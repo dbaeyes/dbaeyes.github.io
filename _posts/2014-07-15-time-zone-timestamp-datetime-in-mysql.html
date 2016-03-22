@@ -1,0 +1,86 @@
+---
+layout: post
+title: time_zone timestamp datetime in MySQL
+date: 2014-07-15 15:17:08.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- mysql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '3316'
+  _aioseop_title: MySQL
+author:
+  login: Toby
+  email: renwei.chu@gmail.com
+  display_name: David
+  first_name: ''
+  last_name: ''
+---
+<p>MySQL上的time_zone时区设置对timestamp和datetime有什么样的影响，是否一样。</p>
+<p>先将系统时间改成美国洛杉矶时间<br />
+[cc lang='sql']<br />
+cp /usr/share/zoneinfo/America/Los_Angeles /etc/localtime</p>
+<p>$date<br />
+Mon Jul 14 23:47:30 PDT 2014</p>
+<p>root@(none) 11:49:44>show variables like '%time_zone%';<br />
++------------------+--------+<br />
+| Variable_name    | Value  |<br />
++------------------+--------+<br />
+| system_time_zone | PDT    |<br />
+| time_zone        | SYSTEM |<br />
++------------------+--------+<br />
+[/cc]</p>
+<p>创建一个有datetime和timestamp字段的表<br />
+[cc lang='sql'] CREATE TABLE `xf_time` (<br />
+  `id` int(11) NOT NULL DEFAULT '0',<br />
+  `gmt_c` datetime DEFAULT NULL,<br />
+  `gmt_m` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,<br />
+  PRIMARY KEY (`id`)<br />
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</p>
+<p>root@test 11:52:54>insert into xf_time values(1,now(),now());<br />
+Query OK, 1 row affected (0.00 sec)</p>
+<p>root@test 11:54:30>select * from xf_time;<br />
++----+---------------------+---------------------+<br />
+| id | gmt_c               | gmt_m               |<br />
++----+---------------------+---------------------+<br />
+|  1 | 2014-07-14 23:54:30 | 2014-07-14 23:54:30 |<br />
++----+---------------------+---------------------+<br />
+1 row in set (0.00 sec)[/cc]</p>
+<p>更改MySQL的time_zone到北京时间所在东八区<br />
+[cc lang='sql']root@test 11:54:35>set time_zone = '+8:00';<br />
+Query OK, 0 rows affected (0.00 sec)<br />
+root@(none) 12:03:04>show variables like '%time_zone%';<br />
++------------------+--------+<br />
+| Variable_name    | Value  |<br />
++------------------+--------+<br />
+| system_time_zone | PDT    |<br />
+| time_zone        | +08:00 |<br />
++------------------+--------+<br />
+2 rows in set (0.00 sec)[/cc]</p>
+<p>可以看到MySQL的time_zone已经改变，而且当前时间都已经发生变化。</p>
+<p>[cc lang='sql']root@test 12:00:58>select now();<br />
++---------------------+<br />
+| now()               |<br />
++---------------------+<br />
+| 2014-07-15 15:01:01 |<br />
++---------------------+<br />
+1 row in set (0.00 sec)</p>
+<p>root@test 12:01:01>select * from xf_time;<br />
++----+---------------------+---------------------+<br />
+| id | gmt_c               | gmt_m               |<br />
++----+---------------------+---------------------+<br />
+|  1 | 2014-07-14 23:54:30 | 2014-07-15 14:54:30 |<br />
++----+---------------------+---------------------+<br />
+1 row in set (0.00 sec)[/cc]</p>
+<p>datetime类型字段在time_zone发生变化后，没有变化。但timestamp类型是跟随时区发生了变化。故dateime类型跟时区无关，timestamp类型跟时区密切相关<br />
+所以说：<br />
+MySQL converts TIMESTAMP values from the current time zone to UTC for storage, and back from UTC to the current time zone for retrieval. (This does not occur for other types such as DATETIME.)</p>
+<p>小结：更改MySQL时区的方式有<br />
+1. 调整系统OS时区 cp /usr/share/zoneinfo/America/Los_Angeles /etc/localtime 将相应的时区文件覆盖<br />
+2. 调整MySQL的启动参数文件： 在[mysqld]下面加上  default-time-zone=timezone 比如 default-time-zone='+8:00' 。 通过登录后的set time-zone 是session级别的，不能做为全局使用，但也有其使用的场景</p>
+<p>--eof</p>
