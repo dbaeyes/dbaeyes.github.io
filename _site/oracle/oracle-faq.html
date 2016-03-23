@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>ORACLE常见问题 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/oracle-faq.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#question" title="question">question</a>
+                        
+                    </div>
+                    <h1>ORACLE常见问题</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on September 26, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>1. Oracle安裝完成后的初始口令?<br />
+internal/oracle<br />
+sys/change_on_install<br />
+system/manager<br />
+scott/tiger<br />
+sysman/oem_temp</p>
+<p>2. ORACLE9IAS WEB CACHE的初始默认用户和密码？<br />
+administrator/administrator</p>
+<p>3. oracle 8.0.5怎么创建数据库?<br />
+用orainst。如果有motif界面，可以用orainst /m</p>
+<p>4. oracle 8.1.7怎么创建数据库?<br />
+dbassist</p>
+<p>5. oracle 9i 怎么创建数据库?<br />
+dbca</p>
+<p>6. oracle中的裸设备指的是什么?<br />
+裸设备就是绕过文件系统直接访问的储存空间</p>
+<p>7. oracle如何区分 64-bit/32bit 版本？？？<br />
+$ sqlplus '/ AS SYSDBA'<br />
+SQL*Plus: Release 9.0.1.0.0 - Production on Mon Jul 14 17:01:09 2003<br />
+(c) Copyright 2001 Oracle Corporation. All rights reserved.<br />
+Connected to:<br />
+Oracle9i Enterprise Edition Release 9.0.1.0.0 - Production<br />
+With the Partitioning option<br />
+JServer Release 9.0.1.0.0 - Production<br />
+SQL&gt; select * from v$version;<br />
+BANNER<br />
+----------------------------------------------------------------<br />
+Oracle9i Enterprise Edition Release 9.0.1.0.0 - Production<br />
+PL/SQL Release 9.0.1.0.0 - Production<br />
+CORE 9.0.1.0.0 Production<br />
+TNS for Solaris: Version 9.0.1.0.0 - Production<br />
+NLSRTL Version 9.0.1.0.0 - Production<br />
+SQL&gt;</p>
+<p>8. SVRMGR什么意思？<br />
+svrmgrl，Server Manager.<br />
+9i下没有，已经改为用SQLPLUS了<br />
+sqlplus /nolog<br />
+变为归档日志型的</p>
+<p>9. 请问如何分辨某个用户是从哪台机器登陆ORACLE的?<br />
+SELECT machine , terminal FROM V$SESSION;</p>
+<p>10. 用什么语句查询字段呢？<br />
+desc table_name 可以查询表的结构<br />
+select field_name,... from ... 可以查询字段的值<br />
+select * from all_tables where table_name like '%'<br />
+select * from all_tab_columns where table_name='??'</p>
+<p>11. 怎样得到触发器、过程、函数的创建脚本？<br />
+desc user_source<br />
+user_triggers</p>
+<p>12. 怎样计算一个表占用的空间的大小？<br />
+select owner,table_name,<br />
+NUM_ROWS,<br />
+BLOCKS*AAA/1024/1024 "Size M",<br />
+EMPTY_BLOCKS,<br />
+LAST_ANALYZED<br />
+from dba_tables<br />
+where table_name='XXX';<br />
+Here: AAA is the value of db_block_size ;<br />
+XXX is the table name you want to check</p>
+<p>13. 如何查看最大会话数？<br />
+SELECT * FROM V$PARAMETER WHERE NAME LIKE 'proc%';<br />
+SQL&gt;<br />
+SQL&gt; show parameter processes<br />
+NAME TYPE VALUE<br />
+------------------------------------ ------- ------------------------------<br />
+aq_tm_processes integer 1<br />
+db_writer_processes integer 1<br />
+job_queue_processes integer 4<br />
+log_archive_max_processes integer 1<br />
+processes integer 200<br />
+这里为200个用户。<br />
+select * from v$license;<br />
+其中sessions_highwater纪录曾经到达的最大会话数</p>
+<p>14. 如何查看系统被锁的事务时间？<br />
+select * from v$locked_object ;</p>
+<p>15. 如何以archivelog的方式运行oracle。<br />
+init.ora<br />
+log_archive_start = true<br />
+RESTART DATABASE</p>
+<p>16. 怎么获取有哪些用户在使用数据库<br />
+select username from v$session;</p>
+<p>17. 数据表中的字段最大数是多少?<br />
+表或视图中的最大列数为 1000</p>
+<p>18. 怎样查得数据库的SID ?<br />
+select name from v$database;<br />
+也可以直接查看 init.ora文件</p>
+<p>19. 如何在Oracle服务器上通过SQLPLUS查看本机IP地址 ?<br />
+select sys_context('userenv','ip_address') from dual;<br />
+如果是登陆本机数据库，只能返回127.0.0.1，呵呵</p>
+<p>20. unix 下怎么调整数据库的时间？<br />
+su -root<br />
+date -u 08010000</p>
+<p>21. 在ORACLE TABLE中如何抓取MEMO類型欄位為空的資料記錄?<br />
+select remark from oms_flowrec where trim(' ' from remark) is not null ;</p>
+<p>22. 如何用BBB表的資料去更新AAA表的資料(有關聯的字段)<br />
+UPDATE AAA SET BNS_SNM=(SELECT BNS_SNM FROM BBB WHERE AAA.DPT_NO=BBB.DPT_NO) WHERE BBB.DPT_NO IS NOT NULL;</p>
+<p>23. P4電腦安裝方法<br />
+將SYMCJIT.DLL改為SYSMCJIT.OLD</p>
+<p>24. 何查詢SERVER是不是OPS?<br />
+SELECT * FROM V$OPTION;<br />
+如果PARALLEL SERVER=TRUE則有OPS能</p>
+<p>25. 何查詢每個用戶的權限?<br />
+SELECT * FROM DBA_SYS_PRIVS;</p>
+<p>26. 如何將表移動表空間?<br />
+ALTER TABLE TABLE_NAME MOVE TABLESPACE_NAME;</p>
+<p>27. 如何將索引移動表空間?<br />
+ALTER INDEX INDEX_NAME REBUILD TABLESPACE TABLESPACE_NAME;</p>
+<p>28. 在LINUX,UNIX下如何啟動DBA STUDIO?<br />
+OEMAPP DBASTUDIO</p>
+<p>29. 查詢鎖的狀況的對象有?<br />
+V$LOCK, V$LOCKED_OBJECT, V$SESSION, V$SQLAREA, V$PROCESS ;<br />
+查詢鎖的表的方法:<br />
+SELECT S.SID SESSION_ID, S.USERNAME, DECODE(LMODE, 0, 'None', 1, 'Null', 2, 'Row-S (SS)', 3, 'Row-X (SX)', 4, 'Share', 5, 'S/Row-X (SSX)', 6, 'Exclusive', TO_CHAR(LMODE)) MODE_HELD, DECODE(REQUEST, 0, 'None', 1, 'Null', 2, 'Row-S (SS)', 3, 'Row-X (SX)', 4, 'Share', 5, 'S/Row-X (SSX)', 6, 'Exclusive', TO_CHAR(REQUEST)) MODE_REQUESTED, O.OWNER||'.'||O.OBJECT_NAME||' ('||O.OBJECT_TYPE||')', S.TYPE LOCK_TYPE, L.ID1 LOCK_ID1, L.ID2 LOCK_ID2 FROM V$LOCK L, SYS.DBA_OBJECTS O, V$SESSION S WHERE L.SID = S.SID AND L.ID1 = O.OBJECT_ID ;</p>
+<p>30. 如何解鎖?<br />
+ALTER SYSTEM KILL SESSION ‘SID,SERIR#’;</p>
+<p>31. SQLPLUS下如何修改編輯器?<br />
+DEFINE _EDITOR="" -- 必须加上双引号<br />
+来定义新的编辑器，也可以把这个写在$ORACLE_HOME/sqlplus/admin/glogin.sql里面使它永久有效。</p>
+<p>32. ORACLE產生隨機函數是?<br />
+DBMS_RANDOM.RANDOM</p>
+<p>33. LINUX下查詢磁盤競爭狀況命令?<br />
+Sar -d</p>
+<p>33. LINUX下查詢CPU競爭狀況命令?<br />
+sar -r</p>
+<p>34. 查詢當前用戶對象?<br />
+SELECT * FROM USER_OBJECTS;<br />
+SELECT * FROM DBA_SEGMENTS;</p>
+<p>35. 如何獲取錯誤信息?<br />
+SELECT * FROM USER_ERRORS;</p>
+<p>36. 如何獲取鏈接狀況?<br />
+SELECT * FROM DBA_DB_LINKS;</p>
+<p>37. 查看數據庫字符狀況?<br />
+SELECT * FROM NLS_DATABASE_PARAMETERS;<br />
+SELECT * FROM V$NLS_PARAMETERS;</p>
+<p>38. 查詢表空間信息?<br />
+SELECT * FROM DBA_DATA_FILES;</p>
+<p>39. ORACLE的INTERAL用戶要口令?<br />
+修改 SQLNET.ORA<br />
+SQLNET.AUTHENTICATION_SERVICES=(NTS)</p>
+<p>40. 出現JAVA.EXE的解決辦法?<br />
+一般是將ORACLEORAHOMEXIHTTPSERVER改成手工啟動可以的<br />
+X是8或9</p>
+<p>41. 如何给表、列加注释？<br />
+SQL&gt;comment on table 表 is '表注释';<br />
+注释已创建。<br />
+SQL&gt;comment on column 表.列 is '列注释';<br />
+注释已创建。<br />
+SQL&gt; select * from user_tab_comments where comments is not null;</p>
+<p>42. 如何查看各个表空间占用磁盘情况？<br />
+SQL&gt; col tablespace format a20<br />
+SQL&gt; select<br />
+b.file_id 文件ID号,<br />
+b.tablespace_name 表空间名,<br />
+b.bytes 字节数,<br />
+(b.bytes-sum(nvl(a.bytes,0))) 已使用,<br />
+sum(nvl(a.bytes,0)) 剩余空间,<br />
+sum(nvl(a.bytes,0))/(b.bytes)*100 剩余百分比<br />
+from dba_free_space a,dba_data_files b<br />
+where a.file_id=b.file_id<br />
+group by b.tablespace_name,b.file_id,b.bytes<br />
+order by b.file_id<br />
+43. 如把ORACLE设置为MTS或专用模式？<br />
+#dispatchers="(PROTOCOL=TCP) (SERVICE=SIDXDB)"<br />
+加上就是MTS，注释就是专用模式，SID是指你的实例名。</p>
+<p>44. 如何才能得知系统当前的SCN号 ?<br />
+select max(ktuxescnw * power(2, 32) + ktuxescnb) from x$ktuxe;</p>
+<p>45. 请问如何在ORACLE中取毫秒?<br />
+9i之前不支持,9i开始有timestamp.<br />
+9i可以用select systimestamp from dual;<br />
+大家在應用ORACLE的時候可能會遇到很多看起來不難的問題, 特別對新手來說, 今天我簡單把它總結一下, 發布給大家, 希望對大家有幫助! 和大家一起探討, 共同進步!</p>
+<p>對ORACLE高手來說是不用看的.</p>
+<p>46. 如何在字符串里加回车？<br />
+select 'Welcome to visit'||chr(10)||'www.CSDN.NET' from dual ;</p>
+<p>47. 中文是如何排序的？<br />
+Oracle9i之前，中文是按照二进制编码进行排序的。<br />
+在oracle9i中新增了按照拼音、部首、笔画排序功能。设置NLS_SORT值<br />
+SCHINESE_RADICAL_M 按照部首（第一顺序）、笔划（第二顺序）排序<br />
+SCHINESE_STROKE_M 按照笔划（第一顺序）、部首（第二顺序）排序<br />
+SCHINESE_PINYIN_M 按照拼音排序</p>
+<p>48. Oracle8i中对象名可以用中文吗？<br />
+可以</p>
+<p>49. 如何改变WIN中SQL*Plus启动选项？<br />
+SQL*PLUS自身的选项设置我们可以在$ORACLE_HOME/sqlplus/admin/glogin.sql中设置。</p>
+<p>50. 怎样修改oracel数据库的默认日期?<br />
+alter session set nls_date_format='yyyymmddhh24miss';<br />
+OR<br />
+可以在init.ora中加上一行<br />
+nls_date_format='yyyymmddhh24miss'</p>
+<p>51. 如何将小表放入keep池中?<br />
+alter table xxx storage(buffer_pool keep);</p>
+<p>52. 如何检查是否安装了某个patch?<br />
+check that oraInventory</p>
+<p>53. 如何使select语句使查询结果自动生成序号?<br />
+select rownum,COL from table;</p>
+<p>54. 如何知道数据裤中某个表所在的tablespace?<br />
+select tablespace_name from user_tables where table_name='TEST';<br />
+select * from user_tables中有个字段TABLESPACE_NAME，（oracle）;<br />
+select * from dba_segments where …;</p>
+<p>55. 怎么可以快速做一个和原表一样的备份表?<br />
+create table new_table as (select * from old_table);</p>
+<p>55. 怎么在sqlplus下修改procedure?<br />
+select line,trim(text) t from user_source where name =’A’ order by line;</p>
+<p>56. 怎样解除PROCEDURE被意外锁定?<br />
+alter system kill session ,把那个session给杀掉，不过你要先查出她的session id<br />
+or<br />
+把该过程重新改个名字就可以了。</p>
+<p>57. SQL Reference是个什么东西？<br />
+是一本sql的使用手册，包括语法、函数等等，oracle官方网站的文档中心有下载.</p>
+<p>58. 如何查看数据库的状态?<br />
+unix下<br />
+ps -ef | grep ora<br />
+windows下<br />
+看服务是否起来<br />
+是否可以连上数据库</p>
+<p>59. 请问如何修改一张表的主键?<br />
+alter table aaa<br />
+drop constraint aaa_key ;<br />
+alter table aaa<br />
+add constraint aaa_key primary key(a1,b1) ;</p>
+<p>60. 改变数据文件的大小?<br />
+用 ALTER DATABASE .... DATAFILE .... ;<br />
+手工改变数据文件的大小，对于原来的 数据文件有没有损害。</p>
+<p>61. 怎样查看ORACLE中有哪些程序在运行之中？<br />
+查看v$sessions表</p>
+<p>62. 怎么可以看到数据库有多少个tablespace?<br />
+select * from dba_tablespaces;</p>
+<p>63. 如何修改oracle数据库的用户连接数？<br />
+修改initSID.ora，将process加大，重启数据库.</p>
+<p>64. 如何查出一条记录的最后更新时间?<br />
+可以用logminer 察看</p>
+<p>65. 如何在PL/SQL中读写文件？<br />
+UTL_FILE包允许用户通过PL/SQL读写操作系统文件。</p>
+<p>66. 怎樣把“&amp;”放入一條記錄中？<br />
+insert into a values (translate ('at{&amp;}t','at{}','at'));</p>
+<p>67. EXP　如何加ＱＵＥＲＹ参数？<br />
+EXP USER/PASS FILE=A.DMP TABLES(BSEMPMS)<br />
+QUERY='"WHERE EMP_NO=\'S09394\'" ﹔</p>
+<p>68. 关于oracle8i支持简体和繁体的字符集问题？<br />
+ZHS16GBK可以支</p>
+<p>69. Data Guard是什么软件？<br />
+就是Standby的换代产品</p>
+<p>70. 如何創建SPFILE?<br />
+SQL&gt; connect / as sysdba<br />
+SQL&gt; select * from v$version;<br />
+SQL&gt; create pfile from spfile;<br />
+SQL&gt; CREATE SPFILE FROM PFILE='E:\ora9i\admin\eygle\pfile\init.ora';<br />
+文件已创建。<br />
+SQL&gt; CREATE SPFILE='E:\ora9i\database\SPFILEEYGLE.ORA' FROM PFILE='E:\ora9i\admin\eygle\pfile\init.ora';<br />
+文件已创建。</p>
+<p>71. 內核參數的應用?<br />
+shmmax<br />
+含义：这个设置并不决定究竟Oracle数据库或者操作系统使用多少物理内存，只决定了最多可以使用的内存数目。这个设置也不影响操作系统的内核资源。<br />
+设置方法：0.5*物理内存<br />
+例子：Set shmsys:shminfo_shmmax=10485760<br />
+shmmin<br />
+含义：共享内存的最小大小。<br />
+设置方法：一般都设置成为1。<br />
+例子：Set shmsys:shminfo_shmmin=1：<br />
+shmmni<br />
+含义：系统中共享内存段的最大个数。<br />
+例子：Set shmsys:shminfo_shmmni=100<br />
+shmseg<br />
+含义：每个用户进程可以使用的最多的共享内存段的数目。<br />
+例子：Set shmsys:shminfo_shmseg=20：<br />
+semmni<br />
+含义：系统中semaphore identifierer的最大个数。<br />
+设置方法：把这个变量的值设置为这个系统上的所有Oracle的实例的init.ora中的最大的那个processes的那个值加10。<br />
+例子：Set semsys:seminfo_semmni=100<br />
+semmns<br />
+含义：系统中emaphores的最大个数。<br />
+设置方法：这个值可以通过以下方式计算得到：各个Oracle实例的initSID.ora里边的processes的值的总和（除去最大的Processes参数）＋最大的那个Processes×2＋10×Oracle实例的个数。<br />
+例子：Set semsys:seminfo_semmns=200<br />
+semmsl:<br />
+含义：一个set中semaphore的最大个数。<br />
+设置方法：设置成为10＋所有Oracle实例的InitSID.ora中最大的Processes的值。<br />
+例子：Set semsys:seminfo_semmsl=-200<br />
+72. 怎样查看哪些用户拥有SYSDBA、SYSOPER权限？<br />
+SQL&gt;conn sys/change_on_install<br />
+SQL&gt;select * from V_$PWFILE_USERS;</p>
+<p>73. 如何单独备份一个或多个表？<br />
+exp 用户/密码 tables=(表1,…,表2)</p>
+<p>74. 如何单独备份一个或多个用户？<br />
+exp system/manager owner=(用户1,用户2,…,用户n) file=导出文件</p>
+<p>75. 如何对CLOB字段进行全文检索？<br />
+SELECT * FROM A WHERE dbms_lob.instr(a.a,'K',1,1)&gt;0;</p>
+<p>76. 如何显示当前连接用户?<br />
+SHOW USER</p>
+<p>77. 如何查看数据文件放置的路径 ?<br />
+col file_name format a50<br />
+SQL&gt; select tablespace_name,file_id,bytes/1024/1024,file_name from dba_data_files order by file_id;</p>
+<p>78. 如何查看现有回滚段及其状态 ?<br />
+SQL&gt; col segment format a30<br />
+SQL&gt; SELECT SEGMENT_NAME,OWNER,TABLESPACE_NAME,SEGMENT_ID,FILE_ID,STATUS FROM DBA_ROLLBACK_SEGS</p>
+<p>79. 如何改变一个字段初始定义的Check范围？<br />
+SQL&gt; alter table xxx drop constraint constraint_name;<br />
+之后再创建新约束:<br />
+SQL&gt; alter table xxx add constraint constraint_name check();</p>
+<p>80. Oracle常用系统文件有哪些？<br />
+通过以下视图显示这些文件信息：v$database,v$datafile,v$logfile v$controlfile v$parameter;</p>
+<p>81. 內連接INNER JOIN?<br />
+Select a.* from bsempms a,bsdptms b where a.dpt_no=b.dpt_no;</p>
+<p>82. 如何外連接?<br />
+Select a.* from bsempms a,bsdptms b where a.dpt_no=b.dpt_no(+);<br />
+Select a.* from bsempms a,bsdptms b wherea.dpt_no(+)=b.dpt_no;</p>
+<p>83. 如何執行腳本SQL文件?<br />
+SQL&gt;@$PATH/filename.sql;</p>
+<p>84. 如何快速清空一個大表?<br />
+SQL&gt;truncate table table_name;</p>
+<p>85. 如何查有多少個數据庫實例?<br />
+SQL&gt;SELECT * FROM V$INSTANCE;</p>
+<p>86. 如何查詢數据庫有多少表?<br />
+SQL&gt;select * from all_tables;</p>
+<p>87. 如何測試SQL語句執行所用的時間?<br />
+SQL&gt;set timing on ;<br />
+SQL&gt;select * from tablename;</p>
+<p>大家在應用ORACLE的時候可能會遇到很多看起來不難的問題, 特別對新手來說, 今天我簡單把它總結一下, 發布給大家, 希望對大家有幫助! 和大家一起探討, 共同進步!</p>
+<p>對ORACLE高手來說是不用看的.</p>
+<p>88. CHR()的反函數是?<br />
+ASCII()<br />
+SELECT CHAR(65) FROM DUAL;<br />
+SELECT ASCII('A') FROM DUAL;</p>
+<p>89. 字符串的連接<br />
+SELECT CONCAT(COL1,COL2) FROM TABLE ;<br />
+SELECT COL1||COL2 FROM TABLE ;</p>
+<p>90. 怎么把select出来的结果导到一个文本文件中？<br />
+SQL&gt;SPOOL C:\ABCD.TXT;<br />
+SQL&gt;select * from table;<br />
+SQL &gt;spool off;</p>
+<p>91. 怎样估算SQL执行的I/O数 ?<br />
+SQL&gt;SET AUTOTRACE ON ;<br />
+SQL&gt;SELECT * FROM TABLE;<br />
+OR<br />
+SQL&gt;SELECT * FROM v$filestat ;<br />
+可以查看IO数</p>
+<p>92. 如何在sqlplus下改变字段大小?<br />
+alter table table_name modify (field_name varchar2(100));<br />
+改大行，改小不行（除非都是空的）</p>
+<p>93. 如何查询某天的数据?<br />
+select * from table_name where trunc(日期字段)＝to_date('2003-05-02','yyyy-mm-dd');</p>
+<p>94. sql 语句如何插入全年日期？<br />
+create table BSYEAR (d date);<br />
+insert into BSYEAR<br />
+select to_date('20030101','yyyymmdd')+rownum-1<br />
+from all_objects<br />
+where rownum startup pfile和ifile,spfiled有什么区别？<br />
+pfile就是Oracle传统的初始化参数文件，文本格式的。<br />
+ifile类似于c语言里的include，用于把另一个文件引入<br />
+spfile是9i里新增的并且是默认的参数文件，二进制格式<br />
+startup后应该只可接pfile</p>
+<p>101. 如何搜索出前N条记录？<br />
+SELECT * FROM empLOYEE WHERE ROWNUM &lt; n ORDER BY empno; 102. 如何知道机器上的Oracle支持多少并发用户数? SQL&gt;conn internal ;<br />
+SQL&gt;show parameter processes ;</p>
+<p>103. db_block_size可以修改嗎?<br />
+一般不可以﹐不建議這樣做的。</p>
+<p>104. 如何统计两个表的记录总数?<br />
+select (select count(id) from aa)+(select count(id) from bb) 总数 from dual;</p>
+<p>105. 怎样用Sql语句实现查找一列中第N大值？<br />
+select * from<br />
+(select t.*,dense_rank() over (order by sal) rank from employee)<br />
+where rank = N;</p>
+<p>106. 如何在给现有的日期加上2年？(<br />
+select add_months(sysdate,24) from dual;</p>
+<p>107. USED_UBLK为负值表示什么意思?<br />
+It is "harmless".</p>
+<p>108. Connect string是指什么?<br />
+应该是tnsnames.ora中的服务名后面的内容</p>
+<p>109. 怎样扩大REDO LOG的大小？<br />
+建立一个临时的redolog组，然后切换日志，删除以前的日志，建立新的日志。</p>
+<p>110. tablespace 是否不能大于4G?<br />
+没有限制.</p>
+<p>111. 返回大于等于N的最小整數值?<br />
+SELECT CEIL(N) FROM DUAL;</p>
+<p>112. 返回小于等于N的最小整數值?<br />
+SELECT FLOOR(N) FROM DUAL;</p>
+<p>113. 返回當前月的最后一天?<br />
+SELECT LAST_DAY(SYSDATE) FROM DUAL;</p>
+<p>114. 如何不同用戶間數據導入?<br />
+IMP SYSTEM/MANAGER FILE=AA.DMP FROMUSER=USER_OLD TOUSER=USER_NEW ROWS=Y INDEXES=Y ;</p>
+<p>115. 如何找数据库表的主键字段的名称?<br />
+SQL&gt;SELECT * FROM user_constraints WHERE CONSTRAINT_TYPE='P' and table_name='TABLE_NAME';</p>
+<p>116. 兩個結果集互加的函數?<br />
+SQL&gt;SELECT * FROM BSEMPMS_OLD INTERSECT SELECT * FROM BSEMPMS_NEW;<br />
+SQL&gt;SELECT * FROM BSEMPMS_OLD UNION SELECT * FROM BSEMPMS_NEW;<br />
+SQL&gt;SELECT * FROM BSEMPMS_OLD UNION ALL SELECT * FROM BSEMPMS_NEW;</p>
+<p>117. 兩個結果集互減的函數?<br />
+SQL&gt;SELECT * FROM BSEMPMS_OLD MINUS SELECT * FROM BSEMPMS_NEW;</p>
+<p>118. 如何配置Sequence?<br />
+建sequence seq_custid<br />
+create sequence seq_custid start 1 incrememt by 1;<br />
+建表时:<br />
+create table cust<br />
+{ cust_id smallint not null,<br />
+...}<br />
+insert 时:<br />
+insert into table cust<br />
+values( seq_cust.nextval, ...)</p>
+<p>日期的各部分的常用的的寫法<br />
+119&gt;.取時間點的年份的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'YYYY') FROM DUAL;</p>
+<p>120&gt;.取時間點的月份的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'MM') FROM DUAL;</p>
+<p>121&gt;.取時間點的日的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'DD') FROM DUAL;</p>
+<p>122&gt;.取時間點的時的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'HH24') FROM DUAL;</p>
+<p>123&gt;.取時間點的分的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'MI') FROM DUAL;</p>
+<p>124&gt;.取時間點的秒的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'SS') FROM DUAL;</p>
+<p>125&gt;.取時間點的日期的寫法:<br />
+SELECT TRUNC(SYSDATE) FROM DUAL;</p>
+<p>126&gt;.取時間點的時間的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'HH24:MI:SS') FROM DUAL;</p>
+<p>127&gt;.日期,時間形態變為字符形態<br />
+SELECT TO_CHAR(SYSDATE) FROM DUAL;</p>
+<p>128&gt;.將字符串轉換成日期或時間形態:<br />
+SELECT TO_DATE('2003/08/01') FROM DUAL;</p>
+<p>129&gt;.返回參數的星期几的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'D') FROM DUAL;</p>
+<p>130&gt;.返回參數一年中的第几天的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'DDD') FROM DUAL;</p>
+<p>131&gt;.返回午夜和參數中指定的時間值之間的秒數的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'SSSSS') FROM DUAL;</p>
+<p>132&gt;.返回參數中一年的第几周的寫法:<br />
+SELECT TO_CHAR(SYSDATE,'WW') FROM DUAL;</p>
+<p>作者: CCBZZP</p>
+<p><a href="http://blog.csdn.net/column/details/oracle1000.html">http://blog.csdn.net/column/details/oracle1000.html</a></p>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/web&amp;rt/english-writing-will-back-200-zt.html" data-toggle="tooltip" data-placement="top" title="英语写作必背200句 (zt)">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/11-holiday-is-over-hard-drops.html" data-toggle="tooltip" data-placement="top" title="十一长假结束了 辛苦滴">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/oracle-faq" data-title="ORACLE常见问题"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="1. Oracle安裝完成后的初始口令?
+internal/oracle
+sys/change_on_install
+system/manager
+sco... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/oracle-faq.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/oracle-faq" data-title="ORACLE常见问题" data-url="http://dbaeyes.github.io/oracle/oracle-faq.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

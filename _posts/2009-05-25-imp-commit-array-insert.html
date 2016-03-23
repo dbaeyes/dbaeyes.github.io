@@ -1,0 +1,29 @@
+---
+layout: post
+title: imp -- commit array insert
+date: 2009-05-25 21:42:57.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- imp
+- oracle
+---
+<p>在给数据库用户做逻辑迁移，imp的时候涉及 commit array insert 这个参数，第一次使用了 commit=y,发现速度相当滴慢，这个参数默认是 N的。</p>
+<div>
+文档上说：<br />
+COMMIT</p>
+<p>Default: n</p>
+<p>Specifies whether Import should commit after each array insert. By default, Import commits only after loading each table, and Import performs a rollback when an error occurs, before continuing with the next object.</p>
+<p>If a table has nested table columns or attributes, the contents of the nested tables are imported as separate tables. Therefore, the contents of the nested tables are always committed in a transaction distinct from the transaction used to commit the outer table.</p>
+<p>If COMMIT=n and a table is partitioned, each partition and subpartition in the Export file is imported in a separate transaction.</p>
+<p>Specifying COMMIT=y prevents rollback segments from growing inordinately large and improves the performance of large imports. Specifying COMMIT=y is advisable if the table has a uniqueness constraint. If the import is restarted, any rows that have already been imported are rejected with a recoverable error.</p>
+<p>If a table does not have a uniqueness constraint, Import could produce duplicate rows when you reimport the data.</p>
+<p>For tables containing LONG, LOB, BFILE, REF, ROWID, UROWID, or DATE columns, array inserts are not done. If COMMIT=y, Import commits these tables after each row.</p>
+<p>n: default ,以表为单位commit;<br />
+y: 以buffer为单位commit,<br />
+如果表含有LONG, LOB, BFILE, REF, ROWID, UROWID,   DATE类型字段 , 以行为单位</p>
+<p>ITPUB上有一个讨论的帖子<br />
+http://www.itpub.net/thread-530380-1-1.html</p></div>

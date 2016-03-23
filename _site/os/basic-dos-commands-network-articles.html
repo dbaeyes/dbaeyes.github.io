@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>基本Dos命令-网络篇 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/os/basic-dos-commands-network-articles.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#net" title="net">net</a>
+                        
+                    </div>
+                    <h1>基本Dos命令-网络篇</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on August 26, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>1.最基本最常用的 Ping</p>
+<div>　　Ping命令通过向计算机发送Internet控制信息协议（ICMP）回应报文并且监听回应报文的返回，以校验与远程计算机或本地计算机的连接情况。<br />
+例：ping 127.0.0.1 －t<br />
+参数－t　是无限发送数据包，等待用户去中断测试 ,按Ctrl+C键中断<br />
+参数-a 　将IP地址解析为计算机名<br />
+参数-n count 发送由count指定数量的回应报文<br />
+参数-l size 发送由size指定数据大小的回应报文。<br />
+数据包返回时间越短，则意味着与此计算机的连接稳定和速度快。</p>
+<p>2.查看DNS、IP、Mac等<br />
+(A) Win98：winipcfg Win2000：Ipconfig<br />
+ipconfig参数： /all<br />
+( NSLOOKUP：如查看本地的DNS<br />
+C:\&amp;gt;nslookup<br />
+Default Server: dns.guangzhou.gd.cn<br />
+Address: 202.96.128.68<br />
+&amp;gt;server 202.99.41.2 则将DNS改为了41.2<br />
+&amp;gt; www.china.com<br />
+Server: dns.guangzhou.gd.cn<br />
+Address: 202.96.128.68</p>
+<p>Non-authoritative answer:<br />
+Name: www.china.com<br />
+Address: 61.151.243.8</p>
+<p>3.网络信使<br />
+Net send 计算机名/IP|* (广播) 传送内容，注意不能跨网段<br />
+例如：net send /domain:china 5:00将切换线路,请注意。<br />
+net stop messenger 停止信使服务，也可以在开始－程序-管理工具-服务修改<br />
+net start messenger 开始信使服务</p>
+<p>4.探测对方对方计算机名，所在的组、域及当前用户名<br />
+前面说的ping －a IP ，只能显示NetBios名<br />
+nbtstat -a 192.168.10.146 比较全的</p>
+<p>5.netstat -a 显示出你的计算机当前所开放的所有端口<br />
+netstat -s -e 比较详细的显示你的网络资料，包括TCP、UDP、ICMP 和 IP的统计等</p>
+<p>6.探测arp绑定（动态和静态）列表，显示所有连接了我的计算机，显示对方IP和MAC地址<br />
+arp -a</p>
+<p>7.在代理服务器端<br />
+捆绑IP和MAC地址，解决局域网内盗用IP：<br />
+ARP －s 192.168.10.59 00－50－ff－6c－08－75<br />
+解除网卡的IP与MAC地址的绑定：<br />
+arp -d 网卡IP</p>
+<p>8.在网络邻居上隐藏你的计算机<br />
+net config server /hidden:yes 是隐藏<br />
+net config server /hidden:no 为开启</p>
+<p>9.几个net命令<br />
+A.显示当前工作组服务器列表 net view，当不带选项使用本命令时，它就会显示当前域或网络上的计算机上的列表。<br />
+比如：查看这个IP上的共享资源，就可以<br />
+C:\&amp;gt;net view 192.168.10.8<br />
+在 192.168.10.8 的共享资源<br />
+资源共享名 类型 用途 注释<br />
+--------------------------------------<br />
+网站服务 Disk<br />
+命令成功完成。</p>
+<p>B.查看计算机上的用户帐号列表 net user<br />
+C.查看网络链接 net use<br />
+例如：net use z: \\192.168.10.8\movie 将这个IP的movie共享目录映像为本地的Z盘</p>
+<p>D.记录链接 net session<br />
+例如：<br />
+C:\&amp;gt;net session<br />
+计算机 用户名 客户类型 打开空闲时间<br />
+-------------------------------------------------------------------------------<br />
+\\192.168.10.110 ROME Windows 2000 2195 0 00:03:12<br />
+\\192.168.10.51 ROME Windows 2000 2195 0 00:00:39<br />
+命令成功完成。</p>
+<p>10.路由跟踪命令<br />
+A.tracert www.263.com<br />
+该诊断实用程序通过向目的地发送具有不同生存时间的ICMP回应报文，以确定至目的地的路由。也就是说，Tracert命令可以用来跟踪一个报文从一台计算机到另一台计算机所走的路径。比如你在上网时，想知道从你的计算机如何走到263主页的，可在MS-DOS方式下，输入命令Tracert www.263.net并回车。<br />
+C:\&amp;gt;tracert www.263.net<br />
+Tracing route to www.263.net [211.100.31.131]<br />
+over a maximum of 30 hops:<br />
+1 &amp;lt;10 ms &amp;lt;10 ms &amp;lt;10 ms 202.195.243.1</p>
+<p>2 10 ms &amp;lt;10 ms 10 ms 202.195.240.254</p>
+<p>3 &amp;lt;10 ms &amp;lt;10 ms &amp;lt;10 ms 210.29.33.9<br />
+.......<br />
+15 190 ms 170 ms 180 ms 211.100.24.4</p>
+<p>16 100 ms 111 ms 120 ms 211.100.31.131</p>
+<p>Trace complete.</p>
+<p>左边的数字是该路由经过的计算机数目和顺序。“*”表示往返时间太长，Tracert 将这个时间“忘记了”，“10ms”是向经过的第一个计算机（202.195.243.1）发送报文的往返时间，单位为毫秒。由于每个报文每次往返时间不一样，Tracert将显示三次往返时间。在时间信息之后，是计算机的名称信息，是便于人们阅读的域名格式，也有IP地址格式。它可以让你知道，你的计算机与目的计算机在网络上距离有多远，要经过几步才能到达。</p>
+<p>B.pathping www.163.com 除了显示路由外，还提供325S的分析，计算丢失包的％</p>
+<p>11.关于共享安全的几个命令<br />
+A.查看你机器的共享资源 net share<br />
+B.手工删除共享<br />
+net share c$ /d<br />
+net share d$ /d<br />
+net share ipc$ /d<br />
+net share admin$ /d<br />
+注意$后有空格。<br />
+C.增加一个共享：<br />
+c:\net share mymovie=e:\downloads\movie /users:1<br />
+mymovie 共享成功。<br />
+同时限制链接用户数为1人。</p>
+<p>12.在DOS行下设置静态IP<br />
+A.设置静态IP<br />
+开始—运行---CMD<br />
+netsh<br />
+netsh&amp;gt;int<br />
+interface&amp;gt;ip<br />
+interface ip&amp;gt;set add "本地链接" static IP地址 mask gateway<br />
+也可以用一个批处理文件(*.bat)用记事本打开并输入<br />
+例：netsh interface ip set address name="本机连线" source=static 192.168.10.3 255.255.255.0 192.168.10.1 1 保存后。改名TXT扩展名为BAT就好。以后要改这个配置只要双击这个文件就好。<br />
+B.查看IP设置<br />
+interface ip&amp;gt;show address</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/start-of-the-work-end-of-the-olympic-games.html" data-toggle="tooltip" data-placement="top" title="奥运会结束 新的工作开始">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/os/use-lsof-to-find-open-file-turn.html" data-toggle="tooltip" data-placement="top" title="使用 lsof 查找打开的文件 -- 转">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/os/basic-dos-commands-network-articles" data-title="基本Dos命令-网络篇"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="1.最基本最常用的 Ping
+　　Ping命令通过向计算机发送Internet控制信息协议（ICMP）回应报文并且监听回应报文的返回，以校验与远程计算机或... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/os/basic-dos-commands-network-articles.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/os/basic-dos-commands-network-articles" data-title="基本Dos命令-网络篇" data-url="http://dbaeyes.github.io/os/basic-dos-commands-network-articles.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

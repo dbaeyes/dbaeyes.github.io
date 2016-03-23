@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>RMAN 命令 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/rman-commands.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#rman" title="rman">rman</a>
+                        
+                    </div>
+                    <h1>RMAN 命令</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on June 25, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>连接到目标数据库(不用恢复目录数据库)</p>
+<div><strong>rman target / nocatalog</strong></p>
+<p>显示rman配置<br />
+<strong>RMAN&gt; show all;</strong></p>
+<p>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝<br />
+报告目标数据库的物理结构<br />
+<strong>RMAN&gt; report schema;</strong></p>
+<p>报告陈旧备份<br />
+<strong>RMAN&gt; report obsolete;</strong></p>
+<p>报告不可恢复的数据文件<br />
+<strong>RMAN&gt; report unrecoverable;</strong></p>
+<p>列出备份信息<br />
+<strong>RMAN&gt; list backup;</p>
+<p>RMAN&gt; list backup of database;</p>
+<p>RMAN&gt; list backup of tablespace table_name;</p>
+<p>RMAN&gt; list backup of controlfile;</p>
+<p>RMAN&gt; list backup of spfile;</p>
+<p>RMAN&gt; list backupset id;</strong></p>
+<p>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝<br />
+校验备份信息：<br />
+<strong>RMAN&gt; crosscheck backup;</p>
+<p>RMAN&gt; crosscheck backup of database;</p>
+<p>RMAN&gt; crosscheck backup of tablespace system;</p>
+<p>RMAN&gt; crosscheck backup of controlfile;</p>
+<p>RMAN&gt; crosscheck backup of spfile;</strong></p>
+<p>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝<br />
+删除备份</p>
+<div>Use the <a name="CHDBCDCF"></a><code><span style="font-family: 新宋体;">ALLOCATE CHANNEL FOR MAINTENANCE</span></code> command to manually allocate a channel in preparation for issuing a <code><a href="http://download-uk.oracle.com/docs/cd/B28359_01/backup.111/b28273/rcmsynta009.htm#i79920"><span style="color: #0000ff; font-family: 新宋体;">CHANGE</span></a></code>, <code><a href="http://download-uk.oracle.com/docs/cd/B28359_01/backup.111/b28273/rcmsynta016.htm#i81315"><span style="color: #0000ff; font-family: 新宋体;">DELETE</span></a></code>, or <code><a href="http://download-uk.oracle.com/docs/cd/B28359_01/backup.111/b28273/rcmsynta015.htm#i81077"><span style="color: #0000ff; font-family: 新宋体;">CROSSCHECK</span></a></code> command. You can use the <code><a href="http://download-uk.oracle.com/docs/cd/B28359_01/backup.111/b28273/rcmsynta032.htm#i84466"><span style="color: #0000ff; font-family: 新宋体;">RELEASE CHANNEL</span></a></code> command to unallocate the channel.</div>
+<div></div>
+<div><span style="font-family: 新宋体;">ALLOCATE CHANNEL FOR MAINTENANCE</span> device type (disk,sbt ...)</div>
+<div>
+<strong>RMAN&gt; delete obsolete; </strong>-- 删除陈旧备份</p>
+<p><strong>RMAN&gt; delete expired backup;</p>
+<p>RMAN&gt; delete backupset id;</p>
+<p>RMAN&gt; delete backup; </strong>-- 删除所有备份</div>
+<div></div>
+<div>
+<hr />
+</div>
+<div>
+<hr />
+</div>
+<div></div>
+<div>1 列出对应物　 RMAN&gt;list incarnation;</p>
+<p>2 列出备份</p>
+<p>2.1概述可用的备份　　　　RMAN&gt;list backup summary;<br />
+B 表示 backup<br />
+F 表示 FULL<br />
+A 表示 archive log<br />
+0 1 表示 incremental backup<br />
+S 说明备份状态 （A　AVAILABLE　　　X EXPIRED )</p>
+<p>2.2按备份类型列出备份　　RMAN&gt;list backup by file;<br />
+按照 数据文件备份，归档日志备份，控制文件备份，<a title="服务器" href="http://server.it168.com/" target="_blank">服务器</a>参数文件备份　列出</p>
+<p>2.3列出详细备份　　　　　RMAN&gt;list backup；</p>
+<p>2.4列出过期备份　　　　　RMAN&gt;list expired backup;</p>
+<p>2.5列出表空间和数据文件备份<br />
+list backup of tablespace 和list backup of datafile 输出和list backup 相似<br />
+如：list backup of tablespace user_tbs;<br />
+list backup of datafile 3;</p>
+<p>2.6列出归档日志备份　　　RMAN&gt;list archivelog all;　　　　　　简要信息<br />
+RMAN&gt;list backup of archivelog all;　详细信息</p>
+<p>2.7列出控制文件和服务器参数文件<br />
+RMAN&gt;list backup of controfile;<br />
+RMAN&gt;list backup of spfile;</p>
+<p>=====================================================<br />
+=====================================================<br />
+<strong>RMAN 的 report命令</strong></p>
+<p>1. 报告最近没有被备份的数据文件<br />
+RMAN&gt;report need backup days=3;</p>
+<p>2. 报告备份冗余或恢复窗口<br />
+RMAN&gt;report need　backup redundancy=2;<br />
+RMAN&gt;report need backup recovery window of 2 days;</p>
+<p>3. 报告数据文件的不可恢复操作<br />
+RMAN&gt;report unrecoverable;</p>
+<p>4. 报告数据库模式<br />
+RMAN&gt;report schema;</p>
+<p>5. 报告丢弃的备份<br />
+如果使用了保存策略，备份会标记为丢弃状态　 RMAN&gt;report obsolete;　删除丢弃状态备份RMAN&gt;delete obsolete;</p>
+<p>=====================================================<br />
+=====================================================<br />
+<strong>RMAN的crosscheck 命令</strong></p>
+<p>1 备份集有两种状态A(Available,RMAN认为该项存在于备份介质上)X(Expired，备份存在于控制文件或恢复目录中，但是并没有物理存在于备份介质上）</p>
+<p>2 crosscheck 的目的是检查RMAN 的目录以及物理文件，如果物理文件不存在于介质上，将标记为Expired。如果物理文件存在，将维持Available。如果原先标记为Expired的备份集再次存在于备份介质上（如恢复了损坏的磁盘<a title="驱动" href="http://driver.it168.com/" target="_blank">驱动</a>器后），crosscheck将把状态重新从Expired标记回Available。</p>
+<p>3 crosscheck 输出分两部分。第一部分列出确定存在于备份介质上的所有备份集片，第二部分列出不存在于备份介质上的备份集片，并将其标记为Expired。当设置备份保 存策略后，一个备份过期，crosscheck之后标记为丢弃的备份状态依旧为availabel,要删除丢弃备份delete obsolete。</p>
+<p>4 示例：<br />
+crosscheck backup<br />
+crosscheck backup of datafile 1;<br />
+crosscheck backup of tablespace users;<br />
+crosscheck backup of controfile;<br />
+crosscheck backup of controlfile;<br />
+crosscheck backup tag='SAT_BACKUP';<br />
+crosscheck backup completed after 'sysdate - 2'<br />
+crosscheck backup completed between 'sysdate - 5' and 'sysdate -2 '<br />
+crosscheck backup device type sbt;<br />
+crosscheck archivelog all;<br />
+crosscheck archivelog like '%ARC00012.001'<br />
+crosscheck archivelog from sequence 12;<br />
+crosscheck archivelog until sequence 522;</p>
+<p>=====================================================<br />
+=====================================================<br />
+<strong>RMAN 的validate 命令</strong></p>
+<p>1 validate 命令验证备份集片是否能够被还原</p>
+<p>2 list backup summary; 得到了备份集得主键ID如40，然后validate backupset 40;<br />
+=====================================================<br />
+=====================================================<br />
+<strong>RMAN 的备份保存策略以及change ,delete命令</strong></p>
+<p>0.带delete参数的change 命令删除备份集，从备份介质，并且从控制文件和恢复目录中删除。<br />
+change backupset 117,118 delete;<br />
+change backuppiece 1304 delete;<br />
+change archivelog until logseq =544 delete;</p>
+<p>1.两类策略：恢复窗口备份保存策略（recovery windows backup retension policy)　基于时间<br />
+备份冗余备份保存策略（backup redundancy backup retension policy) 基于备份的数量</p>
+<p>两类策略互相排斥</p>
+<p>2.即使使用了备份保存策略，备份到期并不删除，只是在RMAN目录中标记为丢弃，看到的状态依旧为available;<br />
+要查看标记为丢弃的备份 report obsolete，只有使用delete obsolete才真正物理删除。</p>
+<p>3.configure retension policy to recovery window of 7 days;<br />
+configure retension policy to redundancy 3;<br />
+显示结果 show all;</p>
+<p>4.查看到期丢弃的备份时，可能需要手工保存一些备份 ，可以使用change 命令带keep 参数，使用这个命令后，那些被修改的备份将被认为是个long-term backup,不在受保存策略影响也就是说delete obsolete 也不删除。</p>
+<p>5.要使备份时候不受保存策略影响 ,使用带keep参数的backup 命令<br />
+backup database keep forever;<br />
+backup database keep 5 days;</p>
+<p>6.change 命令功能</p>
+<p>可以修改备份为永久保存并将以及该备份的相关的日志保存下来，保证总能将备份恢复到当前时间点<br />
+change backupset 31 keep forever logs;<br />
+可以设置备份丢弃的新日期　，将备份在多保存7 天，7 天后将删除<br />
+change backupset 32 keep until time 'sysdata + 7' logs;</p>
+<p>7.change 可以将备份集设置为unavailable<br />
+change backupset 33 unavailable;<br />
+标记为unavailable状态的备份集并不参与crosscheck;<br />
+=====================================================<br />
+=====================================================<br />
+<strong>恢复目录的记录删除</strong></p>
+<p>1. $ORACLE_HOME/rdbms/admin/prgrmanc.sql 脚本定期删除恢复目录中具有DELETED状态的记录</p>
+<p>2. 要删除旧的对应物记录incarnation.必须从DBINC 表中删除这些对应物，使用RC_DATABASE_INCARNATION 视图来确定要删除的对应物。记录要删除的每个对应物的DBINC_KEY<br />
+随后启动SQL*Plus,执行delete from dbinc where dbinc_key=2;<br />
+=====================================================<br />
+=====================================================<br />
+<strong>手工同步恢复目录</strong></p>
+<p>resync catalog;</p>
+<p>Oracle同步恢复目录的时候，首先创建快照控制文件，然后比较这个文件和恢复目录，完成后，Oracle 更新恢复目录，使恢复目录和控制文件同步<br />
+=====================================================<br />
+=====================================================<br />
+<strong>在RMAN 中<a title="存储" href="http://storage.it168.com/" target="_blank">存储</a>脚本</strong></p>
+<p>1，连接到目标数据库和恢复目录<br />
+rman target / catalog rman/rman@rman9i</p>
+<p>2,创建脚本<br />
+RMAN&gt;create script my_bk_script<br />
+2&gt;{backup database plus archivelog;}<br />
+create script my_bk_script</p>
+<p>3,打印脚本<br />
+RMAN&gt;print script my_bk_script;<br />
+printing stored scipt:my_bk_script<br />
+{backup database plus archivelog;}</p>
+<p>4,运行这个脚本，备份目标数据库<br />
+RMAN&gt;run {execute scipt my_bk_script;}</p>
+<p>5 删除脚本<br />
+RMAN&gt;delete script my_bk_script;<br />
+=====================================================<br />
+=====================================================<br />
+<strong>archivelog模式下的完全恢复</strong></p>
+<p>step1：set oracle_sid=recover<br />
+rman target rman_backup/password<br />
+configure controlfile autobackup on;</p>
+<p>step2：backup database plus archivelog delete input;</p>
+<p>step3：shutdown immediate;</p>
+<p>step4：重命名所有的数据文件和控制文件，不重命名联机重做日志。</p>
+<p>step5: startup nomount;<br />
+set DBID=****<br />
+restore controlfile from autobackup;<br />
+alter database mount;</p>
+<p>step6: restore database;<br />
+recover database;<br />
+alter database open resetlogs;</p>
+<p>表空间恢复</p>
+<p>sql"alter tablespace users offline";<br />
+sql"alter tablespace tools offline";<br />
+restore tablespace users,tools;<br />
+recover tablespace users,tools;<br />
+sql"alter tablespace users online";<br />
+sql"alter tablespace tools online";</p>
+<p>数据文件恢复</p>
+<p>sql"alter database datafile 3 offline";<br />
+sql"alter database datafile 'd:oracleoradatausers01.dbf' offline";<br />
+restore datafile 3<br />
+restore datafile 'd:oracleoradatausers01.dbf';<br />
+recover datafile 3<br />
+recover datafile 'd:oracleoradatausers01.dbf';<br />
+sql"alter database datafile 3 online";<br />
+sql"alter database datafile 'd:oracleoradatausers01.dbf'online";</p>
+<p>=====================================================<br />
+=====================================================<br />
+切换当前的incarnation 回到resetlogs 前RESET DATABASE TO INCARNATION inc_key</p>
+<p>=====================================================<br />
+=====================================================</p>
+<p><strong>RMAN 高级恢复</strong></p>
+<p>1 基于时间点的恢复<br />
+run<br />
+{<br />
+set until time "to_date('07/01/02 15:00:00','mm/dd/yy hh24:mi:ss')"'<br />
+restore database;<br />
+recover database;<br />
+alter database open resetlogs;<br />
+}</p>
+<p>2 基于SCN 的恢复<br />
+startup mount;<br />
+restore database UNTIL SCN 10000;<br />
+recover database UNTIL SCN 10000;<br />
+alter database open resetlogs;</p>
+<p>3 基于日志序列的恢复<br />
+startup mount;<br />
+restore database UNTIL SEQUENCE 100 thread 1;<br />
+recover database UNTIL SEQUENCE 100 thread 1;<br />
+alter database open resetlogs;</p></div>
+<div>==================================</div>
+<div><span style="font-size: small;"><span style="color: #cc0033;">c:\&gt; rman</span> cmdfile='' log=''</span></div>
+<div>在run{}脚本里面，format后面的参数含义：%t代表当前时间，s%代表备份集，%p代表备份片</p>
+<p>来源： http://blog.chinaunix.net/u1/46451/showart_456383.html</p></div>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/oracle10g-physical-standby-database-notes.html" data-toggle="tooltip" data-placement="top" title="Oracle10G Physical Standby Database笔记">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/dataguard-physical-standby-creation-and-maintenance-go.html" data-toggle="tooltip" data-placement="top" title="DataGuard physical standby创建与维护 -- 转">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/rman-commands" data-title="RMAN 命令"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="连接到目标数据库(不用恢复目录数据库)
+rman target / nocatalog
+显示rman配置
+RMAN&gt; show all;
+＝＝＝＝＝... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/rman-commands.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/rman-commands" data-title="RMAN 命令" data-url="http://dbaeyes.github.io/oracle/rman-commands.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

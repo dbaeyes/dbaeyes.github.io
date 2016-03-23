@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>CBO体系结构 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/cbo-architecture.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#cbo" title="cbo">cbo</a>
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                    </div>
+                    <h1>CBO体系结构</h1>
+                    
+                    <span class="meta">Posted by David on April 15, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>今天听了B2C 陈立同学的CBO体系结构的分享，收益颇多。 够我消化好一阵子了，很多东西是在不断的摸索中积累起来的。 向大牛们学习！</p>
+<div>
+简单记录一下</p>
+<p>基于规则的优化器<br />
+<strong>1: 通过rowid访问单笔记录</strong><br />
+2: Single Row by Cluster Join<br />
+3: Single Row by Hash Cluster Key with Unique or Primary Key<br />
+<strong>4: 通过唯一索引或主键访问单笔记录</strong><br />
+5: Clustered Join<br />
+6: Hash Cluster Key<br />
+7: Indexed Cluster Key<br />
+<strong>8: 复合索引扫描<br />
+9: 单列索引扫描<br />
+10: 索引列上的闭区间搜索<br />
+11: 索引列上的开区间搜索</strong><br />
+12: 排序归并连接<br />
+13: 索引列的MAX和MIN<br />
+14: 索引列排序<br />
+<strong>15: 全表扫描</strong></p>
+<p><strong>CBO误区</strong><br />
+不同SQL文本的Cost是不可比较的<br />
+统计信息就是指柱状图<br />
+执行计划突然错误, 分析柱状图就可以解决所有问题<br />
+帮定变量可以减少硬解析, 任何时候都应该使用它<br />
+/*+NO_MERGE*/是不使用归并连接</p>
+<p><strong>单表访问路径</strong></p>
+<p>全表扫描(Full Table Scan)<br />
+Cost ≈ Blocks / db_block_multiblock_read_count</p>
+<p>索引范围扫描(Index Range Scan)<br />
+Cost =<br />
+BLevel +<br />
+Index Selective × Leaf Blocks<br />
+[ + Table Selective × Clustering Factor]<br />
+[ - 1]</p>
+<p>索引快速全扫描(Fast Full Index Scan)</p>
+<p>索引全扫描(Index Full Scan)<br />
+Cost ≈ Leaf Blocks / db_block_multiblock_read_count</p>
+<p>Column1 = value1<br />
+1/distinct_value<br />
+Column1 &gt; value1<br />
+Column1 &lt; value1<br />
+Function(C1) operator value1<br />
+对于等于是固定的1%<br />
+对于其他的是固定的5%</p>
+<p><strong>重要的统计变量</strong><br />
+Table<br />
+--Blocks 决定全表扫描成本<br />
+--Num_rows 决定单表访问的输出结果集基数<br />
+Index<br />
+--Leaf_blocks 决定索引全扫描/范围扫描成本<br />
+--Blevel 决定索引唯一扫描成本<br />
+--Clustering_factor 决定索引访问表成本<br />
+Column<br />
+--Num_distinct 无柱状图时使用 = :1 时决定选择率<br />
+--Density 有柱状图时使用 =:1 时决定选择率<br />
+--Low_value &amp; High_value 使用硬编码时决定选择率</p>
+<p>--EOF--</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/fitness-action.html" data-toggle="tooltip" data-placement="top" title="健身行动">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/system-automatically-creates-a-temporary.html" data-toggle="tooltip" data-placement="top" title="系统自动产生的临时段">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/cbo-architecture" data-title="CBO体系结构"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="今天听了B2C 陈立同学的CBO体系结构的分享，收益颇多。 够我消化好一阵子了，很多东西是在不断的摸索中积累起来的。 向大牛们学习！
+
+简单记录一下
+基于... | Microdust:David's blog"
+                    data-url="http://dbaeyes.github.io/oracle/cbo-architecture.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">Share to：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        <li><a class="ds-facebook" href="javascript:void(0);" data-service="facebook">Facebook</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/cbo-architecture" data-title="CBO体系结构" data-url="http://dbaeyes.github.io/oracle/cbo-architecture.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dbaeyes"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

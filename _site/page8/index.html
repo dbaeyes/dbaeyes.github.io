@@ -10,7 +10,7 @@
 
     <title>Microdust</title>
 
-    <link rel="canonical" href="http://azeril.me/page8/">
+    <link rel="canonical" href="http://dbaeyes.github.io/page8/">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -116,154 +116,170 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
-    <a href="/Quiet.html">
+    <a href="/oracle/table-data-and-field-null-implementation-plan-of-error-in-statistical-information.html">
         <h2 class="post-title">            
-            Quiet
+            表数据量和字段空值统计信息导致的执行计划错误
         </h2>
         
         <div class="post-content-preview">
-            安靜不說話
+            TABLE_CC 表数据量 8KW，
 
-嘗試，稍稍改變，今天電腦也開晚了，再折騰著吧，先敘本周——平時不說話 但到了這樣的時候倒是會攢蚊子了……
-
-星期一：平和。
-第一次沒怎麼準備好就去考試，《管理學》。結果到了考場還在那著幾張半夜翻書整理出的筆記背啊背。到現在成績估計已經出來了，也不想多理會。課上得很好，因為老師的教...
+column: Art_id null number  --distinct values:214
+column: User_id  not null number --distinct values: 83w
+&nbsp;
+Index:
+Idx_use...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on January 16, 2012</p>
+    <p class="post-meta">Posted by David on May 9, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Swing-The-Great-World.html">
+    <a href="/mysql/mysql-alter-ignore-table.html">
         <h2 class="post-title">            
-            Swing The Great World
+            mysql alter ignore table
         </h2>
         
         <div class="post-content-preview">
-            继续转吧，这伟大的世界
+            
 
-本周还没结束，稍稍改变下日程，将一周的流水账提前一天。因为这次回学校没带累赘的电脑，也因此网络就没了，现在是在隔壁蹭网蹭电脑。而到了明天，估计同班的里也就我一个人留守了——悲催的在本专业外还有选修课考试必须得留下来考……还好，现在心不野，寒假早晚开始，也不急。
-
-1 ...
+Mark
+&nbsp;
+IGNORE is a MySQL extension to standard SQL. It controls how ALTER TABLE works if there are duplicates on unique keys in the new tabl...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on January 7, 2012</p>
+    <p class="post-meta">Posted by David on April 14, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Become-The-Captain.html">
+    <a href="/mysql/mysql-use-bit-operations.html">
         <h2 class="post-title">            
-            Become The Captain
+            mysql 使用位运算
         </h2>
         
         <div class="post-content-preview">
-            沒有船票的我們 要努力成為自己的船長
-
-本周。停課，準備考試，準備假期。不過一點都不好玩。
-
-26 日，星期一，生日。生日快樂。一如那天叨叨的，「平和中的溫暖最好 希望如此刻這樣安靜淌過 帶著些許的疲倦 和清澈的勇敢 讓一天有一天的樣子 不必刻意 只是經行。忘了是第幾回在學校過生日了 有那樣的...
+            
+如果你不知道什么是位运算的话， 那么请你先去看看基础的C语言教程吧。
+与运算 a &amp; b  ,
+或运算 a | b ,
+异或运算 a ^ b ,
+或者
+你也可以将 与运算理解为 + 法
+例如
+1|2 = 3   （1+2 = 3）
+1|2|4 = 7 （1+2+4 = 7）
+将 异或...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on January 1, 2012</p>
+    <p class="post-meta">Posted by David on April 2, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Merry-Christmas.html">
+    <a href="/oracle/oracle-small-degree-points.html">
         <h2 class="post-title">            
-            Merry Christmas
+            Oracle degree 小点
         </h2>
         
         <div class="post-content-preview">
-            Merry Christmas~
+            
 
-本周 完成論文三篇 都是前幾天搞定的 夠嗆。實在不喜歡寫那些有的沒的 還得生搬硬套些理論模型——大概是我不懂活學活用 無奈。以後是不是找相關書籍學習一下 要麼 能激發點熱情也好的。太陽在本周實在夠熱情 喜歡陽光燦爛的時光 雖然沒怎麼曬來著。但願下周能逮到好機...
+在开启并行创建索引时，实际消耗的数据库并行线程是双倍。
+create index ind_qid on crm_detail(queue_id,gmt_create) parallel 6 tablespace tbs_ind ONLINE;
+上面的sql以并行6来创建索引，6个并行用于获...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on December 25, 2011</p>
+    <p class="post-meta">Posted by David on March 29, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Smile-to-Myself.html">
+    <a href="/my%20life/fooling-around.html">
         <h2 class="post-title">            
-            Smile To Myself
+            瞎忙
         </h2>
         
         <div class="post-content-preview">
-            這一周以摘錄的文字為核心 穿插一點個人在彼時的感受。是為周記。
+            
 
-12 日，週一。关于什么淘寶双十二减价之類的事情，一个非常传统的价值观，就是：”不买最便宜”。這句話說得實在在理。消費在廣告過度而個人控制力不足的年代，往往也是過度的。
-
-「我们天性中最优美的品格，好比果实上的粉霜一样，是只能轻...
+一直的忙碌并不能让自己成长，有所为而有所不为，协调好自己和他人的关系。
+平均10分钟被打断一次，而且中途忙碌的很多是临时插入的事情，所以虽然一整天都在忙，但是忙完之后发现一天都没干啥事情。 响应太快也未必是件好事，适当的让他人等待也是一门学问。
+&nbsp;
+--
+&nbsp;
+&nbsp...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on December 18, 2011</p>
+    <p class="post-meta">Posted by David on March 16, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/such-as-Hand-and-Heart.html">
+    <a href="/my%20life/exercise.html">
         <h2 class="post-title">            
-            Such As Hand And Heart
+            锻炼身体
         </h2>
         
         <div class="post-content-preview">
-            心若冰涼，手也冰涼
+            
 
-本周是漫長的雨和驟降的溫度組成的和絃。灰色的調調，雖然，總不會一直如此。
+上上周六踢球了，结果全身疼了3天
+上周六踢球了，第二天有一点点酸痛
+这周有时间的话再去活动活动。
+明天开始去游泳吧，办的健身卡有5个月没去，浪费了。
+&nbsp;
+&nbsp;
 
-星期一。「史蒂夫说，米兰达，在你的心里，你的女朋友们都是无人可匹配的。NO，NO。他不懂。她们要的不是匹配，是值得。这个词里，含有无限的深厚爱意。因为比旁人更懂得那份珍贵在哪，因为比外人更明白那真...
+
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on December 11, 2011</p>
+    <p class="post-meta">Posted by David on March 14, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Moom-Always-Shining.html">
+    <a href="/mysql/mysql-date-and-time-functions.html">
         <h2 class="post-title">            
-            Moom Always Shining
+            Mysql日期和时间函数
         </h2>
         
         <div class="post-content-preview">
-            月亮依然亮堂
-
-已經記不起上一次久久抬頭望著那一穹星空是什麼時候了，估計比一個俗套的童話故事的開頭久很多。但是日子無論腐朽還是神奇都這麼過到了現在。當又一次久久地仰望，在燈的喧嘩裏，看一看寥落的星星們，看一看那顆相比繁星更切近我們的衛星。
-
-忘記是那麼容易的事情，即使幾乎天天都能有機會遇到，但...
+            
+mysql&gt; SELECT something FROM table
+WHERE TO_DAYS(NOW()) - TO_DAYS(date_col) &lt;= 30;
+DAYOFWEEK(date)
+返回日期date的星期索引(1=星期天，2=星期一, ……7=星期六)。这些索引值...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on December 10, 2011</p>
+    <p class="post-meta">Posted by David on March 14, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Warm-Moments.html">
+    <a href="/my%20life/early-to-bed.html">
         <h2 class="post-title">            
-            Warm Moments
+            早起早睡
         </h2>
         
         <div class="post-content-preview">
-            如果溫暖，也無非是這樣
+            
 
-又到一周流水帳的時間。
-
-28 日，星期一。週一的時間總是過得特別快，但是相比以往，那天更添了些安寧。上午十點出發去圖書館，爲了還書順便再借幾本適合的英語讀物，不過到那傻眼了，圖書外借室的大門都還沒打開。告示板上週一下午一點開放的幾個字有些嘲諷地顯映到眼鏡里。
-
-嗯，...
+每天11点前睡觉，早上6点30起来。 能做到吗？
+晚上11点的话，不算早了，但也肯定不算晚，这个时间睡觉应该差不多。
+早上6点半起床算是比较早的。
+现在晚上基本在11点半左右睡觉，早上的闹钟在6点48。总的时间差不多没变，不过早点入睡难度不大，要再早些起来还是很难的。 上班以来，因为工作地...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on December 4, 2011</p>
+    <p class="post-meta">Posted by David on March 13, 2011</p>
 </div>
 
 <hr>
@@ -325,7 +341,7 @@
 
                     
                     <li>
-                        <a href="https://twitter.com/Azeril_Lapland">
+                        <a href="https://twitter.com/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
@@ -336,7 +352,7 @@
 
                     
                     <li>
-                        <a href="https://github.com/Azeril">
+                        <a href="https://github.com/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -348,7 +364,7 @@
                     <!--
                     
                     <li>
-                        <a href="http://www.douban.com/people/Azeril">
+                        <a href="http://www.douban.com/people/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
@@ -361,7 +377,7 @@
                     <!--
                     
                     <li>
-                        <a href="https://www.facebook.com/Azeril_Lapland">
+                        <a href="https://www.facebook.com/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
@@ -373,7 +389,7 @@
 
                     
                     <li>
-                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa  fa-stack-1x fa-inverse">知</i>
@@ -385,7 +401,7 @@
                     <!--
                     
                     <li>
-                        <a target="_blank" href="http://weibo.com/Azeril">
+                        <a target="_blank" href="http://weibo.com/poofly">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
@@ -397,7 +413,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2016 Azeril ♪ Powered by Jekyll.
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

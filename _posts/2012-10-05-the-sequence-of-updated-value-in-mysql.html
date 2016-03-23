@@ -1,0 +1,57 @@
+---
+layout: post
+title: The sequence of updated value in MySQL
+date: 2012-10-05 19:34:14.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- mysql
+- sql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '1521'
+---
+<p>It was a confused phenomenon when I found it.<br />
+[cc lang="sql"]CREATE TABLE `tmp_xf` (<br />
+  `id` int(11) NOT NULL AUTO_INCREMENT,<br />
+   name varchar(32) not null,<br />
+  `status` tinyint(4) NOT NULL,<br />
+  PRIMARY KEY (`id`)<br />
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;</p>
+<p>insert into tmp_xf(name,status) values ('dbaeyes',1);</p>
+<p>select * from tmp_xf;<br />
++----+---------+--------+<br />
+| id | name    | status |<br />
++----+---------+--------+<br />
+|  1 | dbaeyes |      1 |<br />
++----+---------+--------+[/cc]</p>
+<p>Phase 1:<br />
+[cc lang="sql"]update tmp_xf<br />
+set status= if(name='dbaeyes',8,status),<br />
+name = 'toby'<br />
+where id =1;</p>
+<p>+----+------+--------+<br />
+| id | name | status |<br />
++----+------+--------+<br />
+|  1 | toby |      8 |<br />
++----+------+--------+[/cc]</p>
+<p>--restore data<br />
+update tmp_xf set status=1,name='dbaeyes' where id = 1;</p>
+<p>[cc lang="sql"]update tmp_xf<br />
+set name = 'toby',<br />
+status= if(name='dbaeyes',8,status)<br />
+where id =1;</p>
+<p>+----+------+--------+<br />
+| id | name | status |<br />
++----+------+--------+<br />
+|  1 | toby |      1 |<br />
++----+------+--------+[/cc]</p>
+<p>The deifference is the seq of "set values".<br />
+It can be considered that MySQL use the updated value for the next action, then the result is different.<br />
+It just like<br />
+i++ and i=i+1</p>
+<p>You can find the detail info by the source code.</p>

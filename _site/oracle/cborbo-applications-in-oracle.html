@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>CBO,RBO在ORACLE中的应用 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/cborbo-applications-in-oracle.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#cbo" title="cbo">cbo</a>
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#rbo" title="rbo">rbo</a>
+                        
+                    </div>
+                    <h1>CBO,RBO在ORACLE中的应用</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on August 13, 2007</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <h1></h1>
+<div>
+<p><span style="font-family: verdana, arial, helvetica; font-size: small;">ORACLE 提供了CBO、RBO两种SQL优化器。CBO在ORACLE7 引入，但在ORACLE8i 中才成熟。ORACLE 已经明确声明在ORACLE9i<br />
+之后的版本中(ORACLE 10G )，RBO将不再支持。因此选择CBO 是必然的趋势。</p>
+<p>CBO和 RBO作为不同的SQL优化器，对SQL语句的执行计划产生重大影响，如果要对现有的应用程序从RBO向CBO移植，则必须充分<br />
+考虑这些影响，避免SQL语句性能急剧下降；但是，对新的应用系统，则可以考虑直接使用CBO，在CBO模式下进行SQL语句编写、分析<br />
+执行计划、性能测试等工作，这需要开发者对CBO的特性比较熟悉。以下小结几点在CBO下写SQL语句的注意事项：</p>
+<p>1、RBO自ORACLE 6版以来被采用，有着一套严格的使用规则，只要你按照它去写SQL语句，无论数据表中的内容怎样，也不会影响到你的<br />
+“执行计划”，也就是说对数据不“敏感”；CBO计算各种可能“执行计划”的“代价”，即cost，从中选用cost最低的方案，作为实际<br />
+运行方案。各“执行计划”的cost的计算根据，依赖于数据表中数据的统计分布，ORACLE数据库本身对该统计分布并不清楚，必须要分<br />
+析表和相关的索引（使用ANALYZE 命令），才能搜集到CBO所需的数据。</p>
+<p>2、使用CBO 时，编写SQL语句时，不必考虑"FROM" 子句后面的表或视图的顺序和"WHERE" 子句后面的条件顺序；<br />
+ORACLE自7版以来采用的许多新技术都是基于CBO的，如星型连接排列查询，哈希连接查询，函数索引，和并行查询等。</p>
+<p>3、一般而言，CBO所选择的“执行计划”都不会比RBO的“执行计划”差，而且相对而言，CBO对程序员的要求没有RBO那么苛刻，节省了程<br />
+序员为了从多个可能的“执行计划”中选择一个最优的方案而花费的调试时间，但在某些场合下也会存在问题。<br />
+较典型的问题有：有时，表明明建有索引，但查询过程显然没有用到相关的索引，导致查询过程耗时漫长，占用资源巨大，这时就需要<br />
+仔细分析执行计划，找出原因。例如，可以看连接顺序是否允许使用相关索引。假设表emp的deptno列上有索引，表dept的列deptno上无<br />
+索引，WHERE语句有emp.deptno=dept.deptno条件。在做NL连接时，emp做为外表，先被访问，由于连接机制原因，外表的数据访问方式是<br />
+全表扫描，emp.deptno上的索引显然是用不上，最多在其上做索引全扫描或索引快速全扫描。</p>
+<p>4、如果一个语句使用 RBO的执行计划确实比CBO 好，则可以通过加 " rule" 提示，强制使用RBO。</p>
+<p>5、使用CBO 时，SQL语句 "FROM" 子句后面的表，必须全部使用ANALYZE 命令分析过，如果"FROM" 子句后面的是视图，则此视图的<br />
+基础表，也必须全部使用ANALYZE 命令分析过；否则，ORACLE 会在执行此SQL语句之前，自动进行ANALYZE 命令分析，这会极大<br />
+导致SQL语句执行极其缓慢。</p>
+<p>6、使用CBO 时，SQL语句 "FROM" 子句后面的表的个数不宜太多，因为CBO在选择表连接顺序时，会对"FROM" 子句后面的表进行阶乘<br />
+运算，选择最好的一个连接顺序。假如"FROM" 子句后有6个表，则其可选择的连接顺序就是6*5*4*3*2*1 = 720 种，CBO 选择其中<br />
+一种，而如果"FROM" 子句后有12个表，则其可选择的连接顺序就是12*11*10*9*8*7*6*5*4*3*2*1= 479001600 种，可以想象从中选<br />
+择一种，会消耗多少CPU 时间？如果实在是要访问很多表，则最好使用 ORDER 提示，强制使用"FROM" 子句表固定的访问顺序。</p>
+<p>7、使用CBO 时，SQL语句中不能引用系统数据字典表或视图，因为系统数据字典表都未被分析过，可能导致极差的“执行计划”。但是<br />
+不要擅自对数据字典表做分析，否则可能导致死锁，或系统性能严重下降。</p>
+<p>8、使用CBO 时，要注意看采用了哪种类型的表连接方式。ORACLE的共有Sort Merge Join（SMJ）、Hash Join（HJ）和Nested Loop Join<br />
+（NL）。CBO有时会偏重于SMJ 和 HJ，但在OLTP 系统中，NL 一般会更好，因为它高效的使用了索引。<br />
+在两张表连接，且内表的目标列上建有索引时，只有Nested Loop才能有效地利用到该索引。SMJ即使相关列上建有索引，最多只能因索引<br />
+的存在，避免数据排序过程。HJ由于须做HASH运算，索引的存在对数据查询速度几乎没有影响。</p>
+<p>9、使用CBO 时，必须保证为表和相关的索引搜集足够的统计数据。对数据经常有增、删、改的表最好定期对表和索引进行分析，可用SQL<br />
+语句“analyze table xxx compute statistics for all indexes;"ORACLE掌握了充分反映实际的统计数据，才有可能做出正确的选择。</p>
+<p>10、使用CBO 时，要注意被索引的字段的值的数据分布，会影响SQL语句的执行计划。例如：<br />
+表emp，共有一百万行数据，但其中的emp.deptno列，数据只有4种不同的值，如10、20、30、40。虽然emp数据行有很多，ORACLE缺省<br />
+认定表中列的值是在所有数据行均匀分布的，也就是说每种deptno值各有25万数据行与之对应。假设SQL搜索条件DEPTNO=10，利用<br />
+deptno列上的索引进行数据搜索效率，往往不比全表扫描的高，ORACLE理所当然对索引“视而不见”，认为该索引的选择性不高。</p>
+<p>我们考虑另一种情况，如果一百万数据行实际不是在4种deptno值间平均分配，其中有99万行对应着值10，5000行对应值20，3000行<br />
+对应值30，2000行对应值40。在这种数据分布图案中对除值为10外的其它deptno值搜索时，毫无疑问，如果索引能被应用，那么效率会<br />
+高出很多。我们可以采用对该索引列进行单独分析，或用analyze语句对该列建立直方图，对该列搜集足够的统计数据，使ORACLE在搜<br />
+索选择性较高的值能用上索引。</span></p>
+<div><span style="font-family: verdana, arial, helvetica; font-size: small;">原文出处:<a href="http://www.itpub.net/263395.html" target="_blank"><span style="color: #800080;">http://www.itpub.net/263395.html</span></a></span></div>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/hand-built-gallery-em-startup-problems.html" data-toggle="tooltip" data-placement="top" title="手工建库 EM启动问题">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/oracle-pagination-technology.html" data-toggle="tooltip" data-placement="top" title="oracle分页技术">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/cborbo-applications-in-oracle" data-title="CBO,RBO在ORACLE中的应用"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="
+
+ORACLE 提供了CBO、RBO两种SQL优化器。CBO在ORACLE7 引入，但在ORACLE8i 中才成熟。ORACLE 已经明确声明在ORAC... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/cborbo-applications-in-oracle.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/cborbo-applications-in-oracle" data-title="CBO,RBO在ORACLE中的应用" data-url="http://dbaeyes.github.io/oracle/cborbo-applications-in-oracle.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

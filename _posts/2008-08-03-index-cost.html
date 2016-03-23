@@ -1,0 +1,33 @@
+---
+layout: post
+title: 索引成本计算
+date: 2008-08-03 23:30:27.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- cbo
+- index
+- oracle
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '927'
+---
+<p>典型索引访问路径的工作流程：</p>
+<div>*为定义索引的列准备相关谓词<br />
+*定位索引的根块<br />
+*沿着索引的分支层（branch level）往下走，一直到叶块<br />
+*遍历整个叶块的链表，一直到最后一个能够与谓词相匹配的索引项<br />
+*对于每个索引项，确定是否访问一个表块（table block）</p>
+<p>cost=<br />
+blevel(降序遍历索引所需块访问的数目） +<br />
+ceiling(leaf_block * effective index selectivity) 遍历叶块的数目 +<br />
+ceiling(clustering_factor * effective table selectivity)</p>
+<p>在收集统计信息后，视图 User_index中，存在 blevel, leaf_blocks, clustering_factor信息</p>
+<p>-- from Cost-Base Oracle Fundamentals</p>
+<p>因为时间和水平的问题，打算先看 选择率，查询变换、连接基数、嵌套循环、排序与归并连接这几个章节。<br />
+这个书确实是好书，但有些地方比较深，不是一下子能够理解的，估计得回过头来再看好几遍才行，现在知道的概念先。 打算把上面几个章节结束后快速的在不expert oracle database architecture 再来一遍，那个好懂，不过有些概念需要再次清晰一下。</p>
+<p>-- EOF --</p></div>

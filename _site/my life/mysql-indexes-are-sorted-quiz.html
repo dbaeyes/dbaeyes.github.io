@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>MYSQL 排序 索引 小测 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/my%20life/mysql-indexes-are-sorted-quiz.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#index" title="index">index</a>
+                        
+                        <a class="tag" href="/Tags/#mysql" title="mysql">mysql</a>
+                        
+                    </div>
+                    <h1>MYSQL 排序 索引 小测</h1>
+                    
+                    <span class="meta">Posted by David on June 29, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>性能测试中碰到关于mysql排序消耗非常之巨，使用索引来去除排序，可以比较好的降低load。我对mysql是比较初学的</p>
+<div>
+root@orphean 02:19:27&gt;select count(*) from tmp_info;<br />
++----------+<br />
+| count(*) |<br />
++----------+<br />
+|    42916 |<br />
++----------+<br />
+1 row in set (0.02 sec)</p>
+<p>root@orphean 02:29:27&gt;select count(*) from tmp_info where status = 1;<br />
++----------+<br />
+| count(*) |<br />
++----------+<br />
+|    32911 |<br />
++----------+<br />
+1 row in set (0.02 sec)</p>
+<p>root@orphean 02:29:40&gt;select count(*) from tmp_info where status = 2;<br />
++----------+<br />
+| count(*) |<br />
++----------+<br />
+|    10005 |<br />
++----------+<br />
+1 row in set (0.00 sec)</p>
+<p>root@orphean 02:33:16&gt;select count(*) from tmp_info<br />
+-&gt; where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%';<br />
++----------+<br />
+| count(*) |<br />
++----------+<br />
+|    32888 |<br />
++----------+<br />
+1 row in set (0.19 sec)</p>
+<p>--可以看到虽然加了很多查询条件，但是过滤性并不好，返回的数据量还是比较大，占了增加的表3/4<br />
+--看一下全表扫描和用索引的消耗<br />
+索引字段：`status`, `level`, `appraise`, `open_date`, `outer_sys_code`, `gmt_modified`</p>
+<p>root@orphean 04:06:20&gt;explain select count(*) from tmp_info<br />
+-&gt; where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%' \G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: tmp_info<br />
+type: ref<br />
+possible_keys: IDX_RECRUIT_STATUS<br />
+key: IDX_RECRUIT_STATUS<br />
+key_len: 1<br />
+ref: const<br />
+rows: 1626<br />
+Extra: Using where<br />
+1 row in set (0.00 sec)</p>
+<p>+----------+<br />
+| count(*) |<br />
++----------+<br />
+|    32888 |<br />
++----------+<br />
+1 row in set (0.17 sec)</p>
+<p>=======================<br />
+root@orphean 04:07:08&gt;explain select count(*) from tmp_info IGNORE INDEX (IDX_RECRUIT_STATUS)<br />
+-&gt; where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%' \G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: tmp_info<br />
+type: ALL<br />
+possible_keys: NULL<br />
+key: NULL<br />
+key_len: NULL<br />
+ref: NULL<br />
+rows: 42277<br />
+Extra: Using where<br />
+1 row in set (0.00 sec)</p>
+<p>+----------+<br />
+| count(*) |<br />
++----------+<br />
+|    32888 |<br />
++----------+<br />
+1 row in set (0.14 sec)</p>
+<p>可以看到全表扫描速度要快，其实这个也是可想而知的，用索引扫描返回了表70%多的数据，上面的是count语句，下面看一下分页list语句</p>
+<p>root@orphean 04:12:49&gt;explain select * from tmp_info   where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%'<br />
+-&gt; ORDER BY gmt_modified desc<br />
+-&gt; LIMIT 1,20 \G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: tmp_info<br />
+type: ref<br />
+possible_keys: IDX_RECRUIT_STATUS<br />
+key: IDX_RECRUIT_STATUS<br />
+key_len: 1<br />
+ref: const<br />
+rows: 21041<br />
+Extra: Using where<br />
+1 row in set (0.00 sec)</p>
+<p>---------------------------+------------------------+---------------------+---------------------+<br />
+20 rows in set (0.00 sec)</p>
+<p>root@orphean 04:13:19&gt;explain select * from tmp_info   IGNORE INDEX (IDX_RECRUIT_STATUS)<br />
+-&gt; where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%'<br />
+-&gt; ORDER BY gmt_modified desc<br />
+-&gt; LIMIT 1,20 \G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: tmp_info<br />
+type: ALL<br />
+possible_keys: NULL<br />
+key: NULL<br />
+key_len: NULL<br />
+ref: NULL<br />
+rows: 42082<br />
+Extra: Using where; Using filesort<br />
+1 row in set (0.00 sec)</p>
+<p>---------------------------+-------------<br />
+20 rows in set (0.33 sec)</p>
+<p>这个非常明显，看到使用索引去掉filesort之后，sql的效率非常高，显示执行的时间是0.00s（基本在几个毫秒），而使用全表就需要非常330ms<br />
+如果我把索引中的gmt_modifid字段移后，是排序用不到索引，那是什么效果呢</p>
+<p>ALTER TABLE `orphean`.`tmp_info` DROP INDEX `IDX_RECRUIT_STATUS`,<br />
+ADD INDEX `IDX_RECRUIT_STATUS` USING BTREE(`status`, `level`, `appraise`, `open_date`, `outer_sys_code`， `gmt_modified`);</p>
+<p>root@orphean 04:58:50&gt;EXPLAIN select * from tmp_info<br />
+-&gt; where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%'<br />
+-&gt; ORDER BY gmt_modified desc<br />
+-&gt; LIMIT 1,20 \G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: tmp_info<br />
+type: ref<br />
+possible_keys: IDX_RECRUIT_STATUS<br />
+key: IDX_RECRUIT_STATUS<br />
+key_len: 1<br />
+ref: const<br />
+rows: 11234<br />
+Extra: Using where; Using filesort<br />
+1 row in set (0.00 sec)</p>
+<p>---------------------------+------------------------+---------------------+---------------------+<br />
+20 rows in set (0.35 sec)</p>
+<p>没有用到排序索引消耗的代价比全表扫描来的还大，可惜排序对于mysql的消耗是非常非常大的。 上面的sql比较是将30000多条记录排序啊，代价昂贵！</p>
+<p>在性能测试的时候，使用全表扫描或者没有用上索引排序的时候，数据库CPU在50%（16个CPU用掉了8个），load在8以上，而在用索引去掉排序之后，使CPU下降到4%，load在1以下</p>
+<p>小结：1. 尽可以去除mysql的排序，使用索引。 要使用索引来用作排序，必须索引列都在查询条件中，而且排序字段前面的查询条件是用=号连接，<br />
+因此可能会创建多个索引，前面的字段都相同，只是排序字段的位置不一样的情况。 这个时候用强制索引去提示吧<br />
+2. 如果在确定查询返回的结果集太大，查询条件的筛选度太下，那就干脆用全表扫描吧，用 IGNORE INDEX (IDX_NAME)来忽略索引。</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/transformers-2-making-a-comeback.html" data-toggle="tooltip" data-placement="top" title="变形金刚2 卷土重来">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/these-days.html" data-toggle="tooltip" data-placement="top" title="这些天">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/my%20life/mysql-indexes-are-sorted-quiz" data-title="MYSQL 排序 索引 小测"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="性能测试中碰到关于mysql排序消耗非常之巨，使用索引来去除排序，可以比较好的降低load。我对mysql是比较初学的
+
+root@orphean 02:... | Microdust:David's blog"
+                    data-url="http://dbaeyes.github.io/my%20life/mysql-indexes-are-sorted-quiz.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">Share to：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        <li><a class="ds-facebook" href="javascript:void(0);" data-service="facebook">Facebook</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/my%20life/mysql-indexes-are-sorted-quiz" data-title="MYSQL 排序 索引 小测" data-url="http://dbaeyes.github.io/my%20life/mysql-indexes-are-sorted-quiz.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dbaeyes"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

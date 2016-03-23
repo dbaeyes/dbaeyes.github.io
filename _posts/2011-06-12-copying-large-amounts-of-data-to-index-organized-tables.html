@@ -1,0 +1,87 @@
+---
+layout: post
+title: 复制大数据量到索引组织表
+date: 2011-06-12 22:16:30.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- extent
+- index
+- oracle
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '4538'
+---
+<p>当导入索引组织表的数据不能排序时，那么效率是很差的。如果用一个大事务来做，很可能失败，并且导致服务器压力很大。</p>
+<p>在oracle中还是推荐使用根据extent分块来实现大数据量的移动 http://hi.baidu.com/dbaeyes/blog/item/dcf741ada8edac004b36d674.html</p>
+<p> 测试：<br />
+1. 使用堆表 2000w记录，耗时 3mins<br />
+2. 使用索引组织表 2000w记录，耗时 20mins</p>
+<p>--创建存储extent的临时表<br />
+[cc lang='sql']dbaeyes@ orcl>create table xf_rowid(<br />
+  2  table_name                     VARCHAR2(50),<br />
+  3  ID                             NUMBER(22),<br />
+  4  ROWID_MIN                      VARCHAR2(100),<br />
+  5  ROWID_MAX                      VARCHAR2(100),<br />
+  6  HAS_DEAL                       NUMBER(22),<br />
+  7  gmt_modified                   DATE,<br />
+  8  primary key(table_name,id));<br />
+Table created.[/cc]</p>
+<p>--将表的extent对于的最大最小rowid放到临时表中<br />
+[cc lang='sql']dbaeyes@ orcl>insert into xf_rowid(table_name,id,rowid_min,rowid_max,has_deal)<br />
+  2   select 'rac_02',<br />
+  3                            rownum,<br />
+  4          DBMS_ROWID.ROWID_CREATE(1,o.data_object_id,e.RELATIVE_FNO,e.BLOCK_ID,0),<br />
+  5          DBMS_ROWID.ROWID_CREATE(1,o.data_object_id,e.RELATIVE_FNO,e.BLOCK_ID+e.BLOCKS-1,10000),<br />
+  6          0<br />
+  7          from dba_extents e,dba_objects o<br />
+  8          where e.segment_name=upper('user_cat_info')<br />
+  9          and e.owner='DBAEYES'<br />
+ 10          AND o.object_name = upper('user_cat_info')<br />
+ 11          AND o.owner='DBAEYES';</p>
+<p>3446 rows created.[/cc]</p>
+<p>--统一每个extent区块的数据量<br />
+[cc lang='sql']select /*+ rowid(tt) */<br />
+  COUNT(*)<br />
+   from user_cat_info<br />
+  where rowid >= chartorowid('AAF7lUAKSAAAhIFAAA')<br />
+    and rowid <= chartorowid('AAF7lUAKSAAAhQECcQ');</p>
+<p>  COUNT(*)<br />
+----------<br />
+    173336[/cc]</p>
+<p>因为单行记录比较小，所以一个extetn存放而来17w多的记录。                 </p>
+<p>--根据extent搬数据的存储过程</p>
+<p>[cc lang='sql']CREATE OR REPLACE PROCEDURE SP_XF_EXTENT_MOVE IS<br />
+  /*<br />
+  CREATE DATE: 20110613<br />
+  USER: XUANFENG<br />
+  根据extent搬数据<br />
+  */</p>
+<p>  V_SQLERRM VARCHAR2(200);<br />
+BEGIN<br />
+  FOR C IN (SELECT ID, ROWID_MIN, ROWID_MAX<br />
+              FROM XF_ROWID<br />
+             WHERE TABLE_NAME ='rac_02'<br />
+               AND HAS_DEAL = 0) LOOP</p>
+<p>    INSERT INTO TEST_USER_CAT_IOT(ID, USER_ID, CAT_ID, GMT_MODIFIED)<br />
+      SELECT /*+ rowid(tt) */<br />
+       ID,<br />
+       USER_ID,<br />
+       CAT_ID,<br />
+       TO_DATE(GMT_MODIFIED, 'yyyy-mm-dd hh24:mi:ss')<br />
+        FROM user_cat_info<br />
+       WHERE ROWID >= CHARTOROWID(C.ROWID_MIN)<br />
+         AND ROWID <= CHARTOROWID(C.ROWID_MAX);</p>
+<p>    UPDATE XF_ROWID SET HAS_DEAL = 1 WHERE ID = C.ID;<br />
+    COMMIT;<br />
+  END LOOP;</p>
+<p>EXCEPTION<br />
+  WHEN OTHERS THEN<br />
+    V_SQLERRM := SUBSTR(SQLERRM, 1, 200);<br />
+    DBMS_OUTPUT.PUT_LINE(V_SQLERRM);<br />
+    ROLLBACK;<br />
+END SP_XF_EXTENT_MOVE;[/cc]</p>

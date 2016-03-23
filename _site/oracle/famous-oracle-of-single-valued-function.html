@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>ORACLE 著名函数之单值函数 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/famous-oracle-of-single-valued-function.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                    </div>
+                    <h1>ORACLE 著名函数之单值函数</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on July 24, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>From: http://www.itpub.net/843333.html 三思</p>
+<div>
+注：N表示数字型，C表示字符型，D表示日期型，[]表示内中参数可被忽略，fmt表示格式。</p>
+<p>单值函数在查询中返回单个值，可被应用到select，where子句，start with以及connect by 子句和having子句。</p>
+<p>(一).数值型函数(Number Functions)</p>
+<p>数值型函数输入数字型参数并返回数值型的值。多数该类函数的返回值支持38位小数点，诸如：COS, COSH, EXP, LN, LOG, SIN, SINH, SQRT, TAN, and TANH 支持36位小数点。ACOS, ASIN, ATAN, and ATAN2支持30位小数点。</p>
+<p>1、<strong>MOD(n1,n2)</strong> 返回n1除n2的余数，如果n2=0则返回n1的值。</p>
+<p>例如：<span style="color: #339966;">SELECT MOD(24,5) FROM DUAL;</span></p>
+<p>2、<strong>ROUND(n1[,n2])</strong> 返回四舍五入小数点右边n2位后n1的值，n2缺省值为0，如果n2为负数就舍入到小数点左边相应的位上(虽然oracle documents上提到n2的值必须为整数，事实上执行时此处的判断并不严谨，即使n2为非整数，它也会自动将n2取整后做处理，但是我文档中其它提到必须为整的地方需要特别注意，如果不为整执行时会报错的)。</p>
+<p>例如：<span style="color: #339966;">SELECT ROUND(23.56),ROUND(23.56,1),ROUND(23.56,-1) FROM DUAL;</span></p>
+<p>3、<strong>TRUNC(n1[,n2]) </strong>返回截尾到n2位小数的n1的值，n2缺省设置为0，当n2为缺省设置时会将n1截尾为整数，如果n2为负值，就截尾在小数点左边相应的位上。</p>
+<p>例如：<span style="color: #339966;">SELECT TRUNC(23.56),TRUNC(23.56,1),TRUNC(23.56,-1) FROM DUAL;</span></p>
+<p>(二).字符型函数返回字符值(Character Functions Returning Character Values)</p>
+<p>该类函数返回与输入类型相同的类型。</p>
+<p>l         返回的CHAR类型值长度不超过2000字节；</p>
+<p>l         返回的VCHAR2类型值长度不超过4000字节；<br />
+如果上述应返回的字符长度超出，oracle并不会报错而是直接截断至最大可支持长度返回。</p>
+<p>l         返回的CLOB类型值长度不超过4G；</p>
+<p>对于CLOB类型的函数，如果返回值长度超出，oracle不会返回任何错误而是直接抛出错误。</p>
+<p>1、<strong>LOWER(c)</strong> 将指定字符串内字符变为小写，支持CHAR,VARCHAR2,NCHAR,NVARCHAR2,CLOB,NCLOB类型</p>
+<p>例如：<span style="color: #339966;">SELECT LOWER('WhaT is tHis') FROM DUAL;</span></p>
+<p>2、<strong>UPPER(c) </strong>将指定字符串内字符变为大写，支持CHAR,VARCHAR2,NCHAR,NVARCHAR2,CLOB,NCLOB类型</p>
+<p>例如：<span style="color: #339966;">SELECT UPPER('WhaT is tHis') FROM DUAL;</span></p>
+<p>3、<strong>LPAD(c1,n[,c2]) </strong>返回指定长度=n的字符串，需要注意的有几点：</p>
+<p>l         如果n&lt;c1.length则从右到左截取指定长度返回；</p>
+<p>l         如果n&gt;c1.length and c2 is null，以空格从左向右补充字符长度至n并返回；</p>
+<p>l         如果n&gt;c1.length and c2 is not null，以指定字符c2从左向右补充c1长度至n并返回；</p>
+<p>例如：<span style="color: #339966;">SELECT LPAD('WhaT is tHis',5),LPAD('WhaT is tHis',25),LPAD('WhaT is tHis',25,'-') FROM DUAL;</span></p>
+<p>最后大家再猜一猜，如果n&lt;0，结果会怎么样</p>
+<p>4、<strong>RPAD(c1,n[,c2])</strong> 返回指定长度=n的字符串，基本与上同，不过补充字符是从右向左方向正好与上相反；</p>
+<p>例如：<span style="color: #339966;">SELECT RPAD('WhaT is tHis',5),RPAD('WhaT is tHis',25),RPAD('WhaT is tHis',25,'-') FROM DUAL;</span></p>
+<p>5、<strong>TRIM([[LEADING||TRAILING||BOTH] c2 FROM] c1) </strong>哈哈，被俺无敌的形容方式搞晕头了吧，这个地方还是看图更明了一些。</p>
+<p>看起来很复杂，理解起来很简单：</p>
+<p>l         如果没有指定任何参数则oracle去除c1头尾空格<br />
+例如：<span style="color: #339966;">SELECT TRIM('   WhaT is tHis   ') FROM DUAL;<br />
+</span><br />
+l         如果指定了c2参数，则oracle去掉c1头尾c2(这个建议细致测试，有多种不同情形的哟)<br />
+例如：<span style="color: #339966;">SELECT TRIM('W' FROM 'WhaT is tHis w W') FROM DUAL;</span></p>
+<p>l         如果指定了leading参数则会去掉c1头部c2<br />
+例如：<span style="color: #339966;">SELECT TRIM(leading 'W' FROM 'WhaT is tHis w W') FROM DUAL;</span></p>
+<p>l         如果指定了trailing参数则会去掉c1尾部c2<br />
+例如：SELECT TRIM(trailing 'W' FROM 'WhaT is tHis w W') FROM DUAL;</p>
+<p>l         如果指定了both参数则会去掉c1头尾c2(跟不指定有区别吗？没区别！)<br />
+例如：<span style="color: #339966;">SELECT TRIM(both 'W' FROM 'WhaT is tHis w W') FROM DUAL;</span></p>
+<p>注意：c2长度=1</p>
+<p>6、<strong>LTRIM(c1[,c2]) </strong>千万表以为与上面那个长的像，功能也与上面的类似，本函数是从字符串c1左侧截取掉与指定字符串c2相同的字符并返回。如果c2为空则默认截取空格。</p>
+<p>例如：<span style="color: #339966;">SELECT LTRIM('WWhhhhhaT is tHis w W','Wh') FROM DUAL;</span><br />
+----aT is tHis w W----</p>
+<p>7、<strong>RTRIM(c1,c2)</strong>与上同，不过方向相反</p>
+<p>例如：<span style="color: #339966;">SELECT RTRIM('WWhhhhhaT is tHis w W','W w') FROM DUAL;</span></p>
+<p>8、<strong>REPLACE(c1,c2[,c3])</strong> 将c1字符串中的c2替换为c3，如果c3为空，则从c1中删除所有c2。</p>
+<p>例如：<span style="color: #339966;">SELECT REPLACE('WWhhhhhaT is tHis w W','W','-') FROM DUAL;</span></p>
+<p>9、<strong>SOUNDEX(c)</strong> 神奇的函数啊，该函数返回字符串参数的语音表示形式，对于比较一些读音相同，但是拼写不同的单词非常有用。计算语音的算法如下：</p>
+<p>l         保留字符串首字母，但删除a、e、h、i、o、w、y。</p>
+<p>l         将下表中的数字赋给相对应的字母：</p>
+<p>1：b、f、p、v</p>
+<p>2：c、g、k、q、s、x、z</p>
+<p>3：d、t</p>
+<p>4：l</p>
+<p>5：m、n</p>
+<p>6：R</p>
+<p>l         如果字符串中存在拥有相同数字的2个以上（包含2个）的字母在一起（例如b和f），或者只有h或w，则删除其他的，只保留1个；</p>
+<p>l         只返回前4个字节，不够用0填充</p>
+<p>例如：SELECT SOUNDEX('dog'),soundex('boy') FROM DUAL;</p>
+<p><strong>10、SUBSTR(c1,n1[,n2])</strong> 截取指定长度的字符串。稍不注意就可能充满了陷阱的函数。</p>
+<p>n1=开始长度；</p>
+<p>n2=截取的字符串长度，如果为空，默认截取到字符串结尾；</p>
+<p>l         如果n1=0 then n1=1</p>
+<p>l         如果n1&gt;0，则oracle从左向右确认起始位置截取</p>
+<p>例如：<span style="color: #339966;">SELECT SUBSTR('What is this',5,3) FROM DUAL;</span></p>
+<p>l         如果n1&lt;0，则oracle从右向左数确认起始位置</p>
+<p>例如：SELECT SUBSTR('What is this',-5,3) FROM DUAL;</p>
+<p>l         如果n1&gt;c1.length则返回空</p>
+<p>例如：SELECT SUBSTR('What is this',50,3) FROM DUAL;</p>
+<p>然后再请你猜猜，如果n2&lt;1，会如何返回值呢</p>
+<p>11、<strong>TRANSLATE(c1,c2,c3)</strong> 就功能而言，此函数与replace有些相似。但需要注意的一点是，translate是绝对匹配替换，这点与replace函数具有非常大区别。什么是绝对匹配替换呢？简单的说，是将字符串c1中按一定的格式c2替换为c3。如果文字形容仍然无法理解，我们通过几具实例来说明：</p>
+<p>例如：</p>
+<p>SELECT TRANSLATE('What is this','','-') FROM DUAL;</p>
+<p>SELECT TRANSLATE('What is this','-','') FROM DUAL;</p>
+<p>结果都是空。来试试这个：</p>
+<p>SELECT TRANSLATE('What is this',' ',' ') FROM DUAL;</p>
+<p>再来看这个：</p>
+<p>SELECT TRANSLATE('What is this','ait','-*') FROM DUAL;</p>
+<p>是否明白了点呢？Replace函数理解比较简单，它是将字符串中指定字符替换成其它字符，它的字符必须是连续的。而translate中，则是指定字符串c1中出现的c2，将c2中各个字符替换成c3中位置顺序与其相同的c3中的字符。明白了？<strong><em>Replace是替换，而translate则像是过滤。<br />
+</em></strong></p>
+<p>(三).字符型函数返回数字值(Character Functions Returning Number Values)</p>
+<p>本类函数支持所有的数据类型</p>
+<p>1、<strong>INSTR(c1,c2[,n1[,n2]])</strong> 返回c2在c1中位置</p>
+<p>l         c1:原字符串</p>
+<p>l         c2:要寻找的字符串</p>
+<p>l         n1:查询起始位置，正值表示从左到右，负值表示从右到左 (大小表示位置,比如3表示左面第3处开始,-3表示右面第3处开始)。黑黑，如果为0的话，则返回的也是0</p>
+<p>l         n2:第几个匹配项。大于0</p>
+<p>例如：SELECT INSTR('abcdefg','e',-3) FROM DUAL;</p>
+<p>2、LENGTH(c) 返回指定字符串的长度。如果</p>
+<p>例如：SELECT LENGTH('A123中') FROM DUAL;</p>
+<p>猜猜SELECT LENGTH('') FROM DUAL;的返回值是什么</p>
+<p>(四).日期函数(Datetime Functions)</p>
+<p>本类函数中，除months_between返回数值外，其它都将返回日期。</p>
+<p>1、<strong>ADD_MONTHS()</strong> 返回指定日期月份+n之后的值，n可以为任何整数。</p>
+<p>例如：<span style="color: #008080;">SELECT ADD_MONTHS(sysdate,12),ADD_MONTHS(sysdate,-12) FROM DUAL;</span></p>
+<p>2、<strong>CURRENT_DATE</strong> 返回当前session所在时区的默认时间</p>
+<p>例如：alter</p>
+<p>SQL&gt; alter session set nls_date_format = 'mm-dd-yyyy' ;</p>
+<p>SQL&gt; select current_date from dual;</p>
+<p>3、<strong>SYSDATE</strong> 功能与上相同，返回当前session所在时区的默认时间。但是需要注意的一点是，如果同时使用sysdate与current_date获得的时间不一定相同，某些情况下current_date会比sysdate快一秒。经过与xyf_tck(兄台的大作ORACLE的工作机制写的很好，深入浅出)的短暂交流，我们认为current_date是将current_timestamp中毫秒四舍五入后的返回，虽然没有找到文档支持，但是想来应该八九不离十。同时，仅是某些情况下会有一秒的误差，一般情况下并不会对你的操作造成影响，所以了解即可。</p>
+<p>例如：SELECT SYSDATE,CURRENT_DATE FROM DUAL;</p>
+<p>4、<strong>LAST_DAY(d)</strong> 返回指定时间所在月的最后一天</p>
+<p>例如：SELECT last_day(SYSDATE) FROM DUAL;</p>
+<p>5、<strong>NEXT_DAY(d,n) </strong>返回指定日期后第一个n的日期，n为一周中的某一天。但是，需要注意的是n如果为字符的话，它的星期形式需要与当前session默认时区中的星期形式相同。</p>
+<p>例如：三思用的中文nt，nls_language值为SIMPLIFIED CHINESE</p>
+<p>SELECT NEXT_DAY(SYSDATE,5) FROM DUAL;</p>
+<p>SELECT NEXT_DAY(SYSDATE,'星期四') FROM DUAL;</p>
+<p>两种方式都可以取到正确的返回，但是：</p>
+<p>SELECT NEXT_DAY(SYSDATE,'Thursday') FROM DUAL;</p>
+<p>则会执行出错，提供你说周中的日无效，就是这个原因了。</p>
+<p>6、MONTHS_BETWEEN(d1,d2) 返回d1与d2间的月份差，视d1,d2的值大小，结果可正可负，当然也有可能为0</p>
+<p>例如：</p>
+<p>SELECT months_between(SYSDATE, sysdate),</p>
+<p>months_between(SYSDATE, add_months(sysdate, -1)),</p>
+<p>months_between(SYSDATE, add_months(sysdate, 1))</p>
+<p>FROM DUAL;</p>
+<p>7、ROUND(d[,fmt]) 前面讲数值型函数的时候介绍过ROUND，此处与上功能基本相似，不过此处操作的是日期。如果不指定fmt参数，则默认返回距离指定日期最近的日期。</p>
+<p>例如：SELECT ROUND(SYSDATE,'HH24') FROM DUAL;</p>
+<p>8、TRUNC(d[,fmt]) 与前面介绍的数值型TRUNC原理相同，不过此处也是操作的日期型。</p>
+<p>例如：SELECT TRUNC(SYSDATE,'HH24') FROM DUAL;</p>
+<p>(五).转换函数(Conversion Functions)</p>
+<p>转换函数将指定字符从一种类型转换为另一种，通常这类函数遵循如下惯例：函数名称后面跟着待转换类型以及输出类型。</p>
+<p>1、<strong>TO_CHAR() </strong>本函数又可以分三小类，分别是</p>
+<p>l         转换字符-&gt;字符TO_CHAR(c)：将nchar,nvarchar2,clob,nclob类型转换为char类型；</p>
+<p>例如：SELECT TO_CHAR('AABBCC') FROM DUAL;</p>
+<p>l         转换时间-&gt;字符TO_CHAR(d[,fmt])：将指定的时间(data,timestamp,timestamp with time zone)按照指定格式转换为varchar2类型；</p>
+<p>例如：SELECT TO_CHAR(sysdate,'yyyy-mm-dd hh24:mi:ss') FROM DUAL;</p>
+<p>l         转换数值-&gt;字符TO_CHAR(n[,fmt])：将指定数值n按照指定格式fmt转换为varchar2类型并返回；</p>
+<p>例如：SELECT TO_CHAR(-100, 'L99G999D99MI') FROM DUAL;</p>
+<p>2、<strong>TO_DATE(c[,fmt[,nls]])</strong> 将char,nchar,varchar2,nvarchar2转换为日期类型，如果fmt参数不为空，则按照fmt中指定格式进行转换。注意这里的fmt参数。如果ftm为'J'则表示按照公元制(Julian day)转换，c则必须为大于0并小于5373484的正整数。</p>
+<p>例如：</p>
+<p>SELECT TO_DATE(2454336, 'J') FROM DUAL;</p>
+<p>SELECT TO_DATE('2007-8-23 23:25:00', 'yyyy-mm-dd hh24:mi:ss') FROM DUAL;</p>
+<p>3、<strong>TO_NUMBER(c[,fmt[,nls]])</strong> 将char,nchar,varchar2,nvarchar2型字串按照fmt中指定格式转换为数值类型并返回。</p>
+<p>例如：SELECT TO_NUMBER('-100.00', '9G999D99') FROM DUAL;</p>
+<p>(六).其它辅助函数(Miscellaneous Single-Row Functions)</p>
+<p>1、<strong>DECODE(exp,s1,r1,s2,r2..s,r[,def]) </strong>可以把它理解成一个增强型的if else，只不过它并不通过多行语句，而是在一个函数内实现if else的功能。</p>
+<p>exp做为初始参数。s做为对比值，相同则返回r，如果s有多个，则持续遍历所有s，直到某个条件为真为止，否则返回默认值def(如果指定了的话)，如果没有默认值，并且前面的对比也都没有为真，则返回空。</p>
+<p>毫无疑问，decode是个非常重要的函数，在实现行转列等功能时都会用到，需要牢记和熟练使用。</p>
+<p>例如：<span style="color: #008080;">select decode('a2','a1','true1','a2','true2','default') from dual;</span></p>
+<p>2、<strong>GREATEST(n1,n2,...n) </strong>返回序列中的最大值</p>
+<p>例如：SELECT GREATEST(15,5,75,8) "Greatest" FROM DUAL;</p>
+<p>3、<strong>LEAST(n1,n2....n)  </strong> 返回序列中的最小值</p>
+<p>例如：SELECT LEAST(15,5,75,8) LEAST FROM DUAL;</p>
+<p>4、<strong>NULLIF(c1,c2)</strong></p>
+<p>Nullif也是个很有意思的函数。逻辑等价于：CASE WHEN c1 = c2 THEN NULL ELSE c1 END</p>
+<p>例如<span style="color: #008080;">：SELECT NULLIF('a','b'),NULLIF('a','a') FROM DUAL;</span></p>
+<p>5、<strong>NVL(c1,c2) </strong>逻辑等价于IF c1 is null THEN c2 ELSE c1 END。c1,c2可以是任何类型。如果两者类型不同，则oracle会自动将c2转换为c1的类型。</p>
+<p>例如：<span style="color: #008080;">SELECT NVL(null, '12') FROM DUAL;</span></p>
+<p>6、<strong>NVL2(c1,c2,c3)</strong> 大家可能都用到nvl，但你用过nvl2吗？如果c1非空则返回c2,如果c1为空则返回c3</p>
+<p>例如：select nvl2('a', 'b', 'c') isNull,nvl2(null, 'b', 'c') isNotNull from dual;</p>
+<p>7、SYS_CONNECT_BY_PATH(col,c) 该函数只能应用于树状查询。返回通过c1连接的从根到节点的路径。该函数必须与connect by 子句共同使用。</p>
+<p>例如：</p>
+<p>create table tmp3(</p>
+<p>rootcol varchar2(10),</p>
+<p>nodecol varchar2(10)</p>
+<p>);</p>
+<p>insert into tmp3 values ('','a001');</p>
+<p>insert into tmp3 values ('','b001');</p>
+<p>insert into tmp3 values ('a001','a002');</p>
+<p>insert into tmp3 values ('a002','a004');</p>
+<p>insert into tmp3 values ('a001','a003');</p>
+<p>insert into tmp3 values ('a003','a005');</p>
+<p>insert into tmp3 values ('a005','a008');</p>
+<p>insert into tmp3 values ('b001','b003');</p>
+<p>insert into tmp3 values ('b003','b005');</p>
+<p>select lpad(' ', level*10,'=') ||'&gt;'|| sys_connect_by_path(nodecol,'/')</p>
+<p>from tmp3</p>
+<p>start with rootcol = 'a001'</p>
+<p>connect by prior nodecol =rootcol;</p>
+<p>8、SYS_CONTEXT(c1,c2[,n]) 将指定命名空间c1的指定参数c2的值按照指定长度n截取后返回。</p>
+<p>Oracle9i提供内置了一个命名空间USERENV，描述了当前session的各项信息，其拥有下列参数：</p>
+<p>l         CURRENT_SCHEMA:当前模式名；</p>
+<p>l         CURRENT_USER:当前用户；</p>
+<p>l         IP_ADDRESS:当前客户端IP地址；</p>
+<p>l         OS_USER:当前客户端操作系统用户；</p>
+<p>等等数十项，更详细的参数列还请大家直接参考Oracle Online Documents</p>
+<p>例如：SELECT SYS_CONTEXT('USERENV', 'SESSION_USER') FROM DUAL;</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/exp-00091.html" data-toggle="tooltip" data-placement="top" title="EXP-00091">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/oracle-non-famous-single-valued-function.html" data-toggle="tooltip" data-placement="top" title="ORACLE 非著名函数之单值函数">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/famous-oracle-of-single-valued-function" data-title="ORACLE 著名函数之单值函数"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="From: http://www.itpub.net/843333.html 三思
+
+注：N表示数字型，C表示字符型，D表示日期型，[]表示内中参数可被忽... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/famous-oracle-of-single-valued-function.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/famous-oracle-of-single-valued-function" data-title="ORACLE 著名函数之单值函数" data-url="http://dbaeyes.github.io/oracle/famous-oracle-of-single-valued-function.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

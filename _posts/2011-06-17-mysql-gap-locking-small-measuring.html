@@ -1,0 +1,66 @@
+---
+layout: post
+title: mysql 间隙锁小测
+date: 2011-06-17 12:09:46.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- gap
+- lock
+- mysql
+- 间隙锁
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  _aioseop_title: mysql 间隙锁小测
+  _aioseop_description: mysql 间隙锁小测
+  _aioseop_keywords: mysql,lock,gap,间隙锁
+  views: '1616'
+---
+<p>一个innod的表，如果根据没有索引的列去更新，那么很悲剧，会lock整个表。</p>
+<div>
+<pre>update tmp_xf set c =11 where a = 1;</pre>
+<p>整个tmp_xf表都会被lock。</p>
+<p>所以我们必须在列a上建索引，但是innodb的索引是会有间隙锁（Next-Key)，主要是存在在update对insert的影响上，两个update之间没有影响。 看下面的测试</p>
+<p>&nbsp;</p>
+<p><a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=SHOW">show</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=CREATE">create</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">table</a> tmp_xf\G<br />
+*************************** 1. row ***************************<br />
+<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">Table</a>: tmp_xf<br />
+<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=CREATE">Create</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">Table</a>: <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=CREATE">CREATE</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">TABLE</a> `tmp_xf` (<br />
+`id` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://dev.mysql.com/doc/refman/5.1/en/non-typed-operators.html">NOT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=AUTO_INCREMENT">AUTO_INCREMENT</a>,<br />
+`a` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a>,<br />
+`b` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a>,<br />
+`c` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a>,<br />
+`d` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> '10',<br />
+<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=PRIMARY%20KEY">PRIMARY KEY</a> (`id`),<br />
+<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=KEY">KEY</a> `a` (`a`)<br />
+) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=ENGINE">ENGINE</a>=<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INNODB">InnoDB</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=AUTO_INCREMENT">AUTO_INCREMENT</a>=77 <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=">CHARSET</a>=gbk;</p>
+<p><a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=SELECT">select</a> * <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=FROM">from</a> tmp_xf;<br />
++----+------+------+------+------+<br />
+| id | a    | b    | c    | d    |<br />
++----+------+------+------+------+<br />
+|  1 |    1 | <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a> |   11 |   10 |<br />
+| 41 |   30 |    1 |    1 |   10 |<br />
+| 42 |   50 |    1 |    1 |   10 |<br />
+| 43 |  100 |    1 |    1 |   10 |<br />
++----+------+------+------+------+<br />
+4 rows <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=IN">in</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=SET">set</a> (0.00 sec)</p>
+<p>session1&amp;#65306;<br />
+<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=UPDATE">update</a> tmp_xf <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=SET">set</a> c =11 <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=WHERE">where</a> a = 1;</p>
+<p>session2&amp;#65306;<br />
+<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INSERT">insert</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INTO">into</a> tmp_xf (a,b,c) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=VALUES">values</a> (2,1,1);</p>
+<p>Result&amp;#65306;<br />
+a         <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=LOCK">lock</a> range(<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=ALL">all</a> the row <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=IN">in</a> the range can be inserted)<br />
+1           &lt;=29<br />
+30          1  <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TO">to</a> 49<br />
+50          30 <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TO">to</a> 99<br />
+100         &gt;=50<br />
+可以看到以查询条件a=50为例，那么锁的范围从上一个值30开始一直到下一个值100的前一个值99，这段范围都不被允许insert记录，update是可以的。 这个类似于起点和终点的概念，如果一边是开区间，那么开区间整个都会被lock</p>
+<p>&nbsp;</p>
+<p>简单用3个值来表示，下面是手画的图。</p>
+<p><a href="http://hiphotos.baidu.com/dbaeyes/pic/item/2735dfc3bd81f50bb219a870.jpg" target="_blank"><img src="http://hiphotos.baidu.com/dbaeyes/abpic/item/2735dfc3bd81f50bb219a870.jpg" alt="" width="200" height="143" border="0" data-pinit="registered" /></a></p>
+<p>间隙锁（Next-key locking)是为了防止“幻读”问题：不仅对查询中读取的行进行加锁，而且还对索引结构中的间隙（gaps)进行加锁，以防止幻影（Phantom）插入。 -- from 《高性能mysql》</p>
+</div>

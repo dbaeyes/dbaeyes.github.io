@@ -1,0 +1,23 @@
+---
+layout: post
+title: watch list
+date: 2010-03-25 16:31:29.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags: []
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '1077'
+---
+<h1></h1>
+<div>用watch命令可以实时查看输入命令的变化，比如观察mysql当前在跑的sql<br />
+<strong>watch -n 1 -d mysql -uroot --execute=\"show full processlist\"</strong>其中的<br />
+-n 1 表示每秒变化一次<br />
+-d 表示有变化的地方高亮</p>
+<p><strong>watch ls -l</strong> 就可以监控文件夹文件的变化情况，具体使用就靠个人发挥了。</p>
+<p>详细情况参考man watch</p>
+</div>

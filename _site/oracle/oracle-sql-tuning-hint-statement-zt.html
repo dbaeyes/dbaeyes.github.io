@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>ORACLE常用SQL优化hint语句 (zt) - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/oracle-sql-tuning-hint-statement-zt.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#hint" title="hint">hint</a>
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                    </div>
+                    <h1>ORACLE常用SQL优化hint语句 (zt)</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on February 26, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>在SQL语句优化过程中，我们经常会用到hint,现总结一下在SQL优化过程中常见Oracle HINT的用法：</p>
+<div>
+<p>1. /*+ALL_ROWS*/<br />
+表明对语句块选择基于开销的优化方法,并获得最佳吞吐量,使资源消耗最小化.<br />
+例如:<br />
+SELECT /*+ALL+_ROWS*/ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO=’SCOTT’;<br />
+2. /*+FIRST_ROWS*/<br />
+表明对语句块选择基于开销的优化方法,并获得最佳响应时间,使资源消耗最小化.<br />
+例如:<br />
+SELECT /*+FIRST_ROWS*/ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO=’SCOTT’;<br />
+3. /*+CHOOSE*/<br />
+表明如果数据字典中有访问表的统计信息,将基于开销的优化方法,并获得最佳的吞吐量;<br />
+表明如果数据字典中没有访问表的统计信息,将基于规则开销的优化方法;<br />
+例如:<br />
+SELECT /*+CHOOSE*/ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO=’SCOTT’;</p>
+<p>4. /*+RULE*/<br />
+表明对语句块选择基于规则的优化方法.<br />
+例如:<br />
+SELECT /*+ RULE */ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO=’SCOTT’;</p>
+<p>5. /*+FULL(TABLE)*/<br />
+表明对表选择全局扫描的方法.<br />
+例如:<br />
+SELECT /*+FULL(A)*/ EMP_NO,EMP_NAM FROM BSEMPMS A WHERE EMP_NO=’SCOTT’;</p>
+<p>6. /*+ROWID(TABLE)*/<br />
+提示明确表明对指定表根据ROWID进行访问.<br />
+例如:<br />
+SELECT /*+ROWID(BSEMPMS)*/ * FROM BSEMPMS WHERE ROWID&gt;=’AAAAAAAAAAAAAA’<br />
+AND EMP_NO=’SCOTT’;</p>
+<p>7. /*+CLUSTER(TABLE)*/<br />
+提示明确表明对指定表选择簇扫描的访问方法,它只对簇对象有效.<br />
+例如:<br />
+SELECT /*+CLUSTER */ BSEMPMS.EMP_NO,DPT_NO FROM BSEMPMS,BSDPTMS<br />
+WHERE DPT_NO=’TEC304′ AND BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;</p>
+<p>8. /*+INDEX(TABLE INDEX_NAME)*/<br />
+表明对表选择索引的扫描方法.<br />
+例如:<br />
+SELECT /*+INDEX(BSEMPMS SEX_INDEX) USE SEX_INDEX BECAUSE THERE ARE FEWMALE BSEMPMS */ FROM BSEMPMS WHERE SEX=’M';</p>
+<p>9. /*+INDEX_ASC(TABLE INDEX_NAME)*/<br />
+表明对表选择索引升序的扫描方法.<br />
+例如:<br />
+SELECT /*+INDEX_ASC(BSEMPMS PK_BSEMPMS) */ FROM BSEMPMS WHERE DPT_NO=’SCOTT’;</p>
+<p>10. /*+INDEX_COMBINE*/<br />
+为指定表选择位图访问路经,如果INDEX_COMBINE中没有提供作为参数的索引,将选择出位图索引的布尔组合方式.<br />
+例如:<br />
+SELECT /*+INDEX_COMBINE(BSEMPMS SAL_BMI HIREDATE_BMI)*/ * FROM BSEMPMS<br />
+WHERE SAL&lt;5000000 AND HIREDATE</p>
+<p>11. /*+INDEX_JOIN(TABLE INDEX_NAME)*/<br />
+提示明确命令优化器使用索引作为访问路径.<br />
+例如:<br />
+SELECT /*+INDEX_JOIN(BSEMPMS SAL_HMI HIREDATE_BMI)*/ SAL,HIREDATE<br />
+FROM BSEMPMS WHERE SAL&lt;60000;</p>
+<p>12. /*+INDEX_DESC(TABLE INDEX_NAME)*/<br />
+表明对表选择索引降序的扫描方法.<br />
+例如:<br />
+SELECT /*+INDEX_DESC(BSEMPMS PK_BSEMPMS) */ FROM BSEMPMS WHERE DPT_NO='SCOTT';</p>
+<p>13. /*+INDEX_FFS(TABLE INDEX_NAME)*/<br />
+对指定的表执行快速全索引扫描,而不是全表扫描的办法.<br />
+例如:<br />
+SELECT /*+INDEX_FFS(BSEMPMS IN_EMPNAM)*/ * FROM BSEMPMS WHERE DPT_NO='TEC305';</p>
+<p>14. /*+ADD_EQUAL TABLE INDEX_NAM1,INDEX_NAM2,...*/<br />
+提示明确进行执行规划的选择,将几个单列索引的扫描合起来.<br />
+例如:<br />
+SELECT /*+INDEX_FFS(BSEMPMS IN_DPTNO,IN_EMPNO,IN_SEX)*/ * FROM BSEMPMS WHERE EMP_NO='SCOTT' AND DPT_NO='TDC306';</p>
+<p>15. /*+USE_CONCAT*/<br />
+对查询中的WHERE后面的OR条件进行转换为UNION ALL的组合查询.<br />
+例如:<br />
+SELECT /*+USE_CONCAT*/ * FROM BSEMPMS WHERE DPT_NO='TDC506' AND SEX='M';</p>
+<p>16. /*+NO_EXPAND*/<br />
+对于WHERE后面的OR 或者IN-LIST的查询语句,NO_EXPAND将阻止其基于优化器对其进行扩展.<br />
+例如:<br />
+SELECT /*+NO_EXPAND*/ * FROM BSEMPMS WHERE DPT_NO='TDC506' AND SEX='M';</p>
+<p>17. /*+NOWRITE*/<br />
+禁止对查询块的查询重写操作.</p>
+<p>18. /*+REWRITE*/<br />
+可以将视图作为参数.</p>
+<p>19. /*+MERGE(TABLE)*/<br />
+能够对视图的各个查询进行相应的合并.<br />
+例如:<br />
+SELECT /*+MERGE(V) */ A.EMP_NO,A.EMP_NAM,B.DPT_NO FROM BSEMPMS A (SELET DPT_NO<br />
+,AVG(SAL) AS AVG_SAL FROM BSEMPMS B GROUP BY DPT_NO) V WHERE A.DPT_NO=V.DPT_NO<br />
+AND A.SAL&gt;V.AVG_SAL;</p>
+<p>20. /*+NO_MERGE(TABLE)*/<br />
+对于有可合并的视图不再合并.<br />
+例如:<br />
+SELECT /*+NO_MERGE(V) */ A.EMP_NO,A.EMP_NAM,B.DPT_NO FROM BSEMPMS A (SELECT DPT_NO,AVG(SAL) AS AVG_SAL FROM BSEMPMS B GROUP BY DPT_NO) V WHERE A.DPT_NO=V.DPT_NO AND A.SAL&gt;V.AVG_SAL;</p>
+<p>21. /*+ORDERED*/<br />
+根据表出现在FROM中的顺序,ORDERED使ORACLE依此顺序对其连接.<br />
+例如:<br />
+SELECT /*+ORDERED*/ A.COL1,B.COL2,C.COL3 FROM TABLE1 A,TABLE2 B,TABLE3 C WHERE A.COL1=B.COL1 AND B.COL1=C.COL1;</p>
+<p>22. /*+USE_NL(TABLE)*/<br />
+将指定表与嵌套的连接的行源进行连接,并把指定表作为内部表.<br />
+例如:<br />
+SELECT /*+ORDERED USE_NL(BSEMPMS)*/ BSDPTMS.DPT_NO,BSEMPMS.EMP_NO,BSEMPMS.EMP_NAM FROM BSEMPMS,BSDPTMS WHERE BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;</p>
+<p>23. /*+USE_MERGE(TABLE)*/<br />
+将指定的表与其他行源通过合并排序连接方式连接起来.<br />
+例如:<br />
+SELECT /*+USE_MERGE(BSEMPMS,BSDPTMS)*/ * FROM BSEMPMS,BSDPTMS WHERE BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;</p>
+<p>24. /*+USE_HASH(TABLE)*/<br />
+将指定的表与其他行源通过哈希连接方式连接起来.<br />
+例如:<br />
+SELECT /*+USE_HASH(BSEMPMS,BSDPTMS)*/ * FROM BSEMPMS,BSDPTMS WHERE BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;</p>
+<p>25. /*+DRIVING_SITE(TABLE)*/<br />
+强制与ORACLE所选择的位置不同的表进行查询执行.<br />
+例如:<br />
+SELECT /*+DRIVING_SITE(DEPT)*/ * FROM BSEMPMS,DEPT@BSDPTMS WHERE BSEMPMS.DPT_NO=DEPT.DPT_NO;</p>
+<p>26. /*+LEADING(TABLE)*/<br />
+将指定的表作为连接次序中的首表.</p>
+<p>27. /*+CACHE(TABLE)*/<br />
+当进行全表扫描时,CACHE提示能够将表的检索块放置在缓冲区缓存中最近最少列表LRU的最近使用端<br />
+例如:<br />
+SELECT /*+FULL(BSEMPMS) CAHE(BSEMPMS) */ EMP_NAM FROM BSEMPMS;</p>
+<p>28. /*+NOCACHE(TABLE)*/<br />
+当进行全表扫描时,CACHE提示能够将表的检索块放置在缓冲区缓存中最近最少列表LRU的最近使用端<br />
+例如:<br />
+SELECT /*+FULL(BSEMPMS) NOCAHE(BSEMPMS) */ EMP_NAM FROM BSEMPMS;</p>
+<p>29. /*+APPEND*/<br />
+直接插入到表的最后,可以提高速度.<br />
+insert /*+append*/ into test1 select * from test4 ;</p>
+<p>30. /*+NOAPPEND*/<br />
+通过在插入语句生存期内停止并行模式来启动常规插入.<br />
+insert /*+noappend*/ into test1 select * from test4 ;</p>
+<p>&nbsp;</p>
+<table width="100%">
+<tbody>
+<tr align="left" valign="top">
+<td><strong>Optimization Approaches</strong></td>
+<td><strong>Access Methods</strong></td>
+</tr>
+<tr align="left" valign="top">
+<td>ALL_ROWS</td>
+<td>AND_EQUAL</td>
+</tr>
+<tr align="left" valign="top">
+<td>CHOOSE</td>
+<td>CLUSTER</td>
+</tr>
+<tr align="left" valign="top">
+<td>FIRST RULES</td>
+<td>FULL</td>
+</tr>
+<tr align="left" valign="top">
+<td>RULE</td>
+<td>HASH</td>
+</tr>
+<tr align="left" valign="top">
+<td>Parallel Execution</td>
+<td>HASH_AJ</td>
+</tr>
+<tr align="left" valign="top">
+<td>APPEND*ORDERED</td>
+<td>HASH_SJ ***</td>
+</tr>
+<tr align="left" valign="top">
+<td>STAR**</td>
+<td>INDEX</td>
+</tr>
+<tr align="left" valign="top">
+<td>STAR_TRANSFORMATION*</td>
+<td>INDEX_ASC</td>
+</tr>
+<tr align="left" valign="top">
+<td>Join Operations</td>
+<td>INDEX_COMBINE*</td>
+</tr>
+<tr align="left" valign="top">
+<td>DRIVING_SITE*</td>
+<td>INDEX_DESC</td>
+</tr>
+<tr align="left" valign="top">
+<td>USE_HASH**</td>
+<td>INDEX_FFS*</td>
+</tr>
+<tr align="left" valign="top">
+<td>USE_MERGE</td>
+<td>MERGE_AJ**</td>
+</tr>
+<tr align="left" valign="top">
+<td>USE_NL</td>
+<td>MERGE_SJ***</td>
+</tr>
+<tr align="left" valign="top">
+<td><strong>Additional Hints</strong></td>
+<td>ROW_ID</td>
+</tr>
+<tr align="left" valign="top">
+<td>CACHE</td>
+<td>USE_CONCAT</td>
+</tr>
+<tr align="left" valign="top">
+<td>NOCACHE</td>
+<td>NO_EXPAND***</td>
+</tr>
+<tr align="left" valign="top">
+<td>PUSH_SUBQ</td>
+<td>REWRITE***</td>
+</tr>
+<tr align="left" valign="top">
+<td>MERGE***</td>
+<td>NOREWRITE***</td>
+</tr>
+<tr align="left" valign="top">
+<td>NO_MERGE*</td>
+<td>Join Orders</td>
+</tr>
+<tr align="left" valign="top">
+<td>PUSH_JOIN_PRED***</td>
+<td></td>
+</tr>
+<tr align="left" valign="top">
+<td>NO_PUSH_JOIN_PRED***</td>
+<td>NOAPPEND*</td>
+</tr>
+<tr align="left" valign="top">
+<td>ORDERED PREDICATES***</td>
+<td>NOPARALLEL</td>
+</tr>
+<tr align="left" valign="top">
+<td></td>
+<td>PARALLEL</td>
+</tr>
+<tr align="left" valign="top">
+<td></td>
+<td>PARALLEL_INDEX*</td>
+</tr>
+<tr align="left" valign="top">
+<td></td>
+<td>NO_PARALLEL_INDEX***</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p>----------------------------------------------------------------------------</p>
+<p>提示(hint)从Oracle7中引入，目的是弥补基于成本优化器的缺陷。提示通常用来改变SQL执行计划，提高执行效率。</p>
+<p>&nbsp;</p>
+<p><span style="font-size: large;">1.使用提示需要遵循的原则<br />
+1)仔细检查提示语法。尽量使用完整注释语法/*+ hint */<br />
+2)使用表别名。如果在查询中指定了表别名，那么提示必须也使用表别名。例如：select /*+ index(e,dept_idx) */ * from emp e;<br />
+3)不要在提示中使用模式名称：如果在提示中指定了模式的所有者，那么提示将被忽略。例如：<br />
+select /*+ index(scott.emp,dept_idx) */ * from emp;<br />
+4)检验提示。如果提示指定了不可用的访问路径，那么这个提示将被忽略。</span></p>
+<p><span style="font-size: large;">2.导致提示无效的条件：</span></p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="132">
+<p align="left"><span style="font-size: large;">提示</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">被忽略的条件</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">cluster</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">与非簇表一同使用</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">hash</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">与非簇表一同使用</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">hash_aj</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">不存在子查询</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">index</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">指定的索引不存在</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">index_combine</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">不存在位图索引</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">merge_aj</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">不存在子查询</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">parallel</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">调用的不是TABLE ACCESS FULL计划</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">push_subq</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">不存在子查询</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">star</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">事实表中存在不恰当的索引</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">use_concat</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">在where子句中不存在多个or条件</span></p>
+<p>&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" width="132">
+<p align="center"><span style="font-size: large;">use_nl</span></p>
+<p>&nbsp;</td>
+<td valign="top" width="396">
+<p align="center"><span style="font-size: large;">表中不存在索引</span></p>
+<p>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: large;">3几种主要的优化模式：<br />
+1)all_rows:all_rows是基于成本的优化方法，目的是提供整体最佳的吞吐量和最小的资源消耗。all_rows提示倾向使用全表扫描，而且不适用于OLTP数据库。使用all_rows提示应该保障查询中涉及的表和索引拥有使用analyze命令分析得到的统计资料。<br />
+2)rule:rule提示使Oracle为查询提供基于规则的优化模式。在怀疑CBO生成了非优化的执行计划时，通常首先尝试使用rule提示。Rule提示忽略表和索引的统计资料，并且使用基本的试探法生成执行计划。<br />
+3)first_rows：这个提示是基于成本的优化方法，目的是提供最快的反应时间。使用first_rows提示应该保障查询中涉及的表和索引拥有使用analyze命令分析得到的统计资料。<br />
+4.表的连接提示<br />
+1)use_hash提示<br />
+use_hash 提示对指定的表进行散列连接。散列连接是Oracle用以驱动表（最小的表）向RAM区中装载记录的方法，RAM区由HASH_AREA_SIZE定义。散列连接适合中间结果比较大的情况。使用散列连接时,HASH_AREA_SIZE对速度影响非常大，如果驱动表不能一次装入内存，那么需要使用TEMP表空间，这种情况下速度比较慢。这个参数可以在session级别动态修改，需要进行散列连接时可以临时增大，速度可能显著增加。<br />
+2)use_merge 提示<br />
+use_merge 提示强制执行一个排序合并操作。排序合并操作通常与并行查询结合使用，因为排序合并操作倾向于全表扫描。该提示适合于生成大型结果集的查询。<br />
+3)use_nl：<br />
+use_nl提示将强制对目标表执行嵌套循环连接。use_nl提示很少用于SQL调整，因为CBO和RBO更倾向于使用循环嵌套连接。<br />
+4)star提示<br />
+star 提示强制使用星型查询计划。前提是查询中至少三个表，而且在事实表中存在恰当的索引<br />
+5.表反连接提示<br />
+SQL反连接是指在语句中包含NOT IN 或者NOT EXISTS子句时执行的操作。<br />
+1)merge_aj<br />
+在使用全表访问比索引访问更好的情况下，可以在NOT IN子查询中使用merge_aj提示以便执行反连接。<br />
+2)hash_aj<br />
+hash_aj 提示放在NOT IN 子查询中用来希望执行散列连接时，执行散列反连接。<br />
+hash_aj和merge_aj要求子查询列非空。<br />
+6INDEX提示<br />
+1)INDEX提示简介：<br />
+INDEX提示被用于显示指定表名或表名与索引。如果只指定了表名，那么优化器将使用表中的"最优"索引。在永久优化SQL语句中，建议指定表和索引。<br />
+2)index_join 提示<br />
+index_join 提示明确要求优化器使用索引连接来作为访问路径。<br />
+3)and_equal 提示<br />
+and_equal 提示可以使多个非唯一的索引合并索引，并且使这些索引操作时就象单个连续索引一样。该提示如果被应用，在查询计划中显示的是AND-EQUAL<br />
+4)index_asc 提示<br />
+index_asc 提示使用升序索引。这是默认的优化器行为<br />
+5)no_index 提示<br />
+该提示忽略索引存在，类似full<br />
+6)index_combine提示<br />
+index_combine 提示用来强制使用位图索引作为表的访问路径。<br />
+7)index_ffs提示<br />
+索引快速完全扫描可以在不访问任何记录的情况下完成查询。<br />
+8)use_concat提示<br />
+use_concat提示要求为所有的OR条件使用UNION ALL执行计划，并将这个查询重新书写为多个查询。如果在WHERE子句中存在大量OR条件，可以考虑使用use_concat提示。<br />
+7.总结<br />
+1)因为提示放在注释中，所以如果提示通现存的执行计划不兼容，或者提示不正确，有可能被忽略。<br />
+2)在使用RBO时，可以通过提示将指定的查询更改为CBO。切记要对查询中涉及的所有表和索引进行分析<br />
+3)在使用CBO的时候，可以通过添加RULE提示或者FIRST_ROWS提示来开始调整一个可以的SQL语句<br />
+4)提示可以在子查询中使用，但是外部查询的提示不会带入子查询。<br />
+5)如果在查询计划中发现卡笛尔积（CARTESIAN），则要尽量解决。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: small;">--FROM: </span><a href="http://flysky0814.itpub.net/"><span style="font-size: small;">http://flysky0814.itpub.net</span></a></p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/sg-i-chapter-10-implementing-database-backups.html" data-toggle="tooltip" data-placement="top" title="SG I: Chapter 10 | Implementing Database Backups">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/code/c-allow-launch-only-a-single-process.html" data-toggle="tooltip" data-placement="top" title="C# 只允许启动单个进程">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/oracle-sql-tuning-hint-statement-zt" data-title="ORACLE常用SQL优化hint语句 (zt)"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="在SQL语句优化过程中，我们经常会用到hint,现总结一下在SQL优化过程中常见Oracle HINT的用法：
+
+1. /*+ALL_ROWS*/
+表明对... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/oracle-sql-tuning-hint-statement-zt.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/oracle-sql-tuning-hint-statement-zt" data-title="ORACLE常用SQL优化hint语句 (zt)" data-url="http://dbaeyes.github.io/oracle/oracle-sql-tuning-hint-statement-zt.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

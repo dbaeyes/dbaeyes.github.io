@@ -1,0 +1,49 @@
+---
+layout: post
+title: 单一索引和联合索引 简单测试
+date: 2009-06-22 12:33:51.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- index
+- oracle
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '998'
+---
+<h1></h1>
+<div>对于分表分库系统可能用到是否将分表条件传入的考虑，如果将分表条件传入sql的话，那么索引将不可避免的使用联合索引。<br />
+不将分表条件传入sql的话，对于分表的中间层来说效率是最高的，因为不再需要分析sql来判断使用哪个表，但这样对于应用来说就不够透明了。<br />
+现在只对这两种情况的索引效率做下对比。<br />
+########################<br />
+表数据量200W</p>
+<p><span style="color: #0000ff;"><strong>单一索引</strong></span><br />
+create index IDX_TMP_1 on tmp_xf(auc_id) compute statistics;</p>
+<p>SQL&gt; select * from tmp_xf</p>
+<p>2 - access("auc_id"=1002445366)<br />
+<span style="color: #ff0000;"><strong>23 consistent gets</strong></span></p>
+<p><span style="color: #0000ff;"><strong>联合索引，完全满足查询条件列顺序</strong></span><br />
+create index IDX_TMP_2 on tmp_xf(rated_uid, auc_id) compute statistics;</p>
+<p>SQL&gt; select * from tmp_xf where rated_uid = 39512 and auc_id = 1002445366;</p>
+<p>2 - access("RATED_UID"=39512 AND "auc_id"=1002445366)<br />
+<strong><span style="color: #ff0000;">23 consistent gets</span></strong><br />
+--逻辑读和单一索引一样</p>
+<p>联合索引，索引列中间多出一列，s为number（1）类型<br />
+create index IDX_TMP_3 on tmp_xf(<strong>rated_uid,s, auc_id</strong>) compute statistics;<br />
+2 - access("RATED_UID"=39512 AND "auc_id"=1002445366)<br />
+filter("auc_id"=1002445366)<br />
+<span style="color: #ff0000;"><strong>31 consistent gets</strong></span></p>
+<p>create index IDX_TMP_4 on tmp_xf(<strong>rated_uid,s,r, auc_id</strong>) compute statistics; --r 为 number(1)<br />
+2 - access("RATED_UID"=39512 AND "auc_id"=1002445366)<br />
+filter("auc_id"=1002445366)<br />
+<strong><span style="color: #ff0000;">31 consistent gets</span></strong></p>
+<p>create index IDX_TMP_5 on tmp_xf(<strong>rated_uid,s,rr, auc_id)</strong> compute statistics; --rr 为 varchar(32)<br />
+2 - access("RATED_UID"=39512 AND "auc_id"=1002445366)<br />
+filter("auc_id"=1002445366)<br />
+<span style="color: #ff0000;"><strong>41 consistent gets</strong></span></p>
+<p>小结，联合索引的消耗根据查询条件和索引中列的对应关系来确定，如果满足索引列逐个用下来的情况，那效果应当是不错的。 其他的情况需要慎重，随着查询条件和索引列的匹配关系，代价可能越来越大。</p>
+<p>这个只是非常简单的一个数据测试，具体的联合索引消耗可以参阅Troubleshooting Oracle Performance ，有非常精彩的论述</p></div>

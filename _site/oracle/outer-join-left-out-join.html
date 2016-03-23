@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>outer join, left out join - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/outer-join-left-out-join.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#sql" title="sql">sql</a>
+                        
+                    </div>
+                    <h1>outer join, left out join</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on March 20, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>使用关系代数合并数据</p>
+<div>
+<p><span style="font-family: 'Times New Roman';">1 </span>关系代数</p>
+<p>合并数据集合的理论基础是关系代数，它是由<span style="font-family: 'Times New Roman';">E.F.Codd</span>于<span style="font-family: 'Times New Roman';">1970</span>年提出的。</p>
+<p>在关系代数的形式化语言中：</p>
+<p><span style="font-family: 'Times New Roman';">        </span>用表、或者数据集合表示关系或者实体。</p>
+<p><span style="font-family: 'Times New Roman';">        </span>用行表示元组。</p>
+<p><span style="font-family: 'Times New Roman';">        </span>用列表示属性。</p>
+<p>关系代数包含以下<span style="font-family: 'Times New Roman';">8</span>个关系运算符</p>
+<p><span style="font-family: 'Times New Roman';">        </span>选取――返回满足指定条件的行。</p>
+<p><span style="font-family: 'Times New Roman';">        </span>投影――从数据集合中返回指定的列。</p>
+<p><span style="font-family: 'Times New Roman';">        </span>笛卡尔积――是关系的乘法，它将分别来自两个数据集合中的行以所有可能的方式进行组合。</p>
+<p><span style="font-family: 'Times New Roman';">        </span>并――关系的加法和减法，它可以在行的方向上合并两个表中的数据，就像把一个表垒在另一个表之上一样。</p>
+<p><span style="font-family: 'Times New Roman';">        </span>交――返回两个数据集合所共有的行。</p>
+<p><span style="font-family: 'Times New Roman';">        </span>差――返回只属于一个数据集合的行。</p>
+<p><span style="font-family: 'Times New Roman';">        </span>连接――在水平方向上合并两个表，其方法是：将两个表中在共同数据项上相互匹配的那些行合并起来。</p>
+<p><span style="font-family: 'Times New Roman';">        </span>除――返回两个数据集之间的精确匹配。</p>
+<p>此外，作为一种实现现代关系代数运算的方法，<span style="font-family: 'Times New Roman';">SQL</span>还提供了：</p>
+<p><span style="font-family: 'Times New Roman';">        </span>子查询――类似于连接，但更灵活；在外部查询中，方式可以使用表达式、列表或者数据集合的地方都可以使用子查询的结果。</p>
+<p>本章将主要讲述多种类型的连接、简单的和相关的子查询、几种类型的并、关系除以及其他的内容。</p>
+<p><span style="font-family: 'Times New Roman';">2 </span>使用连接</p>
+<p><span style="font-family: 'Times New Roman';">2.1 </span>连接类型</p>
+<p>在关系代数中，连接运算是由一个笛卡尔积运算和一个选取运算构成的。首先用笛卡尔积完成对两个数据集合的乘运算，然后对生成的结果集合进行选取运算，确保只把分别来自两个数据集合并且具有重叠部分的行合并在一起。连接的全部意义在于在水平方向上合并两个数据集合（通常是表），并产生一个新的结果集合，其方法是将一个数据源中的行于另一个数据源中和它匹配的行组合成一个新元组。</p>
+<p><span style="font-family: 'Times New Roman';">SQL</span>提供了多种类型的连接方式，它们之间的区别在于：从相互交叠的不同数据集合中选择用于连接的行时所采用的方法不同。</p>
+<p>连接类型<span style="font-family: 'Times New Roman';">        </span>定义</p>
+<p>内连接<span style="font-family: 'Times New Roman';">        </span>只连接匹配的行</p>
+<p>左外连接<span style="font-family: 'Times New Roman';">       </span>包含左边表的全部行（不管右边的表中是否存在与它们匹配的行），以及右边表中全部匹配的行</p>
+<p>右外连接<span style="font-family: 'Times New Roman';">        </span>包含右边表的全部行（不管左边的表中是否存在与它们匹配的行），以及左边表中全部匹配的行</p>
+<p>全外连接<span style="font-family: 'Times New Roman';">        </span>包含左、右两个表的全部行，不管另外一边的表中是否存在与它们匹配的行。</p>
+<p><span style="font-family: 'Times New Roman';">(H)(theta)</span>连接<span style="font-family: 'Times New Roman';">        </span>使用等值以外的条件来匹配左、右两个表中的行</p>
+<p>交叉连接<span style="font-family: 'Times New Roman';">        </span>生成笛卡尔积－它不使用任何匹配或者选取条件，而是直接将一个数据源中的每个行与另一个数据源的每个行都一一匹配</p>
+<p>在<span style="font-family: 'Times New Roman';">INFORMIX</span>中连接表的查询</p>
+<p>如果<span style="font-family: 'Times New Roman';">FROM</span>子句指定了多于一个表引用，则查询会连接来自多个表的行。连接条件指定各列之间（每个表至少一列）进行连接的关系。因为正在比较连接条件中的列，所以它们必须具有一致的数据类型。</p>
+<p><span style="font-family: 'Times New Roman';">SELECT</span>语句的<span style="font-family: 'Times New Roman';">FROM</span>子句可以指定以下几种类型的连接</p>
+<p><span style="font-family: 'Times New Roman';">FROM</span>子句关键字<span style="font-family: 'Times New Roman';">        </span>相应的结果集</p>
+<p><span style="font-family: 'Times New Roman';">CROSS JOIN        </span>笛卡尔乘积（所有可能的行对）</p>
+<p><span style="font-family: 'Times New Roman';">INNER JOIN        </span>仅对满足连接条件的<span style="font-family: 'Times New Roman';">CROSS</span>中的列</p>
+<p><span style="font-family: 'Times New Roman';">LEFT OUTER JOIN        </span>一个表满足条件的行，和另一个表的所有行</p>
+<p><span style="font-family: 'Times New Roman';">RIGHT OUTER JOIN        </span>与<span style="font-family: 'Times New Roman';">LEFT</span>相同，但两个表的角色互换</p>
+<p><span style="font-family: 'Times New Roman';">FULL OUTER JOIN        LEFT OUTER </span>和<span style="font-family: 'Times New Roman';"> RIGHT OUTER</span>中所有行的超集</p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Times New Roman';">2.2 </span>内连接（<span style="font-family: 'Times New Roman';">Inner Join</span>）</p>
+<p>内连接是最常见的一种连接，它页被称为普通连接，而<span style="font-family: 'Times New Roman';">E.FCodd</span>最早称之为自然连接。下面是<span style="font-family: 'Times New Roman';">ANSI SQL</span>－<span style="font-family: 'Times New Roman';">92</span>标准</p>
+<p><span style="font-family: 'Times New Roman';">select *  </span><span style="font-family: 'Times New Roman';">from  t_institution i </span><span style="font-family: 'Times New Roman';">inner join t_teller t </span><span style="font-family: 'Times New Roman';">on i.inst_no = t.inst_no </span><span style="font-family: 'Times New Roman';">where i.inst_no = "5801"</span></p>
+<p>其中<span style="font-family: 'Times New Roman';">inner</span>可以省略。等价于早期的连接语法</p>
+<p><span style="font-family: 'Times New Roman';">select * </span><span style="font-family: 'Times New Roman';">from t_institution i, t_teller t </span><span style="font-family: 'Times New Roman';">where i.inst_no = t.inst_no </span><span style="font-family: 'Times New Roman';">and i.inst_no = "5801"</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Times New Roman';">2.3 </span>外连接</p>
+<p><span style="font-family: 'Times New Roman';">2.3.1        </span>左外连接<span style="font-family: 'Times New Roman';">(Left Outer Jion)</span></p>
+<p><span style="font-family: 'Times New Roman';">select * </span><span style="font-family: 'Times New Roman';">from  t_institution i </span><span style="font-family: 'Times New Roman';">left outer join t_teller t </span><span style="font-family: 'Times New Roman';">on i.inst_no = t.inst_no</span></p>
+<p>其中<span style="font-family: 'Times New Roman';">outer</span>可以省略。</p>
+<p><span style="font-family: 'Times New Roman';">2.3.2        </span>右外连接<span style="font-family: 'Times New Roman';">(Rigt Outer Jion)</span></p>
+<p><span style="font-family: 'Times New Roman';">select * </span><span style="font-family: 'Times New Roman';">from  t_institution i  </span><span style="font-family: 'Times New Roman';">right outer join t_teller t  </span><span style="font-family: 'Times New Roman';">on i.inst_no = t.inst_no</span></p>
+<p><span style="font-family: 'Times New Roman';">2.3.3        </span>全外连接<span style="font-family: 'Times New Roman';">(Full Outer)</span></p>
+<p>全外连接返回参与连接的两个数据集合中的全部数据，无论它们是否具有与之相匹配的行。在功能上，它等价于对这两个数据集合分别进行左外连接和右外连接，然后再使用消去重复行的并操作将上述两个结果集合并为一个结果集。</p>
+<p>在现实生活中，参照完整性约束可以减少对于全外连接的使用，一般情况下左外连接就足够了。在数据库中没有利用清晰、规范的约束来防范错误数据情况下，全外连接就变得非常有用了，你可以使用它来清理数据库中的数据。</p>
+<p><span style="font-family: 'Times New Roman';">select *  </span><span style="font-family: 'Times New Roman';">from  t_institution i  </span><span style="font-family: 'Times New Roman';">full outer join t_teller t </span><span style="font-family: 'Times New Roman';">on i.inst_no = t.inst_no</span></p>
+<p><span style="font-family: 'Times New Roman';">2.3.4        </span>外连接与条件配合使用</p>
+<p>当在内连接查询中加入条件是，无论是将它加入到<span style="font-family: 'Times New Roman';">join</span>子句，还是加入到<span style="font-family: 'Times New Roman';">where</span>子句，其效果是完全一样的，但对于外连接情况就不同了。当把条件加入到<span style="font-family: 'Times New Roman';">join</span>子句时，<span style="font-family: 'Times New Roman';">SQL Server</span>、<span style="font-family: 'Times New Roman';">Informix</span>会返回外连接表的全部行，然后使用指定的条件返回第二个表的行。如果将条件放到<span style="font-family: 'Times New Roman';">where</span>子句中，<span style="font-family: 'Times New Roman';">SQL Server</span>将会首先进行连接操作，然后使用<span style="font-family: 'Times New Roman';">where</span>子句对连接后的行进行筛选。下面的两个查询展示了条件放置位子对执行结果的影响：</p>
+<p>条件在<span style="font-family: 'Times New Roman';">join</span>子句</p>
+<p><span style="font-family: 'Times New Roman';">select * </span><span style="font-family: 'Times New Roman';">from  t_institution i </span><span style="font-family: 'Times New Roman';">left outer join t_teller t </span><span style="font-family: 'Times New Roman';">on i.inst_no = t.inst_no</span><span style="font-family: 'Times New Roman';">and i.inst_no = “5801”</span></p>
+<p>结果是：</p>
+<p><span style="font-family: 'Times New Roman';">inst_no    inst_name            inst_no    teller_no  teller_name</span></p>
+<p><span style="font-family: 'Times New Roman';">5801       </span>天河区<span style="font-family: 'Times New Roman';">               5801       0001       tom</span></p>
+<p><span style="font-family: 'Times New Roman';">5801       </span>天河区<span style="font-family: 'Times New Roman';">               5801       0002       david</span></p>
+<p><span style="font-family: 'Times New Roman';">5802       </span>越秀区</p>
+<p><span style="font-family: 'Times New Roman';">5803       </span>白云区</p>
+<p>条件在<span style="font-family: 'Times New Roman';">where</span>子句</p>
+<p><span style="font-family: 'Times New Roman';">select * </span><span style="font-family: 'Times New Roman';">from  t_institution i </span><span style="font-family: 'Times New Roman';">left outer join t_teller t </span><span style="font-family: 'Times New Roman';">on i.inst_no = t.inst_no </span><span style="font-family: 'Times New Roman';">where i.inst_no = “5801”</span></p>
+<p>结果是：</p>
+<p><span style="font-family: 'Times New Roman';">inst_no    inst_name            inst_no    teller_no  teller_name</span></p>
+<p><span style="font-family: 'Times New Roman';">5801       </span>天河区<span style="font-family: 'Times New Roman';">               5801       0001       tom</span></p>
+<p><span style="font-family: 'Times New Roman';">5801       </span>天河区<span style="font-family: 'Times New Roman';">               5801       0002       david</span></p>
+<p><span style="font-family: 'Times New Roman';">2.4 </span>自身连接</p>
+<p>自身连接是指同一个表自己与自己进行连接。这种一元连接通常用于从自反关系（也称作递归关系）中抽取数据。例如人力资源数据库中雇员与老板的关系。</p>
+<p>下面例子是在机构表中查找本机构和上级机构的信息。</p>
+<p><span style="font-family: 'Times New Roman';">select s.inst_no superior_inst, s.inst_name sup_inst_name, i.inst_no, i.inst_name</span></p>
+<p><span style="font-family: 'Times New Roman';">from t_institution i </span><span style="font-family: 'Times New Roman';">join t_institution s </span><span style="font-family: 'Times New Roman';">on i.superior_inst = s.inst_no</span></p>
+<p>&nbsp;</p>
+<p>结果是：</p>
+<p><span style="font-family: 'Times New Roman';">superior_inst sup_inst_name        inst_no    inst_name</span></p>
+<p><span style="font-family: 'Times New Roman';">800           </span>广州市<span style="font-family: 'Times New Roman';">               5801       </span>天河区</p>
+<p><span style="font-family: 'Times New Roman';">800           </span>广州市<span style="font-family: 'Times New Roman';">               5802       </span>越秀区</p>
+<p><span style="font-family: 'Times New Roman';">800           </span>广州市<span style="font-family: 'Times New Roman';">               5803       </span>白云区</p>
+<p>&nbsp;</p>
+<p>2.5 交叉(无限制) 连接</p>
+<p>交叉连接用于对两个源表进行纯关系代数的乘运算。它不使用连接条件来限制结果集合，而是将分别来自两个数据源中的行以所有可能的方式进行组合。数据集合中一的每个行都要与数据集合二中的每一个行分别组成一个新的行。例如，如果第一个数据源中有5个行，而第二个数据源中有4个行，那么在它们之间进行交叉连接就会产生20个行。人们将这种类型的结果集称为笛卡尔乘积。</p>
+<p>大多数交叉连接都是由于错误操作而造成的；但是它们却非常适合向数据库中填充例子数据，或者预先创建一些空行以便为程序执行期间所要填充的数据保留空间。</p>
+<p>select * from  t_institution i  cross join t_teller t</p>
+<p>在交叉连接中没有on条件子句</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/brothers-of-the-world-week.html" data-toggle="tooltip" data-placement="top" title="世界兄弟周">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/oracle/chuckle-by-1z0-042.html" data-toggle="tooltip" data-placement="top" title="窃喜一下 通过1z0-042">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/outer-join-left-out-join" data-title="outer join, left out join"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="使用关系代数合并数据
+
+1 关系代数
+合并数据集合的理论基础是关系代数，它是由E.F.Codd于1970年提出的。
+在关系代数的形式化语言中：
+    ... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/outer-join-left-out-join.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/outer-join-left-out-join" data-title="outer join, left out join" data-url="http://dbaeyes.github.io/oracle/outer-join-left-out-join.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>Oracle SQL*PLUS - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/oracle-sqlplus.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                    </div>
+                    <h1>Oracle SQL*PLUS</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on July 10, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>Oracle的sql*plus是与oracle进行交互的客户端工具。在sql*plus中，可以运行sql*plus命令与sql*plus语句。</p>
+<div>
+我们通常所说的DML、DDL、DCL语句都是sql*plus语句，它们执行完后，都可以保存在一个被称为sql buffer的内存区域中，并且只能保存一条最近执行的sql语句，我们可以对保存在sql buffer中的sql 语句进行修改，然后再次执行，sql*plus一般都与数据库打交道。</p>
+<p>除了sql*plus语句，在sql*plus中执行的其它语句我们称之为sql*plus命令。它们执行完后，不保存在sql buffer的内存区域中，它们一般用来对输出的结果进行格式化显示，以便于制作报表。</p>
+<p>下面就介绍一下一些常用的sql*plus命令：</p>
+<p>1. 执行一个SQL脚本文件<br />
+SQL&gt;start file_name<br />
+SQL&gt;@ file_name<br />
+我们可以将多条sql语句保存在一个文本文件中，这样当要执行这个文件中的所有的sql语句时，用上面的任一命令即可，这类似于dos中的批处理。</p>
+<p>2. 对当前的输入进行编辑<br />
+SQL&gt;edit</p>
+<p>3. 重新运行上一次运行的sql语句<br />
+SQL&gt;/</p>
+<p>4. 将显示的内容输出到指定文件<br />
+SQL&gt; SPOOL file_name<br />
+在屏幕上的所有内容都包含在该文件中，包括你输入的sql语句。</p>
+<p>5. 关闭spool输出<br />
+SQL&gt; SPOOL OFF<br />
+只有关闭spool输出，才会在输出文件中看到输出的内容。</p>
+<p>6．显示一个表的结构<br />
+SQL&gt; desc table_name</p>
+<p>7. COL命令：<br />
+主要格式化列的显示形式。<br />
+该命令有许多选项，具体如下：<br />
+COL[UMN] [{ columneXPr} [ option ...]]<br />
+Option选项可以是如下的子句:<br />
+ALI[AS] alias<br />
+CLE[AR]<br />
+FOLD_A[FTER]<br />
+FOLD_B[EFORE]<br />
+FOR[MAT] format<br />
+HEA[DING] text<br />
+JUS[TIFY] {L[EFT]C[ENTER]C[ENTRE]R[IGHT]}<br />
+LIKE { expralias}<br />
+NEWL[INE]<br />
+NEW_V[ALUE] variable<br />
+NOPRI[NT]PRI[NT]<br />
+NUL[L] text<br />
+OLD_V[ALUE] variable<br />
+ONOFF<br />
+WRA[PPED]WOR[D_WRAPPED]TRU[NCATED]</p>
+<p>1). 改变缺省的列标题<br />
+COLUMN column_name HEADING column_heading<br />
+For example:<br />
+Sql&gt;select * from dept;<br />
+DEPTNO DNAME　　　　　　　　　　　　LOC<br />
+---------- ---------------------------- ---------<br />
+10 ACCOUNTING　　　　　　　　　 NEW YORK<br />
+sql&gt;col　LOC heading location<br />
+sql&gt;select * from dept;<br />
+DEPTNO DNAME　　　　　　　　　　　　location<br />
+--------- ---------------------------- -----------<br />
+10 ACCOUNTING　　　　　　　　　 NEW YORK</p>
+<p>2). 将列名ENAME改为新列名EMPLOYEE NAME并将新列名放在两行上：<br />
+Sql&gt;select * from emp<br />
+Department　name　　　　　 Salary<br />
+---------- ---------- ----------<br />
+10 aaa　　　　　　　　11<br />
+SQL&gt; COLUMN ENAME HEADING ’EmployeeName’<br />
+Sql&gt;select * from emp<br />
+Employee<br />
+Department　name　　　　　 Salary<br />
+---------- ---------- ----------<br />
+10 aaa　　　　　　　　11<br />
+note: the col heading turn into two lines from one line.</p>
+<p>3). 改变列的显示长度：<br />
+FOR[MAT] format<br />
+Sql&gt;select empno,ename,job from emp;<br />
+EMPNO ENAME　　　JOB<br />
+---------- ----------　　 ---------<br />
+7369 SMITH　　　CLERK<br />
+7499 ALLEN　　　SALESMAN<br />
+7521 WARD　　　 SALESMAN<br />
+Sql&gt; col ename format a40<br />
+EMPNO ENAME　　　　　　　　　　　　　　　　　　JOB<br />
+----------　 ----------------------------------------　　　　 ---------<br />
+7369 SMITH　　　　　　　　　　　　　　　　　　CLERK<br />
+7499 ALLEN　　　　　　　　　　　　　　　　　　SALESMAN<br />
+7521 WARD　　　　　　　　　　　　　　　　　　SALESMAN</p>
+<p>4). 设置列标题的对齐方式<br />
+JUS[TIFY] {L[EFT]C[ENTER]C[ENTRE]R[IGHT]}</p>
+<p>SQL&gt; col ename justify center<br />
+SQL&gt; /<br />
+EMPNO　　　　　 ENAME　　　　　　　　　 JOB<br />
+----------　 ----------------------------------------　　　 ---------<br />
+7369 SMITH　　　　　　　　　　　　　　　　　　CLERK<br />
+7499 ALLEN　　　　　　　　　　　　　　　　　　SALESMAN<br />
+7521 WARD　　　　　　　　　　　　　　　　　　 SALESMAN<br />
+对于NUMBER型的列，列标题缺省在右边，其它类型的列标题缺省在左边</p>
+<p>5). 不让一个列显示在屏幕上<br />
+NOPRI[NT]PRI[NT]<br />
+SQL&gt; col job noprint<br />
+SQL&gt; /<br />
+EMPNO　　　　　 ENAME<br />
+----------　　 ----------------------------------------<br />
+7369 SMITH<br />
+7499 ALLEN<br />
+7521 WARD</p>
+<p>6). 格式化NUMBER类型列的显示：<br />
+SQL&gt; COLUMN SAL FORMAT $99,990<br />
+SQL&gt; /<br />
+Employee<br />
+Department Name　　　　Salary　　Commission<br />
+---------- ---------- --------- ----------<br />
+30　　　　　ALLEN　　　　$1,600　　300</p>
+<p>7). 显示列值时，假如列值为NULL值，用text值代替NULL值<br />
+COMM NUL[L] text<br />
+SQL&gt;COL COMM NUL[L] text</p>
+<p>8). 设置一个列的回绕方式<br />
+WRA[PPED]WOR[D_WRAPPED]TRU[NCATED]<br />
+COL1<br />
+--------------------<br />
+HOW ARE YOU?</p>
+<p>SQL&gt;COL COL1 FORMAT A5<br />
+SQL&gt;COL COL1 WRAPPED<br />
+COL1<br />
+-----<br />
+HOW A<br />
+RE YO<br />
+U?</p>
+<p>SQL&gt; COL COL1 <a href="http://www.knowsky.com/article.asp?typeid=117" target="_blank">Word</a>_WRAPPED<br />
+COL1<br />
+-----<br />
+HOW<br />
+ARE<br />
+YOU?</p>
+<p>SQL&gt; COL COL1 WORD_WRAPPED<br />
+COL1<br />
+-----<br />
+HOW A</p>
+<p>9). 显示列的当前的显示属性值<br />
+SQL&gt; COLUMN column_name</p>
+<p>10). 将所有列的显示属性设为缺省值<br />
+SQL&gt; CLEAR COLUMNS</p>
+<p>8. 屏蔽掉一个列中显示的相同的值<br />
+BREAK ON break_column<br />
+SQL&gt; BREAK ON DEPTNO<br />
+SQL&gt; SELECT DEPTNO, ENAME, SAL<br />
+FROM EMP<br />
+WHERE SAL &lt; 2500<br />
+ORDER BY DEPTNO;<br />
+DEPTNO　　　ENAME　　　　 SAL<br />
+---------- ----------- ---------<br />
+10　　　　　 CLARK　　　　2450<br />
+MILLER　　　1300<br />
+20　　　　　　SMITH　　　 800<br />
+ADAMS　　　 1100</p>
+<p>9. 在上面屏蔽掉一个列中显示的相同的值的显示中，每当列值变化时在值变化之前插入n个空行。<br />
+BREAK ON break_column SKIP n</p>
+<p>SQL&gt; BREAK ON DEPTNO SKIP 1<br />
+SQL&gt; /<br />
+DEPTNO ENAME SAL<br />
+---------- ----------- ---------<br />
+10 CLARK 2450<br />
+MILLER 1300</p>
+<p>20 SMITH 800<br />
+ADAMS 1100</p>
+<p>10. 显示对BREAK的设置<br />
+SQL&gt; BREAK</p>
+<p>11. 删除6、7的设置<br />
+SQL&gt; CLEAR BREAKS</p>
+<p>12. Set 命令：<br />
+该命令包含许多子命令：<br />
+SET system_variable value<br />
+system_variable value 可以是如下的子句之一：<br />
+APPI[NFO]{ONOFFtext}<br />
+ARRAY[SIZE] {15n}<br />
+AUTO[COMMIT]{ONOFFIMM[EDIATE]n}<br />
+AUTOP[RINT] {ONOFF}<br />
+AUTORECOVERY [ONOFF]<br />
+AUTOT[RACE] {ONOFFTRACE[ONLY]} [EXP[LAIN]] [STAT[ISTICS]]<br />
+BLO[CKTERMINATOR] {.c}<br />
+CMDS[EP] {;cONOFF}<br />
+COLSEP {_text}<br />
+COM[PATIBILITY]{V7V8NATIVE}<br />
+CON[CAT] {.cONOFF}<br />
+COPYC[OMMIT] {0n}<br />
+COPYTYPECHECK {ONOFF}<br />
+DEF[INE] {&amp;cONOFF}<br />
+DESCRIBE [DEPTH {1nALL}][LINENUM {ONOFF}][INDENT {ONOFF}]<br />
+ECHO {ONOFF}<br />
+EDITF[ILE] file_name[.ext]<br />
+EMB[EDDED] {ONOFF}<br />
+ESC[APE] {\cONOFF}<br />
+FEED[BACK] {6nONOFF}<br />
+FLAGGER {OFFENTRY INTERMED[IATE]FULL}<br />
+FLU[SH] {ONOFF}<br />
+HEA[DING] {ONOFF}<br />
+HEADS[EP] {cONOFF}</p>
+<p>INSTANCE [instance_pathLOCAL]<br />
+LIN[ESIZE] {80n}<br />
+LOBOF[FSET] {n1}<br />
+LOGSOURCE [pathname]<br />
+LONG {80n}<br />
+LONGC[HUNKSIZE] {80n}<br />
+MARK[UP] Html [ONOFF] [HEAD text] [BODY text] [ENTMAP {ONOFF}] [SPOOL<br />
+{ONOFF}] [PRE[FORMAT] {ONOFF}]<br />
+NEWP[AGE] {1nNONE}<br />
+NULL text<br />
+NUMF[ORMAT] format<br />
+NUM[WIDTH] {10n}<br />
+PAGES[IZE] {24n}<br />
+PAU[SE] {ONOFFtext}<br />
+RECSEP {WR[APPED]EA[CH]OFF}<br />
+RECSEPCHAR {_c}<br />
+SERVEROUT[PUT] {ONOFF} [SIZE n] [FOR[MAT] {WRA[PPED]WOR[D_<br />
+WRAPPED]TRU[NCATED]}]<br />
+SHIFT[INOUT] {VIS[IBLE]INV[ISIBLE]}<br />
+SHOW[MODE] {ONOFF}<br />
+SQLBL[ANKLINES] {ONOFF}<br />
+SQLC[ASE] {MIX[ED]LO[WER]UP[PER]}<br />
+SQLCO[NTINUE] {&gt; text}<br />
+SQLN[UMBER] {ONOFF}<br />
+SQLPRE[FIX] {#c}<br />
+SQLP[ROMPT] {SQL&gt;text}<br />
+SQLT[ERMINATOR] {;cONOFF}<br />
+SUF[FIX] {SQLtext}<br />
+TAB {ONOFF}<br />
+TERM[OUT] {ONOFF}<br />
+TI[ME] {ONOFF}<br />
+TIM</p>
+<p>------------------------------</p>
+<p>首先我们输入这样一条指令：</p>
+<p>SELECT emp_id, emp_name<br />
+FROM Employees</p>
+<p>input 命令可以接着上一条指令的后面添加语句，比如在上述语句运行后输入：</p>
+<p>input WHERE emp_age &gt; 30</p>
+<p>便可得到如下指令：</p>
+<p>SELECT emp_id, emp_name<br />
+FROM Employees<br />
+WHERE emp_age &gt; 30</p>
+<p>ln 命令用于指定对以输入的第n行语句进行操作，比如在上述语句运行后输入：</p>
+<p>l1则当前选中的语句行即为</p>
+<p>SELECT emp_id, emp_name</p>
+<p>（语句前有“*”表示）</p>
+<p>a 命令用于直接在当前行的末尾加上字符，比如在上述语句运行后输入：</p>
+<p>a , emp_dept</p>
+<p>则执行的指令变为：<br />
+SELECT emp_id, emp_name, emp_dept<br />
+FROM Employees<br />
+WHERE emp_age &gt; 30</p>
+<p>c 命令用于修改当前语句中的字符，比如在上述语句运行后输入：</p>
+<p>c /emp_name/emp_age/则执行的指令变为：</p>
+<p>SELECT emp_id, emp_age, emp_dept<br />
+FROM Employees<br />
+WHERE emp_age &gt; 30</p>
+<p>del n 命令用于删除第n行指令，比如在上述语句运行后输入：</p>
+<p>DEL 3</p>
+<p>则执行的指令变为：</p>
+<p>SELECT emp_id, emp_age, emp_dept<br />
+FROM Employees</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/os/vmstat-command.html" data-toggle="tooltip" data-placement="top" title="vmstat命令">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/10046-event-trace.html" data-toggle="tooltip" data-placement="top" title="10046 event trace">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/oracle-sqlplus" data-title="Oracle SQL*PLUS"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Oracle的sql*plus是与oracle进行交互的客户端工具。在sql*plus中，可以运行sql*plus命令与sql*plus语句。
+
+我们通常... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/oracle-sqlplus.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/oracle-sqlplus" data-title="Oracle SQL*PLUS" data-url="http://dbaeyes.github.io/oracle/oracle-sqlplus.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

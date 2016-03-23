@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>UNIX 快速充电 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/os/unix-quick-charging.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#unix" title="unix">unix</a>
+                        
+                    </div>
+                    <h1>UNIX 快速充电</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on April 17, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><strong><span style="color: #0000ff;">基本操作</span></strong></p>
+<div>
+<p>1. 管道流,合并多个命令 ls | more</p>
+<p>2. 通配符 ? 单个字符, * 多个</p>
+<p>3. more 空格: 下一屏 b:上一屏   回车:下一行 q:返回</p>
+<p>4. cat 没啥好处,大文件也只能显示末尾几行. 好处可以合并文件, cat lib.txt lib.txt &gt; lib.all</p>
+<p>5. 帮助 man 加文件名</p>
+<p>6. touch 新建空文件. touch -t 时间 文件名 更新文件的日期</p>
+<p>7. mv, rm, rmdir, rm -r,</p>
+<p>8. find find path -name value*<br />
+find . -name 'xxx* -exec compress{}\ 找到包含xxx的文件，并执行压缩</p>
+<p>9. 硬连接 ln file1 file2; 同一文件存在在不同的起始位置. 删除任何一个,都可以继续独立使用.</p>
+<p>10. 软连接 ln -s file1 file2; 软件得到的是目录或者文件的一个文件副本.</p>
+<p>11. which awk 找到在使用的awk的完整路径</p>
+<p>-------------------<br />
+<strong><span style="color: #0000ff;">SHELL</span></strong></p>
+<p>&gt;echo $SHELL 显示shell信息<br />
+finger username 显示信息</p>
+<p>cat /etc/shells 显示用户的shell环境变量</p>
+<p>chsh 改变shell变量</p>
+<p>history 查看shell中的会话历史<br />
+r 441 重用第441条命令</p>
+<p>stty erase '^?' 解决退格问题<br />
+----------------------------------</p>
+<p><strong><span style="color: #0000ff;">编辑vi</span></strong></p>
+<p>u 撤销上一次操作</p>
+<p>&lt;esc&gt; /val 查找 按 n 查找下一个<br />
+--------------------------------</p>
+<p><strong><span style="color: #0000ff;">文件权限控制</span></strong></p>
+<p>查看用户所属组<br />
+&gt; grep fcs /etc/passwd<br />
+fcs:!:206:202::/user1/fcs:/usr/bin/ksh</p>
+<p>查看所有组<br />
+&gt; more /etc/group</p>
+<p>改变文件的所属组,一个文件同时只能属于一个组 使用 -R 来使动作递归到子目录<br />
+chgrp grpName fileName</p>
+<p>改变文件的所有者<br />
+chown uerName fileName</p>
+<p>改变许用权<br />
+chmod u=rwx,g=rx,o=rx lib.txt 改权限</p>
+<p>chmod g+w lib.txt 加权限</p>
+<p>chmod g-w lib.xtx 删权限</p>
+<p>改变默认许用权<br />
+umask 022 666-644 (644是需要给予的权限)<br />
+---------------------------------</p>
+<p><strong><span style="color: #0000ff;">操作文件</span></strong></p>
+<p>文件计数<br />
+wc -w fileName 统计字数<br />
+wc -l fileName 统计行数<br />
+wc fileName 行数,字数,字符数<br />
+ls | wc -l 统计一个目录的文件个数</p>
+<p>查看文件开头<br />
+&gt; head lib.txt<br />
+查看从n行开始<br />
+&gt; head -20 lib.txt<br />
+查看多个文件的开头<br />
+&gt; head lib* | more</p>
+<p>查看文件末尾<br />
+&gt; tail lib.txt</p>
+<p>查找文本grep<br />
+&gt; grep jar lib.txt 查找jar并返回所有行</p>
+<p>&gt; grep -c jar lib.txt 计算jar出现的次数</p>
+<p>&gt; grep -v jar lib.txt 查找并返回不包含jar所有行</p>
+<p>&gt; grep -i Jar lib.txt 不区分大小写</p>
+<p>grep正则表达式<br />
+*    grep s*day /file *匹配*前面出现的字符0次或者多次<br />
+^    ^Some 某行必须以Some开头<br />
+$    $abc 行必须以abc结尾<br />
+\    转义符,可以使用*,^等<br />
+[]    [32,64]-bit 匹配[]中的成员32-bit或者64-bit</p>
+<p>sed进行全局修改<br />
+sed /oldVal /newVal/g fileNmae &gt; fileName</p>
+<p>awk 显示包含jar的行<br />
+awk /jar/ fileName 参考： <a href="http://www.newasp.net/tech/program/21126.html">http://www.newasp.net/tech/program/21126.html</a></p>
+<p>比较文件<br />
+cmp lb lc</p>
+<p>弄清文件区别 diff<br />
+diff file1 file2<br />
+diff folder1 folder2 比较目录文件</p>
+<p>sdiff<br />
+sdiff file1 file2 文件在屏幕上显示 加-s 只显示不同的行<br />
+sdiff fiel1 file2 | more</p>
+<p>文件排序 sort<br />
+sort file 排序文件中的行<br />
+sort file -t, 用逗号分割字段</p>
+<p>删除重复行<br />
+sort file | uniq<br />
+只看重复行<br />
+sort file | uniq -t 如果是两个文件中的重复行 sort file1 file2 | uniq -t</p>
+<p>------------------------------------</p>
+<p><strong><span style="color: #0000ff;">系统信息</span></strong></p>
+<p>uname 基本系统<br />
+uname -sr   系统类型和发行级别<br />
+uname -a    具体细节</p>
+<p>查看文件系统df<br />
+hzfcs01&gt; df<br />
+Filesystem    512-blocks      Free %Used    Iused %Iused Mounted on<br />
+/dev/hd1         2097152   2073672    2%      137     1% /home</p>
+<p>查看指定目录的文件系统报告(df -k /paht, 指定使用1k字节块)<br />
+hzfcs01&gt; df /user1/fcs<br />
+Filesystem    512-blocks      Free %Used    Iused %Iused Mounted on<br />
+/dev/fslv05      2097152    781152   63%      896     2% /user1<br />
+判断磁盘使用情况 du<br />
+du -k path 指定目录磁盘使用情况. -k 使用1k字节块</p>
+<p>判断文件类型 file<br />
+file fileName/pathName</p>
+<p>获取用户登陆信息 finger<br />
+finger<br />
+finger userName</p>
+<p>用户的基本登陆信息 who<br />
+whoami<br />
+who am i</p>
+<p>还有... w<br />
+&gt; w<br />
+03:13PM   up 408 days, 22:06, 7 users, load average: 0.49, 0.36, 0.34<br />
+User     tty          login@       idle      JCPU      PCPU what<br />
+fcs      pts/8       02:26PM          0         0         0 /usr/bin/w64</p>
+<p>获取用户ID号信息 id<br />
+&gt; id<br />
+uid=206(fcs) gid=202(fcs) groups=1(staff),14(dba)</p>
+<p>--------------------------------------------------</p>
+<p><strong><span style="color: #0000ff;">配置UNXI环境</span></strong></p>
+<p>set (bash, ksh)查看当前环境变量<br />
+setenv (csh)</p>
+<p>设置变量--当前session<br />
+&gt; VARIABLE=Value<br />
+&gt; export VARIABLE<br />
+查看<br />
+&gt; echo $VARIABLE</p>
+<p>配置文件 bash<br />
+more ~/.bash_profile ~/.profile /etc/bash* /etc/profile 查看配置文件<br />
+/etc/profile 全局<br />
+~/.bash_profile 局部</p>
+<p>改变提示符<br />
+grep PS1 ~/.profiel 找到<br />
+vi ~/.profile<br />
+PS1="$LOGNAME in $PWD $"</p>
+<p>设置别名 alias<br />
+alias ls='ls -aF'</p>
+<p>---------------------------------</p>
+<p><strong><span style="color: #0000ff;">运行脚本和程序</span></strong></p>
+<p>安排一次性任务 at<br />
+&gt; at 16:20<br />
+cp lc xxxxxxx (按下 crtl + D) 显示:<br />
+------<br />
+Job fcs.1208420400.a will be run at Thu Apr 17 16:20:00 BEIST 2008.</p>
+<p>删除任务 atq<br />
+安排规律执行的任务 crontab<br />
+1. crontab -e<br />
+2. 第一行写入分钟/小时/日期/月份/星期 执行的命令<br />
+3. 关闭保持</p>
+<p>任务<br />
+Ctrl + Z 暂停<br />
+fg 后台运行 可以加序号 例如 fg 2<br />
+fg 前台运行<br />
+jobs 检查状态<br />
+kill %任务</p>
+<p>控制优先权 nice<br />
+nice -n 19 任务名 (等级 1-19,越小,优先级越高)</p>
+<p>任务计时 time<br />
+time scripts<br />
+time ls 比较任务时间<br />
+time nice -n 19 ls</p>
+<p>查看运行的进程 ps<br />
+ps a 查看别人正在运行的进程<br />
+ps x 查看系统运行的进程<br />
+ps f 详细的进程信息</p>
+<p><span style="color: #ff6600;">查看 ora进程 ps -ef | grep 'ora'</span></p>
+<p>删除进程 kill<br />
+删除任务 jobs ... kill %nn<br />
+删除进程 ps .... kill 进程号 kill -9 sid</p>
+<p>-------------------------</p>
+<p><strong><span style="color: #0000ff;">基本脚本</span></strong></p>
+<p>1. 创建脚本文件<br />
+2. 运行. ! fileName   //   #! fileName<br />
+sh fileName</p>
+<p># echo -- 打印到屏幕</p>
+<p>脚本运行是输入变量<br />
+&gt; vi abc<br />
+"abc" 4 lines, 59 characters<br />
+echo "Enter the file name"<br />
+read file<br />
+echo "$file"<br />
+ls -l "$file"<br />
+-----运行<br />
+&gt; abc<br />
+Enter the file name<br />
+sc<br />
+sc<br />
+-rwxr--r--   1 fcs      fcs             196 Apr 18 13:13 sc</p>
+<p>------------------------------<br />
+<strong><span style="color: #0000ff;">邮件 信息 网络</span></strong></p>
+<p><span style="color: #ff6600;">mail addr</span><br />
+suject:<br />
+TEXT<br />
+. (以点或者ctrl+D结束)</p>
+<p>mail看邮件 加序号</p>
+<p>与其他用户联系<br />
+write uid<br />
+TEXT<br />
+ctrl+D 发送</p>
+<p>mesg n (关闭消息, y 开启)</p>
+<p>ifconfig -a</p>
+<p>traceroute 跟踪网络连接</p>
+<p>nslookup 域名--IP</p>
+<p>-----------------------</p>
+<p><strong><span style="color: #0000ff;">文件编码 压缩</span></strong></p>
+<p>uuencode fileName fileNamess &gt; file.uue 文件编码</p>
+<p>uudecode fileName 文件解码</p>
+<p>档案文件tar<br />
+tar -cf file.tar file/d 归档</p>
+<p>tar -xf file.tar 解档<br />
+tar -ixf file.tar 解档</p>
+<p>tar -tf file.tar 查看档案</p>
+<p>压缩<br />
+compress ***.tar 取代原来文件,增加后缀 .Z (***.tar.Z)<br />
+compress -c ***.tar &gt; ***.tar.Z 保持原始文件,压缩到.Z</p>
+<p>uncompress ***.Z 解压<br />
+uncompress ***.Z &gt; ***.** 保持原始文件</p>
+<p>gzip ***.tar 文件或者目录,比compress更高的压缩比<br />
+gzip ***.tar &gt; ***.gz</p>
+<p>gunzip ***.gz 解压,能解压大多数的压缩文件,</p>
+<p>zip newName fileName 压缩<br />
+unzip 解压</p>
+<p>组合命令例子:<br />
+uudecode -o /folder home.gz.uue | gunzip &gt; home</p>
+<p>tar -cf -Labrea |gzip &gt;labre.tar.gz</p>
+<p>-----------------------------------------</p>
+<p><strong><span style="color: #0000ff;">安装软件</span></strong></p>
+<p>下载、解压软件（主要文件夹和权限）</p>
+<p>配置<br />
+more README*<br />
+ls configure<br />
+./configure 记得备份配置文件，做最少的修改</p>
+<p>编译 安装<br />
+make install<br />
+./rpm<br />
+./rpm --rcfile ./lib-rpmrc<br />
+make install</p>
+<p>make clean 清除所以的垃圾</p>
+<p>--------------------------------------<br />
+<strong><span style="color: #0000ff;">一些实用的小程序</span></strong></p>
+<p>cal 日历</p>
+<p>bc 计算器</p>
+<p>ispell 拼写检查</p>
+<p>script 保存用户会话记录 scripts fileName , Ctrl + D 结束</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/sg-ii-chapter-2-using-recovery-manager.html" data-toggle="tooltip" data-placement="top" title="SG II: Chapter 2 | Using Recovery Manager">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/os/linux-user-management.html" data-toggle="tooltip" data-placement="top" title="Linux用户管理">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/os/unix-quick-charging" data-title="UNIX 快速充电"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="基本操作
+
+1. 管道流,合并多个命令 ls | more
+2. 通配符 ? 单个字符, * 多个
+3. more 空格: 下一屏 b:上一屏   回车:... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/os/unix-quick-charging.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/os/unix-quick-charging" data-title="UNIX 快速充电" data-url="http://dbaeyes.github.io/os/unix-quick-charging.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>SG II: Chapter 8 | Understanding Automatic Database Management - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/sg-ii-chapter-8-understanding-automatic-database-management.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#study" title="study">study</a>
+                        
+                    </div>
+                    <h1>SG II: Chapter 8 | Understanding Automatic Database Management</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on April 26, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>Diagnostic Sources</p>
+<div>
+<p>·Adjust thresholds for tracked metrics.<br />
+Automatic Database Management<br />
+·Use the Database Advisors to gather information about your database.<br />
+·Use the SQL Tuning Advisor to improve database performance.<br />
+·Use automatic undo retention tuning.</p>
+<p>----------------------------</p>
+<p><strong><span style="color: #ff6600;">Using the Automatic Workload Repository (AWR)</span></strong></p>
+<p><strong>The statistics collection facility of AWR</strong> resides in memory and is responsible for the collection of dynamic performance statistics. All of the collected statistics are stored in fixed tables that are only accessible through fixed views.</p>
+<p><strong>Database performance statistics</strong> are dynamic in nature, meaning that they are initialized at instance startup and are lost at instance shutdown. Unlike optimizer statistics, they are not stored in the data dictionary. Instead, they are stored in dynamic performance tables, more commonly known as fixed<strong>tables</strong></p>
+<p>New Statistics in Oracle 10g<br />
+V$SYS_TIME_MODE --Time model statistics<br />
+V$OSSTAT -- Operating system statistics<br />
+V$SERVICE_STATS -- Wait statistics</p>
+<p><strong><span style="color: #0000ff;">Workload Repository</span></strong></p>
+<p>Workload repository data is owned by the <strong>SYS</strong> user and is stored in the <strong>SYSAUX</strong> tablespace.<br />
+The data is stored in a collection of tables, all of which are named <strong>beginning with WR</strong>.</p>
+<p><span>SQL&gt; select table_name<br />
+from dba_tables<br />
+where tablespace_name = 'SYSAUX'<br />
+and substr(table_name, 1,2) = 'WR'<br />
+and rownum &lt;= 20<br />
+order by 1;</span></p>
+<p><strong>Enabling AWR<br />
+</strong>the STATISTICS_LEVEL initialization parameter must be set to TYPICAL or ALL. BASIC will not be gathered automatically, but they can be gathered manually</p>
+<p><strong>AWR Space Considerations</strong><br />
+Determined by the number of active sessions, the snapshot interval, and the retention period.</p>
+<p><strong>Active Session History (ASH)</strong></p>
+<p>ASH resides in the System Global Area (SGA) and its size is fixed for the lifetime of the instance.</p>
+<p>SIZE   The lesser of:<br />
+~Total number of CPUs × 2MB of memory<br />
+~ 5 percent of the Shared Pool size</p>
+<p>V_$SESSION<br />
+V$ACTIVE_SESSION_HISTORY</p>
+<p><strong>AWR Snapshots</strong></p>
+<p>SQL&gt; Select snap_interval, retention From dba_hist_wr_control; -- Get snapshots info</p>
+<p><strong>Creating Snapshots<br />
+</strong><span>BEGIN<br />
+DBMS_WORKLOAD_REPOSITORY.CREATE_SNAPSHOT();<br />
+END;</span></p>
+<p><strong>Modifying Snapshot Frequency<br />
+</strong><span>BEGIN<br />
+DBMS_WORKLOAD_REPOSITORY.MODIFY_SNAPSHOT_SETTINGS(<br />
+RETENTION =&gt; 14400, INTERVAL =&gt; 45);<br />
+END;</span></p>
+<p><strong>Dropping Snapshots</strong><br />
+LOW_SNAP_ID The lowest snapshot ID of range to drop<br />
+HIGH_SNAP_ID The highest snapshot ID of range to drop<br />
+DBID Optional database ID</p>
+<p><span>Exec DBMS_WORKLOAD_REPOSITORY.<strong>DROP_SNAPSHOT_RANGE</strong>(<br />
+LOW_SNAP_ID =&gt;316, HIGH_SNAP_ID =&gt;320);</span></p>
+<p><span>---------------------------------</span></p>
+<p><strong><span style="color: #ff6600;">AWR Baselines</span></strong><br />
+A baseline is the definition of a pair of snapshots that denote a significant workload period.</p>
+<p><strong><span style="color: #0000ff;">Creating Baselines</span></strong><br />
+<strong>START_SNAP_ID</strong> Lowest snapshot ID in the range<br />
+<strong>END_SNAP_ID</strong> Highest snapshot ID in the range<br />
+<strong>BASELINE_NAME</strong> Unique name for the baseline<br />
+<strong>DBID</strong> Optional database ID</p>
+<p><span>BEGIN<br />
+Exec DBMS_WORKLOAD_REPOSITORY.<strong>CREATE_BASELINE</strong>(START_SNAP_ID =&gt;42,<br />
+END_SNAP_ID =&gt;43,<br />
+BASELINE_NAME =&gt; ’REPORTS’);<br />
+END</span></p>
+<p><strong><span style="color: #0000ff;">Dropping Baselines</span></strong><br />
+Exec DBMS_WORKLOAD_REPOSITORY.DROP_BASELINE(‘REPORTS’,FALSE);</p>
+<p><strong>BASELINE_NAME</strong> Name of the baseline to be dropped<br />
+<strong>CASCADE</strong> Boolean to determine whether the associated snapshots will be dropped (default = FALSE)<br />
+<strong>DBID</strong> Optional database ID</p>
+<p><strong><span style="color: #0000ff;">Using AWR Views</span></strong><br />
+<strong>DBA_HIST_ACTIVE_SESS_HISTORY</strong> Displays session statistics gathered from ASH.<br />
+<strong>DBA_HIST_BASELINE</strong> Displays information on baselines in the repository.<br />
+<strong>DBA_HIST_DATABASE</strong>_INSTANCE Displays database environment data.<br />
+<strong>DBA_HIST_SQL_PLAN</strong> Displays SQL execution path data.<br />
+<strong>DBA_HIST_WR_CONTROL</strong> Displays current AWR settings.<br />
+<strong>DBA_HIST_SNAPSHOT</strong> Displays information regarding snapshots stored in the AWR.</p>
+<p><strong><span style="color: #0000ff;">Using AWR Reports</span></strong></p>
+<p>The report is run through one of two SQL*Plus scripts:<br />
+~ <strong>awrrpt.sql</strong>, which generates a text file report<br />
+~ <strong>awrrpti.sql</strong>, which generates an HTML version of the report<br />
+These scripts reside in $ORACLE_HOME/rdbms/admin (on Unix systems) or<br />
+%ORACLE_HOME%\rdbms\admin (on Windows systems)</p>
+<p><strong><em>EXP:<br />
+</em></strong><span>SQL&gt; @/u01/app/oracle/10.2.0/db_1/rdbms/admin/<strong>awrrpti.sql</strong></span></p>
+<p><span>Specify the Report Type<br />
+~~~~~~~~~~~~~~~~~~~~~~~<br />
+Would you like an HTML report, or a plain text report?<br />
+Enter 'html' for an HTML report, or 'text' for plain text<br />
+Defaults to 'html'<br />
+Enter value for report_type: html</span></p>
+<p><span>Type Specified: <strong>html</strong></span><br />
+<span>Instances in this Workload Repository schema<br />
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></p>
+<p><span>   DB Id     Inst Num DB Name      Instance     Host<br />
+------------ -------- ------------ ------------ ------------<br />
+* 1179140783        1 ORCL         orcl         localhost.lo<br />
+caldomain</span></p>
+<p><span>Enter value for dbid: 1179140783<br />
+Using 1179140783 for database Id<br />
+Enter value for inst_num:<strong> 1<br />
+</strong>Using 1 for instance number</span><br />
+<span>Specify the number of days of snapshots to choose from<br />
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br />
+Entering the number of days (n) will result in the most recent<br />
+(n) days of snapshots being listed. Pressing &lt;return&gt; without<br />
+specifying a number lists all completed snapshots.</span><br />
+<span>Enter value for num_days: <strong>2</strong></span></p>
+<p><span>Listing the last 2 days of Completed Snapshots</span></p>
+<p><span>                                                        Snap<br />
+Instance     DB Name        Snap Id    Snap Started    Level<br />
+------------ ------------ --------- ------------------ -----<br />
+orcl         ORCL                25 26 4? 2008 17:07      1<br />
+26 26 4? 2008 18:00      1<br />
+27 26 4? 2008 19:00      1<br />
+28 26 4? 2008 20:00      1<br />
+29 26 4? 2008 21:00      1<br />
+30 26 4? 2008 22:00      1<br />
+31 26 4? 2008 23:00      1<br />
+32 27 4? 2008 17:28      1<br />
+33 27 4? 2008 18:00      1<br />
+34 27 4? 2008 19:00      1<br />
+35 27 4? 2008 20:00      1<br />
+36 27 4? 2008 21:01      1<br />
+37 27 4? 2008 22:00      1</span></p>
+<p>&nbsp;</p>
+<p><span>Specify the Begin and End Snapshot Ids<br />
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br />
+Enter value for begin_snap: <strong>31<br />
+</strong>Begin Snapshot Id specified: 31</span></p>
+<p><span>Enter value for end_snap: <strong>35<br />
+</strong>End   Snapshot Id specified: 35</span></p>
+<p>&nbsp;</p>
+<p><span>Specify the Report Name<br />
+~~~~~~~~~~~~~~~~~~~~~~~<br />
+The default report file name is awrrpt_1_31_35.html. To use this name,<br />
+press &lt;return&gt; to continue, otherwise enter an alternative.</span></p>
+<p><span>Enter value for report_name: <strong>rp_name</strong></span></p>
+<p><span><strong>OK, Generate the AWR report!</strong></span></p>
+<p>---------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Managing Server-Generated Alerts</span></strong></p>
+<p>&nbsp;</p>
+<p><strong><span style="color: #0000ff;">Threshold and Non-Threshold Alerts</span></strong></p>
+<p><strong><span style="color: #0000ff;">Using Enterprise Manager to Configure Thresholds</span></strong></p>
+<p><span style="color: #0000ff;"><strong>Setting Thresholds through PL/SQL</strong><br />
+</span>EXP:<br />
+<span>The following example sets the threshold for the CPU Time Per Call metric:<br />
+EXEC DBMS_SERVER_ALERTS.SET_THRESHOLD(<br />
+METRICS_ID =&gt; CPU_TIME_PER_CALL,<br />
+WARNING_OPERATOR =&gt; OPERATOR_GT,<br />
+WARNING_VALUE =&gt; ‘15000’,<br />
+CRITICAL_OPERATOR =&gt; OPERATOR_GT,<br />
+CRITICAL_VALUE =&gt; ‘30000’, OBSERVATION_PERIOD =&gt; 10,<br />
+CONSECUTIVE_OCCURRENCES =&gt; 3);</span></p>
+<p><strong><span style="color: #0000ff;">Viewing Server Alerts</span><br />
+</strong><span style="color: #000000;">View     Description<br />
+<strong>DBA_OUTSTANDING_ALERTS</strong> Current alerts awaiting resolution<br />
+<strong>DBA_ALERT_HISTORY</strong> Alerts that have been cleared<br />
+<strong>DBA_THRESHOLDS</strong> Threshold settings defined for the instance<br />
+<strong>V$ALERT_TYPES</strong> Alert type and group information<br />
+<strong>V$METRIC</strong> System-level metric values in memory<br />
+<strong>V$METRIC_NAME</strong> Names, identifiers, and other information about system metrics<br />
+<strong>V$METRIC_HISTORY</strong> Historical system-level metric values in memory</span></p>
+<p><span style="color: #000000;">-----------------------------------------------------------</span></p>
+<p><strong><span style="color: #ff6600;">Using Automatic Routine Administration Tasks</span></strong></p>
+<p><strong><span style="color: #0000ff;">Automatic Statistics Collection</span></strong></p>
+<p>The different types of <strong>optimizer </strong>statistics :<br />
+<strong>Dictionary statistics</strong> Dictionary statistics, new to Oracle 10g, are statistics that can be captured on Oracle’s data dictionary objects.<br />
+<strong>System statistics</strong> System statistics provide the query optimizer with information on hardware characteristics such as CPU performance and disk I/O.<br />
+<strong>Operating system statistics</strong> Operating system statistics, new to Oracle 10g, offer operating system–level statistics, which were previously unavailable inside Oracle.<br />
+<strong>User-defined statistics</strong> User-defined statistics provide the optimizer with statistics on nonstandard objects such as user-defined functions and packages, domain indexes, index types, datatypes, and others.</p>
+<p><strong><span style="color: #0000ff;">Optimizer statistics on the type of object</span></strong><br />
+<strong>Tables</strong><br />
+_ Number of rows<br />
+_ Number of blocks<br />
+_ Average row length<br />
+<strong>Columns</strong><br />
+_ Number of distinct values in the column<br />
+_ Number of nulls in the column<br />
+_ Histograms (distribution of data)<br />
+<strong>Indexes</strong><br />
+_ Number of leaf blocks in the index<br />
+_ Levels<br />
+_ Clustering factor<br />
+<strong>System</strong><br />
+_ I/O performance/utilization<br />
+_ CPU performance/utilization</p>
+<p><strong><span style="color: #0000ff;">System Statistics</span></strong><br />
+<em>CPU and I/O performance.</em><br />
+This information is made available to the query optimizer through the use of system statistics.<br />
+<em><span style="color: #3366ff;">V$SYSSTAT<br />
+V$SESSTAT</span></em></p>
+<p><strong>Operating System Statistics</strong><br />
+Operating system statistics provide CPU, memory, and file system utilization data from the operating system.<br />
+<em><span style="color: #3366ff;">V$OSSTAT</span></em> view.</p>
+<p><strong><span style="color: #0000ff;">User-Defined Statistics</span></strong></p>
+<p><strong><span style="color: #0000ff;">Collecting Optimizer Statistics</span></strong><br />
+<strong>DBMS_STATS.GATHER_DATABASE_STATS_JOB_PROC</strong> to gather the statistics</p>
+<p>To verify that the job exists, query the <strong>DBA_SCHEDULER_JOBS</strong> view:<br />
+<span>SELECT * FROM DBA_SCHEDULER_JOBS<br />
+WHERE JOB_NAME = 'GATHER_STATS_JOB';</span></p>
+<p>DBMS_SCHEDULER.DISABLE function:<br />
+<span>BEGIN<br />
+DBMS_SCHEDULER.DISABLE('GATHER_STATS_JOB');<br />
+END;<br />
+/</span></p>
+<p><strong><span style="color: #0000ff;">Managing Volatile Object Statistics</span></strong><br />
+Simply gather the statistics manually using DBMS_STATS.</p>
+<p>To set statistics for a table to NULL, delete and lock the statistics as shown:<br />
+<span>SQL&gt; exec DBMS_STATS.DELETE_TABLE_STATS(‘BUTERTB’, ‘VOLATILE_TABLE’);<br />
+PL/SQL procedure successfully completed<br />
+SQL&gt; exec DBMS_STATS.LOCK_TABLE_STATS(‘BUTERTB’, ‘VOLATILE_TABLE’);</span></p>
+<p><strong><span style="color: #0000ff;">Monitoring DML Table Changes<br />
+</span></strong>STATISTICS_LEVEL initialization parameter instead of using the [NO]MONITORING clause in the CREATE TABLE or ALTER TABLE statements in oracle 10g.</p>
+<p>Monitoring data can be viewed using the DBA_TAB_MODIFICATIONS, ALL_TAB_MODIFICATIONS, or USER_TAB_MODIFICATIONS views.</p>
+<p><strong><span style="color: #0000ff; font-size: medium;">Altering the STATISTICS_LEVEL Parameter</span></strong></p>
+<p><strong>BASIC</strong> This setting disables the collection of many important statistics that Oracle requires<br />
+Oracle strongly advises against setting the STATISTICS_LEVEL parameter to BASIC, due to the serious loss of functionality.<br />
+<strong>TYPICAL</strong> This setting ensures collection of all major statistics that the database needs for selfmanagement. It also provides the best performance overall.<br />
+<strong>ALL</strong> This setting results in the gathering of all of the TYPICAL statistics, as well as the operating system and plan execution statistics.</p>
+<p>&nbsp;</p>
+<p align="left">
+<p align="left">
+<p align="left">
+<p>Viewing the Statistics Level <strong>V$STATISTICS_LEVEL</strong></p>
+<p>---------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Understanding the Advisory Framework</span></strong></p>
+<p><strong><span style="color: #ff6600;">Automatic Database Diagnostic Monitor (ADDM)</span></strong></p>
+<p>ADDM provides all of the following <strong>benefits</strong>:<br />
+Automatic performance diagnostic report produced hourly (default setting)<br />
+Problem diagnosis based on decades of Oracle tuning expertise<br />
+Time-based quantification of problem impacts and recommendation benefits<br />
+Identification of the root causes of problems, not just symptoms<br />
+Recommendations for resolving identified problems<br />
+Identification of non-problem areas of the system<br />
+Minimal overhead to the system during the diagnostic process</p>
+<p><strong><span style="color: #0000ff;">DB_TIME</span></strong><br />
+The DB_TIME statistic is the most important of the time model statistics. DB_TIME captures total time spent in database calls for all components.<br />
+Time model statistics at the session level can be viewed using the V$SESS_TIME_MODEL view.</p>
+<p><strong><span style="color: #0000ff;">Wait Event Changes</span></strong><br />
+The first of these changes is the enhanced granularity of the statistics.<br />
+The second change to the Wait Event model is the classification of wait events into highlevel classes for ease of identification.</p>
+<p><strong><span style="color: #0000ff;">ADDM Findings</span></strong><br />
+When ADDM analysis is complete, ADDM will return a set of findings, recommendations, and rationales.</p>
+<p><strong><span style="color: #0000ff;">Accessing ADDM through EM Database Control</span></strong><br />
+Though ADDM can be accessed using the DBMS_ADVISOR package, Oracle recommends using EM Database Control to access ADDM.</p>
+<p><strong><span style="color: #ff6600;">SQL Tuning Advisor</span></strong></p>
+<p><strong><span style="color: #0000ff;">Automatic Tuning Optimizer (ATO)</span></strong><br />
+When the ATO parses a query, it performs a more thorough analysis in an attempt to improve on the execution plan.</p>
+<p>The Automatic Tuning Optimizer (ATO) does not generate execution plans at all. Instead, it will return recommendations for optimization, along with their expected benefit and rationale.</p>
+<p><strong><span style="color: #0000ff;">Automatic SQL Tuning</span></strong><br />
+<strong><em>Statistics Analysis</em></strong> Statistics Analysis is essential to the tuning of any SQL statement, so if essential statistics are missing or stale, the optimizer will be unable to generate an accurate execution plan.<br />
+<strong><em>SQL Profiling</em></strong> SQL Profiles contain auxiliary statistics specific to a single query that aid the optimizer in generating an optimal execution path. SQL profiles can be applied to SELECT, INSERT, UPDATE, DELETE, CREATE TABLE AS SELECT, and MERGE statements.<br />
+<strong><em>Access Path Analysis</em></strong> Access Path Analysis examines whether the addition of one or more new indexes would significantly increase performance for the query.<br />
+<strong><em>SQL Structure Analysis</em></strong> SQL Structure Analysis looks at the syntax, semantics, and design of a query and identifies common problems associated with each.</p>
+<p><strong><span style="color: #0000ff;">SQL Tuning Advisor Options<br />
+</span><em>Limited </em></strong>Performs statistics analysis, access path analysis, and SQL structure analysis, and returns recommendations.<br />
+<strong><em>Comprehensive</em></strong> Performs all functions included in the Limited mode, but also performs full SQL Profile analysis.</p>
+<p><strong><span style="color: #0000ff;">DBMS_SQLTUNE Package</span></strong><br />
+The DBMS_SQLTUNE package exposes the API to directly access the SQL Tuning Advisor.<br />
+Utilizing the DBMS_SQLTUNE package requires the ADVISOR privilege.</p>
+<p><strong><em>Creating a Task</em></strong><br />
+<span>DECLARE<br />
+task_name varchar2(30);<br />
+sql_stmt clob;<br />
+BEGIN<br />
+sql_stmt := ‘select /*+ full(a) use_hash(a) ‘ ||<br />
+‘ parallel(a,8) full(b) use_hash(b) parallel(b,8) ‘ ||<br />
+‘ */ a.type, sum(a.amt_paid) ‘ ||<br />
+‘ from large_table a, large_table2 b ’ ||<br />
+‘ where a.key = b.key ’ ||<br />
+‘ and state_id = :bnd’;</p>
+<p>task_name := <strong><em>DBMS_SQLTUNE.CREATE_TUNING_TASK</em></strong>(<br />
+sql_text =&gt; sql_stmt,<br />
+bind_list =&gt; sql_binds (anydata.ConvertNumber(32));<br />
+user_name =&gt; ‘BUTERTB’,<br />
+scope =&gt; ‘COMPREHENSIVE’,<br />
+time_limit =&gt; 45,<br />
+task_name =&gt; ‘large_table_task’,<br />
+description =&gt; ‘Tune state totals query’);<br />
+dbms_output.put_line(‘Task ‘ || task_name ||<br />
+‘ has been created.’);<br />
+END;<br />
+/</span></p>
+<p><strong><em>Executing a Task</em></strong><br />
+<span>BEGIN<br />
+DBMS_SQLTUNE.<strong><em>EXECUTE_TUNING_TASK</em></strong>( task_name =&gt; ‘large_table_task’);<br />
+END;</span></p>
+<p>The status of the executing task can be monitored by querying the <strong><em>DBA_ADVISOR_LOG</em></strong> view or <strong><em>V$SESSION_LONGOPS</em></strong></p>
+<p><strong><em>Task Results</em></strong><br />
+Results from the tuning task can be reported by using the <strong><em>REPORT_TUNING_TASK</em></strong> function.<br />
+<span>select dbms_sqltune.report_tuning_task(‘large_table_task’) from dual;</span></p>
+<p><strong><em>SQL Tuning Views</em></strong><br />
+<span style="color: #0000ff;">SQL Tuning Information</span><br />
+DBA_SQLTUNE_STATISTICS<br />
+DBA_SQLTUNE_BINDS<br />
+DBA_SQLTUNE_PLANS<br />
+<span style="color: #0000ff;">SQL Tuning Sets</span><br />
+DBA_SQLSET<br />
+DBA_SQLSET_BINDS<br />
+DBA_SQLSET_STATEMENTS<br />
+DBA_SQLSET_REFERENCES<br />
+<span style="color: #0000ff;">SQL Profiles</span><br />
+DBA_SQL_PROFILES<br />
+Advisor Information<br />
+DBA_ADVISOR_TASKS<br />
+DBA_ADVISOR_FINDINGS<br />
+DBA_ADVISOR_RECOMMENDATIONS<br />
+DBA_ADVISOR_RATIONALE<br />
+<span style="color: #0000ff;">Dynamic Views</span><br />
+V$SQL<br />
+V$SQLAREA<br />
+V$SQL_BINDS</p>
+<p><strong><em>Using SQL Tuning Advisor through EM Database Control</em></strong></p>
+<p><span style="color: #0000ff;"><strong>An Overview of the Advisors<br />
+</strong></span><strong><em>Automatic Database Diagnostic Monitor (ADDM)</em></strong><br />
+ADDM represents the pinnacle of automatic database performance tuning. Without any human<br />
+interaction, it proactively identifies performance issues and bottlenecks within the database.</p>
+<p><strong><em>The Segment Advisor</em></strong><br />
+The Segment Advisor analyzes space fragmentation within segments and identifies the segments that are good candidates for the new online shrink operation.</p>
+<p><strong><em>The Undo Advisor</em></strong><br />
+The Undo Advisor helps determine appropriate sizing for Undo tablespaces and helps determine optimal UNDO_RETENTION settings.</p>
+<p><strong><em>The SQL Tuning Advisor</em></strong><br />
+The SQL Tuning Advisor is used to analyze individual SQL statements and provides recommendations<br />
+to increase performance.</p>
+<p><strong><em>The SQL Access Advisor</em></strong><br />
+The SQL Access Advisor is used to analyze a SQL workload (which can consist of one or more SQL statements) and recommend appropriate access structures to improve the performance of the workload.</p>
+<p><strong><em>The Memory Advisor</em></strong><br />
+The Memory Advisor helps you to tune the size of the different Oracle memory structures. The Memory Advisor acts as a sort of supervising advisor with responsibility for the overall instance.</p>
+<p>EXAM:<br />
+All<em><strong> ADDM analysis results</strong></em> are categorized as Problem, Symptom, or Information findings.<br />
+Problem represents the root problem identified, Symptom identifies a symptom resulting from<br />
+the root problem, and Information reports on non-problem areas. ADDM does not classify its<br />
+findings as Errors.</p>
+<p>-- EOF --</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/web&amp;rt/teach-you-words-easily-walking-career.html" data-toggle="tooltip" data-placement="top" title="教你九句话 轻松走职场">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/web&amp;rt/how-to-overcome-fear-of-speech-go.html" data-toggle="tooltip" data-placement="top" title="怎样克服对演讲的恐惧 - - 转">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/sg-ii-chapter-8-understanding-automatic-database-management" data-title="SG II: Chapter 8 | Understanding Automatic Database Management"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Diagnostic Sources
+
+·Adjust thresholds for tracked metrics.
+Automatic Databas... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-8-understanding-automatic-database-management.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/sg-ii-chapter-8-understanding-automatic-database-management" data-title="SG II: Chapter 8 | Understanding Automatic Database Management" data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-8-understanding-automatic-database-management.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

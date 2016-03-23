@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>Oracle 系统表大全 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/encyclopedia-of-oracle-system-tables.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                    </div>
+                    <h1>Oracle 系统表大全</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on June 5, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><span style="font-family: Arial;">数据字典dict总是属于</span><span style="font-family: Arial;">Oracle</span><span style="font-family: Arial;">用户sys的。</span></p>
+<div>
+<p align="left"><span style="font-family: Arial;">1、用户：<br />
+select username from dba_users;<br />
+改口令<br />
+alter user spgroup identified by spgtest;<br />
+2、表空间：<br />
+select * from dba_data_files;<br />
+select * from dba_tablespaces;//表空间</span></p>
+<p align="left"><span style="font-family: Arial;">　　　select tablespace_name,sum(bytes), sum(blocks)<br />
+from dba_free_space group by tablespace_name;//空闲表空间</span></p>
+<p align="left"><span style="font-family: Arial;">　　　select * from dba_data_files<br />
+where tablespace_name='RBS';//表空间对应的数据文件</span></p>
+<p align="left"><span style="font-family: Arial;">　　　select * from dba_segments<br />
+where tablespace_name='INDEXS';<br />
+3、数据库对象：<br />
+select * from dba_objects;<br />
+CLUSTER、DATABASE LINK、FUNCTION、INDEX、LIBRARY、PACKAGE、PACKAGE BODY、<br />
+PROCEDURE、SEQUENCE、SYNONYM、TABLE、TRIGGER、TYPE、UNDEFINED、VIEW。<br />
+4、表：<br />
+select * from dba_tables;<br />
+analyze my_table compute statistics;-&gt;dba_tables后6列<br />
+select extent_id,bytes from dba_extents<br />
+where segment_name='CUSTOMERS' and segment_type='TABLE'<br />
+order by extent_id;//表使用的extent的信息。segment_type='ROLLBACK'查看回滚段的空间分配信息<br />
+列信息：<br />
+select distinct table_name<br />
+from user_tab_columns<br />
+where column_name='SO_TYPE_ID';<br />
+5、索引：<br />
+select * from dba_indexes;//索引，包括主键索引<br />
+select * from dba_ind_columns;//索引列<br />
+select i.index_name,i.uniqueness,c.column_name<br />
+from user_indexes i,user_ind_columns c<br />
+where i.index_name=c.index_name<br />
+and i.table_name ='ACC_NBR';//联接使用<br />
+6、序列：<br />
+select * from dba_sequences;<br />
+7、视图：<br />
+select * from dba_views;<br />
+select * from all_views;<br />
+text 可用于查询视图生成的脚本<br />
+8、聚簇：<br />
+select * from dba_clusters;<br />
+9、快照：<br />
+select * from dba_snapshots;<br />
+快照、分区应存在相应的表空间。<br />
+10、同义词：<br />
+select * from dba_synonyms<br />
+where table_owner='SPGROUP';<br />
+//if owner is PUBLIC,then the synonyms is a public synonym.<br />
+if owner is one of users,then the synonyms is a private synonym.<br />
+11、数据库链：<br />
+select * from dba_db_links;<br />
+在spbase下建数据库链<br />
+create database link dbl_spnew<br />
+connect to spnew identified by spnew using 'jhhx';<br />
+insert into acc_nbr@dbl_spnew<br />
+select * from acc_nbr where nxx_nbr='237' and line_nbr='8888';<br />
+12、触发器：<br />
+select * from dba_trigers;<br />
+存储过程，函数从dba_objects查找。<br />
+其文本：select text from user_source where name='BOOK_SP_EXAMPLE';<br />
+建立出错：select * from user_errors;<br />
+<span>oracle</span>总是将存储过程，函数等软件放在SYSTEM表空间。<br />
+13、约束：<br />
+（1）约束是和表关联的，可在create table或alter table table_name add/drop/modify来建立、修改、删除约束。<br />
+可以临时禁止约束，如：<br />
+alter table book_example<br />
+disable constraint book_example_1;<br />
+alter table book_example<br />
+enable constraint book_example_1;<br />
+（2）主键和外键被称为表约束，而not null和unique之类的约束被称为列约束。通常将主键和外键作为单独的命名约束放在字段列表下面，而列约束可放在列定义的同一行，这样更具有可读性。<br />
+（3）列约束可从表定义看出，即describe;表约束即主键和外键，可从dba_constraints和dba_cons_columns 查。<br />
+select * from user_constraints<br />
+where table_name='BOOK_EXAMPLE';<br />
+select owner,CONSTRAINT_NAME,TABLE_NAME<br />
+from user_constraints<br />
+where constraint_type='R'<br />
+order by table_name;<br />
+（4）定义约束可以无名（系统自动生成约束名）和自己定义约束名（特别是主键、外键）<br />
+如：create table book_example<br />
+(identifier number not null);<br />
+create table book_example<br />
+(identifier number constranit book_example_1 not null);<br />
+14、回滚段：<br />
+在所有的修改结果存入磁盘前，回滚段中保持恢复该事务所需的全部信息，必须以数据库发生的事务来相应确定其大小（DML语句才可回滚，create,drop,truncate等DDL不能回滚）。<br />
+回滚段数量=并发事务/4，但不能超过50；使每个回滚段大小足够处理一个完整的事务；<br />
+create rollback segment r05<br />
+tablespace rbs;<br />
+create rollback segment rbs_cvt<br />
+tablespace rbs<br />
+storage(initial 1M next 500k);<br />
+使回滚段在线<br />
+alter rollback segment r04 online;<br />
+用dba_extents,v$rollback_segs监测回滚段的大小和动态增长。<br />
+回滚段的区间信息<br />
+select * from dba_extents<br />
+where segment_type='ROLLBACK' and segment_name='RB1';<br />
+回滚段的段信息,其中bytes显示目前回滚段的字节数<br />
+select * from dba_segments<br />
+where segment_type='ROLLBACK' and segment_name='RB1';<br />
+为事物指定回归段<br />
+set transaction use rollback segment rbs_cvt<br />
+针对bytes可以使用回滚段回缩。<br />
+alter rollback segment rbs_cvt shrink;<br />
+select bytes,extents,max_extents from dba_segments<br />
+where segment_type='ROLLBACK' and segment_name='RBS_CVT';<br />
+回滚段的当前状态信息：<br />
+select * from dba_rollback_segs<br />
+where segment_name='RB1';<br />
+比多回滚段状态status，回滚段所属实例instance_num<br />
+查优化值optimal<br />
+select n.name,s.optsize<br />
+from v$rollname n,v$rollstat s<br />
+where n.usn=s.usn;<br />
+回滚段中的数据<br />
+set transaction use rollback segment rb1;/*回滚段名*/<br />
+select n.name,s.writes<br />
+from v$rollname n,v$rollstat s<br />
+where n.usn=s.usn;<br />
+当事务处理完毕，再次查询$rollstat，比较writes(回滚段条目字节数)差值，可确定事务的大小。<br />
+查询回滚段中的事务<br />
+column rr heading 'RB Segment' format a18<br />
+column us heading 'Username' format a15<br />
+column os heading 'Os User' format a10<br />
+column te heading 'Terminal' format a10<br />
+select r.name rr,nvl(s.username,'no transaction') us,s.osuser os,s.terminal te<br />
+from v$lock l,v$session s,v$rollname r<br />
+where l.sid=s.sid(+)<br />
+and trunc(l.id1/65536)=R.USN<br />
+and l.type='TX'<br />
+and l.lmode=6<br />
+order by r.name;<br />
+15、作业<br />
+查询作业信息<br />
+select job,broken,next_date,interval,what from user_jobs;<br />
+select job,broken,next_date,interval,what from dba_jobs;<br />
+查询正在运行的作业<br />
+select * from dba_jobs_running;<br />
+使用包exec dbms_job.submit(:v_num,'a;',sysdate,'sysdate + (10/(24*60*60))')加入作业。间隔10秒钟<br />
+exec dbms_job.submit(:v_num,'a;',sysdate,'sysdate + (11/(24*60))')加入作业。间隔11分钟使用包exec dbms_job.remove(21)删除21号作业。</span></p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/primary-keys-unique-indexes-built-non-unique-indexes.html" data-toggle="tooltip" data-placement="top" title="建主键 唯一索引 非唯一索引">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/insert-append-vs-create-table-as.html" data-toggle="tooltip" data-placement="top" title="insert append vs. create table as">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/encyclopedia-of-oracle-system-tables" data-title="Oracle 系统表大全"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="数据字典dict总是属于Oracle用户sys的。
+
+1、用户：
+select username from dba_users;
+改口令
+alter us... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/encyclopedia-of-oracle-system-tables.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/encyclopedia-of-oracle-system-tables" data-title="Oracle 系统表大全" data-url="http://dbaeyes.github.io/oracle/encyclopedia-of-oracle-system-tables.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

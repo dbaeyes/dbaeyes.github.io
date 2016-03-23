@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/page19/">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/autumn2.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>Microdust</h1>
+                    <hr class="small">
+                    <span class="subheading">在遙遠的地方 一切虔誠終必相遇</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+	<div class="row">
+		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+			
+<div class="post-preview">
+    <a href="/oracle/primary-keys-unique-indexes-built-non-unique-indexes.html">
+        <h2 class="post-title">            
+            建主键 唯一索引 非唯一索引
+        </h2>
+        
+        <div class="post-content-preview">
+            表中ID有重复数据，但必须要先建索引给查下用的情况：
+
+SQL&gt; create table tmp_xf1
+2 (id number);
+SQL&gt; insert into tmp_xf1 values(1);
+insert into tmp_xf1 values(1);
+inser...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on June 3, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/my%20life/all-these-days.html">
+        <h2 class="post-title">            
+            车这么些天
+        </h2>
+        
+        <div class="post-content-preview">
+            车是代步的！
+周末开车回家了，新车新手没舍得上高速，事实证明这个决定是非常错误的，路上飘着小雨，上了4桥走高架一直缓慢的行进到德胜路，然后走得S001（平安大道-东西大道），路上限速80（对新车来说这个速度是刚刚好的），路上除了货车很少有私家小车的踪迹，过路费也要20元，这样一共花了2个小时才...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on May 25, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/imp-commit-array-insert.html">
+        <h2 class="post-title">            
+            imp -- commit array insert
+        </h2>
+        
+        <div class="post-content-preview">
+            在给数据库用户做逻辑迁移，imp的时候涉及 commit array insert 这个参数，第一次使用了 commit=y,发现速度相当滴慢，这个参数默认是 N的。
+
+文档上说：
+COMMIT
+Default: n
+Specifies whether Import should commit...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on May 25, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/my%20life/first-day-of-driving-to-work.html">
+        <h2 class="post-title">            
+            第一天开车上班
+        </h2>
+        
+        <div class="post-content-preview">
+            今天是第一天开着我的小马去上班，心里那个激动！
+   可怜的小鱼被我早早拖起来了，因为新手加新车，要慢慢的开，所以要早点出发才对。
+8点送小鱼到她公司门口，然后感受了一下有序而拥堵的钱江一桥，花了10分钟顺利通过。走杨公堤8点52到世纪联华华商店停车场，一路顺利！
+不过在进华商店的时候收到保安...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on May 14, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/my%20life/pony-home.html">
+        <h2 class="post-title">            
+            小马到家了
+        </h2>
+        
+        <div class="post-content-preview">
+            今天折腾了一天，终于将小马请回来了家！瀚海蓝的马自达6
+
+过程有点小曲折，选车的时候销售MM开始弄出来的车，我们都不满意，后来发现车库还有两辆一样颜色的同型号车，嘿嘿 小样还有留着的，选中了其中比较干净的一辆，发动机声音也比较轻（妈妈和表哥一起过来的，表哥的驾龄快20年了，老驾驶员啦）后来在看...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on May 13, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/performed-using-sql-comparison.html">
+        <h2 class="post-title">            
+            用SQL完成对比
+        </h2>
+        
+        <div class="post-content-preview">
+            可以更简单，有的时候自己比较笨，用笨的方法还不亦乐乎
+
+我需要对比初始化后的数字ID是否和原表中的吻合（其实脚本肯定是没问题了，但万一起见还是要验证的，而且程序那边也有可能有问题的）
+select b.auction_id,b.auc_num_id aa,a.auction_id ba
+fro...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on May 7, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/my%20life/the-51.html">
+        <h2 class="post-title">            
+            这个五一
+        </h2>
+        
+        <div class="post-content-preview">
+            这个五一做了几件事。踢球、开车
+
+五一那天回到海盐，联络朋友说下午干啥去呢，提议踢球吧。 原来大家都有一年多没有踢球了。我们只有3个人（周克、周军），到海盐中学的体育场上和另外一伙人一起踢。 还是有些个认识的，都是很久很久前一起踢球的，至少有8年了吧 。。。 时间真快。。 他们是属于踢球比较多...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on May 5, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/length-of-the-number-character-date-type.html">
+        <h2 class="post-title">            
+            数字、字符、日期类型的长度
+        </h2>
+        
+        <div class="post-content-preview">
+            
+insert into tmp_xf_test values(923456789012,'Ad62d45cf37fc5ae977429bd7189373d',sysdate);
+
+
+
+
+
+
+
+
+
+I
+DUMP(I)
+NN
+DUMP(NN)
+DUMP(GMT)
+
+
+923456789012
+T...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on May 4, 2009</p>
+</div>
+
+<hr>
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    <li class="previous">
+        <a href="/page18">&larr; Newer Posts</a>
+    </li>
+    
+    
+    <li class="next">
+        <a href="/page20">Older Posts &rarr;</a>
+    </li>
+    
+</ul>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-66863061-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<hr>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

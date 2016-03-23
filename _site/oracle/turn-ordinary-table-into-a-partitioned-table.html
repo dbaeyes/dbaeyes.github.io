@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>将普通表转变为分区表 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/turn-ordinary-table-into-a-partitioned-table.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#partition" title="partition">partition</a>
+                        
+                        <a class="tag" href="/Tags/#分区表" title="分区表">分区表</a>
+                        
+                    </div>
+                    <h1>将普通表转变为分区表</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on July 14, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>转自：yangtingkun blog： http://yangtingkun.itpub.net/post/468/13091</p>
+<div>
+Oracle的普通表没有办法通过修改属性的方式直接转化为分区表，必须通过重建的方式进行转变，下面介绍三种效率比较高的方法，并说明它们各自的特点。</p>
+<p>&nbsp;<br />
+方法一：利用原表重建分区表。</p>
+<p>步骤：</p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; CREATE TABLE T (ID NUMBER PRIMARY KEY, TIME DATE);</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已创建。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; INSERT INTO T SELECT ROWNUM, CREATED FROM DBA_OBJECTS;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">已创建6264行。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; COMMIT;</span></span></p>
+<p><span style="font-family: 宋体; font-size: medium;">提交完成。</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; CREATE TABLE T_NEW (ID, TIME) PARTITION BY RANGE (TIME)<br />
+2 (PARTITION P1 VALUES LESS THAN (TO_DATE('2004-7-1', 'YYYY-MM-DD')),<br />
+3 PARTITION P2 VALUES LESS THAN (TO_DATE('2005-1-1', 'YYYY-MM-DD')),<br />
+4 PARTITION P3 VALUES LESS THAN (TO_DATE('2005-7-1', 'YYYY-MM-DD')),<br />
+5 PARTITION P4 VALUES LESS THAN (MAXVALUE))<br />
+6 AS SELECT ID, TIME FROM T;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已创建。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; RENAME T TO T_OLD;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已重命名。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; RENAME T_NEW TO T;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已重命名。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; SELECT COUNT(*) FROM T;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">COUNT(*)<br />
+----------<br />
+6264</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; SELECT COUNT(*) FROM T PARTITION (P1);</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">COUNT(*)<br />
+----------<br />
+0</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; SELECT COUNT(*) FROM T PARTITION (P2);</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">COUNT(*)<br />
+----------<br />
+6246</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; SELECT COUNT(*) FROM T PARTITION (P3);</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">COUNT(*)<br />
+----------<br />
+18</span></span></p>
+<p>优点：方法简单易用，由于采用DDL语句，不会产生UNDO，且只产生少量REDO，效率相对较高，而且建表完成后数据已经在分布到各个分区中了。</p>
+<p>不足：对于数据的一致性方面还需要额外的考虑。由于几乎没有办法通过手工锁定T表的方式保证一致性，在执行CREATE TABLE语句和RENAME T_NEW TO T语句直接的修改可能会丢失，如果要保证一致性，需要在执行完语句后对数据进行检查，而这个代价是比较大的。另外在执行两个RENAME语句之间执行的对T的访问会失败。</p>
+<p>适用于修改不频繁的表，在闲时进行操作，表的数据量不宜太大。</p>
+<p>&nbsp;</p>
+<p>方法二：使用交换分区的方法。</p>
+<p>步骤：</p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; CREATE TABLE T (ID NUMBER PRIMARY KEY, TIME DATE);</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已创建。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; INSERT INTO T SELECT ROWNUM, CREATED FROM DBA_OBJECTS;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">已创建6264行。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; COMMIT;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">提交完成。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; CREATE TABLE T_NEW (ID NUMBER PRIMARY KEY, TIME DATE) PARTITION BY RANGE (TIME)<br />
+2 (PARTITION P1 VALUES LESS THAN (TO_DATE('2005-7-1', 'YYYY-MM-DD')),<br />
+3 PARTITION P2 VALUES LESS THAN (MAXVALUE));</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已创建。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; ALTER TABLE T_NEW EXCHANGE PARTITION P1 WITH TABLE T;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已更改。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; RENAME T TO T_OLD;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已重命名。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; RENAME T_NEW TO T;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已重命名。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; SELECT COUNT(*) FROM T;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">COUNT(*)<br />
+----------<br />
+6264</span></span></p>
+<p>优点：只是对数据字典中分区和表的定义进行了修改，没有数据的修改或复制，效率最高。如果对数据在分区中的分布没有进一步要求的话，实现比较简单。在执行完RENAME操作后，可以检查T_OLD中是否存在数据，如果存在的话，直接将这些数据插入到T中，可以保证对T插入的操作不会丢失。</p>
+<p>不足：仍然存在一致性问题，交换分区之后RENAME T_NEW TO T之前，查询、更新和删除会出现错误或访问不到数据。如果要求数据分布到多个分区中，则需要进行分区的SPLIT操作，会增加操作的复杂度，效率也会降低。</p>
+<p>适用于包含大数据量的表转到分区表中的一个分区的操作。应尽量在闲时进行操作。</p>
+<p>&nbsp;</p>
+<p>方法三：Oracle9i以上版本，利用在线重定义功能</p>
+<p>步骤：</p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; CREATE TABLE T (ID NUMBER PRIMARY KEY, TIME DATE);</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已创建。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; INSERT INTO T SELECT ROWNUM, CREATED FROM DBA_OBJECTS;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">已创建6264行。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; COMMIT;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">提交完成。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; EXEC DBMS_REDEFINITION.CAN_REDEF_TABLE(USER, 'T', DBMS_REDEFINITION.CONS_USE_PK);</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">PL/SQL 过程已成功完成。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; CREATE TABLE T_NEW (ID NUMBER PRIMARY KEY, TIME DATE) PARTITION BY RANGE (TIME)<br />
+2 (PARTITION P1 VALUES LESS THAN (TO_DATE('2004-7-1', 'YYYY-MM-DD')),<br />
+3 PARTITION P2 VALUES LESS THAN (TO_DATE('2005-1-1', 'YYYY-MM-DD')),<br />
+4 PARTITION P3 VALUES LESS THAN (TO_DATE('2005-7-1', 'YYYY-MM-DD')),<br />
+5 PARTITION P4 VALUES LESS THAN (MAXVALUE));</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">表已创建。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; EXEC DBMS_REDEFINITION.START_REDEF_TABLE(USER, 'T', 'T_NEW', -<br />
+&gt; 'ID ID, TIME TIME', DBMS_REDEFINITION.CONS_USE_PK);</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">PL/SQL 过程已成功完成。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; EXEC DBMS_REDEFINITION.FINISH_REDEF_TABLE('YANGTK', 'T', 'T_NEW');</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">PL/SQL 过程已成功完成。</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; SELECT COUNT(*) FROM T;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">COUNT(*)<br />
+----------<br />
+6264</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; SELECT COUNT(*) FROM T PARTITION (P2);</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">COUNT(*)<br />
+----------<br />
+6246</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">SQL&gt; SELECT COUNT(*) FROM T PARTITION (P3);</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 宋体;">COUNT(*)<br />
+----------<br />
+18</span></span></p>
+<p>优点：保证数据的一致性，在大部分时间内，表T都可以正常进行DML操作。只在切换的瞬间锁表，具有很高的可用性。这种方法具有很强的灵活性，对各种不同的需要都能满足。而且，可以在切换前进行相应的授权并建立各种约束，可以做到切换完成后不再需要任何额外的管理操作。</p>
+<p>不足：实现上比上面两种略显复杂。</p>
+<p>适用于各种情况。</p>
+<p>这里只给出了在线重定义表的一个最简单的例子，详细的描述和例子可以参考下面两篇文章。</p>
+<p>Oracle的在线重定义表功能：<a href="http://blog.itpub.net/post/468/12855"><span style="color: #ff6600;">http://blog.itpub.net/post/468/12855</span></a></p>
+<p>Oracle的在线重定义表功能（二）：<a href="http://blog.itpub.net/post/468/12962">http://blog.itpub.net/post/468/12962</a></p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/redo-statistics-understood-go.html" data-toggle="tooltip" data-placement="top" title="redo 相关统计值理解 --转">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/gypsum-board-was-available-for-such-a-heavy.html" data-toggle="tooltip" data-placement="top" title="石膏板原来可以这样重！！！">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/turn-ordinary-table-into-a-partitioned-table" data-title="将普通表转变为分区表"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="转自：yangtingkun blog： http://yangtingkun.itpub.net/post/468/13091
+
+Oracle的普通表没... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/turn-ordinary-table-into-a-partitioned-table.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/turn-ordinary-table-into-a-partitioned-table" data-title="将普通表转变为分区表" data-url="http://dbaeyes.github.io/oracle/turn-ordinary-table-into-a-partitioned-table.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

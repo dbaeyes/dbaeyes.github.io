@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>物化视图查询重写的限制 －－ 转 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/materialized-view-query-rewriting-constraints-go.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                    </div>
+                    <h1>物化视图查询重写的限制 －－ 转</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on August 22, 2007</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <h1></h1>
+<div>
+<p>物化视图的一个重要的特性就是支持查询重写。</p>
+<p>如果初始化参数query_rewrite_enabled 设置为TRUE，且使用CBO时，当发出对基表的查询，Oracle会自动判断是否能利用这个基表的所有指定了ENABLE QUERY REWRITE语句的物化视图，如果可以且根据统计信息判断通过查询物化视图代价更小，则Oracle自动重写查询语句，通过查询物化视图得到正确的结 果。</p>
+<p>不过不是所有的物化视图都支持查询重写的，查询重写有一些限制条件，本文首先讨论查询重写对物化视图的限制。</p>
+<p>物化视图的查询重写功能的限制来自两个方面，对物化视图的限制和对查询重写的限制。<br />
+<span style="color: #0000ff;">物化视图的限制：</span></p>
+<p><span style="color: #0000ff;">1.物化视图中不能包括ROWNUM、SYSDATE等不可重复的表达式；</span></p>
+<p><span style="color: #0000ff;">2.物化视图不能包括LONG或LONG RAW或对象参考列；</span></p>
+<p><span style="color: #0000ff;">3.如果物化视图的查询定义中包括集合操作（如minus、union等），则物化视图只支持全文匹配的查询重写；</span></p>
+<p><span style="color: #0000ff;">4.如果以PREBUILD方式建立物化视图，除非指定了WITH REDUCED PRECISION语句，否则列的精度必须满足SELECT表达式的精度；</span></p>
+<p><span style="color: #0000ff;">5.如果物化视图包含一个表的次数多于一次，那么，这个物化视图支持一般类型的查询重写，要求查询中的表的别名必须和物化视图中定义的一致。</span><br />
+首先建立测试环境：</p>
+<p>SQL&gt; create table dim_a (id number primary key, name varchar2(30));<br />
+表已创建。</p>
+<p>SQL&gt; create table dim_b (id number primary key, name varchar2(30));<br />
+表已创建。</p>
+<p>SQL&gt; create table fact (id number, aid number, bid number, num number);<br />
+表已创建。</p>
+<p>SQL&gt; alter table fact add constraint fk_fact_aid foreign key (aid) references dim_a(id);<br />
+表已更改。</p>
+<p>SQL&gt; alter table fact add constraint fk_fact_bid foreign key (bid) references dim_b(id);<br />
+表已更改。</p>
+<p>SQL&gt; insert into dim_a select rownum, 'a'||rownum from user_objects;<br />
+已创建56行。</p>
+<p>SQL&gt; insert into dim_b select rownum, 'b'||rownum from user_objects;<br />
+已创建56行。</p>
+<p>SQL&gt; insert into fact select rownum, mod(rownum, 6) + 1, mod(rownum, 5 ) + 1, rownum *2<br />
+2 from user_objects;<br />
+已创建56行。</p>
+<p>SQL&gt; commit;<br />
+提交完成。</p>
+<p>建立MV_CAPABILITIES_TABLE表：<br />
+SQL&gt; @?/rdbms/admin/utlxmv.sql</p>
+<p>表已创建。</p>
+<p>环境：</p>
+<p>SQL&gt; show parameter query_rewrite</p>
+<p>NAME                                 TYPE        VALUE<br />
+------------------------------------ ----------- -------------------<br />
+query_rewrite_enabled                string      TRUE<br />
+query_rewrite_integrity              string      enforced</p>
+<p>物化视图的限制：</p>
+<p>1.物化视图中不能包括ROWNUM、SYSDATE等不可重复的表达式；</p>
+<p>SQL&gt; create materialized view mv_fact enable query rewrite as<br />
+2 select rownum id, a.name, b.num from dim_a a, fact b<br />
+3 where a.id = b.aid;<br />
+where a.id = b.aid<br />
+*<br />
+ERROR 位于第 3 行:<br />
+ORA-30353: 表达式对查询重写不支持</p>
+<p>SQL&gt; begin<br />
+2 dbms_mview.explain_mview('select rownum id, a.name, b.num from dim_a a, fact b<br />
+3 where a.id = b.aid');<br />
+4 end;<br />
+5 /</p>
+<p>PL/SQL 过程已成功完成。</p>
+<p>SQL&gt; col msgtxt format a40<br />
+SQL&gt; col related_text format a30<br />
+SQL&gt; select capability_name, possible, msgtxt, related_text<br />
+2 from mv_capabilities_table<br />
+3 where capability_name like '%REWRITE%'<br />
+4 and capability_name not like '%PCT%';</p>
+<p>CAPABILITY_NAME                P MSGTXT                                   RELATED_TEXT<br />
+------------------------------ - ---------------------------------------- --------------<br />
+REWRITE                        N<br />
+REWRITE_FULL_TEXT_MATCH        N Oracle 错误: 有关详细信息, 请参阅 RELATE 表达式对查询重写不支持<br />
+D_NUM 和 RELATED_TEXT</p>
+<p>REWRITE_PARTIAL_TEXT_MATCH     N 实体化视图无法支持任何类型的查询重写<br />
+REWRITE_GENERAL                N 实体化视图无法支持任何类型的查询重写</p>
+<p>2.物化视图不能包括LONG或LONG RAW或对象参考列；</p>
+<p>SQL&gt; alter table dim_b add (col_long long);</p>
+<p>表已更改。</p>
+<p>SQL&gt; create materialized view mv_fact as<br />
+2 select b.col_long, a.num from dim_b b, fact a<br />
+3 where b.id = a.bid;<br />
+select b.col_long, a.num from dim_b b, fact a<br />
+*<br />
+ERROR 位于第 2 行:<br />
+ORA-00997: 非法使用 LONG 数据类型</p>
+<p>SQL&gt; alter table dim_b drop (col_long);</p>
+<p>表已更改。<br />
+3.如果物化视图的查询定义中包括集合操作（如minus、union等），则物化视图只支持全文匹配的查询重写；</p>
+<p>SQL&gt; create materialized view mv_fact enable query rewrite as<br />
+2 select a.name, b.num from dim_a a, fact b<br />
+3 where a.id = b.aid<br />
+4 union<br />
+5 select a.name, b.num from dim_b a, fact b<br />
+6 where a.id = b.bid<br />
+7 ;<br />
+实体化视图已创建。</p>
+<p>SQL&gt; truncate table mv_capabilities_table;<br />
+表已截掉。</p>
+<p>SQL&gt; begin<br />
+2 dbms_mview.explain_mview('MV_FACT');<br />
+3 end;<br />
+4 /<br />
+PL/SQL 过程已成功完成。</p>
+<p>SQL&gt; select capability_name, possible, msgtxt<br />
+2 from mv_capabilities_table<br />
+3 where capability_name like '%REWRITE%'<br />
+4 and capability_name not like '%PCT%';</p>
+<p>CAPABILITY_NAME                P MSGTXT<br />
+------------------------------ - ------------------------<br />
+REWRITE                        Y<br />
+REWRITE_FULL_TEXT_MATCH        Y<br />
+REWRITE_PARTIAL_TEXT_MATCH     N 设置在实体化视图中遇到的运算符<br />
+REWRITE_GENERAL                N 设置在实体化视图中遇到的运算符</p>
+<p>根据MV_CAPABILITIES_TABLE中的信息可以看出，物化视图MV_FACT只支持全文匹配的查询。</p>
+<p>4.如果以PREBUILD方式建立物化视图，除非指定了WITH REDUCED PRECISION语句，否则列的精度必须满足SELECT表达式的精度；</p>
+<p>SQL&gt; drop materialized view mv_fact;<br />
+实体化视图已删除。</p>
+<p>SQL&gt; create table mv_fact (name varchar2(20), num number);<br />
+表已创建。</p>
+<p>SQL&gt; create table mv_fact1 (name varchar2(20), num number);<br />
+表已创建。</p>
+<p>SQL&gt; create materialized view mv_fact on prebuilt table enable query rewrite as<br />
+2 select a.name, b.num from dim_a a, fact b<br />
+3 where a.id = b.aid;<br />
+select a.name, b.num from dim_a a, fact b<br />
+*<br />
+ERROR 位于第 2 行:<br />
+ORA-12060: 预建表的形式与定义查询不匹配</p>
+<p>SQL&gt; create materialized view mv_fact1 on prebuilt table with reduced precision<br />
+2 enable query rewrite as<br />
+3 select a.name, b.num from dim_a a, fact b<br />
+4 where a.id = b.aid;</p>
+<p>实体化视图已创建。<br />
+5.如果物化视图包含一个表的次数多于一次，那么，这个物化视图支持一般类型的查询重写，要求查询中的表的别名必须和物化视图中定义的一致。</p>
+<p>SQL&gt; create materialized view mv_fact1 on prebuilt table with reduced precision 2 enable query rewrite as<br />
+3 select a.name, b.num from dim_a a, fact b<br />
+4 where a.id = b.aid;</p>
+<p>实体化视图已创建。<br />
+SQL&gt;<br />
+SQL&gt; create materialized view mv_dim_a enable query rewrite<br />
+2 as select a.id, b.name from dim_a a, dim_a b<br />
+3 where a.id = b.id;<br />
+实体化视图已创建。</p>
+<p>SQL&gt; truncate table mv_capabilities_table;<br />
+表已截掉。</p>
+<p>SQL&gt; begin<br />
+2 dbms_mview.explain_mview('MV_DIM_A');<br />
+3 end;<br />
+4 /</p>
+<p>PL/SQL 过程已成功完成。</p>
+<p>SQL&gt; select capability_name, possible, msgtxt<br />
+2 from mv_capabilities_table<br />
+3 where capability_name like '%REWRITE%'<br />
+4 and capability_name not like '%PCT%';</p>
+<p>CAPABILITY_NAME                P MSGTXT<br />
+------------------------------ - ----------------------<br />
+REWRITE                        Y<br />
+REWRITE_FULL_TEXT_MATCH        Y<br />
+REWRITE_PARTIAL_TEXT_MATCH     N 相同的表或视图的多个例程<br />
+REWRITE_GENERAL                Y</p>
+<p>SQL&gt; set autot on exp<br />
+SQL&gt; select a.id, b.name from dim_a a, dim_a b<br />
+2 where a.id = b.id;</p>
+<p>ID NAME<br />
+---------- ------------------------------<br />
+1 a1<br />
+2 a2<br />
+3 a3<br />
+.<br />
+.<br />
+.<br />
+56 a56</p>
+<p>已选择56行。<br />
+Execution Plan<br />
+----------------------------------------------------------<br />
+0      SELECT STATEMENT ptimizer=CHOOSE<br />
+1    0   NESTED LOOPS<br />
+2    1     TABLE ACCESS (FULL) OF 'DIM_A'<br />
+3    1     INDEX (UNIQUE SCAN) OF 'SYS_C001917' (UNIQUE)</p>
+<p>由于没有统计信息采用了RBO，下面对表进行分析。</p>
+<p>SQL&gt; exec dbms_stats.gather_table_stats(user, 'DIM_A');</p>
+<p>PL/SQL 过程已成功完成。</p>
+<p>SQL&gt; select a.id, b.name from dim_a a, dim_a b<br />
+2 where a.id = b.id;</p>
+<p>ID NAME<br />
+---------- ------------------------------<br />
+1 a1<br />
+2 a2<br />
+3 a3<br />
+.<br />
+.<br />
+.<br />
+56 a56</p>
+<p>已选择56行。<br />
+Execution Plan<br />
+----------------------------------------------------------<br />
+0      SELECT STATEMENT ptimizer=CHOOSE (Cost=2 Card=327 Bytes=9810)<br />
+1    0   TABLE ACCESS (FULL) OF 'MV_DIM_A' (Cost=2 Card=327 Bytes=9810)<br />
+SQL&gt; select a.id, c.name from dim_a a, dim_a c<br />
+2 where a.id = c.id;</p>
+<p>ID NAME<br />
+---------- ------------------------------<br />
+1 a1<br />
+2 a2<br />
+3 a3<br />
+.<br />
+.<br />
+.<br />
+56 a56</p>
+<p>已选择56行。<br />
+Execution Plan<br />
+----------------------------------------------------------<br />
+0      SELECT STATEMENT ptimizer=CHOOSE (Cost=2 Card=56 Bytes=504)<br />
+1    0   NESTED LOOPS (Cost=2 Card=56 Bytes=504)<br />
+2    1     TABLE ACCESS (FULL) OF 'DIM_A' (Cost=2 Card=56 Bytes=336)<br />
+3    1     INDEX (UNIQUE SCAN) OF 'SYS_C001917' (UNIQUE)</p>
+<p>可以看出，当物化视图中包含一个表多次时，查询重写的要求是查询语句中的别名必须和物化视图定义中的一致。</p>
+<p>本文介绍的是一般意义上的限制，对于具体某个SQL能否使用查询重写，可以使用DBMS_MVIEW.EXPLAIN_REWRITE过程。</p>
+<p>物化视图的查询首先功能的限制来自两个方面，对物化视图的限制和对查询重写的限制。</p>
+<p><span style="color: #0000ff;">查询重写的限制包括：</span></p>
+<p><span style="color: #0000ff;">1.如果物化视图包括本地表和远端表，则只有本地表支持查询重写；</span></p>
+<p><span style="color: #0000ff;">2.基表和物化视图都不能处于SYS用户下；</span></p>
+<p><span style="color: #0000ff;">3.物化视图的查询中如果包含SELECT和GROUP BY列表，则二者必须保持一致；</span></p>
+<p><span style="color: #0000ff;">4.聚集函数必须在表达式的最外层；</span></p>
+<p><span style="color: #0000ff;">5.不允许CONNECT BY语句。</span></p>
+<p>1.如果物化视图包括本地表和远端表，则只有本地表支持查询重写；</p>
+<p>SQL&gt; conn yangtk/yangtk@yangtk<br />
+已连接。<br />
+SQL&gt; create table dim_b (id number primary key, name varchar2(30));</p>
+<p>表已创建。</p>
+<p>SQL&gt; insert into dim_b select rownum, 'b'||rownum from user_objects;</p>
+<p>已创建60行。</p>
+<p>SQL&gt; commit;</p>
+<p>提交完成。</p>
+<p>SQL&gt; conn yangtk/yangtk@test4<br />
+已连接。<br />
+SQL&gt; create database link yangtk using 'yangtk';</p>
+<p>数据库链接已创建。</p>
+<p>SQL&gt; select count(*) from dim_b@yangtk;</p>
+<p>COUNT(*)<br />
+----------<br />
+60</p>
+<p>SQL&gt; create materialized view mv_fact enable query rewrite as<br />
+2 select a.name aname, b.name bname, f.num<br />
+3 from dim_a a, dim_b@yangtk b, fact f<br />
+4 where a.id = f.aid<br />
+5 and b.id = f.bid;</p>
+<p>实体化视图已创建。</p>
+<p>SQL&gt; truncate table mv_capabilities_table;</p>
+<p>表已截掉。</p>
+<p>SQL&gt; begin<br />
+2 dbms_mview.explain_mview('MV_FACT');<br />
+3 end;<br />
+4 /</p>
+<p>PL/SQL 过程已成功完成。</p>
+<p>SQL&gt; select capability_name, possible, msgtxt<br />
+2 from mv_capabilities_table<br />
+3 where capability_name like '%REWRITE%'<br />
+4 and capability_name not like '%PCT%';</p>
+<p>CAPABILITY_NAME                P MSGTXT<br />
+------------------------------ - --------------------------<br />
+REWRITE                        N<br />
+REWRITE_FULL_TEXT_MATCH        N 实体化视图引用了 FROM 列表中的远程表或视图<br />
+REWRITE_PARTIAL_TEXT_MATCH     N 实体化视图无法支持任何类型的查询重写<br />
+REWRITE_GENERAL                N 实体化视图无法支持任何类型的查询重写</p>
+<p>优化器无法使用远端数据库中的物化视图，如果在本地建立远端表的物化视图，则Oracle无法确定物化视图中的数据是否和基表中的数据同步，因此包含远端表的物化视图也不支持查询重写。</p>
+<p>因此如果一个查询中包含了远端表和本地表，则只有对本地表的访问会被优化器考虑是否使用查询重写，远端表部分不会利用查询重写的功能。</p>
+<p>2.基表和物化视图都不能处于SYS用户下；</p>
+<p>SQL&gt; conn /@test4 as sysdba<br />
+已连接。<br />
+SQL&gt; create materialized view mv_fact enable query rewrite as<br />
+2 select a.name, b.num from yangtk.dim_a a, yangtk.fact b<br />
+3 where a.id = b.aid;<br />
+select a.name, b.num from yangtk.dim_a a, yangtk.fact b<br />
+*<br />
+ERROR 位于第 2 行:<br />
+ORA-30359: SYS 具体化视图不支持查询重写</p>
+<p>SQL&gt; create table dim_a (id number primary key, name varchar2(30));</p>
+<p>表已创建。</p>
+<p>SQL&gt; grant select on dim_a to yangtk;</p>
+<p>授权成功。</p>
+<p>SQL&gt; conn yangtk/yangtk@test4<br />
+已连接。<br />
+SQL&gt; create materialized view mv_fact enable query rewrite as<br />
+2 select a.name, b.num from sys.dim_a a, yangtk.fact b<br />
+3 where a.id = b.aid;<br />
+where a.id = b.aid<br />
+*<br />
+ERROR 位于第 3 行:<br />
+ORA-01031: 权限不足<br />
+SQL&gt; conn /@test4 as sysdba<br />
+已连接。<br />
+SQL&gt; create materialized view yangtk.mv_fact enable query rewrite as<br />
+2 select a.name, b.num from sys.dim_a a, yangtk.fact b<br />
+3 where a.id = b.aid;<br />
+where a.id = b.aid<br />
+*<br />
+ERROR 位于第 3 行:<br />
+ORA-30354: SYS 关系中不允许查询重写</p>
+<p>根据简单的测试可以发现，基表和物化视图都不能包括在SYS用户中。</p>
+<p>3.物化视图的查询中如果包含SELECT和GROUP BY列表，则二者必须保持一致；</p>
+<p>SQL&gt; create materialized view mv_dim_b enable query rewrite as<br />
+2 select count(*) from dim_b<br />
+3 group by name;</p>
+<p>实体化视图已创建。</p>
+<p>SQL&gt; truncate table mv_capabilities_table;</p>
+<p>表已截掉。</p>
+<p>SQL&gt; begin<br />
+2 dbms_mview.explain_mview('MV_DIM_B');<br />
+3 end;<br />
+4 /</p>
+<p>PL/SQL 过程已成功完成。</p>
+<p>SQL&gt; select capability_name, possible, msgtxt<br />
+2 from mv_capabilities_table<br />
+3 where capability_name like '%REWRITE%'<br />
+4 and capability_name not like '%PCT%';</p>
+<p>CAPABILITY_NAME                P MSGTXT<br />
+------------------------------ - --------------------------------<br />
+REWRITE                        Y<br />
+REWRITE_FULL_TEXT_MATCH        Y<br />
+REWRITE_PARTIAL_TEXT_MATCH     N 在 SELECT 列表中忽略了分组列<br />
+REWRITE_GENERAL                N 在 SELECT 列表中忽略了分组列</p>
+<p>如果GROUP BY列表和SELECT列表不一致，则只支持全文匹配的查询重写。</p>
+<p>4.聚集函数必须在表达式的最外层；</p>
+<p>SQL&gt; create materialized view mv_fact enable query rewrite as<br />
+2 select avg(avg(num)) from dim_a a, fact b<br />
+3 where a.id = b.aid<br />
+4 group by name;</p>
+<p>实体化视图已创建。</p>
+<p>SQL&gt; truncate table mv_capabilities_table;</p>
+<p>表已截掉。</p>
+<p>SQL&gt; begin<br />
+2 dbms_mview.explain_mview('MV_FACT');<br />
+3 end;<br />
+4 /</p>
+<p>PL/SQL 过程已成功完成。</p>
+<p>SQL&gt; select capability_name, possible, msgtxt<br />
+2 from mv_capabilities_table<br />
+3 where capability_name like '%REWRITE%'<br />
+4 and capability_name not like '%PCT%';</p>
+<p>CAPABILITY_NAME                P MSGTXT<br />
+------------------------------ - --------------------------------<br />
+REWRITE                        Y<br />
+REWRITE_FULL_TEXT_MATCH        Y<br />
+REWRITE_PARTIAL_TEXT_MATCH     N 在 SELECT 列表中忽略了分组列<br />
+REWRITE_GENERAL                N 表达式中聚集函数嵌套<br />
+REWRITE_GENERAL                N 在 SELECT 列表中忽略了分组列</p>
+<p>5.不允许CONNECT BY语句。</p>
+<p>SQL&gt; create table test_connect (id number, father_id number, name varchar2(30));</p>
+<p>表已创建。</p>
+<p>SQL&gt; create materialized view mv_test_connect enable query rewrite as<br />
+2 select id from test_connect<br />
+3 start with id = 1<br />
+4 connect by prior id = father_id;</p>
+<p>实体化视图已创建。</p>
+<p>SQL&gt; truncate table mv_capabilities_table;</p>
+<p>表已截掉。</p>
+<p>SQL&gt; begin<br />
+2 dbms_mview.explain_mview('MV_TEST_CONNECT');<br />
+3 end;<br />
+4 /</p>
+<p>PL/SQL 过程已成功完成。</p>
+<p>SQL&gt; select capability_name, possible, msgtxt<br />
+2 from mv_capabilities_table<br />
+3 where capability_name like '%REWRITE%'<br />
+4 and capability_name not like '%PCT%';</p>
+<p>CAPABILITY_NAME                P MSGTXT<br />
+------------------------------ - -----------------------------<br />
+REWRITE                        Y<br />
+REWRITE_FULL_TEXT_MATCH        Y<br />
+REWRITE_PARTIAL_TEXT_MATCH     Y<br />
+REWRITE_GENERAL                N 存在一个 CONNECT BY 子句</p>
+<p>来源：http://blog.student163.com/?uid-8883-action-viewspace-itemid-14706</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/cut-class-today.html" data-toggle="tooltip" data-placement="top" title="今天跷课了">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/laymans-notes-on-oracle.html" data-toggle="tooltip" data-placement="top" title="深入浅出Oracle －－一些散记">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/materialized-view-query-rewriting-constraints-go" data-title="物化视图查询重写的限制 －－ 转"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="
+
+物化视图的一个重要的特性就是支持查询重写。
+如果初始化参数query_rewrite_enabled 设置为TRUE，且使用CBO时，当发出对基表的查... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/materialized-view-query-rewriting-constraints-go.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/materialized-view-query-rewriting-constraints-go" data-title="物化视图查询重写的限制 －－ 转" data-url="http://dbaeyes.github.io/oracle/materialized-view-query-rewriting-constraints-go.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

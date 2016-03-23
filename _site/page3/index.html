@@ -10,7 +10,7 @@
 
     <title>Microdust</title>
 
-    <link rel="canonical" href="http://azeril.me/page3/">
+    <link rel="canonical" href="http://dbaeyes.github.io/page3/">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -116,50 +116,6 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
-    <a href="/database/mysql/mysql-recover-the-database-from-a-compressed-file.html">
-        <h2 class="post-title">            
-            MySQL从压缩文件恢复数据库
-        </h2>
-        
-        <div class="post-content-preview">
-            MySQL备份的过程使用了bzip2压缩以节省存储空间，正常的恢复过程是
-[cc lang='sql']
-解压
-nohup pbzip2 -d -k -p10 dump_dbcc_20131103.sql.bz2 &
-恢复
-nohup mysql -uroot  
-[/cc]
-关于pbzip2...
-        </div>
-    </a>
-    <p class="post-meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on November 8, 2013</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/my%20life/running.html">
-        <h2 class="post-title">            
-            Running
-        </h2>
-        
-        <div class="post-content-preview">
-            这几天开始跑步，跑步的感觉相对不错，第一天有点累，不太舒服，第二天就跑的很开心了！
-现在跑步也带上装备了，跑步小包，可以装上手机、门卡，后挂式耳机，跑步听歌很惬意。
-asics跑鞋，跑步脚掌不累！
---
-最近每天中午带老妈做的饭菜吃，一周来已经增重2.5斤，哈哈！
-&nbsp;
-
-
-        </div>
-    </a>
-    <p class="post-meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on September 5, 2013</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
     <a href="/thinking/message-from-rolling-around-in-the-wind-in-my-heart.html">
         <h2 class="post-title">            
             寄语在风中 游荡在心中
@@ -175,7 +131,7 @@ asics跑鞋，跑步脚掌不累！
 流动的繁星像那洒落的饱含柔情...
         </div>
     </a>
-    <p class="post-meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on August 28, 2013</p>
+    <p class="post-meta">Posted by David on August 28, 2013</p>
 </div>
 
 <hr>
@@ -193,7 +149,7 @@ asics跑鞋，跑步脚掌不累！
 计划好了9月份去美国的行程，又一次美国之行...
         </div>
     </a>
-    <p class="post-meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on August 26, 2013</p>
+    <p class="post-meta">Posted by David on August 26, 2013</p>
 </div>
 
 <hr>
@@ -211,7 +167,7 @@ asics跑鞋，跑步脚掌不累！
 闷闷不乐绝对不是好事，对于很多事情需要看...
         </div>
     </a>
-    <p class="post-meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on June 28, 2013</p>
+    <p class="post-meta">Posted by David on June 29, 2013</p>
 </div>
 
 <hr>
@@ -232,7 +188,7 @@ begin
   declare v_commit int...
         </div>
     </a>
-    <p class="post-meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on June 9, 2013</p>
+    <p class="post-meta">Posted by David on June 9, 2013</p>
 </div>
 
 <hr>
@@ -252,7 +208,7 @@ begin
 保持良好的心态，smi...
         </div>
     </a>
-    <p class="post-meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on May 24, 2013</p>
+    <p class="post-meta">Posted by David on May 24, 2013</p>
 </div>
 
 <hr>
@@ -270,7 +226,45 @@ begin
 
         </div>
     </a>
-    <p class="post-meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on April 27, 2013</p>
+    <p class="post-meta">Posted by David on April 27, 2013</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/mysql/troubleshooting/mysql-lock-info-waiting-for-table-metadata-lock.html">
+        <h2 class="post-title">            
+            MySQL lock info  --  Waiting for table metadata lock
+        </h2>
+        
+        <div class="post-content-preview">
+            现象：
+1. 数据库发现一条根据主键更新的sql特别慢，持续70秒后显示更新超时。
+[cc lang='sql']update user_quotation set GMT_MODIFIED = now() where ID = 230967517;[/cc]
+2. 任何DDL操作都显示
+[c...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on February 27, 2013</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/mysql/mysql-error-1535-table-definition-on-master-and-slave-does-not-match.html">
+        <h2 class="post-title">            
+            MySQL error 1535 --table definition on master and slave does not match
+        </h2>
+        
+        <div class="post-content-preview">
+            It will be slave error when change column type on slave first.
+Table definition:
+[cc lang='sql']
+CREATE TABLE `table_xf` (
+`i` int(11) NOT NULL AUT...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on January 21, 2013</p>
 </div>
 
 <hr>
@@ -332,7 +326,7 @@ begin
 
                     
                     <li>
-                        <a href="https://twitter.com/Azeril_Lapland">
+                        <a href="https://twitter.com/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
@@ -343,7 +337,7 @@ begin
 
                     
                     <li>
-                        <a href="https://github.com/Azeril">
+                        <a href="https://github.com/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -355,7 +349,7 @@ begin
                     <!--
                     
                     <li>
-                        <a href="http://www.douban.com/people/Azeril">
+                        <a href="http://www.douban.com/people/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
@@ -368,7 +362,7 @@ begin
                     <!--
                     
                     <li>
-                        <a href="https://www.facebook.com/Azeril_Lapland">
+                        <a href="https://www.facebook.com/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
@@ -380,7 +374,7 @@ begin
 
                     
                     <li>
-                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa  fa-stack-1x fa-inverse">知</i>
@@ -392,7 +386,7 @@ begin
                     <!--
                     
                     <li>
-                        <a target="_blank" href="http://weibo.com/Azeril">
+                        <a target="_blank" href="http://weibo.com/poofly">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
@@ -404,7 +398,7 @@ begin
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2016 Azeril ♪ Powered by Jekyll.
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

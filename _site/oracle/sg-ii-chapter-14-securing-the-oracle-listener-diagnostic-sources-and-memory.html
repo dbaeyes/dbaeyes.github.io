@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>SG II: Chapter 14 | Securing the Oracle Listener, Diagnostic Sources, and Memory - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/sg-ii-chapter-14-securing-the-oracle-listener-diagnostic-sources-and-memory.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#study" title="study">study</a>
+                        
+                    </div>
+                    <h1>SG II: Chapter 14 | Securing the Oracle Listener, Diagnostic Sources, and Memory</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on May 27, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><strong><em><span style="color: #ff6600;">Securing the Oracle Listener</span></em></strong></p>
+<div>Secure the listener.<br />
+Remove default EXTPROC entry and add a separate listener to handle external procedure calls.</p>
+<p><strong><em><span style="color: #ff6600;">Diagnostic Sources</span></em></strong><br />
+Use the alert log and database trace files for diagnostic purposes.<br />
+View alerts using Enterprise Manager.<br />
+Control the size and location of trace files.</p>
+<p><strong><em><span style="color: #ff6600;">Monitoring and Managing Memory</span></em></strong><br />
+Implement Automatic Shared Memory Management.<br />
+Manually configure SGA parameters for various memory components in the SGA.<br />
+Use Automatic PGA Memory Management.--------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Securing the Oracle Listener</span></strong></p>
+<p><strong><span style="color: #ff6600;">Managing the Listener Remotely</span></strong></p>
+<p>Remote management can be accomplished by simply following these steps:<br />
+1. Install Oracle software (either client or server) on a remote machine. The machine needs to have Oracle Net Services connectivity, as well as the lsnrctl executable.</p>
+<p>2. On the remote machine, configure the listener.ora file so that it can resolve to the address of the database server. For this example, assume that the IP address of the database server is 192.168.1.200.<br />
+The following lines can be added to the listener.ora file to accomplish this step:<br />
+REMOTE_LISTENER =<br />
+ADDRESS_LIST =<br />
+(ADDRESS =<br />
+(PROTOCOL = TCP)<br />
+(HOST =192.168.1.200)<br />
+(PORT = 1521)<br />
+)<br />
+)<br />
+The only difference is that no SID or service name is specified. In the preceding example, the alias name<br />
+is REMOTE_LISTENER.</p>
+<p>3. Start the lsnrctl program and specify the alias defined in step 2, as shown here:<br />
+lsnrctl remote_listener</p>
+<p>The lsnrctl program will now be accessing the listener on the database server. It can process all commands, with the exception of the start command.<br />
+While remote management is a very convenient feature for managing remote servers, it also makes the server highly susceptible to outside attacks unless properly secured.</p>
+<p><strong><span style="color: #ff6600;">Setting the Listener Password</span></strong></p>
+<p>The most important step in securing the Oracle listener is to set a password for the listener.</p>
+<p>The <span style="color: #3366ff;">first</span> method is to manually edit the <em><strong>listener.ora</strong></em> file and add the following line:<br />
+PASSWORDS_LISTENER = shazam</p>
+<p>The <span style="color: #3366ff;">second</span> method of setting the listener password is to use the CHANGE_PASSWORD command from<br />
+the lsnrctl prompt:<br />
+LSNRCTL&gt;<strong><em>change_password<br />
+</em></strong>Old password:<br />
+New password:<br />
+Reenter new password:<br />
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=IPC)(KEY=EXTPROC)))<br />
+Password changed for LISTENER<br />
+The command completed successfully</p>
+<p>LSNRCTL&gt; set password<br />
+Password:<br />
+The command completed successfully<br />
+LSNRCTL&gt; save_config</p>
+<p>The <span style="color: #3366ff;">third</span> method of setting the listener password is to use one of Oracle’s graphical tools such as Net Manager (netmgr), Network Creation Assistant (netca), or the Oracle Enterprise Manager (EM) Database Control application.</p>
+<p><strong><span style="color: #ff6600;">Controlling Database Access</span></strong></p>
+<p>Oracle Net Services can be configured to accept requests only from specific IP addresses.</p>
+<p>$ORACLE_HOME/network/ admin/sqlnet.ora file to add the following settings:<br />
+<strong><em>TCP.VALIDNODE_CHECKING</em></strong> This option should be set to a value of YES to enable valid node checking.<br />
+<strong><em>TCP.INVITED_NODES</em></strong> This option specifies the addresses from which requests should be accepted.<br />
+<strong><em>TCP.EXCLUDED_NODES</em></strong> This option specifies the addresses from which requests should not be accepted.</p>
+<p>The TCP.INVITED_NODES and TCP.EXCLUDED_NODES options are mutually exclusive. Only one may be defined. Do not use both.<br />
+If you can deal with these limitations, valid node checking may be a good option.</p>
+<p>For example, to instruct the listener to accept requests only from an application server<br />
+(159.158.212.1) and from the administrative team (Jeaneanne, Nicholas, Gillian, and Murphy),<br />
+the following lines could be added to the sqlnet.ora file:<br />
+tcp.validnode_checking = yes<br />
+tcp.invited_nodes = (159.158.216.12, jeaneanne, nicholas,<br />
+gillian, murphy)</p>
+<p><strong><span style="color: #ff6600;">Using Listener Logging</span></strong><br />
+The listener logging feature creates and maintains a log file showing all listener activity, including incoming requests and administrative commands.</p>
+<p><strong><span style="color: #0000ff;">Enabling Logging Using the lsnrctl Program</span></strong><strong><em>LOG_DIRECTORY</em></strong> specify the location where the log file should be created. default: $ORACLE_HOME/network/log</p>
+<p><strong><em>LOG_FILE</em></strong> specify the name of the log file.</p>
+<p><strong><em>LOG_STATUS</em></strong> controls whether logging is turned on or off.</p>
+<p><strong><span style="color: #0000ff;">Manually Removing External Procedure Services</span></strong></p>
+<p>SID_LIST_LISTENER =<br />
+<span style="text-decoration: underline;">(SID_LIST =<br />
+(SID_DESC =<br />
+(SID_NAME = PLSExtProc)<br />
+(ORACLE_HOME = /apps/oracle/oracle10gR1)<br />
+(PROGRAM = extproc)<br />
+)<br />
+</span>　(SID_DESC =<br />
+(GLOBAL_DBNAME = lnx1)<br />
+(ORACLE_HOME = /apps/oracle/oracle10g)<br />
+(SID_NAME = lnx1)<br />
+)<br />
+)<br />
+LISTENER =<br />
+(DESCRIPTION_LIST =<br />
+(DESCRIPTION =<br />
+<span style="text-decoration: underline;">(ADDRESS_LIST =<br />
+(ADDRESS = (PROTOCOL = ICP)(KEY = EXTPROC))<br />
+)<br />
+</span>　　(ADDRESS_LIST =<br />
+(ADDRESS = (PROTOCOL = TCP)(HOST =lnx1)<br />
+(PORT = 1521))<br />
+)<br />
+)<br />
+)</p>
+<p>Remoe the highlight sentance.</p>
+<p><strong><span style="color: #0000ff;">Creating a Separate Listener for External Procedures</span></strong></p>
+<p><strong><span style="color: #0000ff;">Executing the Listener with a Restricted Account</span></strong></p>
+<p><strong><span style="color: #0000ff;">Limiting the Available Libraries<br />
+</span></strong>you can limit the listener to accessing only the libraries explicitly specified in the listener.ora file.<br />
+The extproc agent program resides in the %ORACLE_HOME%\bin directory in Windows and in the $ORACLE_HOME/lib directory in Unix.</p>
+<p>example:<br />
+(ENVS="EXTPROC_DLLS=ONLY:/usr/libjava.so:/usr/lib/libz.so,<br />
+ORACLE_SID=lnx1,PATH=$PATH:/usr/bin:/usr/sql")</p>
+<p><span style="color: #0000ff;"><strong>Using the ADMIN_RESTRICTIONS Parameter</strong><br />
+</span>The ADMIN_RESTRICTIONS parameter can be set to a value of ON in the listener.ora file. This parameter disallows all SET commands executed through the lsnrctl program or through Oracle's graphical utilities.</p>
+<p><strong><span style="color: #0000ff;">Securing the Listener Directory</span></strong><br />
+The directory containing the listener.ora and sqlnet.ora files should be protected so that no user (other than the Oracle administrative account) can read or write files in the directory.</p>
+<p><strong><span style="color: #0000ff;">Applying Oracle Listener Patches</span></strong></p>
+<p><strong><span style="color: #0000ff;">Blocking SQL*NET Traffic on Firewalls</span></strong></p>
+<p>--------------------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Diagnostic Sources</span></strong></p>
+<p>The alert log is an excellent source of diagnostic data and is generally considered the first place to check when an error occurs.<br />
+Trace files are automatically produced when background processes encounter problem situations. Trace files can also be produced to analyze SQL execution for performance purposes.</p>
+<p><strong><span style="color: #ff6600;">Using the Oracle Alert Log</span></strong><br />
+These significant events include all of the following (and more):<br />
+Administrative create, alter, and drop events<br />
+Redo log switches<br />
+Checkpoints (optional)<br />
+Recovery operations<br />
+Database startup and shutdown<br />
+ALTER SYSTEM operations<br />
+Database errors<br />
+DBMS_JOB and DBMS_SCHEDULER job errors</p>
+<p>named alert_SID.log<br />
+DB_NAME=lnx1<br />
+BACKGROUND_DUMP_DEST=/data1/admin/lnx1/bdump</p>
+<p><strong><span style="color: #ff6600;">Alert Log Usage<br />
+</span></strong>View alert log<br />
+Viewing Alert Log Entries in the Database</p>
+<p>Alert Log Maintenance<br />
+When Oracle logs an event to the alert log, it performs the following operations on the file:<br />
+Open the alert log file using APPEND mode. If the file exists, move the file pointer to the end of the file. If the file doesn’t exist, create it.<br />
+Write the alert data to the file.<br />
+Close the file.</p>
+<p><strong><span style="color: #ff6600;">Using Server-Generated Alerts</span></strong><br />
+A server-generated alert is a notification from Oracle that indicates a potential problem in the database. These alerts generally indicate that the threshold level for a monitored metric has been exceeded.</p>
+<p><strong><span style="color: #ff6600;">Using Oracle Trace Files</span></strong><br />
+When an Oracle background process encounters an error situation, it will generate a trace file.<br />
+The trace file contains in-depth details about the error and the state of the process at the time of the error.</p>
+<p><strong><span style="color: #ff6600;">Trace File Location and Sizing Parameters</span></strong><br />
+<strong><em>BACKGROUND_DUMP_DEST</em></strong> The BACKGROUND_DUMP_DEST parameter defines the operating system path where background process trace files will be created.<br />
+<strong><em>USER_DUMP_DEST</em></strong> The USER_DUMP_DEST parameter defines the operating system path where user session trace files will be created.<br />
+<strong><em>MAX_DUMP_FILE_SIZE</em></strong> The MAX_DUMP_FILE_SIZE parameter specifies the maximum size for trace files.</p>
+<p><strong><span style="color: #ff6600;">Trace File Naming</span></strong><br />
+Background processes use this format:<br />
+<em><span style="color: #3366ff;">sid_process_name_process_id.trc<br />
+</span></em>User processes use this format:<br />
+<em><span style="color: #3366ff;">sid_ora_process_id.trc</span></em></p>
+<p>The TRACEFILE_IDENTIFIER parameter allows you specify a text string that will be appended to the names of user session trace files.<br />
+ALTER SESSION SET SQLTRACE = TRUE<br />
+ALTER SESSION SET TIMED_STATISTICS = TRUE<br />
+ALTER SESSION SET TRACEFILE_IDENTIFIER = ‘TIM’<br />
+Assuming that the process ID for your job was 10322, you should find a file named lnx1_ora-10322_TIM.trc in the USER_DUMP_DEST directory.</p>
+<p>------------------------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Automatic Memory Management</span></strong></p>
+<p><strong><span style="color: #ff6600;">Oracle Memory Usage</span></strong></p>
+<p><strong><em><span style="color: #ff00ff;">SGA</span><br />
+Database Buffer Cache</em></strong><br />
+The database buffer cache is a shared memory component that stores data blocks retrieved from<br />
+datafiles.</p>
+<p><strong><em>Shared Pool</em></strong><br />
+<span style="text-decoration: underline;">Library Cache</span><br />
+The library cache holds shared SQL areas, PL/SQL procedures and packages, and associated<br />
+control structures such as library cache handles and locks.<br />
+<span style="text-decoration: underline;">Data Dictionary Cache</span><br />
+The data dictionary cache stores rows from data dictionary tables and views.</p>
+<p><strong><em>Redo Log Buffer</em></strong><br />
+The redo log buffer holds information about all changes made to the database via INSERT, UPDATE, DELETE, CREATE, ALTER, or DROP operations.</p>
+<p><strong><em>Java Pool<br />
+</em></strong>The Java pool provides memory for all session-specific Java code and data within the Java Virtual Machine (JVM).</p>
+<p><strong><em>Large Pool</em></strong><br />
+The large pool is an optional memory area that can be allocated to increase performance</p>
+<p><strong><em>Streams Pool</em></strong><br />
+The streams pool is an optional pool dedicated to handling memory requests for Oracle streams.</p>
+<p><strong><em>Fixed SGA</em></strong><br />
+The fixed SGA area stores information relating to the state of the database instance and is primarily accessed by Oracle’s background processes. Dynamic performance data is stored in fixed tables (V$ tables) in this area.</p>
+<p><strong><em><span style="color: #ff00ff;">PGA</span></em></strong><br />
+A Program Global Area (PGA) stores data and control information for a single server process.</p>
+<p><strong><em>Private SQL area</em></strong> The private SQL area is used to hold runtime memory structures and bind variables for SQL and PL/SQL executed by the process.<br />
+<strong><em>SQL work area</em></strong> The SQL work area provides memory in which SQL operations can be performed.</p>
+<p><strong><span style="color: #ff6600;">Using ASMM</span></strong></p>
+<p>The SGA_TARGET parameter specifies the total memory size for the SGA.<br />
+A setting of zero indicates that ASMM is not enabled for the instance.</p>
+<p>A non-zero value in the SGA_TARGET parameter indicates that ASMM is enabled. It is also imperative that the STATISTICS_LEVEL parameter is set to a value of either TYPICAL (the default value) or ALL. If the STATISTICS_LEVEL parameter is set to value of BASIC, ASMM will not be enabled.</p>
+<p>ASMM divides the SGA memory pools into two groups: automatically sized components and manually sized components.</p>
+<p><strong><span style="color: #ff6600;">Using APMM</span></strong></p>
+<p>APMM functionality is implemented through the use of the PGA_AGGREGATE_TARGET initialization parameter.</p>
+<p>APMM is always enabled (although the functionality can be overridden). If the PGA_AGGREGATE_TARGET parameter is not explicitly set, it will default to either 10MB or 20 percent of the SGA size, whichever is larger.</p>
+<p>Historically, PGA memory allocation has been done through the use of the following initialization parameters:<br />
+SORT_AREA_SIZE<br />
+HASH_AREA_SIZE<br />
+BITMAP_MERGE_AREA_SIZE<br />
+CREATE_BITMAP_AREA_SIZE</p>
+<p>The WORKAREA_SIZE_POLICY parameter can be set to either AUTO or MANUAL.</p>
+<p><strong><span style="color: #ff6600;">Implementing APMM</span></strong></p>
+<p>To implement APMM, simply set the total memory allocation for APMM in the initialization file,<br />
+SQL&gt; alter system set PGA_AGGREGATE_TARGET = 2G;</p>
+<p>-- EOF --</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/feel-again-make-a-trip-to-the-urban-area-is-not-easy.html" data-toggle="tooltip" data-placement="top" title="再次感受去趟市区不容易">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/rest-at-ease.html" data-toggle="tooltip" data-placement="top" title="稍息休息">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/sg-ii-chapter-14-securing-the-oracle-listener-diagnostic-sources-and-memory" data-title="SG II: Chapter 14 | Securing the Oracle Listener, Diagnostic Sources, and Memory"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Securing the Oracle Listener
+Secure the listener.
+Remove default EXTPROC entr... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-14-securing-the-oracle-listener-diagnostic-sources-and-memory.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/sg-ii-chapter-14-securing-the-oracle-listener-diagnostic-sources-and-memory" data-title="SG II: Chapter 14 | Securing the Oracle Listener, Diagnostic Sources, and Memory" data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-14-securing-the-oracle-listener-diagnostic-sources-and-memory.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

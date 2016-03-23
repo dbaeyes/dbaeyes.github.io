@@ -1,0 +1,63 @@
+---
+layout: post
+title: dbms_xplan.display_cursor 获取执行过的sql的执行计划
+date: 2009-06-24 22:39:54.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- tuning
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '2431'
+---
+<p><strong>该函数的语法：</strong></p>
+<div>DBMS_XPLAN.DISPLAY_CURSOR(<br />
+sql_id        IN VARCHAR2 DEFAULT NULL,<br />
+child_number IN NUMBER    DEFAULT NULL,<br />
+format        IN VARCHAR2 DEFAULT 'TYPICAL');</p>
+<p>举个例子 执行一个简单查询：<br />
+SQL&gt; select count(0) from cat_product cp,cat_drug cd where cp.medical_id=cd.id;COUNT(0)<br />
+----------<br />
+118908</p>
+<p>如果我们想获取该语句的实际执行计划，通过下列步骤：</p>
+<p>1、查询v$sql视图，找到该语句的sql_id(注意哟，必须要确保你要查询的sql语句还在shared pool)：<br />
+SQL&gt; select sql_id from v$sql where sql_text=<br />
+2 'select count(0) from cat_product cp,cat_drug cd where cp.medical_id=cd.id';</p>
+<p>SQL_ID<br />
+-------------<br />
+c9cxqvr3q4tjd</p>
+<p>2、调用dbms_xplan包，查看该语句执行时的实现执行计划：<br />
+SQL&gt;<span style="color: #0000ff;"><strong> select * from table(dbms_xplan.display_cursor('c9cxqvr3q4tjd'));</strong></span></p>
+<p>PLAN_TABLE_OUTPUT<br />
+------------------------------------------------------------------------------------------------------------------------------------------------------<br />
+SQL_ID c9cxqvr3q4tjd, child number 0<br />
+-------------------------------------<br />
+select count(0) from cat_product cp,cat_drug cd where cp.medical_id=cd.id</p>
+<p>Plan hash value: 2559475106</p>
+<p>-----------------------------------------------------------------------------------------------------------<br />
+| Id | Operation              | Name                     | Rows | Bytes |TempSpc| Cost (%CPU)| Time     |<br />
+-----------------------------------------------------------------------------------------------------------<br />
+......</p>
+<p>事实上dbms_xplan.display_cursor也非常灵活，如果执行的统计信息也被收集的话，还可以显示出每一步实际的花费时间等信息，例如：</p>
+<p>SQL&gt; select<span style="color: #ff0000;"><strong> /*+gather_plan_statistics*/ </strong></span>count(0) from cat_product cp,cat_drug cd where cp.medical_id=cd.id;</p>
+<p>COUNT(0)<br />
+----------<br />
+118908</p>
+<p>--简单获取，不需要sqlid</p>
+<p>select * from table(dbms_xplan.display_cursor(null,null,'ALLSTATS LAST'));PLAN_TABLE_OUTPUT<br />
+------------------------------------------------------------------------------------------------------------------------------------------------------<br />
+SQL_ID 91w1ug6vc9pxh, child number 0<br />
+-------------------------------------<br />
+select /*+gather_plan_statistics*/ count(0) from cat_product cp,cat_drug cd where cp.medical_id=cd.id</p>
+<p>Plan hash value: 2559475106</p>
+<p>-----------------------------------------------------------------------------------------------------------------------------------------------------<br />
+| Id | Operation              | Name                     | Starts | E-Rows |E-Bytes|E-Temp | Cost (%CPU)| E-Time   | A-Rows |   A-Time   | Buffers |<br />
+-----------------------------------------------------------------------------------------------------------------------------------------------------<br />
+...</p>
+<p>E-Rows是优化器评估的行数,A-Rows是实际的行数，这个对于判断优化器的选择正确与否比较有用！</p>
+</div>

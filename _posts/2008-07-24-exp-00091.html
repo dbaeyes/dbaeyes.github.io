@@ -1,0 +1,31 @@
+---
+layout: post
+title: EXP-00091
+date: 2008-07-24 11:00:03.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- nls
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '716'
+---
+<p>01　查看DB中的NLS_CHARACTERSET的值（提供兩種方法）：</p>
+<div>
+<p>select * from nls_database_parameters t where t.parameter='NLS_CHARACTERSET'<br />
+or<br />
+select * from v$nls_parameters where parameter='NLS_CHARACTERSET';<br />
+SQL&gt; select * from v$nls_parameters where parameter='NLS_CHARACTERSET';</p>
+<p>PARAMETER　　　　      VALUE<br />
+-----------------------　　----------------------------------------------<br />
+NLS_CHARACTERSET    AL32UTF8</p>
+<p>step 02　根據step 01查出的NLS_CHARACTERSET（AL32UTF8）來設定exp的環境變量：</p>
+<p>WINNT&gt; set NLS_LANG=AMERICAN_AMERICA.AL32UTF8</p>
+<p>LINUX&gt; export NLS_LANG=AMERICAN_AMERICA.AL32UTF8</p>
+<p>可以在.profile 中增加 NLS_LANG＝AMERICAN_AMERICA.AL32UTF8; export NLS_LANG</p>
+<p>这样就省事很多，不用每次exp的时候都写一次。</p>
+</div>

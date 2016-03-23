@@ -1,0 +1,69 @@
+---
+layout: post
+title: 根据ID初始化数据
+date: 2009-02-02 10:40:43.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- sql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '920'
+---
+<p>根据序列ID初始化数据，可以很好的完成并行和增量。 但如果中断需要重新跑那些中断了的进程。<br />
+速度一般，没有extend来的快。 适合需要增量来做的情况<br />
+[cc lang="sql"]<br />
+create or replace procedure SP_FB_INT_COL<br />
+(id_start number,id_end   number) is<br />
+/*<br />
+create by 玄风<br />
+date: 2009-2-1<br />
+初始表两个新增字段<br />
+parenttradeid 主订单号<br />
+validfeedback 是否存在内容<br />
+*/</p>
+<p>i         number;<br />
+j         number;<br />
+n         number;<br />
+loop_time number;</p>
+<p>begin<br />
+--确定循环次数<br />
+loop_time := (id_end - id_start) / 10000 + 1;<br />
+i         := id_start; --初始ID</p>
+<p>for loop_c in 1 .. loop_time loop<br />
+--确定该次循环的最大ID<br />
+    if j + 10000 <= id_end then<br />
+      j := j + 10000;<br />
+    else<br />
+      j := id_end;<br />
+    end if;</p>
+<p>    for c in (select rowid rid<br />
+                from auc_feed<br />
+               where id >= i<br />
+                 and id < j) loop</p>
+<p>      update auc_feed au<br />
+         set au.parenttradeid = au.trade_id,<br />
+             au.validfeedback = decode(au.feedback,<br />
+                                       null,<br />
+                                       0,<br />
+                                       '默认好评!',<br />
+                                       0,<br />
+                                       1)<br />
+       where au.rowid = c.rid;</p>
+<p>      n := n + 1;<br />
+      if mod(n, 100) = 0 then<br />
+        commit;<br />
+      end if;</p>
+<p>    end loop;<br />
+    commit;<br />
+--确定下次循环的最小ID<br />
+    i := j;<br />
+end loop;</p>
+<p>end SP_FB_INT_COL;<br />
+/<br />
+[/cc]</p>

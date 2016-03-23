@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>SG II: Chapter 13 | Monitoring and Managing Storage - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/sg-ii-chapter-13-monitoring-and-managing-storage.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#study" title="study">study</a>
+                        
+                    </div>
+                    <h1>SG II: Chapter 13 | Monitoring and Managing Storage</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on May 22, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><strong><em><span style="color: #ff6600;">Objects:</span></em></strong></p>
+<div>
+<p><span style="color: #3366ff;">• </span>Tune redo writing and archiving operations.<br />
+<span style="color: #3366ff;">• </span>Issue statements that can be suspended upon encountering space condition errors.<br />
+<span style="color: #3366ff;">• </span>Reduce space-related error conditions by proactively managing tablespace usage.<br />
+<span style="color: #3366ff;">• </span>Reclaim wasted space from tables and indexes using the segment shrink functionality.<br />
+<span style="color: #3366ff;">• </span>Estimate the size of new tables and indexes.<br />
+<span style="color: #3366ff;">• </span>Use different storage options to improve the performance of queries.<br />
+<span style="color: #3366ff;">• </span>Rebuild indexes online.</p>
+<p>----------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Monitoring Tablespace Storage</span></strong></p>
+<p>Oracle 10g manages the disk space in two ways: reactively and proactively.</p>
+<p><strong><span style="color: #ff6600;">Space Usage Monitoring</span></strong><br />
+If a tablespace does not have specific percentage thresholds defined, the database defaults of 85 percent for the warning level and 97 percent for the critical level apply.<br />
+The background process MMON checks for tablespace space problems every 10 minutes</p>
+<p><strong><span style="color: #ff6600;">Editing Thresholds with Enterprise Manager Database Control</span></strong><br />
+<span>BEGIN<br />
+DBMS_SERVER_ALERT.SET_THRESHOLD(9000,4,'60',4,'85',1,1,NULL,5,'USERS');<br />
+END;</span></p>
+<p><strong><span style="color: #ff6600;">Using DBMS_SERVER_ALERT</span></strong><br />
+The DBMS_SERVER_ALERT package contains a number of procedures that allow you to set, view, and modify a variety of alert conditions.</p>
+<p><span style="color: #0000ff;"><strong>SET_THRESHOLD</strong></span><br />
+OPERATOR_GE as &gt;=<br />
+OPERATOR_GT as &gt;</p>
+<p>exp:<br />
+<span>SQL&gt; execute<br />
+2 dbms_server_alert.set_threshold(<br />
+3 dbms_server_alert.tablespace_pct_full,<br />
+4 dbms_server_alert.operator_ge, 90,<br />
+5 dbms_server_alert.operator_ge, 99,<br />
+6 1, 1, null,<br />
+7 dbms_server_alert.object_type_tablespace,'USERS2');</span></p>
+<p><strong><span style="color: #0000ff;">GET_THRESHOLD</span></strong><br />
+Similar to SET_THRESHOLD, the GET_THRESHOLD procedure retrieves the values of a defined alert.</p>
+<p><strong><span style="color: #0000ff;">EXPAND_MESSAGE</span></strong><br />
+The EXPAND_MESSAGE procedure is very straightforward, translating a numeric message number to a text format.</p>
+<p>---------------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Segment Management Tools</span></strong></p>
+<p>To use disk space more efficiently and to reduce the I/O required to access a segment, segment shrink functionality compacts the space within a segment and optionally moves the high watermark (HWM), freeing up space for other segments.</p>
+<p><strong><span style="color: #ff6600;">Segment Shrink</span></strong><br />
+Segment shrink compresses the data blocks in a table or index and optionally moves the HWM down, making the unused space available for other segments in the tablespace.<br />
+Before Oracle 10g, the HWM could be moved down only if the segment was moved or truncated.</p>
+<p><strong><span style="color: #0000ff;">Segment Shrink Restrictions and Considerations</span></strong><br />
+Segment shrink operations have one major restriction: Segments managed with freelists cannot be shrunk; in other words, the tablespace containing the segment must be defined with automatic segment space management.</p>
+<p><strong><span style="color: #ff6600;">Performing Segment Shrink<br />
+</span><span style="color: #0000ff;">SQL Commands and Segment Shrink</span></strong></p>
+<p><span>SQL&gt; alter table hr.employees enable row movement;</span></p>
+<p><span>SQL&gt; alter table hr.employees shrink space;</span></p>
+<p>---- two step way---<br />
+Although the table is available for use by all users while the shrink operation is in progress, the I/O throughput may be decreased. Therefore, it may be advantageous to split the operation into two commands using the COMPACT clause to compress the rows without moving the HWM,<br />
+as shown here:<br />
+<span>SQL&gt; alter table hr.employees shrink space compact;</span><br />
+Table altered.<br />
+At a later time, when the database is not as busy, you can complete the rest of the operation by omitting the COMPACT clause.</p>
+<p>When CASCADE is specified, all dependent objects, such as indexes, are also shrunk.<br />
+In the following example, you’ll use the CASCADE example to shrink all the indexes defined on the HR.EMPLOYEES table:<br />
+<span>SQL&gt; alter table hr.employees shrink space cascade;</span></p>
+<p><strong><span style="color: #0000ff;">EM Database Control and Segment Shrink</span></strong></p>
+<p><strong><span style="color: #ff6600;">Segment Advisor</span></strong><br />
+Oracle’s Segment Advisor provides several types of functionality to manage the space occupied by database segments such as tables and indexes.</p>
+<p><strong><span style="color: #0000ff;">EM Database Control and Segment Advisor</span></strong></p>
+<p><strong><em>Segment Advisor</em></strong></p>
+<p><strong><em>Growth Trend Report</em></strong><br />
+The Growth Trend Report, based on the AWR data collected at 30-minute intervals or when space-related server-generated alerts are triggered, helps to predict future growth trends for selected segments.</p>
+<p><strong><em>Segment Resource Estimation</em></strong><br />
+The Segment Resource Estimation tool gives you a good estimate of how much disk space a new segment will require.</p>
+<p><strong><em>Segment Advisor within PL/SQL</em></strong><br />
+use the package DBMS_ADVISOR. Because DBMS_ADVISOR is used with the AWR for all advisors within the Oracle 10g advisory framework,</p>
+<p>For the Segment Advisor, you typically use the following procedures:<br />
+CREATE_TASK<br />
+CREATE_OBJECT<br />
+SET_TASK_PARAMETER<br />
+EXECUTE_TASK<br />
+DELETE_TASK<br />
+CANCEL_TASK</p>
+<p><strong><em>Analyzing a Table Using Segment Advisor</em></strong><br />
+these procedures to determine if the table OE.CUSTOMERS needs to be shrunk.</p>
+<p><strong><em>Implementing Segment Advisor Recommendations</em></strong><br />
+<span>SQL&gt; alter table oe.customers enable row movement;</p>
+<p>SQL&gt; select task_id, task_name, command, attr1 from<br />
+2 dba_advisor_actions where task_id = 680;<br />
+TASK_ID TASK_NAME COMMAND<br />
+---------- ------------ ---------------<br />
+680 TASK_680 SHRINK SPACE<br />
+ATTR1<br />
+---------------------------------------------------------<br />
+alter table "OE"."CUSTOMERS" shrink space</p>
+<p>SQL&gt; alter table "OE"."CUSTOMERS" shrink space;<br />
+Table altered.</p>
+<p>SQL&gt; execute dbms_advisor.delete_task('TASK_680');</span></p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Index Space Monitoring</span></strong></p>
+<p><strong><span style="color: #0000ff;">Monitoring Index Space Usage</span></strong></p>
+<p>determine if an index needs to be rebuilt by validating the structure of the index and checking the value of PCT_USED in the data dictionary view INDEX_STATS, as in this example:<br />
+<span>SQL&gt; analyze index emp_name_ix validate structure;<br />
+Index analyzed.</p>
+<p>SQL&gt; select pct_used from index_stats where name = 'EMP_NAME_IX';<br />
+PCT_USED<br />
+----------<br />
+33</span></p>
+<p><strong><span style="color: #0000ff;">Rebuilding versus Coalescing Indexes</span></strong><br />
+<strong><em>Rebuilding an Index</em></strong>                                   <strong><em>Coalescing an Index</em></strong><br />
+<span style="color: #000080;">Can move index to another tablespace        Cannot move index to another tablespace</span><br />
+<span style="color: #3366ff;">Requires double the amount of disk             Does not require additional disk space<br />
+space if performed online</span><br />
+<span style="color: #333399;">Creates a new tree and adjusts tree             Coalesces index leaf blocks within eachbranch<br />
+height if   necessary</span></p>
+<p>SQL&gt; alter index emp_name_ix coalesce;<br />
+SQL&gt; alter index emp_name_ix rebuild online;</p>
+<p><strong><span style="color: #0000ff;">Identifying Unused Indexes</span></strong><br />
+To see if the EMP_NAME_IX index is going to be used during the day, turn on the monitoring process with this statement:<br />
+<span>SQL&gt; alter index hr.emp_name_ix monitoring usage;</span></p>
+<p><span>SQL&gt; select index_name, table_name, monitoring,<br />
+2 used, start_monitoring<br />
+3 from v$object_usage where index_name = 'EMP_NAME_IX';</span></p>
+<p>Because V$OBJECT_USAGE is a dynamic performance view, the contents will not<br />
+be retained in the view once the database is shut down and restarted.-----------------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Understanding Special Table Types</span></strong><br />
+Two special table types—index-organized tables and clustered tables—provide a number of performance-related and space-related benefits compared to the traditional heap-based tables.</p>
+<p><strong><span style="color: #ff6600;">Index-Organized Tables</span></strong><br />
+An index-organized table (IOT) is one special type of table that is most effective when the access of the table is primarily by the primary key and the primary key columns constitute a large part of the table’s columns.</p>
+<p>IOTs are suitable for tables in which the data access is mostly through its primary key, such as lookup tables. An IOT is a b-tree index, much like a traditional stand-alone index.<br />
+However, instead of storing the ROWID of the table where the row belongs, the entire row is stored as part of the index.</p>
+<p><strong><span style="color: #0000ff;">Creating Index-Organized Tables</span></strong><br />
+To create an IOT, you use the CREATE TABLE command, adding the ORGANIZATION INDEX keyword as part of the command.</p>
+<p><span>create table sales_summary_by_date_division<br />
+(sales_date date,<br />
+division_id number,<br />
+total_sales number(20,2),<br />
+constraint ssum_dt_div_pk primary key<br />
+(sales_date, division_id))<br />
+organization index<br />
+tablespace users;</span></p>
+<p>Only one segment is used to store an IOT; if you build a secondary index on this IOT, then a new segment is created.</p>
+<p><strong><span style="color: #0000ff;">IOT Row Overflow</span></strong><br />
+To further improve the performance benefits provided by an IOT, you can create an IOT overflow area. If an IOT row’s data exceeds the threshold of available space in a block, the row’s data will be dynamically and automatically moved to the overflow area.</p>
+<p><span>create table sales_summary_by_date_division<br />
+(sales_date date,<br />
+division_id number,<br />
+total_sales number(20,2),<br />
+constraint ssum_dt_div_pk primary key<br />
+(sales_date, division_id))<br />
+organization index<br />
+tablespace users<br />
+</span><span style="text-decoration: underline;"><span>pctthreshold 25     --The default value for PCTTHRESHOLD is 50.<br />
+overflow tablespace users2</span>;</span></p>
+<p><strong><span style="color: #0000ff;">IOT Mapping Tables</span></strong></p>
+<p>To create bitmap indexes on an IOT, you must use an IOT mapping table.<br />
+Only one mapping table is required per IOT, regardless of the number of bitmap indexes defined on the IOT.<br />
+Oracle creates the mapping table in the same tablespace as its parent IOT. it is created and maintained automatically and is dropped automatically when the IOT is dropped.</p>
+<p><strong><span style="color: #ff6600;">Data Dictionary Views for IOTs</span></strong></p>
+<p><strong><span style="color: #0000ff;">DBA_INDEXES</span></strong><br />
+The view DBA_INDEXES contains most of the information you need about IOTs.</p>
+<p><strong><span style="color: #0000ff;">DBA_SEGMENTS</span></strong><br />
+The view DBA_SEGMENTS helps you identify an IOT’s related segments: the IOT itself and the overflow segment.<br />
+the mapping table resides in the same tablespace as the IOT itself and that the overflow segment resides in a different tablespace, as you specified when you created the IOT.</p>
+<p><strong><span style="color: #0000ff;">DBA_TABLES</span></strong><br />
+The DBA_TABLES view, similar to the DBA_SEGMENTS view, provides you with the information about the IOT itself, the mapping table, and the associated overflow segment</p>
+<p>&nbsp;</p>
+<p><strong><span style="color: #ff6600;">Clustered Tables</span></strong></p>
+<p>Clustered tables provide another alternative to the traditional heap-based table to provide performance<br />
+benefits as well as optimizing the usage of your disk space.</p>
+<p>A cluster consists of a group of two or more tables that share the same data blocks.<br />
+The tables are logically grouped together because they share one or more common columns and are often used together in a join, such as an ORDER table and an ORDER_ITEM table.</p>
+<p>A cluster provides two primary benefits: disk I/O and disk space required to store</p>
+<p>Creating a clustered table requires three steps:<br />
+1. Create the cluster definition.<br />
+2. Create the index on the cluster. (This step is skipped for hash clusters.)<br />
+3. Create tables within the cluster.<br />
+Once the cluster is created, you may add and remove indexes on tables in the cluster as with any heap-based table.</p>
+<p><strong><span style="color: #0000ff;">Cluster Types</span></strong></p>
+<p><strong><em><span style="color: #3366ff;">Index Clusters</span></em></strong><br />
+An index cluster performs much like a b-tree index to ensure quick access to the rows in each cluster table.<br />
+Consider an index cluster in these situations:<br />
+<span style="color: #3366ff;">• </span>The tables in the cluster are always queried together and only infrequently on their own.<br />
+<span style="color: #3366ff;">•</span> The tables have little or no insert, update, or delete activity performed on them after the initial load of the cluster.<br />
+<span style="color: #3366ff;">• </span>The child tables have roughly equal numbers of rows for each parent key in the parent table.</p>
+<p><span>SQL&gt; create cluster ord_item<br />
+2 (ord_number number) size 500<br />
+3 tablespace app_data;<br />
+Cluster created.<br />
+</span>--The parameter SIZE specifies how many cluster keys you expect to have per Oracle block.</p>
+<p><span>SQL&gt; create index ord_item_idx<br />
+2 on cluster ord_item<br />
+3 tablespace app_idx;<br />
+Index created.</span></p>
+<p><span>SQL&gt; create table ord<br />
+2 (ord_number number,<br />
+3 cust_last_name varchar2(40),<br />
+4 cust_first_name varchar2(30),<br />
+5 ord_date date,<br />
+6 ord_total number(15,2))<br />
+7 cluster ord_item (ord_number);<br />
+Table created.</span><br />
+<span>SQL&gt; create table item<br />
+2 (item_id number,<br />
+3 ord_number number,<br />
+4 catalog_number number,<br />
+5 item_price number(7,2))<br />
+6 cluster ord_item (ord_number);<br />
+Table created.</span></p>
+<p>no tablespace specification is allowed when creating the tables in the cluster: The cluster table is stored in the tablespace specified in the cluster definition.</p>
+<p><strong><em><span style="color: #3366ff;">Hash Clusters</span><br />
+</em></strong>A hash cluster is similar to an index cluster, except that a hash cluster uses a hashing algorithm on the row’s cluster key to find the physical location of the row in the table.<br />
+Hash clusters work best for queries with equivalence operators,</p>
+<p>a table that make it suitable for use in a hash cluster:<br />
+<span style="color: #3366ff;">• </span>The tables in the cluster have a relatively uniform distribution of values in the indexed column.<br />
+<span style="color: #3366ff;">• </span>The tables have little or no insert, update, or delete activity performed on them after the initial load of the cluster.<br />
+<span style="color: #3366ff;">• </span>The tables in the cluster have a predictable number of values in the indexed column.<br />
+<span style="color: #3366ff;">• </span>The queries against the clustered table almost exclusively use an equality operator to<br />
+retrieve the desired row.</p>
+<p><span>create cluster ord_item2<br />
+(ord_number number(6,0)) size 500<br />
+<span style="text-decoration: underline;">hash is ord_number hashkeys 100000</span><br />
+tablespace users;</span></p>
+<p>The HASHKEYS keyword specifies the number of unique hash values that can be generated by the cluster’s hash function, in this case, 100,000.</p>
+<p>To make further improvements in performance, you may consider creating a multi-table hash cluster to hold both the orders and the order items, but for now the improvements in processing orders alone will help you avoid new hardware acquisitions for a few months.</p>
+<p>------------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Miscellaneous Space Management Tools</span></strong></p>
+<p><strong><span style="color: #ff6600;">Controlling Undo Space</span></strong></p>
+<p><strong><span style="color: #ff6600;">Controlling Redo Log File Space</span></strong></p>
+<p>Online Redo Log File Configuration A redo log file records all changes to the database, in most cases before the changes are written to the datafiles.</p>
+<p><strong><span style="color: #0000ff;">Redo Log File Architecture</span></strong><br />
+The LGWR process writes redo information from the redo log buffer to the online redo log files under a variety of circumstances:<br />
+When a user commits a transaction, even if this is the only transaction in the log buffer.<br />
+When the redo log buffer becomes one-third full.<br />
+When the buffer contains approximately 1MB of changed records. This total does not include deleted or inserted records.</p>
+<p>LGWR always writes its records to the online redo log file before DBWn writes new or modified database buffer cache records to the datafiles.</p>
+<p>Oracle writes to the alert log file whenever a log switch occurs.</p>
+<p>A commit cannot complete until a transaction’s information has been written to the redo logs, so maximizing the throughput of the redo log files is a top priority.</p>
+<p><strong><em>Database checkpoints</em></strong> are closely tied to redo log file switches. A checkpoint is an event that flushes the modified data from the buffer cache to the disk and updates the control file and datafiles.</p>
+<p><strong><em>A checkpoint is initiated</em></strong><br />
+When the redo log file is filled and a log switch occurs.<br />
+When the instance is shut down with NORMAL, TRANSACTIONAL, or IMMEDIATE.<br />
+When a tablespace status is changed to read-only or put into BACKUP mode.<br />
+When other values specified by certain parameters (discussed later in this section) are reached.</p>
+<p>ALTER SYSTEM CHECKPOINT;<br />
+Forcing a checkpoint ensures that all changes to the database buffers are written to the datafiles on disk.</p>
+<p>The size of the redo log affects the checkpoint performance.</p>
+<p><strong><em>Creating New Groups</em></strong><br />
+ALTER DATABASE ADD LOGFILE<br />
+GROUP 3 (‘/ora02/oradata/MYDB01/redo0301.log’,<br />
+‘/ora03/oradata/MYDB01/redo0302.log’) SIZE 10M;</p>
+<p><strong><em>Adding New Members</em></strong><br />
+If you know the group number, use the following statement to add a member to group 2:<br />
+ALTER DATABASE ADD LOGFILE MEMBER<br />
+‘/ora04/oradata/MYDB01/redo0203.log’ TO GROUP 2;</p>
+<p>Follow these steps to <strong><em>rename a log member</em></strong>:<br />
+1. Shut down the database.<br />
+2. Copy/rename the redo log file member to the new location by using an operating system<br />
+command.<br />
+3. Start up the instance and mount the database (STARTUP MOUNT).<br />
+4. Rename the log file member in the control file. Use the ALTER DATABASE RENAME FILE 'old_redo_file_name’ TO ‘new_redo_file_name’; command.<br />
+5. Open the database (ALTER DATABASE OPEN).<br />
+6. Back up the control file.</p>
+<p><strong><em>Dropping Redo Log Groups</em></strong><br />
+To drop the log file group 3, use the following SQL statement:<br />
+ALTER DATABASE DROP LOGFILE GROUP 3;</p>
+<p>If a database is running in ARCHIVELOG mode, redo log members cannot be deleted unless the redo log group has been archived.</p>
+<p>Clearing Online Redo Log Files<br />
+Under certain circumstances, a redo log group member (or all members of a log group) can become corrupted.<br />
+ALTER DATABASE CLEAR LOGFILE GROUP 3;</p>
+<p><strong><span style="color: #0000ff;">Redo Logfile Size Advisor</span></strong><br />
+In general, redo logs should be sized large enough so that checkpoints do not occur too frequently; if the logs switch more often than every 20 minutes, performance of the database may be affected.</p>
+<p>You have two ways to retrieve the optimal log file size calculated by the Redo Logfile Size Advisor: using a new column in the view V$INSTANCE_RECOVERY or using EM Database Control.</p>
+<p>--------------------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Leveraging Resumable Space Allocation</span></strong></p>
+<p>Resumable Space Allocation allows you to suspend and resume execution of large database operations that fail due to errors related to space limits and out-of-space conditions.</p>
+<p>When a session is enabled for Resumable Space Allocation, the long-running operation is suspended when one of the following occurs:<br />
+The tablespace used by the operation runs out of space.<br />
+The maximum number of extents in a table, index, temporary segment, rollback segment, cluster, LOB, table partition, or index partition has been reached, and no further extents can be allocated.<br />
+The quota for the user executing the long-running operation has been reached.</p>
+<p><strong><span style="color: #0000ff;">Using Resumable Space Allocation</span></strong></p>
+<p><span>ALTER SESSION ENABLE RESUMABLE<br />
+[TIMEOUT timeout] [NAME name];</span></p>
+<p><span>SQL&gt; alter session enable resumable timeout 600 name 'Short Timeout';</span></p>
+<p><span>SQL&gt; alter session disable resumable;</span></p>
+<p><strong><span style="color: #0000ff;">DBMS_RESUMABLE Package</span></strong></p>
+<p><strong><em>ABORT</em></strong> Cancels a suspended Resumable Space Allocation transaction.<br />
+<strong><em>GET_SESSION_TIMEOUT</em></strong> Returns the timeout value for a given session.<br />
+<strong><em>GET_TIMEOUT</em></strong> Returns the timeout value for the current session.<br />
+<strong><em>SET_SESSION_TIMEOUT</em></strong> Sets the timeout value for a given session.<br />
+<strong><em>SET_TIMEOUT</em></strong> Sets the timeout value for the current session.<br />
+<strong><em>SPACE_ERROR_INFO</em></strong> Return</p>
+<p>SQL&gt; select dbms_resumable.get_timeout() from dual;</p>
+<p>SQL&gt; exec dbms_resumable.set_timeout(1200);</p>
+<p><strong><span style="color: #0000ff;">Using the AFTER SUSPEND System Event<br />
+</span></strong>create a trigger to set the timeout to eight hours and send an e-mail to the DBA</p>
+<p><strong><span style="color: #0000ff;">Resumable Space Allocation Data Dictionary Views</span></strong><br />
+<span>The data dictionary views DBA_RESUMABLE and USER_RESUMABLE display the set of Resumable Space Allocation statements in the system.</span></p>
+<p><span>CREATE OR REPLACE TRIGGER resumable_default_timeout<br />
+AFTER SUSPEND ON DATABASE<br />
+BEGIN<br />
+/* set timeout to 8 hours */<br />
+DBMS_RESUMABLE.SET_TIMEOUT(28800);<br />
+/* prepare e-mail to DBA on call */<br />
+. . .<br />
+UTL_MAIL.SEND (. . .);<br />
+END;</span></p>
+<p>------------------------------------------------<br />
+notes:</p>
+<p>The data dictionary view <strong><em>DBA_ADVISOR_ACTIONS</em></strong> contains the SQL statement(s) that the Segment Advisor supplies to implement its recommendation for segment maintenance.<br />
+<strong><em>DBA_ADVISOR_FINDINGS</em></strong> contains the results of the analysis, but no SQL.<br />
+<strong><em>DBA_ADVISOR_RECOMMENDATIONS</em></strong> presents one or more findings and the benefits for performing the recommendation.<br />
+<strong><em>DBA_ADVISOR_RATIONALE</em></strong> provides a more detailed set of reasons why the recommendation should be implemented, along with the impact of not performing the recommendation.</p>
+<p>Even if the size of the undo tablespace is adjusted after an undo space problem, only one alert is sent for each 24-hour period.</p>
+<p>If a query on a sorted hash cluster retrieves rows and an ORDER BY clause specifies either non-sort columns or a suffix of the sort columns, additional sorting is required, assuming that indexes are not defined on the columns in the ORDER BY clause.</p>
+<p>The AFTER SUSPEND system-level trigger can be defined only at the database level or at the schema level.</p>
+<p>-- EOF --</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/thinking/of-silence.html" data-toggle="tooltip" data-placement="top" title="默哀">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/oracle-university-training-and-examination.html" data-toggle="tooltip" data-placement="top" title="Oracle University 培训考试">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/sg-ii-chapter-13-monitoring-and-managing-storage" data-title="SG II: Chapter 13 | Monitoring and Managing Storage"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Objects:
+
+• Tune redo writing and archiving operations.
+• Issue statements th... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-13-monitoring-and-managing-storage.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/sg-ii-chapter-13-monitoring-and-managing-storage" data-title="SG II: Chapter 13 | Monitoring and Managing Storage" data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-13-monitoring-and-managing-storage.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

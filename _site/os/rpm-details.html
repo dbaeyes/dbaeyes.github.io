@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>RPM使用详解 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/os/rpm-details.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                    </div>
+                    <h1>RPM使用详解</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on January 12, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>在Linux操作系统中，有一个系统软件包，它的功能类似于Windows里面的“添加/删除程序”，但是功能又比“添加/删除程序”强很多，它就是 Red Hat Package Manager(简称RPM)。此工具包最先是由Red Hat公司推出的，后来被其他Linux开发商所借用。由于它为Linux使用者省去了很多时间，所以被广泛应用于在Linux下安装、删除软件。下面就 给大家介绍一下它的具体使用方法。</p>
+<div>
+1.我们得到一个新软件，在安装之前，一般都要先查看一下这个软件包里有什么内容，假设这个文件是：Linux-1.4-6.i368.rpm，我们可以用这条命令查看：</p>
+<p>rpm -qpi Linux-1.4-6.i368.rpm</p>
+<p>系统将会列出这个软件包的详细资料，包括含有多少个文件、各文件名称、文件大小、创建时间、编译日期等信息。</p>
+<p>2.上面列出的所有文件在安装时不一定全部安装，就像Windows下程序的安装方式分为典型、完全、自定义一样，Linux也会让你选择安装方式，此时我们可以用下面这条命令查看软件包将会在系统里安装哪些部分，以方便我们的选择：</p>
+<p>rpm -qpl Linux-1.4-6.i368.rpm</p>
+<p>3.选择安装方式后，开始安装。我们可以用rpm-ivh Linux-1.4-6.i368.rpm命令安装此软件。在安装过程中，若系统提示此软件已安装过或因其他原因无法继续安装，但若我们确实想执行安装命 令，可以在 -ivh后加一参数“-replacepkgs”：</p>
+<p>rpm -ivh -replacepkgs Linux-1.4-6.i368.rpm</p>
+<p>4.有时我们卸载某个安装过的软件，只需执行rpm-e &lt;文件名&gt;;命令即可。</p>
+<p>5.对低版本软件进行升级是提高其功能的好办法，这样可以省去我们卸载后再安装新软件的麻烦，要升级某个软件，只须执行如下命令：rpm -uvh &lt;文件名&gt;;，注意：此时的文件名必须是要升级软件的升级补丁</p>
+<p>6.另外一个安装软件的方法可谓是Linux的独到之处，同时也是RMP强大功能的一个表现：通过FTP站点直接在线安装软件。当找到含有你所需软件的站 点并与此网站连接后，执行下面的命令即可实现在线安装，譬如在线安装Linux-1.4-6.i368.rpm，可以用命令：</p>
+<p>rpm -i ftp://ftp.pht.com/pub/linux/redhat/...-1.4-6.i368.rpm</p>
+<p>7.在我们使用电脑过程中，难免会有误操作，若我们误删了几个文件而影响了系统的性能时，怎样查找到底少了哪些文件呢?RPM软件包提供了一个查找损坏文 件的功能，执行此命令：rpm -Va即可，Linux将为你列出所有损坏的文件。你可以通过Linux的安装光盘进行修复。</p>
+<p>8.Linux系统中文件繁多，在使用过程中，难免会碰到我们不认识的文件，在Windows下我们可以用“开始/查找”菜单快速判断某个文件属于哪个文件夹，在Linux中，下面这条命令行可以帮助我们快速判定某个文件属于哪个软件包：</p>
+<p>rpm -qf &lt;文件名&gt;;</p>
+<p>9.当每个软件包安装在Linux系统后，安装文件都会到RPM数据库中“报到”，所以，我们要查询某个已安装软件的属性时，只需到此数据库中查找即可。注意：此时的查询命令不同于1和8介绍的查询，这种方法只适用于已安装过的软件包！命令格式：</p>
+<p>rpm -参数　&lt;文件名&gt;;</p>
+<p>---------------------</p>
+<p>在Linux 操作系统下几乎所有的软件均通过RPM 进行安装卸载及管理等<br />
+操作RPM 的全称为Redhat Package Manager 是由Redhat 公司提出的<br />
+用于管理Linux 下软件包的软件Linux 安装时除了几个核心模块以外其<br />
+余几乎所有的模块均通过RPM 完成安装RPM 有五种操作模式分别为<br />
+安装卸载升级查询和验证<br />
+1.1.1 RPM 安装操作<br />
+命令<br />
+rpm -i 需要安装的包文件名<br />
+举例如下<br />
+rpm -i example.rpm 安装example.rpm 包<br />
+rpm -iv example.rpm 安装example.rpm 包并在安装过程中显示正在<br />
+安装的文件信息<br />
+rpm -ivh example.rpm 安装example.rpm 包并在安装过程中显示正在<br />
+安装的文件信息及安装进度<br />
+1.1.2 RPM 查询操作<br />
+命令<br />
+rpm -q …<br />
+附加查询命令<br />
+a 查询所有已经安装的包<br />
+以下两个附加命令用于查询安装包的信息<br />
+i 显示安装包的信息<br />
+l 显示安装包中的所有文件被安装到哪些目录下<br />
+s 显示安装版中的所有文件状态及被安装到哪些目录下<br />
+以下两个附加命令用于指定需要查询的是安装包还是已安装后的文件<br />
+p 查询的是安装包的信息<br />
+f 查询的是已安装的某文件信息<br />
+举例如下<br />
+rpm -qa | grep tomcat4 查看tomcat4 是否被安装<br />
+rpm -qip example.rpm 查看example.rpm 安装包的信息<br />
+rpm -qif /bin/df 查看/bin/df 文件所在安装包的信息<br />
+rpm -qlf /bin/df 查看/bin/df 文件所在安装包中的各个文件分别被<br />
+安装到哪个目录下<br />
+1.1.3 RPM 卸载操作<br />
+命令<br />
+rpm -e 需要卸载的安装包<br />
+在卸载之前通常需要使用rpm -q …命令查出需要卸载的安装包名称<br />
+举例如下<br />
+rpm -e tomcat4 卸载tomcat4 软件包<br />
+1.1.4 RPM 升级操作<br />
+命令<br />
+rpm -U 需要升级的包<br />
+举例如下<br />
+rpm -Uvh example.rpm 升级example.rpm 软件包<br />
+1.1.5 RPM 验证操作<br />
+命令<br />
+rpm -V 需要验证的包<br />
+举例如下<br />
+rpm -Vf /etc/tomcat4/tomcat4.conf<br />
+输出信息类似如下<br />
+S.5....T c /etc/tomcat4/tomcat4.conf<br />
+其中S 表示文件大小修改过T 表示文件日期修改过限于篇幅更多的验<br />
+证信息请您参考rpm 帮助文件man rpm<br />
+1.1.6 RPM 的其他附加命令--force 强制操作如强制安装删除等<br />
+--requires 显示该包的依赖关系<br />
+--nodeps 忽略依赖关系并继续操作<br />
+2.2 Linux 操作系统的时钟系统<br />
+2.2.1 时钟系统介绍<br />
+对于Linux 操作系统主要有两种时钟系统<br />
+1 硬件时钟系统该时钟系统的运行独立于任何系统控制程序在CPU 内<br />
+部运行既使系统断电该时钟系统仍然保持运行此时钟系统常常被称为<br />
+实时时钟系统RTC BIOS 时钟系统或CMOS 时钟系统<br />
+2 系统时间该时间为Linux 内核的时钟系统所维护并且被定时中断程序<br />
+所驱动该时间仅当Linux 系统运行过程中有意义该系统时间表示为以UTC<br />
+通用协调时间Universal Time Coordinated 计算自1970 年1 月1 日0<br />
+时0 分0 秒起至当前时刻所经过的秒数该数字不是整数以小数方式表示<br />
+精度<br />
+在Linux 系统中真正起作用的是系统时间硬件时钟系统的唯一作用是在<br />
+Linux 系统没有运行时保持时间的运行当Linux 操作系统启动时系统会<br />
+自动将硬件时钟系统的时间同步到Linux 系统时间并且在之后的整个Linux<br />
+运行过程中不再使用该硬件时钟系统这与DOS 的实现方式完全不同在<br />
+DOS 中只有硬件时间系统的概念而在Linux 操作系统关闭时系统会<br />
+自动将当前的Linux 系统时间同步到硬件时钟系统所维护的时间<br />
+2.2.2 硬件时钟系统与系统时间的同步<br />
+/sbin/hwclock 用于同步硬件时钟系统的时间与Linux 操作系统时间<br />
+查看当前硬件时钟系统时间的命令为<br />
+/sbin/hwclock --show<br />
+将硬件时钟系统时间同步到Linux 操作系统时间的命令为<br />
+/sbin/hwclock --hctosys<br />
+将Linux 操作系统时间同步到硬件时钟系统时间的命令为<br />
+/sbin/hwclock --systohc<br />
+如果观察系统启动/关闭时执行的初始化脚本”/etc/rc.d/rc.sysinit” 我们不难发<br />
+现系统启动过程中自动调用/sbin/hwclock --hctosys 将硬件时钟系统<br />
+时间同步到操作系统时间而在系统关闭过程中自动调用/sbin/hwclock<br />
+--systohc 将操作系统时间同步到硬件时钟系统时间</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/about-shared-cursorparent-cursorchild-cursor-zt.html" data-toggle="tooltip" data-placement="top" title="about shared cursor,parent cursor,child cursor --zt">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/toothache.html" data-toggle="tooltip" data-placement="top" title="牙疼">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/os/rpm-details" data-title="RPM使用详解"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="在Linux操作系统中，有一个系统软件包，它的功能类似于Windows里面的“添加/删除程序”，但是功能又比“添加/删除程序”强很多，它就是 Red Ha... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/os/rpm-details.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/os/rpm-details" data-title="RPM使用详解" data-url="http://dbaeyes.github.io/os/rpm-details.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

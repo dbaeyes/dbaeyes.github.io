@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>20%的SOLARIS知识解决80%的问题 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/os/cent-of-solaris-knowledge-solution-20-problem.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#SOLARIS" title="SOLARIS">SOLARIS</a>
+                        
+                    </div>
+                    <h1>20%的SOLARIS知识解决80%的问题</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on April 22, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>Rolf Kersten</p>
+<div>
+<p>德国Sun微系统股份有限公司<br />
+版本历史<br />
+日期 版本 简介<br />
+2002年05月25日 V1.8e 第一个英语发布版<br />
+2002年06月12日 V1.9e 第一次反馈（感谢Dnaiel Schmidberger!）<br />
+2002年07月19日 V1.10e 添加iostat章节<br />
+2002年09月04日 V1.11e Matt Ruetz的修订版<br />
+2002年12月05日 V1.12e 经过修正和增加的版本<br />
+2003年01月17日 V1.13e 被Halvard Halvorsen(<a href="http://www.sundot.com/">www.sundot.com</a>)和Sven Fink修正和附加的版本<br />
+2003年04月11日 V1.14e Sven和Andreas Fatum关于shell编译器和环境变量章节更多地说明<br />
+简介<br />
+这篇文档包含了你用solaris和Sun平台工作时所需要的最重要的20%的技术。它能处理你所遇到的80%的问题。<br />
+这篇文档并不打算覆盖Solaris处理环境的细节，也不会包含常见问题解答（相关的书和链接将在附录中给出）。这本书将用来为刚成为Solaris系统管理员的新手或没有每天管理Solaris系统基础的人提供一种怎样收集这种信息的服务。这篇文章关注的方向是用来做技术开发的图形工作站，也将对希望为建立一套用来演示或作为基准的Sun系统的人有所帮助。<br />
+两点提醒：<br />
+· 永远记住在记录日志中记录下你对系统的每一次改动<br />
+· 清楚的在头脑中记住这篇文档包含能让系统不可用的系统级的程序。除非你对它的破坏性做了仔细的分析，否则不要在正在使用的系统上执行这些程序。</p>
+<p>1 系统启动和测试</p>
+<p>1.1 OK提示符<br />
+每套SUN都有一个Boot-PROM模式，可以在启动操作系统之前访问，也可以在运行的时候访问，可以用STOP+A进入，如果没有STOP键（PC），可以用ctrl+break.。一旦进入Boot-PROM模式，会出现OK提示符。如果操作系统运行时候出现，可以用go继续。</p>
+<p>1.2 控制台测试<br />
+Boot-PROM模式可以用直接连接的键盘和显示器，也可以用终端。<br />
+如果系统启动时候没有检测到键盘，输入输出自动转到第1个串口（/dev/ttya,A），可以连接一个终端或者另一计算机（通过交叉串口线）到这个端口。<br />
+如果另外的计算机是SUN工作站，可以使用tip hardwire来查看启动控制台。Tip命令输入之后，所有的启动信息会出现在相应的终端窗口里面，如果被观察的机器用了STOP+A，必须使用Strg-]把tip改成telnet模式，然后输入一个BREAK：telnet&gt;send brk</p>
+<p>1.3 重新启动SUN工作站<br />
+重新启动之前，工作站需要进入一个合适的状态，可以使用下面及格命令退出：<br />
+# init 5<br />
+# init 6<br />
+# init 0<br />
+SUN工作站在重新启动之前，会以一定的方式关闭系统，下面是几种可选择的方法：<br />
+最好、最干净的方法：<br />
+- #init 5 关闭所有进程，然后系统自动关掉电源。<br />
+- #init 6，关闭所有进程，然后系统自动从新启动。<br />
+- #init 0，关闭所有进程，然后系统自动回到OK状态。<br />
+在这3种情况下，在系统关闭之前执行/etc/rc0.d下面的K*脚本，这可以用于关闭数据库，或者关闭WEB服务器的进程ID文件等。<br />
+如果没有合适的shell窗口，可以使用远程登录来执行上面的命令。远程也不可以，可以使用下面的方法：<br />
+- STOP-A<br />
+- OK sync 同步文件系统，中断OS，然后重启。<br />
+注意：需要察看随之产生的保存在/var/crash/&lt;hostname&gt;下面的内核转储文件。<br />
+如果碰到STOP-A也不能使用的情况，必须关闭计算机电源，在打开电源。</p>
+<p>1.4 系统的测试<br />
+启动系统，在执行到内存测试的时候，按下STOP-A。<br />
+下面的段落只描述很重要的命令。<br />
+详细的描述可以在下面的书中《Hardware Diagnostics for Sun TM Systems: A Toolkit for System Adminis-trators》(Infodoc Number 23476 on<a href="http://sunsolve.sun.com/">http://sunsolve.sun.com</a>)。<br />
+1.4.1 Banner（标识）<br />
+Banner显示下列信息：<br />
+. CPU的数量、类型和频率<br />
+. 内存<br />
+. MAC地址和主机地址（主机号）<br />
+. 控制台显示卡类型<br />
+. Sun-Globe: Creator 3D<br />
+. Sun with face: Elite 3D<br />
+. Self-describing Logo: PGX, Raptor GFX (=PGX32), Expert3D(lite) XVR-500, XVR-1000 etc.<br />
+1.4.2检测<br />
+probe-scsi-all列出内置和外置的所有SCSI设备。对于IDE硬盘，使用：probe-ide-all.<br />
+1.4.3 测试所有<br />
+test-all.运行所有的自检，可以检测象网线是否正常等情况。<br />
+1.4.4 printenv and devalias<br />
+devalias列出所有别名，printenv列出所有变量。例如boot-device变量，定义了计算机启动的路径，一般情况下是disk，disk是一个指向特定设备的别名。<br />
+1.4.5禁止网卡错误信息<br />
+当网卡在没连接网线启动的时候，"Interface: No link"会出现多次，可以在OK下面设置<br />
+setenv tpe_link test false 来禁止这个报错信息。</p>
+<p>2 管理硬盘</p>
+<p>2.1 逻辑设备名<br />
+所有的硬盘都有一个共同的命名方案，该方案包括一下四个部分：<br />
+c 控制器号<br />
+t 目标号，对于SCSU设备，就是对应的SCSI地址。<br />
+d 驱动号或者是RAID设备的LUN号（一个地址，多个硬盘）<br />
+S 分区号（见下一段）<br />
+这些逻辑设备的以连接方式放在/dev/dsk和/dev/rdsk目录里面，并指向物理设备名。但这些物理设备仅在改变启动设备时用到，一般的命令都以逻辑设备为参数。<br />
+例如：<br />
+c0t0d0s0 通常是工作站的第1硬盘，c0t1d0s0 是第2个，c0t6d0s0是内部光驱（SCSI地址是6）<br />
+在OK提示下输入 boot –r可以更新/dev/dsk and /dev/rdsk目录里面的内容，devfsadm也可以。<br />
+Solaris8以前的需要用drvconfig;disks;devlinks3个命令来完成，刷新之后，probe-scsi-all所看到的设备的逻辑连接也就能看见了。</p>
+<p>2.2 分区<br />
+下面是一个两个硬盘的工作站用format命令看到的内容<br />
+c0t0d0<br />
+c0t1d0<br />
+这里显示的是硬盘，不是分区或扇区,format的目的就是产生和管理分区，一个硬盘最多可以优个分区，用format-print可以查看。如果使用缺省安装，Solaris安装工具就会把系统盘分成slices: / (root) /usr /var 和 /export/home。Solaris 8操作系统缺省安装产生3个分区，大约1G的根区，SWAP区（根据内存容量确定大小），剩余空间给/export/home.<br />
+对于工作站来说，这个缺省分区不是最优化的，分区的容量不能在数据不丢失的情况下扩充。在分区空间用尽的情况下，必须使用符号连接。对于服务器来说，得保留一个分区给/var目录，<br />
+这样的话，保存在/var/tmp里面的记录和大文件就不会影响到根区，避免系统产生问题。<br />
+建议工作站这样分区<br />
+slice 0: / root-Partition, incl. /usr, /var, /opt plus /export/home<br />
+slice 1: swap 交换区，和物理内存一样大<br />
+slice 2: backup 不要改变这个分区！！代表整个硬盘<br />
+slice 7: sds 用于Solstice DiskSuite(TM) metadata的小分区<br />
+为了使用Solstice Disksuite logical volume manager (SDS)，建议保留30M，用于拷贝"state replica databases".可以参阅后面的使用SDS镜像启动盘<br />
+从Solaris 8 02/02开始，会自动安装Live Upgrade。使用Live Upgrade，可以在系统正在运行的时候拷贝当前根的环境。例如可以测试新的操作系统而不用改变正在运行的系统。为了产生这个预备启动环境（ABS），必须留出足够的空间，现在的硬盘空间足够大，可以使用下面分区：<br />
+slice 0: / root-partition, incl. /usr, /var, /opt<br />
+slice 1: swap swap-Partition, as large as physical memory<br />
+slice 2: backup Do not change this partition!<br />
+It is always the size of the whole disk<br />
+slice 3: /export OS-independent data, home-directories<br />
+slice 4: &lt;not mountet&gt;, to be used as ABE with Live Upgrade<br />
+( about 150% of the expected size of /<br />
+slice 7: sds A small space reserved for Disksuite metadata</p>
+<p>2.3 Crashdumps<br />
+从Solaris 7开始，缺省情况下crashdump写到交换区上,这也是为什么交换区为什么和内存一样大的原因之一。下次启动的时候，从交换区中读取这个文件，压缩之后写到var/crash/&lt;hostname&gt;里面，用于以后的分析。因此/var（如果没有单独分出/var或者是/区）不能太小。<br />
+如果一个系统用了几个G的空间作为dump设备，启动时会由于上面提到的拷贝操作，花上很长时间。这时候，最好利用dumpadm定义一个dump分区，从这个指定分区拷贝的操作会在后台运行。注意经常检查和清除/var/crash/&lt;hostname&gt;，保证有足够的空间用于其他的crashdumps.</p>
+<p>2.4 Example<br />
+假如有一台E450系统并且有一个已经配置好的启动盘，但你不知道两件事情：（1）盘插哪里（系统又20个槽，必须装到安装系统时硬盘所在的槽里才能启动），（2）忘了超级用户口令。把盘插到一个任意槽里，按下面的步骤：<br />
+第1步 插入一个启动光盘（SOLARIS 安装盘）STOP+A，然后 boot cdrom –s。如果用外置光驱，就需要probe-scsi-all列出光驱位置，然后boot &lt;光驱路径&gt; -s。系统起来之后，就有了一个不需要口令的超级用户窗口。<br />
+第2步 开始mount硬盘。首先用devfsadm重新建立设备，在/dev/dsk下面会有8个新文件。接下来使用format-print-partition确认盘已经装好，并找出来哪个分区是root分区，通常都是0区 。假设盘插到2槽，format会识别到c1t2d0(SCSI ID是2，第1个控制器)，c1t2d0s0就是root分区，因此应该ount这个盘，fsck –Y /dev/rdsk/c1t2d0s0;mldir /tmp/disk;mount /dev/dsk/c1t2d0s0 /tmp/disk<br />
+第3步 首先清楚/tmp/etc/shadow里面的root后面的加密内容清空，然后查看/tmp/etc/vfstab里面看看该盘是不是第2槽的，如果是，/应该mount在/dev/dsk/c1t2d0s0，如果不是，就把硬盘插到相应的槽里面。<br />
+第4步 假设在/tmp/etc/vfstab里面看到的是/dev/dsk/c1t2d0s0，这说明在原来的系统里面启动盘就是第2槽，一般，E450会从第1槽启动（c1t0d0s0）。在/dev/dsk里面找到并记下来c1t0d0s0指向的物理设备文件名。<br />
+第5步 reboot，STOP+A，输入：boot &lt;物理设备文件名&gt;。<br />
+第6步 定义别名， nvalias my disk &lt;物理设备文件名&gt;,这样就可以输入boot mydisk就可以启动了。定义setenv boot-device mydisk，系统就会自动从mydisk启动了。</p>
+<p>2.5 Removable Devices<br />
+2.5.1 Volume Management(卷管理)<br />
+可移动设备又卷管理器来负责，卷管理器检测CD-ROM并自动挂接到/cdrom/cdrom0下面。一些手工操作会造成卷管理器错误，比如使用曲别针打开光驱，而不是使用eject cdrom命令。只这时候需要手工重起卷管理器.<br />
+/etc/init.d/volmgt stop<br />
+/etc/init.d/volmgt start<br />
+2.5.2 软驱<br />
+插入软盘（UNIX或DOS格式）必须使用volcheck才能使用卷管理器管理软驱。如果volcheck成功，软驱会出现在/floppy/floppy0下面，使用eject floppy而不手工取出软盘。<br />
+2.5.3 CD-ROM<br />
+CDROM不需要volcheck,开机就会被检测到，并挂接在/cdrom/cdrom0下面，没有shell或命令使用/cdrom路径时可以使用eject cdrom弹出光驱，fuser –c /cdrom/cdrom列出所有和光驱有关的进程ID或命令，fuser –k可以快速杀掉相关进程。<br />
+如果没有卷管理器，使用下面的方法管理CDROM（假设SCSI地址是6）：<br />
+- mkdir /tmp/cdrom<br />
+- mount -F hsfs /dev/dsk/c0t6d0s0 /tmp/cdrom<br />
+- (Work with CD mounted on /tmp/cdrom)<br />
+- umount /tmp/cdrom<br />
+- eject /dev/dsk/c0t6d0s0<br />
+2.5.4 CD-R 和 CD-RW<br />
+CDRW,是一个与solaris 8 捆绑的工具，用来烧制CD-R或者CD-RW介质。这个工具也可以烧制用命令mkisofs从solaris文件系统和目录中创建的ISO镜象文件。<br />
+看下面带精确参数的例子：<br />
+#! /bin/sh<br />
+# ./nfscd &lt;PARAMETER1&gt; &lt;PARAMETER2&gt;<br />
+# PARAMETER1 = Application ID<br />
+# PARAMETER2 = from where<br />
+#<br />
+# ./nfscd SunNetManager /net/center2000/export/pkg/SUNWsnm<br />
+# set Umask<br />
+umask 022<br />
+# Remove old image<br />
+rm /data/disk.img<br />
+# Create image<br />
+mkisofs -A $1 -d -l -L -o /data/disk.img -P "Sun Microsystems" -p<br />
+"Solaris SPARC" -r -R -J -V "$1" -v $2<br />
+# Burn<br />
+cdrw -i /data/disk.img<br />
+2.5.5 磁带<br />
+磁带设备不是用卷管理器来控制的，它们必须用命令tar来处理。典型的磁带设备被作为一个外部SCSI设备连接到系统。当solaris OE 运行时它们的连接和配置就已经被完成了，在运行以前版本的solaris命令devfsadm(solaris 8 OE) 或者drvconfig; tapes;devlinks,你能找到一些逻辑的连接在/dev/rmt 目录。0描述的是第一个磁带设备，1是第二个磁带设备。<br />
+通过以上，你就可以访问这个磁带，用命令 tar tvf /dev/rmt/0.<br />
+注意：SGI系统写入的磁带通常只能用特定的块因子（blocksize）来读<br />
+tar tvfb 512 /dev/rmt/0<br />
+在某些情况下，需要进行字节交换操作，才能正确读取<br />
+dd if=/dev/rmt/0 conv=swab | tar tvfb 512 -</p>
+<p>2.6 克隆磁盘<br />
+通过这部分的学习，你可以把一个系统克隆到另一个和它的硬件属于同一系列的系统中。例如克隆Ultra(TM) 10工作站到Ultra 10工作站是可以的，而克隆到Ultra 60工作站就是行不通的。<br />
+如果监测到目标系统的硬件结构和源系统有所不同的话（不同的结构缓冲，网卡等），目标系统在克隆以后需要用boot –r命令来重新配置。<br />
+2.6.1 使用内部磁盘来克隆<br />
+这种方式适合用于易于改变的内部磁盘：<br />
+·Ultra 30, Ultra 60, Ultra 80或者Sun Blade(TM) 100工作站或者E220R/E420R/E250R/E450<br />
+·Sun Enterprise(TM)220R, 420R, 250, 或者450服务器<br />
+内部的FC-AL磁盘（如Sun Blade 2000工作站和Sun Fire(TM) 280R或V880服务器）可能导致一些问题。<br />
+接下来是用Ultra 60工作站做的一个范例：<br />
+1   将目标盘插入主板上的第二个硬盘口<br />
+3 启动进入但用户模式(STOP-A; boot –s)<br />
+4 用devfsadm重新配置所有的磁盘<br />
+5 键入format察看硬盘的名称。在Ultra 60工作站上，你会看到c0t0d0和c0t1d0。C0t1d0是内部系统中最顶端的磁盘。<br />
+6 决定哪个盘是源盘，哪个盘是目标盘（不要忘记备份你的数据！）。在我们的例子中c0t0d0(底部的盘)作为源盘，c0t1d0（上面的盘）是目标盘。<br />
+7 dd if=/dev/rdsk/c0t0d0s2 of=/dev/dsk/c0t1d0s2 bs=128k(这条命令为整个盘，包括分区标的内容作了一个1：1的副本。如果源盘是一个9GB的盘，而目标盘是一个18GB的盘，那么将会有9GB的容量被浪费)。警告：仔细检查这一步，避免对你源盘的意外损坏。<br />
+8 fsck –Y of=/dev/dsk/c0t1d0s0（检查启动分区的文件系统，一般来说是分区0）<br />
+9 移除源盘，将克隆好的盘放进先前源盘所在的位置。重新启动你新做好的克隆的系统<br />
+2.6.2 通过转接线来克隆<br />
+这种方式比上面描述的通过内部磁盘克隆要慢，但是它适合用于一些内部的磁盘不容易改变的系统（如Ultra 10或Ultra 5工作站）。<br />
+警告：记住文件“/.rhosts”仅仅在这个任务中使用，在完成这个任务之后删除它来避免系统的安全漏洞。<br />
+目标系统<br />
+启动<br />
+在注册屏幕上使用命令行注册(command line login)<br />
+尽可能地停止引起磁盘输入输出的进程<br />
+TERM=vt100vi /etc/inet/hosts<br />
+-&gt;添加目标和源<br />
+ifconfig hme0 plumb<br />
+ifconfig hme0 &lt;target&gt; netmask 255…up<br />
+-&gt;测试rsh源<br />
+rsh source “dd if=/dev/rdsk/c0t0d0s2 ibs=128k obs=8k” | dd of=dev/rdsk/cotodos2 bis=128k obs=128k<br />
+（9GB的盘需要等待大约40分钟）<br />
+STOP-Aboot cdrom –s（用可引导的光盘引导）<br />
+fsck –Y /dev/rdsk/c0t0d0s0<br />
+源系统<br />
+在文件/.rhosts中添加目标IP<br />
+sync; sync;</p>
+<p>2.7 用SDS制作磁盘镜像<br />
+Solaris逻辑卷面管理（SVM），一般是指Solstice Disksuite(SDS)软件，它可以把磁盘系统做成RAID 0, 1, 0+1或5。工作站最感兴趣的方式是RAID 1：为磁盘错误准备好了一个包含启动文件系统的磁盘镜像。<br />
+SVM是Solaris 9系统环境的一部分。在Solaris 8平台上，你可以在第二章光盘的“EA”目录下找到SDS软件。而在Solaris 7或者2.6系统环境中，服务器版，你可以查找一下光盘“Easy Access Server”。<br />
+我们假定一个工作站有两块内部的磁盘，c0t0d0和c0t1d0。这两块盘都以相同的方式被正确的分区：分区0被分配给/(root)，分区1被分配给交换区(swap)，一个比较小的分区7被分配用来记录复制数据库(State Replica Databases)。分区2被定义成一个备份区（参见“分区”一章）。<br />
+把第一块盘的分区信息复制到第二块盘，可以用如下的命令：<br />
+# prtvtoc /dev/rdsk/c0t0d0s2 | fmthard -s - /dev/rdsk/c0t1d0s2<br />
+记录复制数据库是一个包含了镜像信息纪录的小文件。镜像中的每个磁盘都必须知道有三个记录复制数据库文件:<br />
+# metadb -a -f -c 3 c0t0d0s3 c0t1d0s3<br />
+下一步，在第一块磁盘上创建第一个子镜像，它包含了启动文件系统:<br />
+# metainit -f d50 1 1 c0t0d0s0<br />
+然后在第二块磁盘上创建第二个子镜像:<br />
+# metainit d52 1 1 c0t1d0s0<br />
+使用第一个子镜像创建镜像的第一个部分:<br />
+# metainit d54 -m d50<br />
+用metaroot修改/etc/vfstab和/etc/system，让系统可以从元设备(metadevice)d54上启动：<br />
+# metaroot d54<br />
+重新启动系统，然后将添加第二个子镜像d54。这就强制了“镜像同步”，将第一块盘的内容复制到了第二块盘。这将在一小段时间内影响系统的性能。<br />
+# metattach d54 d52<br />
+为了避免在从第二块盘上紧急启动时发生错误信息，交换分区必须做成相同样式的镜像。否则，交换分区在损坏的磁盘上，/etc/vfstab仍然会定位到c0t0d0s1。<br />
+现在系统已经可以从第一块盘(boot disk)，也可以从第二块盘(boot disk1)上启动了。<br />
+如果有一块磁盘损坏，Solstice DiskSuite会停止启动程序。这是因为如果要在一次错误以后成功地启动系统，纪录复制数据库的大部分必须依然“幸存”。在我们的两块镜像盘上仅仅需要六个复制中的三个依然存活。<br />
+超过两块盘的服务需要有第三块盘来用记录复制数据库来配置。两块盘的工作站必须手动地修复，下面的例子描述了这个过程:<br />
+·记录数据库复制在c0t0d0s7和c0t1d0s7上配置，c0t0d0盘发生故障。<br />
+·启动程序被Solstice DiskSuite停止，并转换进入到单用户模式。<br />
+·现在记录数据库复制希望发生错误的盘没有被配置：<br />
+metadb -d -f c0t0d0s7<br />
+·在下一次重启之后，对重置的磁盘进行分区，使它和仍然活动的磁盘的分区一致。<br />
+·做完这些之后，在重置的硬盘上创建记录数据库复制文件：<br />
+metadb -a -c 3 c0t0d0s7<br />
+·在下次的重启之后，镜像又可以重新同步了。<br />
+注意：<br />
+如果你有一个两块盘的系统，在一块盘上创建三个记录数据库复制，在另一块上面创建四个。在理论上有50%的机会可以在一次错误后重新启动系统而不需要手动地去使用元数据。<br />
+如果你能接受在2盘系统下发生错误后无人职守的重启，在两块盘上创建相同数量的记录数据库复制并且创建/etc/system条目：<br />
+set md:mirrored_root_flag=1<br />
+关于这方面内容更多的讨论可以在Sun的蓝皮书“Configuring Boot Disks With Solaris[tm] Volume Manager Software"(<a href="http://www.sun.com/blueprints/1002/817-0407-10.pdf">http://www.sun.com/blueprints/1002/817-0407-10.pdf</a>)上找到。</p>
+<p>3 SWAP交换空间</p>
+<p>3.1 固定配置文件 /etc/vfstab<br />
+#device device mount FS fsck mount mount<br />
+#to mount to fsck point type pass at boot options<br />
+#<br />
+#/dev/dsk/c1d0s2 /dev/rdsk/c1d0s2 /usr ufs 1 yes –<br />
+/dev/dsk/c0t0d0s1 - - swap - no –<br />
+/usr/local/swapfile.1 - - swap - no –<br />
+...<br />
+swap - /tmp tmpfs - yes –<br />
+交换文件系统可以使用像/dev/dsk/c0t0d0s1这样的裸分区或者象/usr/local/swapfil.1的空文件。<br />
+你可以定义多个交换文件系统，所有这些都在逻辑上绑定并挂接到/tmp挂接点。这就意味着只要物理内存是可用的，向/tmp中写文件将写入内存并耗尽内存（not very sure）<br />
+例如：<br />
+/dev/dsk/c0t0d0s1 - - swap - no –<br />
+/dev/dsk/c0t1d0s1 - - swap - no –<br />
+/dev/dsk/c0t2d0s1 - - swap - no –<br />
+...<br />
+swap - /tmp tmpfs - yes –<br />
+上面创建了另外的6GB的虚拟内存（假设所有的分区大小为2G）.Solaris将条带访问对所有的磁盘。</p>
+<p>3.2 "裸分区”和空文件的比较<br />
+最快速的交换就是不进行交换，假如物理交换不可避免，使用在多可磁盘上条带后的分区。如果实在需要内存或者没有可用的分区或磁盘，则使用空文件系统。</p>
+<p>3.3 临时配置<br />
+在标准的SOLARIS操作中，空文件可以加入到交换空间。<br />
+# mkfile 100m /usr/local/swapfile.1<br />
+# swap -a /usr/local/swapfile.1<br />
+# swap -l<br />
+在系统重启之前，这些额外的空间是临时的。可以使用命令swap -d /usr/local/swapfile.1去掉这些额外的交换空间</p>
+<p>4 系统安装和维护</p>
+<p>4.1 CD安装<br />
+在安装过程中，你尽可以轻松地按照屏幕的提示进行，但也许会有一些小的缺陷；<br />
+－ Name Service:选择 NONE.如果你这时候选择象NIS这样的内容，因为网络还没有安装好，所以没有NIS服务可用，这时系统可能会“挂起”等待NIS服务器响应，在基本的网络安装完成后再配置NIS或DNS会更好些。<br />
+－ 安装群集：对于工作站而言，应该始终选择"Entire Plus OEM Software"项来确保安装所有的内容。对于专用服务器，去掉不必要的服务包可以最大降低安全风险。参考 SUN 蓝皮书《Minimizing the Solaris[tm] Operating Environment for Security: Updated for Solaris 9 Operating Environment&gt;&gt;<br />
+(<a href="http://www.sun.com/blueprints/1102/816-5241.pdf">http://www.sun.com/blueprints/1102/816-5241.pdf</a>) 可获得更多内容<br />
+－ 磁盘分区：根据再“分区”这一章所提供的建议，为了能够对磁盘进行分区，当提示安装方式时，选择“定制”方式而不是“默认”方式。<br />
+从 Solaris 7 OE版本开始，安装CD内含有预打包的Solaris映像.如果需要升级以前的季度升级包到该映像文件的版本，参考“维护升级”<br />
+例如：安装“维护升级 7”（同Solaris 8 02/02 OE发布）到Solaris 8 07/01 OE版本需要升级Solaris 补丁包（只这些，没有功能的增强）到在02/02版本上的状态。升级安装在/etc/release文件中写入如下标记："Solaris 8 07/01 Maintenance Update 7" “推荐补丁集”采用另外的方式，用户每月在“推荐补丁集”上可以看到不同补丁包和补丁版本。      这些可以从<a href="http://www.sun.com/bigadmin">http://www.sun.com/bigadmin</a>下载并且在Solaris安装后安装。<br />
+安装完毕后，root用户只能从system控制台登录，这种终端方式直接连接到系统或键盘。为了允许通过TELNET,RSH等从远程登录，必须修改一个文件：注释该行：CONSOLE=/dev/console!in!/etc/default/login.注意：这是一项安全分险。</p>
+<p>4.2 包的安装<br />
+包是通过tar/compress/zip等工具压缩的一些目录文件，其命名规则名字如下：前面的四个大写字母代表发行该包公司的US股票代码，后面的小写字母代表其功能。例如SUNWspci2这个软件包，就是SUN-pci卡的驱动程序包，前面的SUNW是SUN的股票代码，后面的spci2是其功能（PCI卡驱动）。<br />
+安装命令如下（后面的目录里必须包含这个包）<br />
+pkgadd -d /cdrom/cdrom0<br />
+pkginfo 打印该包的信息，pkgrm &lt;Package-Name&gt;删除（卸载）已经安装的包。<br />
+例如：你的机器原来安装的显示卡是Creator3D（ffb）换成了Elite3D(afb)，这样开机的时候会提示"no console framebuffer"（没有显示卡），说明没安装Elite3D驱动程序。使用<br />
+pkginfo | grep -i afb<br />
+命令检查，没有输出，说明安装系统的时候没有安装Elite3D显示卡的驱动，而Elite3D的驱动程序在安装盘的s0/Solaris/Product. 进入这个目录，使用下面命令安装即可：<br />
+pkgadd -d . *afb*<br />
+重新启动机器，新安装的显示卡就可以正常显示了。</p>
+<p>4.3补丁安装<br />
+补丁的数字代码包含了两个部分，6位数字的补丁号，后面是两位数字的版本号，人员123456-78。<br />
+Solaris8使用的是*.zip格式的补丁压缩，以前使用的是*.tar.Z的格式的包。安装补丁的时候，先拷贝到/tmp下面，然后接压缩，安装之后要删除这些临时文件。解压缩办法：<br />
+zcat 123456-78.tar.Z | tar xvf -<br />
+unzip 123456-78.zip<br />
+然后使用patchadd 123456-78这样的命令安装这个补丁。使用patchadd 123456-78安装的补丁可以使用pkgrm删除（卸载），/var/sadm/patch纪录了这些安装纪录，这个目录没有的话，pkgrm就不能正常删除补丁了。<br />
+showrev -p | grep &lt;patch number&gt;可以查找到已经安装的补丁包。</p>
+<p>5 X-Server和CDE用户接口</p>
+<p>5.1 常见的需要注意的问题<br />
+X-Server或者CDE总是按照以下顺序搜索配置文件：<br />
+1. $HOME/.dt/...<br />
+2. /etc/dt/...<br />
+3. /usr/dt/...<br />
+注意，永远不要改动在整个系统范围内都生效的/usr/dt/中的内容。如果系统的X-Server或CDE出现 问题，总是使用/etc/dt/下的文件去维护或恢复设置。用户自己的配置如扩展按钮或面板的改变等，配置总是保存在$HOME/.dt/目录下。在本节以下的内容中，将用&lt;DT&gt;来代替这些目录（$HOME/.dt, /etc/dt,/usr/dt）。</p>
+<p>5.2 定制登陆界面<br />
+文件：&lt;DT&gt;/config/$LANG/Xresources<br />
+Logo(象素图或位图，24位色或以下，广泛装载时间)：<br />
+Dtlogin*logo*bitmapFile: /usr/local/lib/X11/dt/bitmaps/Mylogo.bm<br />
+通用欢迎登陆语句:<br />
+Dtlogin*greeting*labelString: Here's %LcoalHost%!<br />
+输入用户名后的欢迎：<br />
+Dtlogin*greeting*persLabelString: Hello %s</p>
+<p>5.3 从多屏幕登陆，Xinerama,和24位色<br />
+首先查看 /dev/fbs，找出有几个显示卡可用，它们是如何命名的. 确认有 /dev/fbs/ifb0和/dev/fbs/ifb1,两个 Expert 3D显示卡。<br />
+然后，把X-Server文件从/usr/dt/config复制到/etc/dt/config，编辑该文件，确认最后一行与以下内容相同：<br />
+:0 Local <a href="mailto:local_uid@console">local_uid@console</a> root /usr/openwin/bin/Xsun :0 -nobanner<br />
+5.3.1 多屏幕<br />
+多屏幕是指CDE在每个屏幕中运行一个完整的用户面板。鼠标可以在两个屏幕间移动，而各屏幕上的窗口不能在两个屏幕间移动。ifb0的的显示屏幕被称为： :0.0, ifb1的显示屏幕被称为： :0.1<br />
+:0 Local <a href="mailto:local_uid@console">local_uid@console</a> root /usr/openwin/bin/Xsun :0 -dev /dev/fbs/ifb0 -dev /dev/fbs/ifb1 -nobanner<br />
+5.3.2 Xinerama<br />
+Xinerama（Solaris 7 11/99 OE以后的版本有效）是一个覆盖多个显示屏幕的的虚拟显示屏幕。鼠标和程序窗口可以在多个显示屏幕之间移动， CDE只生成一个用户前端面板。只有一个显示号码： 0:0. Xinerama 只在使用相同的显示卡时才可用。<br />
+:0 Local <a href="mailto:local_uid@console">local_uid@console</a> root /usr/openwin/bin/Xsun :0 +xinerama -dev /dev/fbs/ifb0 -dev/fbs/ifb1 -nobanner<br />
+Xinerama 允许定义一X和Y方向的重叠，这种设置使显示画面边扩展到多个显示器上，使两个显示器显示一个图形窗口（Xoverlap=&lt;水平解析象素&gt;），下面是一个在1280像素的的水平分辨率，20%边缘重叠显示的配置例子：<br />
+:0 Local <a href="mailto:local_uid@console">local_uid@console</a> root /usr/openwin/bin/Xsun :0 = xinerama -xoverlap 256 -dev /dev/fbs/ifb0 -dev /dev/fbs/ifb1 -nobaaner<br />
+5.3.3 使用24位色深<br />
+CDE本身默认使用8位色深(256色). 不过这没有问题，因为每个窗口可以使用单独的颜色位深设置。某些显示卡只有一个颜色表，这可能导致在某些应用中出现程序窗口颜色闪烁的现象。只需要将CDE修改成使用24位色深。如果使用PGX显卡，需要使用命令<br />
+fbconfig -degth 24<br />
+将框架缓冲区切换到24位。<br />
+注意：由于某些老的应用只支持8位色深，不是24位色深，可能会出现问题。<br />
+:0 Local <a href="mailto:local_uid@concole">local_uid@concole</a> root /usr/openwin/bin/Xsun :0 -dev /dev/fbs/ifb0 defdepth 24 -dev /dev/fbs/ifb1 defdepth 24 –nobanner</p>
+<p>5.4 用户定制CDE面板<br />
+CDE中的应用启动机制叫做“活动”。当用户将鼠标点到一个CDE图标是，“活动”发生预定义的行为，一旦定义以后，“活动”的关联到环境变量中：Menus, file manager, MIME-types 和定义文件<br />
+5.4.1 活动（Actions）<br />
+CDE 按照以下顺序搜索*.dt-files配置文件：<br />
+$HOME/.dt/types<br />
+/etc/dt/types/$LANG/<br />
+/usr/dt/types/$LANG/<br />
+例如，StarOffice52.dt(这是在$HOME/.dt/types下安装完StarOffice之后)<br />
+ACTION StarOffice52<br />
+{<br />
+LABEL StarOffice 5.2<br />
+TYPE COMMAND<br />
+EXEC_STRING "/opt/Office52/program/soffice" "%(File)Args%"<br />
+ICON So52<br />
+WINDOW_TYPE NO_STDIO<br />
+DESCRIPTION StarOffice<br />
+}<br />
+5.4.2 图标<br />
+一个活动的的定义还包含一个图标名。图标名按照以下顺序解析：<br />
+$HOME/.dt/icons<br />
+/etc/dt/icons/$LANG/<br />
+/usr/dt/icons/$LANG/<br />
+naming scheme: &lt;name&gt;.&lt;size=m|t|l&gt;.&lt;format=bm|pm&gt;<br />
+例如StarOffice52的图标文件存在以下位置: $HOME/.dt/icons/So52.m.bm<br />
+5.4.3 用户前面板<br />
+通过添加*.fp-files文件到$HOME/.dt/types目录下，可以方便简单的扩展用户前面板。默认定义存储在：<br />
+. /etc/dt/types/$LANG/<br />
+. /usr/dt/types/$LANG/<br />
+例如($HOME/.dt/types/tools.fp)<br />
+CONTROL Tools (Always define the main control before sub panel)<br />
+{<br />
+TYPE icon<br />
+CONTAINER_TYPE BOX<br />
+CONTAINER_NAME Top<br />
+POSITION_HINTS first<br />
+ICON Dtagen (This is a folder icon, Icon must exist!)<br />
+LABEL Tools<br />
+}<br />
+SUBPANEL Toolspanel<br />
+{<br />
+CONTAINER_NAME Tools<br />
+TITLE My Tools<br />
+}<br />
+CONTROL StarOffice52<br />
+{<br />
+TYPE icon<br />
+CONTAINER_TYPE SUBPANEL<br />
+CONTAINER_NAME Toolpanel<br />
+ICON So52<br />
+LABEL Star Office 5.2<br />
+PUSH_ACTION StarOffice52 (compare ACTION StarOffice52)<br />
+DROP_ACTION StarOffice52<br />
+}<br />
+你可以通过在子面板(SUBPANEL)里添加额外的控制(CONTROLs)，来建立整个菜单按钮</p>
+<p>6 显示卡和OpenGL</p>
+<p>6.1 Fbconfig<br />
+在Solaris 8 系统环境中，fbconfig是配置显示卡的唯一的程序接口，每个显示卡有自己的专用配置工具。在Solaris 8 软件中，通过有规则的命名方式来与/dev/fbs下的设备名对应。<br />
+下面是一些显示卡配置命令及对应的显示卡类型<br />
+. ffbconfig Creator, Creator3D<br />
+. afbconfig Elite3D<br />
+. ifbconfig Expert3D, Expert3Dlite<br />
+. m64config PGX24 (onboard U5, U10), PGX64<br />
+. gfxconfig PGX32<br />
+在下面的内容中，只提及fbconfig，其他命令的参数都是一样的。如果没有在配置中把某个设备指定给某个显示卡，fbconfig工作在默认的显示卡（接主屏幕的显示卡）。<br />
+可以使用 ls /dev/fbs命令查找系统中安装了哪些显示卡。另外，可以使用下列命令通过设备名直接列出系统中安装了的显示卡。<br />
+fbconfig -res /dev/fbs/afb1 -propt -prconf<br />
+这个命令可以列出第二个Elite3D显示卡的配置信息，例如显示卡的类型、分辨率等。第一个Elite3D显示卡使用的设备名是 afb0。<br />
+fbconfig －res \?<br />
+这条命令将列出该显示卡支持的分辨率，指定的分辨率可以"剪切&amp;拷贝" 到下面命令里面：<br />
+fbconfig -res "1280x1024x86" -try -now<br />
+-try和-now都是选项。<br />
+-try将只会改变10秒钟的分辨率。可以使用这个方法测试显示器和改变之后的视频信号是否同步。-now参数使分辨率改变立即生效，不需要重启X-Server。然而，有些时候使用-now选项改变分辨率后，屏幕显示会有一点几何失真，可以用退出用户再重新登陆来重新启动X-Server的方法来解决。<br />
+fbconfig -g 1.7<br />
+命令将gamma因子设定到1.7，默认值是2.2，通常看起来可能太亮了。<br />
+新的gamma因子设定，不用重启X-Server就可以立刻生效，而且重启后依然有效。</p>
+<p>6.2 ogl_install_check<br />
+尽管在Solaris 2.5.1以后的版本的CD中都有OpenGL软件包，但在Solaris系统安装过程中，不会自动安装。 使用以下命令检查该系统上是否正确安装了OpenGL，以及OpenGl软件的版本：<br />
+/usr/openwin/demo/GL/ogl_install_chech<br />
+注意：在正确的设置了gamma因子后，OPENGL的测试环的设置也很简单了。<br />
+推荐使用最新版本的OpenGL。 例如Xinerama只能支持OpenGL1.2.1以后的版本。OpenGL的下载地址<br />
+<a href="http://www.sun.com/solaris/opengl">http://www.sun.com/solaris/opengl</a></p>
+<p>6.3 和图形卡相关的补丁<br />
+下面是和显示卡有关的补丁列表，它和Solaris版本、OpenGL版本和显示卡类型有关系。<br />
+下表只列出来补丁号。请到<a href="http://sunsolve.sun.com/">http://sunsolve.sun.com</a>下载最新版本的合适的布丁。补丁的安装顺序如下<br />
+1.显示卡补丁<br />
+2.X-Server补丁<br />
+3.OpenGl<br />
+4.OpenGL补丁<br />
+显示卡补丁列表：（详细列表参见原版21页）<br />
+显示卡类型     Solaris 9 OE    Solaris 8 OE     Solaris 7 OE<br />
+Expert3D (lite)   112540          108576              108787<br />
+XVR-500           112540          108576             不支持<br />
+XVR-1000          112565           112564             不支持<br />
+Elite3D           111620           108604             106144<br />
+- and XFB 106148<br />
+- and VIS 109872 106147<br />
+Creator3D 112621 108605 106145<br />
+- and XFB 106148<br />
+- and VIS 109872 106147<br />
+OpenGL 1.2.2 32 Bit: 111993 32 Bit: 111993 32 Bit: 111993<br />
+64 Bit: 111994 64 Bit: 111994 64 Bit: 111994<br />
+OpenGL 1.2.3 32 Bit: 112628 32 Bit: 112628 32 Bit: 112628<br />
+64 Bit: 112629 64 Bit: 112629 64 Bit: 112629<br />
+XSun 112785 108652 108376<br />
+PGX32 /64 112622 109154 107716</p>
+<p>7 管理</p>
+<p>7.1 主机<br />
+你可以用admintool或者smc创建主机列表文件hosts，直接编辑/etc/inet/hosts文件更简单。提示：/etc/hosts文件是/etc/inet/hosts文件的连接。<br />
+使用复制命令cp /etc/host.old /etc/hosts不会覆盖正确的文件。Solaris默认安装方式启动sendmail守护进程。如果主机名不包含点号（.）的话，sendmail守护进程会输出错误信息。为了抑制错误信息，在/etc/inet/hosts文件里应该像下面这样定义主机信息： 192.168.0.2 myhost myhost.domain.com loghost</p>
+<p>7.2 串口<br />
+同样，常用的最佳工具是admintool或者是Solaris 9环境下的“Solaris 管理控制台（Solaris Management Console）”smc。</p>
+<p>7.3 打印机<br />
+同样，常用的最佳工具是admintool。Solaris 9环境下，有系统自带的“打印机设置向导”/usr/sadm/admin/bin/printmgr。</p>
+<p>7.4 创建用户<br />
+创建用户常用的最佳工具是admintool。从Solaris 9平台开始，使用“Solaris 管理控制台”smc。当创建新用户时不要指定/home/&lt;username&gt;作为用户的起始目录（须禁止autofs）。用下面的更好： /export/home/&lt;username&gt;。<br />
+/home/&lt;username&gt;目录默认作为Solaris自动装载器（automounter）的目标目录，因此不可写。一些第三方软件试图使用/home/xyz目录。为避免出错，应该关闭自动装载器或者改变它的默认设置。</p>
+<p>7.5 Shell和环境变量<br />
+正确的设置环境变量是系统设置中最有效的减少错误的方法之一。不幸的是，在使用不同的shell的情况下，如何设置变量以及针对特定用户的性能优化所用的语法各不相同。<br />
+最常用的命令解释器是sh，ksh和csh。从Solaris 8开始，流行的bash也可以使用了。sh是安装完成后root用户默认的命令解释器。一般情况下，用户的默认命令解释器在/etc/passwd文件中定义，例如：demo:2003:10emo User:/export/home/demo:/bin/csh 下表描述如何在不同的命令解释器中设置变量：表1（见附件）<br />
+所有命令解释器在启动时读取一系列文件。登录命令解释器（login shell，通常在用户使用telnet，ssh等登录系统后启动）与子命令解释器（subshell，即sh，ksh，csh或者bash的统称）读取的文件不同。下表描述了不同命令解释器所读取的文件：表2（见附件）<br />
+表格在原文P23页。</p>
+<p>8 网络连接</p>
+<p>8.1 /etc目录下的文件<br />
+Solaris 软件在/etc目录下存放网络配置文件。所有的配置数据比如ip地址、网关等可以被定义或者在运行层进行修改，而只有那些存放在/etc目录文件中的定义可以在系统重启后可以保存下来，永久生效。<br />
+可以在这些文件中找到主机名（hostname）：<br />
+/etc/nodename<br />
+/etc/hostname.&lt;interface-name&gt;<br />
+/etc/inet/hosts<br />
+/etc/net/{ticlts,ticots,ticotsord}/hosts<br />
+/etc/nodename 这个文件定义了系统名，从网络的观点看，一个有多块网卡和多个ip地址的系统可以有多个名字。每个都在/etc/inet/hosts中有定义。 这些名字中的任何一个都等价于系统名（ nodename），但是他们不是必须的 。<br />
+有些文件产生了ip地址跟网卡接口名之间的连接。他们是/etc/hostname.&lt;interface-name&gt;&lt;number&gt;。<br />
+最常见interface name是：<br />
+le    老式sparc系统上的以太网网卡名<br />
+hme   Ultra sparc系统上的快速以太网网卡名<br />
+eri   UltraSPARC-III 系统上的快速以太网网卡名<br />
+qfe   基于四口扩展以太网卡上的快速以太网网卡名<br />
+举例: 一台有QFE (QuadFastEthernet)的Ultra 60 工作站有五个网络接口： hme0 (on board)，qfe0，qfe1，qfe2 and qfe3 (on the QFE-card)。主机名是 hermione， 则 /etc/inet/hosts文件的内容如下：<br />
+127.0.0.1 localhost<br />
+157.168.34.12 hermione hermione.domain.com loghost<br />
+191.133.23.10 dumbledore<br />
+在公司的局域网上地址是157.168.34.12的系统就叫hermione，相应的，文件 hostname.hme0 必须包含 hermione 这个名字。<br />
+Dumbledore（191.133.23.10）是网络服务提供商分配的地址。这根缆线连接到QFE的第一个端口 qfe0 ，所以文件 hostname.qfe0 包含 dumbledore 这个字符串。<br />
+qfe1-3 现在没有使用。为了避免solaris出现“没有缆线连接”这种错误信息，对于没有使用的接口不要生成hostname.* 这种文件。<br />
+一个具有多个网络接口的系统会在各个子网之间自动路由，例如在我们例子中的157.168.*.* 和 191.133.*.* 子网之间。在系统启动的时候，会显示出来"machine is a router"这条信息。 如果不希望启动路由服务，手工生成一个空文件 /etc/notrouter 接着重新启动系统就可以了。<br />
+Ip地址的子网掩码定义在文件/etc/netmasks中。在X-Server运行时不要更改nodename，最好更改nodename或hostname之前，从当前的会话中退出来然后使用命令行界面重新登陆。</p>
+<p>8.2 虚拟网络接口<br />
+有时候，对于只有一块网卡的系统定义2个ip地址是很有用的。例如，商业演示用的demo工作站了为了与其它的主机通信而需要添加另一个地址的同时也需要保留自己公司的ip地址，这个需求可以通过虚拟网络接口得以实现。实现方法就和上一章节描述2块物理网卡的情形一样， 仅有的不同是我们这次不使用 hme0 和 qfe0 ，而是使用 hme0 和 hme0:1，所以如果你写dumbledore 字符串到/etc/hostname.hme0:1 文件，在商业演示时ISP提供的网线就可以接到 hme0， QFE网卡就不再需要了。</p>
+<p>8.3 ifconfig工具<br />
+ifconfig -a 列出所有物理和虚拟的接口定义，包括ip地址和子网掩码。 另外在系统运行期间我们还可以用ifconfig去定义ip地址和子网掩码（在hpux系统中这样的定义当系统重新启动后就不存在了，不知solaris是不是这样）。 让我们再来看Ultra 60 工作站的例子，这次首先假定dumbledore在/etc/inet/hosts中没有定义，那么 qfe0 在系统重新启动后就不再被使用。<br />
+现在第一步是去激活qfe0(加载驱动)：ifconfig qfe0 plumb<br />
+开始配置这种网络接口：<br />
+ifconfig qfe0 191.133.23.10 netmask 255.255.255.0 up<br />
+ifconfig -a 可以看到新的配置<br />
+对于虚拟网络接口这个步骤是相同的：<br />
+ifconfig hme0:1 plumb<br />
+ifconfig hme0:1 191.133.23.10 netmask 255.255.255.0 up</p>
+<p>8.4 路由<br />
+可以将IP地址加入/etc/defaultrouter文件来设定默认路由（或者是标准网关）。如果在此文件中加入的是主机名，要确认/etc/inet/hosts文件中已经定义了此主机名。 等价的命令是：<br />
+*删除所有当前路由：route flush<br />
+*将1.2.3.4定义为默认路由：route add default 1.2.3.4<br />
+*用netstat -r命令可以查看更改结果。<br />
+如果机器上有两个以上可用的网络接口，Solaris会自动启用IP转发。<br />
+要检查IP转发是否已经启用：ndd -get /dev/ip_forwarding<br />
+启用IP转发：ndd -set /dev/ip_forwarding 1<br />
+关闭IP转发：ndd -set /dev/ip_forwarding 0<br />
+另一种关闭IP转发的方法是创建/etc/norouter文件，例如touch /etc/norouter</p>
+<p>8.5 NIS客户机<br />
+－首先将NIS域名加入/etc/defaultdomain文件（区分大小写）<br />
+－然后在/etc/inet/hosts文件中加入NIS服务器<br />
+－运行ypinit -c，输入NIS服务器名称 －运行/usr/lib/netsvc/yp/ypstart或者重启。<br />
+现在要告诉Solaris操作环境，对于哪些项目（主机名，用户等等）使用NIS。/etc/nsswitch.conf文件对此进行控制。要使Solaris软件在/etc/inet/hosts文件中找不到主机名时查询NIS服务器，可以在hosts开头的行中在files后面加上nis。<br />
+在/etc目录中有名为nsswitch.nis的预设文件，对于所有可用项目都带有nis定义。</p>
+<p>8.6 DNS客户机<br />
+1. 在/etc/resolv.conf文件中输入DNS服务器地址：<br />
+nameserver 192.168.0.1<br />
+现在可以用nslookup <a href="http://www.sun.com/">www.sun.com</a>测试DNS服务。<br />
+2. 告知Solaris解析主机名时使用DNS。编辑/etc/nsswitch.conf，在hosts开头的行的files后面加上dns。现在不只是可以使用nslookup <a href="http://www.sun.com/">www.sun.com</a>，也可以ping <a href="http://www.sun.com/">www.sun.com</a></p>
+<p>8.7 DHCP客户机<br />
+如果创建两个空文件/etc/hostname.&lt;网络接口名称&gt;和/etc/dhcp.&lt;网络接口名称&gt;，此接口就配置为使用DHCP。Solaris会用30秒等待DHCP服务器应答。可以在/etc/dhcp.&lt;网络接口名称&gt;修改此时间： WAIT &lt;以秒计的时间&gt;<br />
+可以在网络接口运行时启用DHCP（在此例中是对接口qfe0）：<br />
+ifconfig qfe0 plumb<br />
+ifconfig qfe0 dhcp start</p>
+<p>8.8 sys-unconfig<br />
+如果要更改网络配置，但是对相关的文件不确定，有一个简单的方法：sys-unconfig,关闭机器。在下一次重启（在OK提示符下输入boot）时所有Solaris安装时网络相关的问题都会再次问到。（IP地址，网关，掩码等等）。</p>
+<p>8.9 10Mb还是100Mb，全双工还是半双工？<br />
+可以用ndd /dev/&lt;interface-driver&gt;命令查询网络接口状态。&lt;interface-driver&gt;一般是le, hme, eri或者是qfe。<br />
+-ndd /dev/eri link_status: 0=down, 1=up<br />
+-ndd /dev/eri link_speed: 0=10Mb, 1=100Mb<br />
+Solaris对于所有网络接口的参数默认为“自适应”。如果添加的网络设备不支持自适应，就要手动设置参数。将多余的参数设为0。<br />
+10Mb半双工的例子：<br />
+ndd -set /dev/eri adv_100fdx_cap 0<br />
+ndd -set /dev/eri adv_100hdx_cap 0<br />
+ndd -set /dev/eri adv_10fdx_cap 0<br />
+ndd -set /dev/eri adv_10hdx_cap 1<br />
+ndd -set /dev/eri adv_autoneg_cap 0<br />
+用ifconfig unplumb关闭网络接口然后用ifconfig plumb重启接口。也可以在/etc/system文件中定义这些设置。（set eri: eri_adv_10hdx_cap=1）</p>
+<p>9.网络文件系统</p>
+<p>9.1 NFS服务器<br />
+Solaris将目录信息存储在/etc/dfs/dfstab 中，以便于在网络上的其他系统安装。该文件是一个被share命令使用的脚本。<br />
+如果这个文件没有包含任何share命令，Solaris OE(OE，操作系统引擎??)在重起时不会自动开始共享网络文件系统， 即使明确的调用执行了/etc/init.d/nfs.server start命令，dfstab也是空的。<br />
+例如：共享/export/home<br />
+1、 添加share /export/home 到/etc/dfs/dfstab中<br />
+2、 如果这是第一次添加该文件中的内容，执行/etc/init.d/nfs.server start命令<br />
+3、 输入shareall<br />
+4、 如果/export/home被正确共享的话，使用share命令检查</p>
+<p>9.2NFS客户端<br />
+一个NFS客户端不需要制定任何域，但是，NFS服务器名是重要的。一个IP地址 (mount 192.168.0.1:/export/home)是不够的，所有的NFS服务器必须在/etc/inet/hosts,NIS或者DNS中定义。<br />
+你能够安装(mount)一个网络目录，使用命令 mount server:/export/home /tmp/home。如果这个安装点需要在下次系统重起的时候自动的安装的话，在文件/etc/vfstab中插入该安装点的相关内容。<br />
+注意：当使用root用户在网络目录中拷贝文件的时候，注意，本地的root和网络目录上的root是不同的，都是作为"nobody"(除非在服务器上使用了anon=0)。网络目录下的文件没有"other"用户的读权限是禁止拷贝的，为了使用root用户从网络文件目录中拷贝所有的文件，不要使用下列命令：<br />
+root# cd server:/verz;tar cvf - | (cd verz;tar xvf<br />
+最好使用 rsh来在该服务器上获得 root用户的读权限：<br />
+root# rsh server "cd /verz; tar cvf -"|(cd verz;tar xvf</p>
+<p>9.3 与其他的流行的UNIX系统的区别<br />
+在Solaris上的NFS系统与其他流行的UNIX版本中（Linux，AIX等）的实现不完全相同：<br />
+1）文件：Solaris 系统中文件/etc/dfs/dfstab，由/etc/exports取代；<br />
+2) 命令：Solaris 系统中的命令shareall由exportfs -a取代。</p>
+<p>9.4 自动加载（AutoMounter）<br />
+自动加载功能可以实现在用户访问相关目录的时候自动的将文件系统加载（mount）。在大型网络环<br />
+境中，如果大量主机和用户的具有如下目录路径/net/&lt;hostname&gt;或/home/&lt;username&gt;是，将会非常有帮助。<br />
+两个文件定义自动加载的基本操作：/etc/auto_master和/etc/auto_home.<br />
+auto_master文件预定义了上述自动加载的行为。<br />
+目录/net将会在访问相关的主机是自动加载。<br />
+/home目录的自动加载功能在/etc/auto_home文件中定义。<br />
+/net -hosts -nosuid,nobrowse<br />
+/home auto_home -nobrowse<br />
+如果/etc/auto_home文件包含以下行<br />
+/export/home/&amp;<br />
+当有人访问/home/joe目录时，自动加载功能将起作用，把/export/home/joe 加载到这个加载点<br />
+(/home/joe)</p>
+<p>10 工具</p>
+<p>10.1 编译器<br />
+c, c++和fortran编译器通常安装在/opt/SUNWspro/bin目录, 通用工具象make安装在/usr/ccs/bin下.</p>
+<p>10.2 GNU工具包<br />
+几乎所有GNU工具包都有基于solaris平台的预编译包. 它们可以从<a href="http://www.sunfreeware.com/">http://www.sunfreeware.com</a>下载.从solaris 8 OE开始, 一些重要工具象perl,gzip或apache是自动安装的, 剩下的绝大多数GNU工具包都作为预编译包存放于solaris companion CD上.</p>
+<p>10.3 SUN PCi和SUNPCi-II<br />
+很多工作站都装备有SUNPCi卡. 这是一个运行WINDOWS(98,ME,NT,2000,XP)系统的完整PC.这里有一些关于操作SUNPCi卡的提示.<br />
+*封装/opt/SUNWspci2/bin/sunpci进一个小脚本以设置一些环境变量:<br />
+setenv NVL_INTERFACE=hme0 (如果SUNPCi要用hme0网络界面)<br />
+setenv LANG=C<br />
+setenv KBCP=850 (例如:德国键盘/代码页)<br />
+setenv KBTYPE=GR (还记得MS-DOS吗?)<br />
+*不但让root可写c:映像, 而且这个工作站上的每一个用户都要有666权限.当sunpci由一个用户启动时, 一个叫pc的子目录在该用户的HOME下产生.为让该用户同全局c:映像协同工作, 中断随后的特定用户映像的创建, 并且编辑sunpci.ini文件以指向那个全局映像(例如: /pc/C.diskimage).</p>
+<p>10.4 staroffice 软件<br />
+如果staroffice软件由root执行setup /net安装, 所有用户能在他们的个别安装期间选择”工作站安装”选项. 工作站安装仅仅拷贝1MB数据进该用户的home目录, 而其他的情况使用集中式安装. 如果staroffice软件安装在/opt/Office60, 用户能用/opt/Office60/program/soffice来启动他的工作站安装.</p>
+<p>10.5 netscape navigator浏览器<br />
+从solaris 8开始, netscape navigator作为标准浏览器. 它被安装在/usr/dt/bin/netscape.</p>
+<p>10.6 杂项<br />
+提示: 当启动桌面时, 那个注册提醒器能用”more information”中的“never register”选项禁止.<br />
+要禁止所有用户中出现的的警告信息, 在/etc/default/solregis文件中加入一行ISABLE=1</p>
+<p>11.提示集</p>
+<p>11.1 3个首要提示<br />
+l c-shell: 在~/.cshrc中定义 set filec和set history=100 savehist=50, 一旦你按下esc键, shell将完成文件名和目录名. History列出最后的100条命令, 用!13用让编号13的命令重新出现.!$用于列出先前命令的最后一个参数, 象: mkdir /export/home/demo/test后键入cd !$. 从solaris 8开始, tcsh有效了, 它有用光标键编辑命令行和浏览历史命令的功能.<br />
+l 进程控制 : 从solaris 8 O以后, 可以用pkill &lt;搜索文本&gt; 去替代由ps –ef|grep &lt;搜索文本&gt;, 然后kill &lt;搜索文本的PID&gt;所能达到的功能. Kill -9 -1中断属于当前用户的所有进程.<br />
+l 文件编辑: 不喜欢vi的人可用CDE的编辑器dtpad.</p>
+<p>11.2 硬件配置分析<br />
+11.2.1 prtdiag<br />
+/usr/platform/`uname –i`/sbin/prtdiag –v命令显示CPU的数量及类型, RAM, 扩展卡等硬件配置信息.<br />
+11.2.2 prtcon/path_to_inst<br />
+prtconf 以阶层的形式列出设备目录. 用逻辑设备(驱动程序在/dev)映射物理设备(在/devices下指定)的说明在/etc/path_to_inst文件中. 当执行boot –r或devfsadm时, 这个文件被重写. 在把一张卡从一个PCI槽移到另一个槽后, 必须编辑这个文件. 在该文件中, /dev/hme1被连接到一个特定槽. Reboot不能重新定义这个关系.<br />
+警告: 手工编辑/etc/path_to_inst需要设备路径操作的高级经验. 编辑错误会导致系统不能引导!<br />
+11.2.3 explorer<br />
+该工具能从SunSolve(<a href="http://sunsolve.sun.com/pub-cgi/show.pl?target=explorer/explorer">http://sunsolve.sun.com/pub-cgi/show.pl?target=explorer/explorer</a>) 下载. 它搜集所有重要的系统信息. 它能用于准备服务命令, 备份配置数据和快照配置等.</p>
+<p>11.3 运行时数据分析<br />
+11.3.1 time/ptime<br />
+较简单的运行时分析工具有time(0.1sec解析)和ptime(1msec解析), 它们能加入命令行. time gzip j2sdk.tar.gz 的结果分成用户(程序)时间, 系统时间和用去的时间.<br />
+11.3.2 top/prstat/ps<br />
+solaris下的prstat类似于其他平台下的top工具./usr/ucb/ps –aux显示相近的结果, 但它没有排序且不能自动更新.<br />
+ps –L –p &lt;process-ID&gt;列出有线程的进程及其线程数.<br />
+11.3.3 vmstat/mpstat<br />
+vmstat &lt;以秒计频率&gt;列出系统负载明细. 下面行列出大多数有趣的:<br />
+free: 空闲内存(直到solaris 7此值接近零, 因为有用磁盘缓存. 从solaris8开始反映了的正确值.)<br />
+page pi/po: 页面调度行为. 系统不交换直到在交换设备上i/o流量被报告!<br />
+Cpu us: user-time. 被应用程序消耗的百分比.<br />
+Cpu sy: system-time.被solaris系统消耗的百分比.<br />
+Cpu id: idle-time.<br />
+Vmstat参数输出结果解释（原文没有，RACE注）<br />
+procs 报表下面三种状态的进程数：<br />
+r--在运行队列中等候运行<br />
+b--被资源阻塞（I/0，页面调度，等等.)<br />
+w--可运行但是被换出的<br />
+memory 报告虚拟内存和实存信息：<br />
+swap--以千字节为单位的当前可用交换空间的数量<br />
+free--以千字节为单位的页自由表大小<br />
+page 报告每秒页面调度活动数量的信息:<br />
+re-从自由表回收页<br />
+mf--次要的错误;地址空间或硬件地址转换错误<br />
+pi--页入的千字节数<br />
+po -页出的千字节数<br />
+fr- 释放的千字节数<br />
+de--以千字节为单位的可接受的短期内存不足数<br />
+sr--页由时钟算法扫描<br />
+disk 可以为四个磁盘报告每秒磁盘I/O的数量<br />
+faults 报告每秒系统软件中断和硬件中断的速率<br />
+in-设备中断，不包括系统时钟中断<br />
+sy-系统调用<br />
+cs-CPU任务（上下文）交换<br />
+cpu-- CPU故障时间的百分比，在多处理器系统上，这是全部处理器的平均值:<br />
+us- 用户时间<br />
+sy-- 系统时间<br />
+id-- 闲置时间<br />
+mstat 打印类似信息, 每个处理器一行.<br />
+mpstat输出结果解释（原文没有，RACE注）<br />
+*CPU——处理器ID<br />
+*minf——一般故障<br />
+*mjf ——重大故障<br />
+*xcal——处事器间的交叉调用<br />
+*intr——中断<br />
+*ithr——线程中断，不计时钟中断<br />
+*csw——任务交换<br />
+*icsw——非主动任务交换<br />
+*migr——向另一处理器的线程转移<br />
+*smtx——互斥信号旋转（第一次时不要求锁定）<br />
+*srw——读/写锁定旋转（第一次时不要求锁定）<br />
+*syscl——系统调用<br />
+*usr ——用户时间百分比<br />
+*sys——系统时间百分比<br />
+*wt——等待时间百分比<br />
+*idd——空闲时间百分比<br />
+11.3.4 iostat<br />
+iostat –xtcP &lt;以秒计频率&gt;列出系统i/o负载.每一个分区或NFS装载打印一行. “kr/s”和”kw/s”行显示以千字节/秒为单位的读写吞吐量. 若”svc_t”大于100表明那磁盘用于磁头(?)分配的时间多过数据传送的时间.<br />
+iostat输出结果解释（原文没有，RACE注）<br />
+tin每秒输入的字符数<br />
+tout每秒输出的字符数<br />
+kps每秒传输的千字符数<br />
+tps每秒传输的操作次数<br />
+serv以毫秒计的的平均服务时间<br />
+最后一组报告了CPU使用率：<br />
+us用户状态所占百分比<br />
+sy系统状态所占百分比<br />
+wt等待状态所占百分比<br />
+id空闲时间所占百分比<br />
+us用户状态所占百分比<br />
+ni用于运行nice或renice的进程的时间所占百分比<br />
+sy系统状态所占百分比<br />
+id空闲时间所占百分比<br />
+r/s每秒的读传输操作<br />
+w/s每秒的写传输操作<br />
+kr/s每秒的千字节数<br />
+kw/s每秒写的千字节数<br />
+wait在设备队列中等待命令的平均数目<br />
+actv在处理中的命令的平均数目<br />
+svc_t服务时间（* 是指为一条命令服务的平均时间，这里包括为等待在处理队列中前面的命令所耗费的时间）<br />
+%w在队列等待时间的百分比<br />
+%b设备忙的时间的百分比<br />
+11.3.5 sdtperfmeter, sdtprocess<br />
+sdtperfmeter是一个图形工具, 它将vmstat的数据作为柱形或条形图. 该工具的最小化版本显示在CDE面板. Sdtprocess显示用某种方式排序的所有进程. 可用于深入察看进程特性, 中断进程等.<br />
+11.3.6 32或64位?<br />
+Isainfo –kv 显示系统内核是32还是64位. UltraSPACR-II系统自动启动64位内核 ; 在ok状态下, 用boot kernel/unix而不是boot kernel/sparcv9/unix可以明确地装入32位内核 . 而UltraSPARC III只有64位内核.</p>
+<p>11.4 调试<br />
+11.4.1 Truss，<br />
+命令truss &lt;command&gt; 列表应用程序执行过程中所有的系统调用，由于列表中还包含系统调用的参数和返回，因而我们可看到应用程序调用的共享库和配置文件以及它们的文件位置。<br />
+11.4.2 pstack,pmap<br />
+"p*-command" 输出属于该进程的详细信息<br />
+pstack &lt;PID&gt; 显示进程的最后一个子程序名<br />
+pldd &lt;PID&gt; 显示共享连接库列表<br />
+pmap -x &lt;PID&gt; 显示该进程与它的装载模块的内存使用情况<br />
+11.4.3 snoop<br />
+snoop 输出通过网卡所有的包</p>
+<p>11.5 常见问题<br />
+1． 启动进程过长<br />
+OBP 设置：ls diag-swith?=true ??<br />
+2. 不能用FTP登陆，但telnet、ssh可以<br />
+在/ect/ftpuser中设置不允许用户FTP登陆<br />
+3. VI 不能正确的显示<br />
+查看变量term 是否定义，如果没有，设置term=vt100<br />
+12 相关参考书籍和站点</p>
+<p>12.1 参考书<br />
+A valuable collection of Hints&amp;Tricks for UNIX:<br />
+Jerry Peek, Tim O'Reilly, Mike Loukides "UNIX Power Tools"<br />
+ISBN 1565922603<br />
+A detailed view on all UNIX-variants incl. Solaris software and Linux<br />
+Evi Nemeth, Garth Snyder, Scott Seebass, Trent R. Hein "UNIX System<br />
+Administration Handbook"<br />
+ISBN 0130206016</p>
+<p>12.2 站点<br />
+<a href="http://www.sun.com/">http://www.sun.com</a> Homepage of Sun Microsystems<br />
+<a href="http://www.sun.com/bigadmin">http://www.sun.com/bigadmin</a> Everything a sys admin needs<br />
+<a href="http://www.sun.com/blueprints">http://www.sun.com/blueprints</a> Blueprints on various topics, monthly additions<br />
+<a href="http://docs.sun.com/">http://docs.sun.com</a> All documentation for Sun products online<br />
+<a href="http://sunsolve.sun.com/">http://sunsolve.sun.com</a> Technical faq's, infodocs, symptom/resulution database,<br />
+patch download etc.<br />
+<a href="http://www.sunfreeware.com/">http://www.sunfreeware.com</a> All Freeware-Tools for Solaris, precompiled<br />
+<a href="http://www.sunhelp.org/">http://www.sunhelp.org</a> FAQ portal, other information<br />
+<a href="http://bhami.com/rosetta.html">http://bhami.com/rosetta.html</a> A Sysadmin's Unixersal Translator (ROSETTA STONE)<br />
+OR What do they call that (command) in this world (Unix)?</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/study-says-ha-in-oracle-rac-datagurad-of-distinction.html" data-toggle="tooltip" data-placement="top" title="温习一下Oracle中常说的HA、RAC、Datagurad的区别">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/sg-ii-chapter-4-database-recovery.html" data-toggle="tooltip" data-placement="top" title="SG II: Chapter 4 | Database Recovery">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/os/cent-of-solaris-knowledge-solution-20-problem" data-title="20%的SOLARIS知识解决80%的问题"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Rolf Kersten
+
+德国Sun微系统股份有限公司
+版本历史
+日期 版本 简介
+2002年05月25日 V1.8e 第一个英语发布版
+2002年06... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/os/cent-of-solaris-knowledge-solution-20-problem.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/os/cent-of-solaris-knowledge-solution-20-problem" data-title="20%的SOLARIS知识解决80%的问题" data-url="http://dbaeyes.github.io/os/cent-of-solaris-knowledge-solution-20-problem.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

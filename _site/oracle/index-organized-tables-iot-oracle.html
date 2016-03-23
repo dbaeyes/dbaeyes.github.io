@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>索引组织表 IOT (ORACLE) - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/index-organized-tables-iot-oracle.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#index" title="index">index</a>
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#tuning" title="tuning">tuning</a>
+                        
+                    </div>
+                    <h1>索引组织表 IOT (ORACLE)</h1>
+                    
+                    <span class="meta">Posted by David on June 12, 2011</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p> 索引组织表其实就是存储在一个索引结构中的表</p>
+<p>一般我们在oracle数据库中，用到的都是堆组织表，而在mysql常用引擎innodb中的表就是索引组织表，今天因为业务需要，测试了下oracle的索引组织表</p>
+<p>  需求是这样的，将有几十亿数据的A表的新字段cc更新为一个新值（蛋疼的需求），这个值来自数据仓库统计得到的一个B表，A.ID与B.ID关联，需要将B表拉到A表所在的库。如果使用常规的方法，将B表拉过来，然后还需要创建 id,cc两个字段的联合索引，这样将消耗大量的空间，并且索引大小会比表还大。所以直接创建id为主键的IOT表，一举两得，唯一的问题可能是在创建这个IOT表的开销会比堆表要大。</p>
+<p>  --处理超级大量数据时，需要使用extent分块来做，这个是必须的 O(∩_∩)O </p>
+<p>在正式开始之前，先对iot和堆表进行一个简单的比较，以便心中有数。</p>
+<p>--常规堆表</p>
+<p>[cc lang='sql']CREATE TABLE tmp_xf (<br />
+id NUMBER,<br />
+PARENT_ID NUMBER,<br />
+NICK VARCHAR2(32),<br />
+GMT_MODIFIED DATE,<br />
+PRIMARY KEY (id))<br />
+TABLESPACE tbs_crm_dat;</p>
+<p>alter SESSION enable parallel dml;</p>
+<p>要在dml中开启并行，需要把这个参数打开</p>
+<p>INSERT /*+ parallel(a,8) */ INTO tmp_xf a<br />
+SELECT /*+ parallel(t,8) */  id,PARENT_ID,NICK,GMT_MODIFIED FROM test_order t;[/cc]</p>
+<p>15mins<br />
+简单粗暴的导入方式，耗时15分钟。从并行度可以看到是8个seleclt 8个insert</p>
+<p>--索引组织表<br />
+[cc lang='sql']CREATE TABLE tmp_xf_iot (<br />
+id NUMBER,<br />
+PARENT_ID NUMBER,<br />
+NICK VARCHAR2(32),<br />
+GMT_MODIFIED DATE,<br />
+PRIMARY KEY (id))<br />
+ORGANIZATION INDEX<br />
+TABLESPACE tbs_crm_dat;</p>
+<p>14:46:41 SQL>  INSERT /*+ parallel(a,8) */ INTO tmp_xf_iot a<br />
+14:47:03   2  SELECT /*+ parallel(t,8) */  id,PARENT_ID,NICK,GMT_MODIFIED FROM test_order t;<br />
+100501397 ROWS created.<br />
+Elapsed: 00:33:41.04[/cc]</p>
+<p>耗时33分钟，是常规表的两倍多，这个时间是可以接受的。毕竟数据导入的同时相当于在维护索引，而且过程中数据在不停的移动。</p>
+<p>=======================分割线 一点都不华丽==========<br />
+读取对比</p>
+<p>-----堆表<br />
+[cc lang='sql']11:35:32 SQL> SELECT * FROM tmp_xf WHERE id = 2165985;</p>
+<p>        ID  PARENT_ID NICK                             GMT_MODIFIED<br />
+---------- ---------- -------------------------------- -------------------<br />
+   2165985          0 twork_mengdie13                  2010-10-26,16:43:17</p>
+<p>Elapsed: 00:00:00.01</p>
+<p>Execution PLAN<br />
+----------------------------------------------------------<br />
+PLAN hash VALUE: 1973243085</p>
+<p>---------------------------------------------------------------------------------------------<br />
+| Id  | Operation                   | Name          | ROWS  | Bytes | COST (%CPU)| TIME     |<br />
+---------------------------------------------------------------------------------------------<br />
+|   0 | SELECT STATEMENT            |               |     1 |    53 |     1   (0)| 00:00:01 |<br />
+|   1 |  TABLE ACCESS BY INDEX ROWID| TMP_XF        |     1 |    53 |     1   (0)| 00:00:01 |<br />
+|*  2 |   INDEX UNIQUE SCAN         | SYS_C00131311 |     1 |       |     1   (0)| 00:00:01 |<br />
+---------------------------------------------------------------------------------------------</p>
+<p>STATISTICS<br />
+----------------------------------------------------------<br />
+          5  consistent gets[/cc]</p>
+<p>可以看到根据主键访问需要5个逻辑读，分析索引的高度是blevel是3，高度high是4，通过索引拿到rowid是4个逻辑读，在回表的话就是5个逻辑读</p>
+<p>--索引组织表</p>
+<p>[cc lang='sql']11:41:01 SQL> SELECT * FROM tmp_xf_iot WHERE id = 2165985; </p>
+<p>        ID  PARENT_ID NICK                             GMT_MODIFIED<br />
+---------- ---------- -------------------------------- -------------------<br />
+   2165985          0 twork_mengdie13                  2010-10-26,16:43:17</p>
+<p>Elapsed: 00:00:00.00</p>
+<p>Execution PLAN<br />
+----------------------------------------------------------<br />
+PLAN hash VALUE: 1560068715</p>
+<p>----------------------------------------------------------------------------------------<br />
+| Id  | Operation         | Name               | ROWS  | Bytes | COST (%CPU)| TIME     |<br />
+----------------------------------------------------------------------------------------<br />
+|   0 | SELECT STATEMENT  |                    |     1 |    53 |     1   (0)| 00:00:01 |<br />
+|*  1 |  INDEX UNIQUE SCAN| SYS_IOT_TOP_249218 |     1 |    53 |     1   (0)| 00:00:01 |<br />
+----------------------------------------------------------------------------------------</p>
+<p>STATISTICS<br />
+----------------------------------------------------------<br />
+          4  consistent gets[/cc]</p>
+<p>4个逻辑读，很好理解，索引的高度是一样的，只是少了回表。 哈哈，因为数据都在索引了，不存在回表的概念了。</p>
+<p>--具体的操作记录后续更新...</p>
+<p> 小结：合理的使用索引组织表，可以提高效率，节省空间，但索引组织表也是存在很多限制的，特别是oracle的索引组织表，因为没有实在的物理rowid，只存在逻辑rowid，在索引组织表上再建索引需要额外的考虑。</p>
+<p>推荐看看下面的资料</p>
+<p>oracle编程艺术 http://blog.csdn.net/knowhow/archive/2008/01/13/2042277.aspx  表 索引章节</p>
+<p>杨老大的 索引组织表中逻辑ROWID的物理猜 http://yangtingkun.itpub.net/post/468/503568</p>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/os/recommend-evernotequickhighlighter.html" data-toggle="tooltip" data-placement="top" title="推荐 evernote & quickhighlighter">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/copying-large-amounts-of-data-to-index-organized-tables.html" data-toggle="tooltip" data-placement="top" title="复制大数据量到索引组织表">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/index-organized-tables-iot-oracle" data-title="索引组织表 IOT (ORACLE)"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content=" 索引组织表其实就是存储在一个索引结构中的表
+一般我们在oracle数据库中，用到的都是堆组织表，而在mysql常用引擎innodb中的表就是索引组织表，... | Microdust:David's blog"
+                    data-url="http://dbaeyes.github.io/oracle/index-organized-tables-iot-oracle.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">Share to：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        <li><a class="ds-facebook" href="javascript:void(0);" data-service="facebook">Facebook</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/index-organized-tables-iot-oracle" data-title="索引组织表 IOT (ORACLE)" data-url="http://dbaeyes.github.io/oracle/index-organized-tables-iot-oracle.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dbaeyes"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

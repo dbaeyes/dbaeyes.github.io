@@ -1,0 +1,265 @@
+---
+layout: post
+title: Mysql日期和时间函数
+date: 2011-03-14 15:47:50.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- function
+- mysql
+- time
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '4755'
+---
+<h1></h1>
+<div>mysql&gt; SELECT something FROM table<br />
+WHERE TO_DAYS(NOW()) - TO_DAYS(date_col) &lt;= 30;</p>
+<p>DAYOFWEEK(date)<br />
+返回日期date的星期索引(1=星期天，2=星期一, ……7=星期六)。这些索引值对应于ODBC标准。<br />
+mysql&gt; select DAYOFWEEK('1998-02-03');<br />
+-&gt; 3</p>
+<p>WEEKDAY(date)<br />
+返回date的星期索引(0=星期一，1=星期二, ……6= 星期天)。<br />
+mysql&gt; select WEEKDAY('1997-10-04 22:23:00');<br />
+-&gt; 5<br />
+mysql&gt; select WEEKDAY('1997-11-05');<br />
+-&gt; 2</p>
+<p>DAYOFMONTH(date)<br />
+返回date的月份中日期，在1到31范围内。<br />
+mysql&gt; select DAYOFMONTH('1998-02-03');<br />
+-&gt; 3</p>
+<p>DAYOFYEAR(date)<br />
+返回date在一年中的日数, 在1到366范围内。<br />
+mysql&gt; select DAYOFYEAR('1998-02-03');<br />
+-&gt; 34</p>
+<p>MONTH(date)<br />
+返回date的月份，范围1到12。<br />
+mysql&gt; select MONTH('1998-02-03');<br />
+-&gt; 2</p>
+<p>DAYNAME(date)<br />
+返回date的星期名字。<br />
+mysql&gt; select DAYNAME("1998-02-05");<br />
+-&gt; 'Thursday'</p>
+<p>MONTHNAME(date)<br />
+返回date的月份名字。<br />
+mysql&gt; select MONTHNAME("1998-02-05");<br />
+-&gt; 'February'</p>
+<p>QUARTER(date)<br />
+返回date一年中的季度，范围1到4。<br />
+mysql&gt; select QUARTER('98-04-01');<br />
+-&gt; 2</p>
+<p>WEEK(date)</p>
+<p>WEEK(date,first)<br />
+对于星期天是一周的第一天的地方，有一个单个参数，返回date的周数，范围在0到52。2个参数形式WEEK()允许<br />
+你指定星期是否开始于星期天或星期一。如果第二个参数是0，星期从星期天开始，如果第二个参数是1，<br />
+从星期一开始。<br />
+mysql&gt; select WEEK('1998-02-20');<br />
+-&gt; 7<br />
+mysql&gt; select WEEK('1998-02-20',0);<br />
+-&gt; 7<br />
+mysql&gt; select WEEK('1998-02-20',1);<br />
+-&gt; 8</p>
+<p>YEAR(date)<br />
+返回date的年份，范围在1000到9999。<br />
+mysql&gt; select YEAR('98-02-03');<br />
+-&gt; 1998</p>
+<p>HOUR(time)<br />
+返回time的小时，范围是0到23。<br />
+mysql&gt; select HOUR('10:05:03');<br />
+-&gt; 10</p>
+<p>MINUTE(time)<br />
+返回time的分钟，范围是0到59。<br />
+mysql&gt; select MINUTE('98-02-03 10:05:03');<br />
+-&gt; 5</p>
+<p>SECOND(time)<br />
+回来time的秒数，范围是0到59。<br />
+mysql&gt; select SECOND('10:05:03');<br />
+-&gt; 3</p>
+<p>PERIOD_ADD(P,N)<br />
+增加N个月到阶段P（以格式YYMM或YYYYMM)。以格式YYYYMM返回值。注意阶段参数P不是日期值。<br />
+mysql&gt; select PERIOD_ADD(9801,2);<br />
+-&gt; 199803</p>
+<p>PERIOD_DIFF(P1,P2)<br />
+返回在时期P1和P2之间月数，P1和P2应该以格式YYMM或YYYYMM。注意，时期参数P1和P2不是日期值。<br />
+mysql&gt; select PERIOD_DIFF(9802,199703);<br />
+-&gt; 11</p>
+<p>DATE_ADD(date,INTERVAL expr type)</p>
+<p>DATE_SUB(date,INTERVAL expr type)</p>
+<p>ADDDATE(date,INTERVAL expr type)</p>
+<p>SUBDATE(date,INTERVAL expr type)<br />
+这些功能执行日期运算。对于MySQL 3.22，他们是新的。ADDDATE()和SUBDATE()是DATE_ADD()和DATE_SUB()的同义词。<br />
+在MySQL 3.23中，你可以使用+和-而不是DATE_ADD()和DATE_SUB()。（见例子）date是一个指定开始日期的<br />
+DATETIME或DATE值，expr是指定加到开始日期或从开始日期减去的间隔值一个表达式，expr是一个字符串；它可以以<br />
+一个“-”开始表示负间隔。type是一个关键词，指明表达式应该如何被解释。EXTRACT(type FROM date)函数从日期<br />
+中返回“type”间隔。下表显示了type和expr参数怎样被关联： type值 含义 期望的expr格式<br />
+SECOND 秒 SECONDS<br />
+MINUTE 分钟 MINUTES<br />
+HOUR 时间 HOURS<br />
+DAY 天 DAYS<br />
+MONTH 月 MONTHS<br />
+YEAR 年 YEARS<br />
+MINUTE_SECOND 分钟和秒 "MINUTES:SECONDS"<br />
+HOUR_MINUTE 小时和分钟 "HOURS:MINUTES"<br />
+DAY_HOUR 天和小时 "DAYS HOURS"<br />
+YEAR_MONTH 年和月 "YEARS-MONTHS"<br />
+HOUR_SECOND 小时, 分钟， "HOURS:MINUTES:SECONDS"<br />
+DAY_MINUTE 天, 小时, 分钟 "DAYS HOURS:MINUTES"<br />
+DAY_SECOND 天, 小时, 分钟, 秒 "DAYS HOURS:MINUTES:SECONDS"</p>
+<p>MySQL在expr格式中允许任何标点分隔符。表示显示的是建议的分隔符。如果date参数是一个DATE值并且你的计算仅仅<br />
+包含YEAR、MONTH和DAY部分(即，没有时间部分)，结果是一个DATE值。否则结果是一个DATETIME值。</p>
+<p>mysql&gt; SELECT "1997-12-31 23:59:59" + INTERVAL 1 SECOND;<br />
+-&gt; 1998-01-01 00:00:00<br />
+mysql&gt; SELECT INTERVAL 1 DAY + "1997-12-31";<br />
+-&gt; 1998-01-01<br />
+mysql&gt; SELECT "1998-01-01" - INTERVAL 1 SECOND;<br />
+-&gt; 1997-12-31 23:59:59<br />
+mysql&gt; SELECT DATE_ADD("1997-12-31 23:59:59",<br />
+INTERVAL 1 SECOND);<br />
+-&gt; 1998-01-01 00:00:00<br />
+mysql&gt; SELECT DATE_ADD("1997-12-31 23:59:59",<br />
+INTERVAL 1 DAY);<br />
+-&gt; 1998-01-01 23:59:59<br />
+mysql&gt; SELECT DATE_ADD("1997-12-31 23:59:59",<br />
+INTERVAL "1:1" MINUTE_SECOND);<br />
+-&gt; 1998-01-01 00:01:00<br />
+mysql&gt; SELECT DATE_SUB("1998-01-01 00:00:00",<br />
+INTERVAL "1 1:1:1" DAY_SECOND);<br />
+-&gt; 1997-12-30 22:58:59<br />
+mysql&gt; SELECT DATE_ADD("1998-01-01 00:00:00",<br />
+INTERVAL "-1 10" DAY_HOUR);<br />
+-&gt; 1997-12-30 14:00:00<br />
+mysql&gt; SELECT DATE_SUB("1998-01-02", INTERVAL 31 DAY);<br />
+-&gt; 1997-12-02<br />
+mysql&gt; SELECT EXTRACT(YEAR FROM "1999-07-02");<br />
+-&gt; 1999<br />
+mysql&gt; SELECT EXTRACT(YEAR_MONTH FROM "1999-07-02 01:02:03");<br />
+-&gt; 199907<br />
+mysql&gt; SELECT EXTRACT(DAY_MINUTE FROM "1999-07-02 01:02:03");<br />
+-&gt; 20102</p>
+<p>如果你指定太短的间隔值(不包括type关键词期望的间隔部分)，MySQL假设你省掉了间隔值的最左面部分。例如，<br />
+如果你指定一个type是DAY_SECOND，值expr被希望有天、小时、分钟和秒部分。如果你象"1:10"这样指定值，<br />
+MySQL假设日子和小时部分是丢失的并且值代表分钟和秒。换句话说，"1:10" DAY_SECOND以它等价于"1:10" MINUTE_SECOND<br />
+的方式解释，这对那MySQL解释TIME值表示经过的时间而非作为一天的时间的方式有二义性。如果你使用确实不正确的日期，<br />
+结果是NULL。如果你增加MONTH、YEAR_MONTH或YEAR并且结果日期大于新月份的最大值天数，日子在新月用最大的天调整。</p>
+<p>mysql&gt; select DATE_ADD('1998-01-30', Interval 1 month);<br />
+-&gt; 1998-02-28</p>
+<p>注意，从前面的例子中词INTERVAL和type关键词不是区分大小写的。<br />
+TO_DAYS(date)<br />
+给出一个日期date，返回一个天数(从0年的天数)。<br />
+mysql&gt; select TO_DAYS(950501);<br />
+-&gt; 728779<br />
+mysql&gt; select TO_DAYS('1997-10-07');<br />
+-&gt; 729669</p>
+<p>TO_DAYS()不打算用于使用格列高里历(1582)出现前的值。</p>
+<p>FROM_DAYS(N)<br />
+给出一个天数N，返回一个DATE值。<br />
+mysql&gt; select FROM_DAYS(729669);<br />
+-&gt; '1997-10-07'</p>
+<p>TO_DAYS()不打算用于使用格列高里历(1582)出现前的值。</p>
+<p>DATE_FORMAT(date,format)<br />
+根据format字符串格式化date值。下列修饰符可以被用在format字符串中： %M 月名字(January……December)<br />
+%W 星期名字(Sunday……Saturday)<br />
+%D 有英语前缀的月份的日期(1st, 2nd, 3rd, 等等。）<br />
+%Y 年, 数字, 4 位<br />
+%y 年, 数字, 2 位<br />
+%a 缩写的星期名字(Sun……Sat)<br />
+%d 月份中的天数, 数字(00……31)<br />
+%e 月份中的天数, 数字(0……31)<br />
+%m 月, 数字(01……12)<br />
+%c 月, 数字(1……12)<br />
+%b 缩写的月份名字(Jan……Dec)<br />
+%j 一年中的天数(001……366)<br />
+%H 小时(00……23)<br />
+%k 小时(0……23)<br />
+%h 小时(01……12)<br />
+%I 小时(01……12)<br />
+%l 小时(1……12)<br />
+%i 分钟, 数字(00……59)<br />
+%r 时间,12 小时(hh:mm:ss [AP]M)<br />
+%T 时间,24 小时(hh:mm:ss)<br />
+%S 秒(00……59)<br />
+%s 秒(00……59)<br />
+%p AM或PM<br />
+%w 一个星期中的天数(0=Sunday ……6=Saturday ）<br />
+%U 星期(0……52), 这里星期天是星期的第一天<br />
+%u 星期(0……52), 这里星期一是星期的第一天<br />
+%% 一个文字“%”。</p>
+<p>所有的其他字符不做解释被复制到结果中。</p>
+<p>mysql&gt; select DATE_FORMAT('1997-10-04 22:23:00', '%W %M %Y');<br />
+-&gt; 'Saturday October 1997'<br />
+mysql&gt; select DATE_FORMAT('1997-10-04 22:23:00', '%H:%i:%s');<br />
+-&gt; '22:23:00'<br />
+mysql&gt; select DATE_FORMAT('1997-10-04 22:23:00',<br />
+'%D %y %a %d %m %b %j');<br />
+-&gt; '4th 97 Sat 04 10 Oct 277'<br />
+mysql&gt; select DATE_FORMAT('1997-10-04 22:23:00',<br />
+'%H %k %I %r %T %S %w');<br />
+-&gt; '22 22 10 10:23:00 PM 22:23:00 00 6'<br />
+MySQL3.23中，在格式修饰符字符前需要%。在MySQL更早的版本中，%是可选的。</p>
+<p>TIME_FORMAT(time,format)<br />
+这象上面的DATE_FORMAT()函数一样使用，但是format字符串只能包含处理小时、分钟和秒的那些格式修饰符。<br />
+其他修饰符产生一个NULL值或0。<br />
+CURDATE()</p>
+<p>CURRENT_DATE<br />
+以'YYYY-MM-DD'或YYYYMMDD格式返回今天日期值，取决于函数是在一个字符串还是数字上下文被使用。<br />
+mysql&gt; select CURDATE();<br />
+-&gt; '1997-12-15'<br />
+mysql&gt; select CURDATE() + 0;<br />
+-&gt; 19971215</p>
+<p>CURTIME()</p>
+<p>CURRENT_TIME<br />
+以'HH:MM:SS'或HHMMSS格式返回当前时间值，取决于函数是在一个字符串还是在数字的上下文被使用。<br />
+mysql&gt; select CURTIME();<br />
+-&gt; '23:50:26'<br />
+mysql&gt; select CURTIME() + 0;<br />
+-&gt; 235026</p>
+<p>NOW()</p>
+<p>SYSDATE()</p>
+<p>CURRENT_TIMESTAMP<br />
+以'YYYY-MM-DD HH:MM:SS'或YYYYMMDDHHMMSS格式返回当前的日期和时间，取决于函数是在一个字符串还是在数字的<br />
+上下文被使用。<br />
+mysql&gt; select NOW();<br />
+-&gt; '1997-12-15 23:50:26'<br />
+mysql&gt; select NOW() + 0;<br />
+-&gt; 19971215235026</p>
+<p>UNIX_TIMESTAMP()</p>
+<p>UNIX_TIMESTAMP(date)<br />
+如果没有参数调用，返回一个Unix时间戳记(从'1970-01-01 00:00:00'GMT开始的秒数)。如果UNIX_TIMESTAMP()用一<br />
+个date参数被调用，它返回从'1970-01-01 00:00:00' GMT开始的秒数值。date可以是一个DATE字符串、一个DATETIME<br />
+字符串、一个TIMESTAMP或以YYMMDD或YYYYMMDD格式的本地时间的一个数字。<br />
+mysql&gt; select UNIX_TIMESTAMP();<br />
+-&gt; 882226357<br />
+mysql&gt; select UNIX_TIMESTAMP('1997-10-04 22:23:00');<br />
+-&gt; 875996580</p>
+<p>当UNIX_TIMESTAMP被用于一个TIMESTAMP列，函数将直接接受值，没有隐含的“string-to-unix-timestamp”变换。</p>
+<p>FROM_UNIXTIME(unix_timestamp)<br />
+以'YYYY-MM-DD HH:MM:SS'或YYYYMMDDHHMMSS格式返回unix_timestamp参数所表示的值，取决于函数是在一个字符串<br />
+还是或数字上下文中被使用。<br />
+mysql&gt; select FROM_UNIXTIME(875996580);<br />
+-&gt; '1997-10-04 22:23:00'<br />
+mysql&gt; select FROM_UNIXTIME(875996580) + 0;<br />
+-&gt; 19971004222300</p>
+<p>FROM_UNIXTIME(unix_timestamp,format)<br />
+返回表示 Unix 时间标记的一个字符串，根据format字符串格式化。format可以包含与DATE_FORMAT()函数列出的条<br />
+目同样的修饰符。<br />
+mysql&gt; select FROM_UNIXTIME(UNIX_TIMESTAMP(),<br />
+'%Y %D %M %h:%i:%s %x');<br />
+-&gt; '1997 23rd December 03:43:30 x'</p>
+<p>SEC_TO_TIME(seconds)<br />
+返回seconds参数，变换成小时、分钟和秒，值以'HH:MM:SS'或HHMMSS格式化，取决于函数是在一个字符串还是在数字<br />
+上下文中被使用。<br />
+mysql&gt; select SEC_TO_TIME(2378);<br />
+-&gt; '00:39:38'<br />
+mysql&gt; select SEC_TO_TIME(2378) + 0;<br />
+-&gt; 3938</p>
+<p>TIME_TO_SEC(time)<br />
+返回time参数，转换成秒。<br />
+mysql&gt; select TIME_TO_SEC('22:23:00');<br />
+-&gt; 80580<br />
+mysql&gt; select TIME_TO_SEC('00:39:38');<br />
+-&gt; 2378</p></div>

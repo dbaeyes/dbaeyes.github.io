@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>MySQL：MySQL日期数据类型、MySQL时间类型使用总结 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/mysql/mysqlmysql-date-time-type-data-type-mysql-uses-summary.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#datatime" title="datatime">datatime</a>
+                        
+                        <a class="tag" href="/Tags/#mysql" title="mysql">mysql</a>
+                        
+                    </div>
+                    <h1>MySQL：MySQL日期数据类型、MySQL时间类型使用总结</h1>
+                    
+                    <span class="meta">Posted by David on November 23, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <h1></h1>
+<div>
+<div></div>
+<table>
+<tbody>
+<tr>
+<td>
+<div>
+<div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>MySQL 日期类型：日期格式、所占存储空间、日期范围 比较。<br />
+日期类型        存储空间       日期格式                 日期范围<br />
+------------ ---------   --------------------- -----------------------------------------<br />
+datetime       8 bytes   YYYY-MM-DD HH:MM:SS   1000-01-01 00:00:00 ~ 9999-12-31 23:59:59<br />
+timestamp      4 bytes   YYYY-MM-DD HH:MM:SS   1970-01-01 00:00:01 ~ 2038<br />
+date           3 bytes   YYYY-MM-DD            1000-01-01          ~ 9999-12-31<br />
+year           1 bytes   YYYY                  1901                ~ 2155</p>
+<p>在 MySQL 中创建表时，对照上面的表格，很容易就能选择到合适自己的数据类型。不过到底是选择 datetime 还是 timestamp，可能会有点犯难。这两个日期时间类型各有优点：datetime 的日期范围比较大；timestamp 所占存储空间比较小，只是 datetime 的一半。</p>
+<p>另外，timestamp 类型的列还有个特性：默认情况下，在 insert, update 数据时，timestamp 列会自动以当前时间（CURRENT_TIMESTAMP）填充/更新。“自动”的意思就是，你不去管它，MySQL 会替你去处理。</p>
+<p>一般情况下，我倾向于使用 datetime 日期类型。</p>
+<p>MySQL 时间类型：时间格式、所占存储空间、时间范围。<br />
+时间类型        存储空间      时间格式                 时间范围<br />
+------------ ---------   --------------------- -----------------------------------------<br />
+time           3 bytes   HH:MM:SS              -838:59:59          ~ 838:59:59</p>
+<p>time 时间范围居然有这么大的范围，特别是 time 可以取负值，有点奇怪。后来，看了 MySQL 手册才知道这是为了满足两个日期时间相减才这样设计的。</p>
+<p>select timediff('2000:01:31 23:59:59', '2000:01:01 00:00:00'); -- 743:59:59<br />
+select timediff('2000:01:01 00:00:00', '2000:01:31 23:59:59'); -- -743:59:59<br />
+select timediff('23:59:59', '12:00:00');                        -- 11:59:59</p>
+<p>注意，timediff 的两个参数只能是 datetime/timestamp, time 类型的，并且这两个参数类型要相同。即：datetime/timestamp 和 datetime/timestamp 比较；time 和 time 相比较。</p>
+<p>虽然 MySQL 中的日期时间类型比较丰富，但遗憾的是，目前（2008-08-08）这些日期时间类型只能支持到秒级别，不支持毫秒、微秒。也没有产生毫秒的函数。</p>
+<p>《MySQL：MySQL日期数据类型、MySQL时间类型使用总结》适用于 MySQL 5.X 及以上版本。</p>
+<p>一、MySQL 获得当前日期时间 函数<br />
+1.1 获得当前日期+时间（date + time）函数：now()</p>
+<p>mysql&gt; select now();</p>
+<p>+---------------------+<br />
+| now()               |<br />
++---------------------+<br />
+| 2008-08-08 22:20:46 |<br />
++---------------------+</p>
+<p>除了 now() 函数能获得当前的日期时间外，MySQL 中还有下面的函数：</p>
+<p>current_timestamp()<br />
+,current_timestamp<br />
+,localtime()<br />
+,localtime<br />
+,localtimestamp    -- (v4.0.6)<br />
+,localtimestamp() -- (v4.0.6)</p>
+<p>这些日期时间函数，都等同于 now()。鉴于 now() 函数简短易记，建议总是使用 now() 来替代上面列出的函数。</p>
+<p>1.2 获得当前日期+时间（date + time）函数：sysdate()</p>
+<p>sysdate() 日期时间函数跟 now() 类似，不同之处在于：now() 在执行开始时值就得到了， sysdate() 在函数执行时动态得到值。看下面的例子就明白了：</p>
+<p>mysql&gt; select now(), sleep(3), now();</p>
+<p>+---------------------+----------+---------------------+<br />
+| now()               | sleep(3) | now()               |<br />
++---------------------+----------+---------------------+<br />
+| 2008-08-08 22:28:21 |        0 | 2008-08-08 22:28:21 |<br />
++---------------------+----------+---------------------+</p>
+<p>mysql&gt; select sysdate(), sleep(3), sysdate();</p>
+<p>+---------------------+----------+---------------------+<br />
+| sysdate()           | sleep(3) | sysdate()           |<br />
++---------------------+----------+---------------------+<br />
+| 2008-08-08 22:28:41 |        0 | 2008-08-08 22:28:44 |<br />
++---------------------+----------+---------------------+</p>
+<p>可以看到，虽然中途 sleep 3 秒，但 now() 函数两次的时间值是相同的； sysdate() 函数两次得到的时间值相差 3 秒。MySQL Manual 中是这样描述 sysdate() 的：Return the time at which the function executes。</p>
+<p>sysdate() 日期时间函数，一般情况下很少用到。</p>
+<p>2. 获得当前日期（date）函数：curdate()</p>
+<p>mysql&gt; select curdate();</p>
+<p>+------------+<br />
+| curdate() |<br />
++------------+<br />
+| 2008-08-08 |<br />
++------------+</p>
+<p>其中，下面的两个日期函数等同于 curdate()：</p>
+<p>current_date()<br />
+,current_date</p>
+<p>3. 获得当前时间（time）函数：curtime()</p>
+<p>mysql&gt; select curtime();</p>
+<p>+-----------+<br />
+| curtime() |<br />
++-----------+<br />
+| 22:41:30 |<br />
++-----------+</p>
+<p>其中，下面的两个时间函数等同于 curtime()：</p>
+<p>current_time()<br />
+,current_time</p>
+<p>4. 获得当前 UTC 日期时间函数：utc_date(), utc_time(), utc_timestamp()</p>
+<p>mysql&gt; select utc_timestamp(), utc_date(), utc_time(), now()</p>
+<p>+---------------------+------------+------------+---------------------+<br />
+| utc_timestamp()     | utc_date() | utc_time() | now()               |<br />
++---------------------+------------+------------+---------------------+<br />
+| 2008-08-08 14:47:11 | 2008-08-08 | 14:47:11   | 2008-08-08 22:47:11 |<br />
++---------------------+------------+------------+---------------------+</p>
+<p>因为我国位于东八时区，所以本地时间 = UTC 时间 + 8 小时。UTC 时间在业务涉及多个国家和地区的时候，非常有用。</p>
+<p>二、MySQL 日期时间 Extract（选取） 函数。<br />
+1. 选取日期时间的各个部分：日期、时间、年、季度、月、日、小时、分钟、秒、微秒</p>
+<p>set @dt = '2008-09-10 07:15:30.123456';</p>
+<p>select date(@dt);        -- 2008-09-10<br />
+select time(@dt);        -- 07:15:30.123456<br />
+select year(@dt);        -- 2008<br />
+select quarter(@dt);     -- 3<br />
+select month(@dt);       -- 9<br />
+select week(@dt);        -- 36<br />
+select day(@dt);         -- 10<br />
+select hour(@dt);        -- 7<br />
+select minute(@dt);      -- 15<br />
+select second(@dt);      -- 30<br />
+select microsecond(@dt); -- 123456</p>
+<p>2. MySQL Extract() 函数，可以上面实现类似的功能：</p>
+<p>set @dt = '2008-09-10 07:15:30.123456';</p>
+<p>select extract(year                from @dt); -- 2008<br />
+select extract(quarter             from @dt); -- 3<br />
+select extract(month               from @dt); -- 9<br />
+select extract(week                from @dt); -- 36<br />
+select extract(day                 from @dt); -- 10<br />
+select extract(hour                from @dt); -- 7<br />
+select extract(minute              from @dt); -- 15<br />
+select extract(second              from @dt); -- 30<br />
+select extract(microsecond         from @dt); -- 123456</p>
+<p>select extract(year_month          from @dt); -- 200809<br />
+select extract(day_hour            from @dt); -- 1007<br />
+select extract(day_minute          from @dt); -- 100715<br />
+select extract(day_second          from @dt); -- 10071530<br />
+select extract(day_microsecond     from @dt); -- 10071530123456<br />
+select extract(hour_minute         from @dt); --    715<br />
+select extract(hour_second         from @dt); --    71530<br />
+select extract(hour_microsecond    from @dt); --    71530123456<br />
+select extract(minute_second       from @dt); --      1530<br />
+select extract(minute_microsecond from @dt); --      1530123456<br />
+select extract(second_microsecond from @dt); --        30123456</p>
+<p>MySQL Extract() 函数除了没有date(),time() 的功能外，其他功能一应具全。并且还具有选取‘day_microsecond’ 等功能。注意这里不是只选取 day 和 microsecond，而是从日期的 day 部分一直选取到 microsecond 部分。够强悍的吧！</p>
+<p>MySQL Extract() 函数唯一不好的地方在于：你需要多敲几次键盘。</p>
+<p>3. MySQL dayof... 函数：dayofweek(), dayofmonth(), dayofyear()</p>
+<p>分别返回日期参数，在一周、一月、一年中的位置。</p>
+<p>set @dt = '2008-08-08';</p>
+<p>select dayofweek(@dt);   -- 6<br />
+select dayofmonth(@dt); -- 8<br />
+select dayofyear(@dt);   -- 221</p>
+<p>日期 '2008-08-08' 是一周中的第 6 天（1 = Sunday, 2 = Monday, ..., 7 = Saturday）；一月中的第 8 天；一年中的第 221 天。</p>
+<p>4. MySQL week... 函数：week(), weekofyear(), dayofweek(), weekday(), yearweek()</p>
+<p>set @dt = '2008-08-08';</p>
+<p>select week(@dt);        -- 31<br />
+select week(@dt,3);      -- 32<br />
+select weekofyear(@dt); -- 32</p>
+<p>select dayofweek(@dt);   -- 6<br />
+select weekday(@dt);     -- 4</p>
+<p>select yearweek(@dt);    -- 200831</p>
+<p>MySQL week() 函数，可以有两个参数，具体可看手册。 weekofyear() 和 week() 一样，都是计算“某天”是位于一年中的第几周。 weekofyear(@dt) 等价于 week(@dt,3)。</p>
+<p>MySQL weekday() 函数和 dayofweek() 类似，都是返回“某天”在一周中的位置。不同点在于参考的标准， weekday：(0 = Monday, 1 = Tuesday, ..., 6 = Sunday)； dayofweek：（1 = Sunday, 2 = Monday, ..., 7 = Saturday）</p>
+<p>MySQL yearweek() 函数，返回 year(2008) + week 位置(31)。</p>
+<p>5. MySQL 返回星期和月份名称函数：dayname(), monthname()</p>
+<p>set @dt = '2008-08-08';</p>
+<p>select dayname(@dt);     -- Friday<br />
+select monthname(@dt);   -- August</p>
+<p>思考，如何返回中文的名称呢？</p>
+<p>6. MySQL last_day() 函数：返回月份中的最后一天。</p>
+<p>select last_day('2008-02-01'); -- 2008-02-29<br />
+select last_day('2008-08-08'); -- 2008-08-31</p>
+<p>MySQL last_day() 函数非常有用，比如我想得到当前月份中有多少天，可以这样来计算：</p>
+<p>mysql&gt; select now(), day(last_day(now())) as days;</p>
+<p>+---------------------+------+<br />
+| now()               | days |<br />
++---------------------+------+<br />
+| 2008-08-09 11:45:45 |   31 |<br />
++---------------------+------+</p>
+<p>三、MySQL 日期时间计算函数<br />
+1. MySQL 为日期增加一个时间间隔：date_add()</p>
+<p>set @dt = now();</p>
+<p>select date_add(@dt, interval 1 day);        -- add 1 day<br />
+select date_add(@dt, interval 1 hour);       -- add 1 hour<br />
+select date_add(@dt, interval 1 minute);     -- ...<br />
+select date_add(@dt, interval 1 second);<br />
+select date_add(@dt, interval 1 microsecond);<br />
+select date_add(@dt, interval 1 week);<br />
+select date_add(@dt, interval 1 month);<br />
+select date_add(@dt, interval 1 quarter);<br />
+select date_add(@dt, interval 1 year);</p>
+<p>select date_add(@dt, interval -1 day);       -- sub 1 day</p>
+<p>MySQL adddate(), addtime()函数，可以用 date_add() 来替代。下面是 date_add() 实现 addtime() 功能示例：</p>
+<p>mysql&gt; set @dt = '2008-08-09 12:12:33';</p>
+<p>mysql&gt;<br />
+mysql&gt; select date_add(@dt, interval '01:15:30' hour_second);</p>
+<p>+------------------------------------------------+<br />
+| date_add(@dt, interval '01:15:30' hour_second) |<br />
++------------------------------------------------+<br />
+| 2008-08-09 13:28:03                            |<br />
++------------------------------------------------+</p>
+<p>mysql&gt; select date_add(@dt, interval '1 01:15:30' day_second);</p>
+<p>+-------------------------------------------------+<br />
+| date_add(@dt, interval '1 01:15:30' day_second) |<br />
++-------------------------------------------------+<br />
+| 2008-08-10 13:28:03                             |<br />
++-------------------------------------------------+</p>
+<p>date_add() 函数，分别为 @dt 增加了“1小时 15分 30秒” 和 “1天 1小时 15分 30秒”。建议：总是使用 date_add() 日期时间函数来替代 adddate(), addtime()。</p>
+<p>2. MySQL 为日期减去一个时间间隔：date_sub()</p>
+<p>mysql&gt; select date_sub('1998-01-01 00:00:00', interval '1 1:1:1' day_second);</p>
+<p>+----------------------------------------------------------------+<br />
+| date_sub('1998-01-01 00:00:00', interval '1 1:1:1' day_second) |<br />
++----------------------------------------------------------------+<br />
+| 1997-12-30 22:58:59                                            |<br />
++----------------------------------------------------------------+</p>
+<p>MySQL date_sub() 日期时间函数 和 date_add() 用法一致，不再赘述。另外，MySQL 中还有两个函数 subdate(), subtime()，建议，用 date_sub() 来替代。</p>
+<p>3. MySQL 另类日期函数：period_add(P,N), period_diff(P1,P2)</p>
+<p>函数参数“P” 的格式为“YYYYMM” 或者 “YYMM”，第二个参数“N” 表示增加或减去 N month（月）。</p>
+<p>MySQL period_add(P,N)：日期加/减去N月。</p>
+<p>mysql&gt; select period_add(200808,2), period_add(20080808,-2)</p>
+<p>+----------------------+-------------------------+<br />
+| period_add(200808,2) | period_add(20080808,-2) |<br />
++----------------------+-------------------------+<br />
+|               200810 |                20080806 |<br />
++----------------------+-------------------------+</p>
+<p>MySQL period_diff(P1,P2)：日期 P1-P2，返回 N 个月。</p>
+<p>mysql&gt; select period_diff(200808, 200801);</p>
+<p>+-----------------------------+<br />
+| period_diff(200808, 200801) |<br />
++-----------------------------+<br />
+|                           7 |<br />
++-----------------------------+</p>
+<p>在 MySQL 中，这两个日期函数，一般情况下很少用到。</p>
+<p>4. MySQL 日期、时间相减函数：datediff(date1,date2), timediff(time1,time2)</p>
+<p>MySQL datediff(date1,date2)：两个日期相减 date1 - date2，返回天数。</p>
+<p>select datediff('2008-08-08', '2008-08-01'); -- 7<br />
+select datediff('2008-08-01', '2008-08-08'); -- -7</p>
+<p>MySQL timediff(time1,time2)：两个日期相减 time1 - time2，返回 time 差值。</p>
+<p>select timediff('2008-08-08 08:08:08', '2008-08-08 00:00:00'); -- 08:08:08<br />
+select timediff('08:08:08', '00:00:00');                       -- 08:08:08</p>
+<p>注意：timediff(time1,time2) 函数的两个参数类型必须相同。</p>
+<p>四、MySQL 日期转换函数、时间转换函数<br />
+1. MySQL （时间、秒）转换函数：time_to_sec(time), sec_to_time(seconds)</p>
+<p>select time_to_sec('01:00:05'); -- 3605<br />
+select sec_to_time(3605);        -- '01:00:05'</p>
+<p>2. MySQL （日期、天数）转换函数：to_days(date), from_days(days)</p>
+<p>select to_days('0000-00-00'); -- 0<br />
+select to_days('2008-08-08'); -- 733627</p>
+<p>select from_days(0);           -- '0000-00-00'<br />
+select from_days(733627);      -- '2008-08-08'</p>
+<p>3. MySQL Str to Date （字符串转换为日期）函数：str_to_date(str, format)</p>
+<p>select str_to_date('08/09/2008', '%m/%d/%Y');                   -- 2008-08-09<br />
+select str_to_date('08/09/08' , '%m/%d/%y');                   -- 2008-08-09<br />
+select str_to_date('08.09.2008', '%m.%d.%Y');                   -- 2008-08-09<br />
+select str_to_date('08:09:30', '%h:%i:%s');                     -- 08:09:30<br />
+select str_to_date('08.09.2008 08:09:30', '%m.%d.%Y %h:%i:%s'); -- 2008-08-09 08:09:30</p>
+<p>可以看到，str_to_date(str,format) 转换函数，可以把一些杂乱无章的字符串转换为日期格式。另外，它也可以转换为时间。“format” 可以参看 MySQL 手册。</p>
+<p>4. MySQL Date/Time to Str（日期/时间转换为字符串）函数：date_format(date,format), time_format(time,format)</p>
+<p>mysql&gt; select date_format('2008-08-08 22:23:00', '%W %M %Y');</p>
+<p>+------------------------------------------------+<br />
+| date_format('2008-08-08 22:23:00', '%W %M %Y') |<br />
++------------------------------------------------+<br />
+| Friday August 2008                             |<br />
++------------------------------------------------+</p>
+<p>mysql&gt; select date_format('2008-08-08 22:23:01', '%Y%m%d%H%i%s');</p>
+<p>+----------------------------------------------------+<br />
+| date_format('2008-08-08 22:23:01', '%Y%m%d%H%i%s') |<br />
++----------------------------------------------------+<br />
+| 20080808222301                                     |<br />
++----------------------------------------------------+</p>
+<p>mysql&gt; select time_format('22:23:01', '%H.%i.%s');</p>
+<p>+-------------------------------------+<br />
+| time_format('22:23:01', '%H.%i.%s') |<br />
++-------------------------------------+<br />
+| 22.23.01                            |<br />
++-------------------------------------+</p>
+<p>MySQL 日期、时间转换函数：date_format(date,format), time_format(time,format) 能够把一个日期/时间转换成各种各样的字符串格式。它是 str_to_date(str,format) 函数的 一个逆转换。</p>
+<p>5. MySQL 获得国家地区时间格式函数：get_format()</p>
+<p>MySQL get_format() 语法：</p>
+<p>get_format(date|time|datetime, 'eur'|'usa'|'jis'|'iso'|'internal'</p>
+<p>MySQL get_format() 用法的全部示例：</p>
+<p>select get_format(date,'usa')          ;   -- '%m.%d.%Y'<br />
+select get_format(date,'jis')          ;   -- '%Y-%m-%d'<br />
+select get_format(date,'iso')          ;   -- '%Y-%m-%d'<br />
+select get_format(date,'eur')          ;   -- '%d.%m.%Y'<br />
+select get_format(date,'internal')     ;   -- '%Y%m%d'<br />
+select get_format(datetime,'usa')      ;   -- '%Y-%m-%d %H.%i.%s'<br />
+select get_format(datetime,'jis')      ;   -- '%Y-%m-%d %H:%i:%s'<br />
+select get_format(datetime,'iso')      ;   -- '%Y-%m-%d %H:%i:%s'<br />
+select get_format(datetime,'eur')      ;   -- '%Y-%m-%d %H.%i.%s'<br />
+select get_format(datetime,'internal') ;   -- '%Y%m%d%H%i%s'<br />
+select get_format(time,'usa')          ;   -- '%h:%i:%s %p'<br />
+select get_format(time,'jis')          ;   -- '%H:%i:%s'<br />
+select get_format(time,'iso')          ;   -- '%H:%i:%s'<br />
+select get_format(time,'eur')          ;   -- '%H.%i.%s'<br />
+select get_format(time,'internal')     ;   -- '%H%i%s'</p>
+<p>MySQL get_format() 函数在实际中用到机会的比较少。</p>
+<p>6. MySQL 拼凑日期、时间函数：makdedate(year,dayofyear), maketime(hour,minute,second)</p>
+<p>select makedate(2001,31);   -- '2001-01-31'<br />
+select makedate(2001,32);   -- '2001-02-01'</p>
+<p>select maketime(12,15,30); -- '12:15:30'</p>
+<p>五、MySQL 时间戳（Timestamp）函数<br />
+1. MySQL 获得当前时间戳函数：current_timestamp, current_timestamp()</p>
+<p>mysql&gt; select current_timestamp, current_timestamp();</p>
+<p>+---------------------+---------------------+<br />
+| current_timestamp   | current_timestamp() |<br />
++---------------------+---------------------+<br />
+| 2008-08-09 23:22:24 | 2008-08-09 23:22:24 |<br />
++---------------------+---------------------+</p>
+<p>2. MySQL （Unix 时间戳、日期）转换函数：</p>
+<p>unix_timestamp(),<br />
+unix_timestamp(date),<br />
+from_unixtime(unix_timestamp),<br />
+from_unixtime(unix_timestamp,format)</p>
+<p>下面是示例：</p>
+<p>select unix_timestamp();                       -- 1218290027<br />
+select unix_timestamp('2008-08-08');           -- 1218124800<br />
+select unix_timestamp('2008-08-08 12:30:00'); -- 1218169800</p>
+<p>select from_unixtime(1218290027);              -- '2008-08-09 21:53:47'<br />
+select from_unixtime(1218124800);              -- '2008-08-08 00:00:00'<br />
+select from_unixtime(1218169800);              -- '2008-08-08 12:30:00'</p>
+<p>select from_unixtime(1218169800, '%Y %D %M %h:%i:%s %x'); -- '2008 8th August 12:30:00 2008'</p>
+<p>3. MySQL 时间戳（timestamp）转换、增、减函数：</p>
+<p>timestamp(date)                                     -- date to timestamp<br />
+timestamp(dt,time)                                  -- dt + time<br />
+timestampadd(unit,interval,datetime_expr)           --<br />
+timestampdiff(unit,datetime_expr1,datetime_expr2)   --</p>
+<p>请看示例部分：</p>
+<p>select timestamp('2008-08-08');                         -- 2008-08-08 00:00:00<br />
+select timestamp('2008-08-08 08:00:00', '01:01:01');    -- 2008-08-08 09:01:01<br />
+select timestamp('2008-08-08 08:00:00', '10 01:01:01'); -- 2008-08-18 09:01:01</p>
+<p>select timestampadd(day, 1, '2008-08-08 08:00:00');     -- 2008-08-09 08:00:00<br />
+select date_add('2008-08-08 08:00:00', interval 1 day); -- 2008-08-09 08:00:00</p>
+<p>MySQL timestampadd() 函数类似于 date_add()。</p>
+<p>select timestampdiff(year,'2002-05-01','2001-01-01');                    -- -1<br />
+select timestampdiff(day ,'2002-05-01','2001-01-01');                    -- -485<br />
+select timestampdiff(hour,'2008-08-08 12:00:00','2008-08-08 00:00:00'); -- -12</p>
+<p>select datediff('2008-08-08 12:00:00', '2008-08-01 00:00:00');           -- 7</p>
+<p>MySQL timestampdiff() 函数就比 datediff() 功能强多了，datediff() 只能计算两个日期（date）之间相差的天数。</p>
+<p>六、MySQL 时区（timezone）转换函数<br />
+convert_tz(dt,from_tz,to_tz)</p>
+<p>select convert_tz('2008-08-08 12:00:00', '+08:00', '+00:00'); -- 2008-08-08 04:00:00</p>
+<p>时区转换也可以通过 date_add, date_sub, timestampadd 来实现。</p>
+<p>select date_add('2008-08-08 12:00:00', interval -8 hour); -- 2008-08-08 04:00:00<br />
+select date_sub('2008-08-08 12:00:00', interval 8 hour); -- 2008-08-08 04:00:00<br />
+select timestampadd(hour, -8, '2008-08-08 12:00:00');      -- 2008-08-08 04:00:00</p>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/the-weather-just-right.html" data-toggle="tooltip" data-placement="top" title="天气刚刚好">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/outlook-2011.html" data-toggle="tooltip" data-placement="top" title="展望2011">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/mysql/mysqlmysql-date-time-type-data-type-mysql-uses-summary" data-title="MySQL：MySQL日期数据类型、MySQL时间类型使用总结"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="
+
+
+
+
+
+
+
+
+&nbsp;
+&nbsp;
+MySQL 日期类型：日期格式、所占存储空间、日期范围 比较。
+日期类型        存储空间      ... | Microdust:David's blog"
+                    data-url="http://dbaeyes.github.io/mysql/mysqlmysql-date-time-type-data-type-mysql-uses-summary.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">Share to：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        <li><a class="ds-facebook" href="javascript:void(0);" data-service="facebook">Facebook</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/mysql/mysqlmysql-date-time-type-data-type-mysql-uses-summary" data-title="MySQL：MySQL日期数据类型、MySQL时间类型使用总结" data-url="http://dbaeyes.github.io/mysql/mysqlmysql-date-time-type-data-type-mysql-uses-summary.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dbaeyes"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+---
+layout: post
+title: Exchanging Partitions 小测
+date: 2009-06-08 17:47:42.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- sql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '927'
+---
+<p>--exchange partition的语法：</p>
+<div>ALTER TABLE table1<br />
+EXCHANGE PARTITION partition<br />
+WITH TABLE table2<br />
+INDEXES]<br />
+[{ WITH | WITHOUT } VALIDATION]<br />
+[EXCEPTIONS INTO [schema.]table]<br />
+[UPDATE/NVALIDATE GLOBAL INDEXES<br />
+[NOPARALLEL/PARALLEL[int]]]</p>
+<p>普通索引和Global分区索引存在时都不能在交换时including indexes，即不能带索引交换，此时如存在Local分区索引，则索引状态为Unusable<br />
+UPDATE GLOBAL INDEXES选项对普通索引和Global分区索引进行rebuild，但对Local分区索引无效,非分区表的索引也都将UNUSABLE<br />
+WITHOUT VALIDATION选项将会把不符合分区规则的数据强制交换过来，这种情况就会出现交换后分区中的数据存在违背分区条件的情况<br />
+不带索引交换时也需要检查是否存在主键 如有则也需要在中间表创建，否则无法进行正常地交换。原因是当有数据的segment交换到对方，而对方存在主键导致无法检验约束</p>
+<p>--测试过程！！！</p>
+<p>insert into test_p<br />
+select * from test_p;<br />
+----<br />
+SQL&gt; select count(*) from test_p;</p>
+<p>COUNT(*)<br />
+----------<br />
+2788920<br />
+----<br />
+create table test_pt<br />
+( ID                  NUMBER not null,<br />
+RATER_TYPE          NUMBER(1) default 0)<br />
+PARTITION BY RANGE (rater_type)<br />
+(<br />
+PARTITION p_rated VALUES LESS THAN<br />
+( 1 ) ,<br />
+PARTITION p_rater VALUES LESS THAN<br />
+( 2 )<br />
+);<br />
+----<br />
+SQL&gt; select count(*) from test_pt;<br />
+COUNT(*)         0<br />
+----</p>
+<p>15:53:57 SQL&gt; insert /*+ append */ into test_pt select * from test_p;<br />
+2788896 rows created.<br />
+Elapsed: 00:00:24.62</p>
+<p>15:58:30 SQL&gt; select count(*) from test_pt partition(p_rated);<br />
+COUNT(*)<br />
+----------<br />
+1292320</p>
+<p>create table TEST_PT_RATED<br />
+( ID                  NUMBER not null,<br />
+RATER_TYPE          NUMBER(1) default 0<br />
+);</p>
+<p>create table TEST_PT_RATER<br />
+( ID                  NUMBER not null,<br />
+RATER_TYPE          NUMBER(1) default 0<br />
+);</p>
+<p>alter table TEST_PT<br />
+exchange partition p_rated<br />
+with table TEST_PT_RATED<br />
+without validation;</p>
+<p>Table altered.<br />
+Elapsed: 00:00:00.03<br />
+--使用without validation一般会更快，实际做的动作只是更新了一下数据字典而已</p>
+<p>alter table TEST_PT<br />
+exchange partition p_rater<br />
+with table TEST_PT_RATER;</p>
+<p>Table altered.<br />
+Elapsed: 00:00:00.04<br />
+--不带without validation一样迅速，新表并不存在索引之类的玩意儿</p>
+<p>SEGMENT_NAME                   segment_size(G) SEGMENT_TYPE<br />
+------------------------------ --------------- ------------------<br />
+TEST_PT                                      0 TABLE PARTITION<br />
+TEST_PT_RATER                              .45 TABLE<br />
+TEST_PT_RATED                              .47 TABLE</p>
+<p>可以看到EXCHANGE PARTITION是非常迅速，而且并不需要额外的表空间！</p>
+<p>create index idx_pt_id on TEST_PT(id);</p>
+<p>create index idx_pt_rater_id on TEST_PT_RATER(id);</p>
+<p>create index idx_pt_rated_id on TEST_PT_RATED(id);</p>
+<p>16:56:11 SQL&gt; alter table TEST_PT<br />
+16:57:41   2 exchange partition p_rated<br />
+16:57:41   3 with table TEST_PT_RATED<br />
+16:57:41   4 including indexes<br />
+16:57:41   5 without validation;<br />
+with table TEST_PT_RATED<br />
+*<br />
+ERROR at line 3:<br />
+ORA-14098: index mismatch for tables in ALTER TABLE EXCHANGE PARTITION<br />
+--存在index名字不一样的索引是不允许带including indexes交换</p>
+<p>Elapsed: 00:00:00.02<br />
+16:57:42 SQL&gt; alter table TEST_PT<br />
+16:58:05   2 exchange partition p_rated<br />
+16:58:05   3 with table TEST_PT_RATED<br />
+16:58:05   4 without validation;<br />
+Table altered.<br />
+Elapsed: 00:00:00.05</p>
+<p>alter index IDX_PT_RATED_ID rebuild;</p>
+<p>---<br />
+drop index idx_pt_rater_id;</p>
+<p>alter table TEST_PT<br />
+exchange partition p_rater<br />
+with table TEST_PT_RATER<br />
+including indexes<br />
+without validation;</p>
+<p>Table altered.<br />
+Elapsed: 00:00:00.03</p>
+<p>----<br />
+以前的记录： <a href="http://hi.baidu.com/dbaeyes/blog/item/83408bf2d9b05011b07ec5cc.html" target="_blank">http://hi.baidu.com/dbaeyes/blog/item/83408bf2d9b05011b07ec5cc.html</a><br />
+ORACLE DOC <a href="http://download.oracle.com/docs/cd/B19306_01/server.102/b14231/partiti.htm#sthref2762" target="_blank">http://download.oracle.com/docs/cd/B19306_01/server.102/b14231/partiti.htm#sthref2762<br />
+</a></p>
+<h3>Exchanging Partitions</h3>
+<p>You can convert a partition (or subpartition) into a non-partitioned table, and a non-partitioned table into a partition (or subpartition) of a partitioned table by exchanging their data segments. You can also convert a hash-partitioned table into a partition of a range-hash partitioned table, or convert the partition of the range-hash partitioned table into a hash-partitioned table. Similarly, you can convert a list-partitioned table into a partition of a range-list partitioned table, or convert the partition of the range-list partitioned table into a list-partitioned table</p>
+<p>Exchanging table partitions is most useful when you have an application using non-partitioned tables that you want to convert to partitions of a partitioned table. For example, in data warehousing environments exchanging partitions facilitates high-speed data loading of new, incremental data into an already existing partitioned table. Generically, OLTP as well as data warehousing environments benefit from exchanging old data partitions out of a partitioned table. The data is purged from the partitioned table without actually being deleted and can be archived separately afterwards.</p>
+<p>When you exchange partitions, logging attributes are preserved. You can optionally specify if local indexes are also to be exchanged (<code>INCLUDING</code> <code>INDEXES</code>clause), and if rows are to be validated for proper mapping (<code>WITH</code> <code>VALIDATION</code> clause).</p>
+<div>
+<p>Note:</p>
+<p>When you specify <code>WITHOUT</code> <code>VALIDATION</code> for the exchange partition operation, this is normally a fast operation because it involves only data dictionary updates. However, if the table or partitioned table involved in the exchange operation has a primary key or unique constraint enabled, then the exchange operation will be performed as if <code>WITH</code> <code>VALIDATION</code> were specified in order to maintain the integrity of the constraints.To avoid the overhead of this validation activity, issue the following statement for each constraint before doing the exchange partition operation:</p>
+<pre>ALTER TABLE table_name 
+     DISABLE CONSTRAINT constraint_name KEEP INDEX</pre>
+<p>Then, enable the constraints after the exchange.</p>
+</div>
+</div>

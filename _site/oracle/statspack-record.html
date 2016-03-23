@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>Statspack 一些记录 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/statspack-record.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#Statspack" title="Statspack">Statspack</a>
+                        
+                    </div>
+                    <h1>Statspack 一些记录</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on June 18, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>Oracle10g 对于系统性能的诊断主要通过AWR来收集数据，使用ADDM来作分析报告。</p>
+<div>但对于Oracle9i的性能诊断必须掌握Statspack （之前在9i2上完成了SP的分析报告，现在跑10g的SP，以下脚本均为10g）<br />
+主要参考了Eygle的Spatspack专题 http://www.eygle.com/archives/2004/11/statspack_list.html</p>
+<p>1. 首先在运行SP的scripts之前，几个参数需要注意一下：<br />
+job_queue_processes 为了之后能正常的执行计划，其值不要为0<br />
+timed_statistics 收集操作系统的计时信息，这些信息可被用来显示时间等统计信息、优化数据库和 SQL 语句。要防止因从操作系统请求时间而引起的开销，请将该值设置为False</p>
+<p>2. 创建存储SP的表空间，大小根据实际需要<br />
+SQL&gt; create tablespace perfstat<br />
+2 datafile '/u01/app/oracle/oradata/ORCL/datafile/perfstat.dbf'<br />
+3 size 300m<br />
+4 extent management local;</p>
+<p>Tablespace created.</p>
+<p>3. 查看创建SP需要的脚本，一般路径： /u01/app/oracle/10.2.0/db_1/rdbms/admin/sp*<br />
+&gt; ls sp*<br />
+SQL&gt; @spcreate   --创建 SP<br />
+在创建过程中要求填入用户 perfstat的密码，和默认表空间和默认临时表空名<br />
+... ...<br />
+... ...<br />
+Creating Package STATSPACK...</p>
+<p>Package created.</p>
+<p>No errors.<br />
+Creating Package Body STATSPACK...</p>
+<p>Package body created.</p>
+<p>No errors.</p>
+<p>NOTE:<br />
+SPCPKG complete. Please check spcpkg.lis for any errors.</p>
+<p>SQL&gt;</p>
+<p>创建完成，如果出现错误，检查log文件找到错误所在，使用spdrop脚本删除SP，再重新创建SP</p>
+<p>4. 测试SP，建立执行计划<br />
+使用命令<br />
+SQL&gt; execute statspack.snap --手动产生SP快照<br />
+PL/SQL procedure successfully completed.</p>
+<p>执行成功，表示SP成功安装</p>
+<p>运行spauto.sql 来创建执行计划，默认每小时收集一次记录，当然你可以手动更改之。<br />
+<em>    begin --spauto.sql中的计划脚本<br />
+select instance_number into :instno from v$instance;<br />
+db</em>生成报告<em>ms_job.submit(:jobno, 'statspack.snap;', trunc(sysdate+1/24,'HH'), 'trunc(SYSDATE+1/24,''HH'')', TRUE, :instno);<br />
+commit;<br />
+end;</em></p>
+<p><span style="color: #0000ff;"><em><strong>生成报告</strong></em></span><br />
+SQL&gt; @spreport<br />
+... ...<br />
+Specify the number of days of snapshots to choose from<br />
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br />
+Entering the number of days (n) will result in the most recent<br />
+(n) days of snapshots being listed. Pressing &lt;return&gt; without<br />
+specifying a number lists all completed snapshots.</p>
+<p>Listing all Completed Snapshots</p>
+<p>Snap<br />
+Instance     DB Name        Snap Id   Snap Started    Level Comment<br />
+------------ ------------ --------- ----------------- ----- --------------------<br />
+orcl         ORCL                 1 18 6? 2008 22:19     5<br />
+2 18 6? 2008 22:20     5</p>
+<p>Specify the Begin and End Snapshot Ids<br />
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br />
+Enter value for begin_snap: 1<br />
+Begin Snapshot Id specified: 1</p>
+<p>Enter value for end_snap: 2<br />
+End   Snapshot Id specified: 2</p>
+<p>Specify the Report Name<br />
+~~~~~~~~~~~~~~~~~~~~~~~<br />
+The default report file name is sp_1_2. To use this name,<br />
+press &lt;return&gt; to continue, otherwise enter an alternative.</p>
+<p>Enter value for report_name:<br />
+...<br />
+... ...<br />
+End of Report ( sp_1_2.lst ) --在目标文件夹下生存报文件</p>
+<p>----------------------------<br />
+5. 删除计划任务<br />
+SQL&gt; select job,log_user,priv_user,last_date,next_date,interval from user_jobs;</p>
+<p>JOB LOG_USER                       PRIV_USER<br />
+---------- ------------------------------ ------------------------------<br />
+LAST_DATE NEXT_DATE<br />
+---------- ----------<br />
+INTERVAL<br />
+------------------------------------------------------------------------------<br />
+21 PERFSTAT                       PERFSTAT<br />
+18-6? -08<br />
+trunc(SYSDATE+1/24,'HH')</p>
+<p>－－－－－－－－－－－－－</p>
+<p>SQL&gt; execute dbms_job.remove('21'); --移除任务</p>
+<p>6. 删除SP历史数据<br />
+查询记录:<br />
+SQL&gt; select max(snap_id) from stats$snapshot;</p>
+<p>MAX(SNAP_ID)<br />
+------------<br />
+2</p>
+<p>SQL&gt;</p>
+<p>SQL&gt; delete from stats$snapshot where snap_id &lt; = 2; --删除stats$snapshot数据表中的相应数据，其他表中的数据会相应的级连删除</p>
+<p>Oracle还提供了系统脚本用于Truncate这些统计信息表，这个脚本名字是: sptrunc.sql (8i、9i,10g都相同),这样就解决了SP内容过多，delete过慢的问题。</p>
+<p>-------------------------------------<br />
+以上只是SP的简单操作，一些具体的分析和处理可以查看eygle的statspack专题，当然statspack有n多专业的书放在那边的，可见其复杂程度。 前几天定的 《基于成本的Oracle优化法则》应该也快到了，估计里面很多性能的指标值都是从statspack里面抓出来的<br />
+需要进一步的分析statspack，当然在10g里面应该是ADDM分析报告（这个东西要简单一些了，不过万变不离其中，估计11g里面的东西会更easy，不过11g还没来得及你玩过）</p>
+<p>---------------------------------------</p>
+<p><strong>top 5 wait events</strong></p>
+<p><strong>db file scattered read-DB文件分散读取</strong><br />
+这种情况通常显示与全表扫描相关的等待。<br />
+当数据库进行全表扫时，基于性能的考虑，数据会分散(scattered)读入Buffer Cache。如果这个等待事件比较显著，<br />
+可能说明对于某些全表扫描的表，没有创建索引或者没有创建合适的索引，我们可能需要检查这些数据表已确定是否进<br />
+行了正确的设置。</p>
+<p><strong>db file sequential read </strong><br />
+显示与单个数据库相关的读取操作（如索引读取），在多表连接中为正取使用驱动表或者索引</p>
+<p><strong>free buffer waits 释放缓冲区等待</strong><br />
+data buffer cache 不够或者dbwr写出速度不够，或者磁盘存在严重的竞争，可以考虑加检查点，使用更多的dbwr进程或者增加物理磁盘数、分散负载</p>
+<p><strong>buffer busy waits</strong><br />
+freelist需要增加；9i以后使用ASSM将彻底改善这个问题</p>
+<p><strong>latch free- latch 释放</strong><br />
+没有很好的使用绑定变量，重作生成问题，缓冲存储竞争问题，buffer cache中存在“热点”块</p>
+<p><strong>Enqueue</strong><br />
+enqueue是一种保护共享资源的锁定机制。该锁定机制保护共享资源，如记录中的数据，以避免两个人在同一时间更新 同一数据。enqueue包括一个排队机制，即FIFO（先进先出）排队机制。<br />
+Enqueue等待常见的有ST、HW 、TX 、TM等</p>
+<p>HW enqueue指和段的高水位标记相关等待；手动分配适当区可以避免这一等待。<br />
+TX是最常见的enqueue等待。TX enqueue等待通常是以下三个问题之一产生的结果。<br />
+第一个问题是唯一索引中的重复索引，你需要执行提交（commit）/回滚（rollback）操作来释放enqueue。<br />
+第二个问题是对同一位图索引段的多次更新。因为单个位图段可能包含多个行地址（rowid），所以当多个用户试图更新同一段时，可能一个<br />
+用户会锁定其他用户请求的记录，这时等待出现。直到获得锁定的用户提交或回滚， enqueue释放。<br />
+第三个问题，也是最可能发生的问题是多个用户同时更新同一个块。如果没有足够的ITL槽，就会发生块级锁定。通过增大initrans和/或maxtrans以允许使用多个ITL槽（对于频繁并发进行DML操作的数据表，在建表之初就应该考虑为相应参数设置合理的数值，避免系统运行<br />
+以后在线的更改，在8i之前，freelists等参数不能在线更改，设计时的考虑就尤为重要），或者增大表上的pctfree值，就可以很容易的避免<br />
+这种情况。</p>
+<p align="left"><strong>Log File Switch -日志文件切换</strong><br />
+日志写完好，LGWR试图写第一个log file时，数据库没有完成写出记录在第一个log file中的dirty块时出现等待。方法：加额外的dbwr或者增加日志组或者日志文件大小</p>
+<p><strong>log file sync 日志文件同步</strong><br />
+用户提交或者回滚时，LGWR将会话期间的重做由日志缓冲器写入到重做日志中。</p>
+<p><strong>log file parallel write</strong></p>
+<p><strong>control file parallel write - 控制文件并行写</strong><br />
+当server进程更新所有控制文件时，可以出现。</p>
+<p><strong>direct path write-直接路径写</strong></p>
+<p><em><strong>Idle Event - 空闲进程</strong></em><br />
+查询stats$idle_event</p>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top" width="187">等待事件</td>
+<td valign="top" width="381">一般解决方法</td>
+</tr>
+<tr>
+<td valign="top" width="187">Sequential Read</td>
+<td valign="top" width="381">调整相关的索引和选择合适的驱动行源</td>
+</tr>
+<tr>
+<td valign="top" width="187">Scattered Read</td>
+<td valign="top" width="381">表明出现很多全表扫描。优化code，cache小表到内存中。</td>
+</tr>
+<tr>
+<td valign="top" width="187">Free Buffer</td>
+<td valign="top" width="381">增大DB_CACHE_SIZE，增大checkpoint的频率，优化代码</td>
+</tr>
+<tr>
+<td valign="top" width="187">Buffer Busy Segment header</td>
+<td valign="top" width="381">增加freelist或者freelistgroups</td>
+</tr>
+<tr>
+<td valign="top" width="187">Buffer Busy Data block</td>
+<td valign="top" width="381">隔离热块；使用反转索引；使用更小的块；增大表的initrans</td>
+</tr>
+<tr>
+<td valign="top" width="187">Buffer Busy Undo header</td>
+<td valign="top" width="381">增加回滚段的数量或者大小</td>
+</tr>
+<tr>
+<td valign="top" width="187">Buffer Busy Undo block</td>
+<td valign="top" width="381">Commit more；增加回滚段的数量或者大小</td>
+</tr>
+<tr>
+<td valign="top" width="187">Latch Free</td>
+<td valign="top" width="381">检查具体的等待latch类型，解决方法参考后面介绍</td>
+</tr>
+<tr>
+<td valign="top" width="187">Enqueue–ST</td>
+<td valign="top" width="381">使用本地管理的表空间或者增加预分配的盘区大小</td>
+</tr>
+<tr>
+<td valign="top" width="187">Enqueue–HW</td>
+<td valign="top" width="381">在HWM之上预先分配盘区</td>
+</tr>
+<tr>
+<td valign="top" width="187">Enqueue–TX4</td>
+<td valign="top" width="381">在表或者索引上增大initrans的值或者使用更小的块</td>
+</tr>
+<tr>
+<td valign="top" width="187">Log Buffer Space</td>
+<td valign="top" width="381">增大LOG_BUFFER，改善I/O</td>
+</tr>
+<tr>
+<td valign="top" width="187">Log File Switch</td>
+<td valign="top" width="381">增加或者增大日志文件</td>
+</tr>
+<tr>
+<td valign="top" width="187">Log file sync</td>
+<td valign="top" width="381">减小提交的频率；使用更快的I/O；或者使用裸设备</td>
+</tr>
+<tr>
+<td valign="top" width="187">Write complete waits</td>
+<td valign="top" width="381">增加DBWR；提高CKPT的频率；</td>
+</tr>
+</tbody>
+</table>
+<p>Instance Efficiency Percentages</p>
+<p>Data Buffer Hit Ratio#&lt;#90#数据块在数据缓冲区中的命中率，通常应该在90%以上，否则考虑加大 db_block_buffers(9i 以上可是db_cache_size)<br />
+Buffer Nowait Ratio#&lt;#99#在缓冲区中获取buffer 的未等待比率<br />
+Library Hit Ratio#&lt;#98#主要代表着sql在共享区的命中率，通常在98%以上<br />
+In Memory Sort Ratio#&lt;#0#如果过低说明有大量的排序在临时表空间中进行，可尝试增加sort_area_size<br />
+Redo Nowait Ratio#&lt;#98#写日志的不等待比率,太低可调整log_buffer(增加)和 _log_io_size(减小，默认为</p>
+<p>&nbsp;<br />
+-- EOF --</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/9i-for-windows-startup-to-automatically-archive-mode.html" data-toggle="tooltip" data-placement="top" title="9i for windows 启动到自动归档模式">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/web&amp;rt/firefox3-plugin-and-increasing.html" data-toggle="tooltip" data-placement="top" title="FireFox3 插件&不断增加">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/statspack-record" data-title="Statspack 一些记录"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Oracle10g 对于系统性能的诊断主要通过AWR来收集数据，使用ADDM来作分析报告。
+但对于Oracle9i的性能诊断必须掌握Statspack （... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/statspack-record.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/statspack-record" data-title="Statspack 一些记录" data-url="http://dbaeyes.github.io/oracle/statspack-record.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

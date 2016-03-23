@@ -1,0 +1,95 @@
+---
+layout: post
+title: 怎么对IN子查询使用绑定变量
+date: 2008-12-03 11:28:14.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- sql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '982'
+---
+<p>在实际使用中，经常会有带in的子查询，如where id in (1,2,3)这样的情况，但是如果很多这样的语句在数据库中出现，将引起数据库的大量硬解析与共享池SQL碎片。所以，在实际应用中，可以采用其他方法，将这些in list给绑定起来。<br />
+如果需要绑定in list，首先，需要创建两个类型(type)：<br />
+针对数据类型的<br />
+<code>CREATE OR REPLACE TYPE NUMTABLETYPE as table of number;</code><br />
+针对字符串类型的(每个list的单元大小不要超过1000字节)<br />
+<code>create or replace type vartabletype as table of varchar2(1000);</code><br />
+然后创建两个相关的函数<br />
+数字列表函数<br />
+[cc lang="sql"]<br />
+create or replace function str2numList( p_string in varchar2 )<br />
+  return numTableType<br />
+as<br />
+    v_str long default p_string || ',';<br />
+    v_n number;<br />
+    v_data numTableType := numTableType();<br />
+begin<br />
+    loop<br />
+    v_n := to_number(instr( v_str, ',' ));<br />
+    exit when (nvl(v_n,0) = 0);<br />
+    v_data.extend;<br />
+    v_data( v_data.count ) := ltrim(rtrim(substr(v_str,1,v_n-1)));<br />
+    v_str := substr( v_str, v_n+1 );<br />
+    end loop;<br />
+    return v_data;<br />
+end;[/cc]<br />
+字符列表函数<br />
+[cc lang="sql"]<br />
+create or replace function str2varList( p_string in varchar2 )<br />
+   return VarTableType<br />
+as<br />
+v_str long default p_string || ',';<br />
+v_n varchar2(2000);<br />
+v_data VarTableType := VarTableType();<br />
+begin<br />
+   loop<br />
+      v_n :=instr( v_str, ',' );<br />
+    exit when (nvl(v_n,0) = 0);<br />
+    v_data.extend;<br />
+   v_data( v_data.count ) := ltrim(rtrim(substr(v_str,1,v_n-1)));<br />
+    v_str := substr( v_str, v_n+1 );<br />
+   end loop;<br />
+   return v_data;<br />
+end;[/cc]<br />
+创建之后，我们就可以采用如下的方式来使用in list的绑定了。如可以采用如下的三种方案<br />
+[cc lang="sql"]<br />
+SELECT /*+ ordered use_nl(a,u) */ id, user_id,<br />
+    BITAND(promoted_type,4) busauth<br />
+from table(STR2NUMLIST(:bind0)) a,<br />
+bmw_users u<br />
+where u.user_id = a.column_value;</p>
+<p>SELECT /*+ leading(a) */ id, user_id, BITAND(promoted_type,4) busauth<br />
+from bmw_users u where user_id in<br />
+(select * from table(STR2NUMLIST(:bind0)) a);</p>
+<p>SELECT /*+ index(bmw_users UK_BMW_USERS_USERID) */ id, user_id<br />
+from bmw_users where user_id in<br />
+(SELECT * FROM THE (SELECT CAST(STR2NUMLIST(:bind0) AS NUMTABLETYPE)<br />
+ FROM dual) WHERE rownum<1000);<br />
+[/cc]<br />
+在如上的方案中，以上语句中的hint提示，是为了稳定执行计划，防止Oracle对in list的错误估计而导致走hash连接。一般建议采用第一种方法，比较简单可靠并且可以指定稳定的计划。但是要求数据库的版本比较高，在老版本中(8i)，可能只能采用第三种方法。总的来说，1、2两种方法比3要少6个逻辑读左右</p>
+<p>例子：<br />
+[cc lang="sql"]<br />
+create or replace procedure SP_MOVE_DATA(p_string in varchar2)<br />
+is<br />
+begin<br />
+update t1 set name= 'Orphean' where t1.id in<br />
+(select * from table(str2numList(p_string)));</p>
+<p>insert into t2<br />
+select * from t1 where id in<br />
+(select * from table(str2numList(p_string)));</p>
+<p>delete from t1 where id in<br />
+(select * from table(str2numList(p_string)));</p>
+<p>commit;</p>
+<p>exception<br />
+when others then<br />
+rollback;</p>
+<p>end SP_MOVE_DATA;<br />
+[/cc]<br />
+-----------------</p>

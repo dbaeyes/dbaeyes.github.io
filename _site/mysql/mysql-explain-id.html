@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>关于MySql explain 中的ID - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/mysql/mysql-explain-id.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#explain" title="explain">explain</a>
+                        
+                        <a class="tag" href="/Tags/#mysql" title="mysql">mysql</a>
+                        
+                    </div>
+                    <h1>关于MySql explain 中的ID</h1>
+                    
+                    <span class="meta">Posted by David on June 10, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>root@test 10:56:20&gt;explain SELECT T0.*</p>
+<div>-&gt;   FROM<br />
+-&gt; PRODUCT_0000 T0,<br />
+-&gt; PRODUCT_0003 T3<br />
+-&gt;  WHERE T0.ID = T3.id<br />
+-&gt;    AND T0.AUC_ID =5120001280;<br />
++----+-------------+-------+--------+-------------------------+-----------------+---------+--------------------+------+-------------+<br />
+| id | select_type | table | type   | possible_keys           | key             | key_len | ref                | rows | Extra       |<br />
++----+-------------+-------+--------+-------------------------+-----------------+---------+--------------------+------+-------------+<br />
+|  1 | SIMPLE      | T0    | ref    | PRIMARY,idx_aa_0000_aid | idx_aa_0000_aid | 9       | const              |    1 | Using where |<br />
+|  1 | SIMPLE      | T3    | eq_ref | PRIMARY                 | PRIMARY         | 8       | test.T0.id |    1 | Using index |<br />
++----+-------------+-------+--------+-------------------------+-----------------+---------+--------------------+------+-------------+<br />
+2 rows in set (0.00 sec)</p>
+<p>root@test 10:56:32&gt;explain SELECT T0.*<br />
+-&gt;   FROM<br />
+-&gt; PRODUCT_0000 T0,<br />
+-&gt; PRODUCT_0003 T3<br />
+-&gt;  WHERE T0.ID = T3.id<br />
+-&gt;    AND T3.AUC_ID =5120001283;<br />
++----+-------------+-------+--------+-------------------------+-----------------+---------+--------------------+------+--------------------------+<br />
+| id | select_type | table | type   | possible_keys           | key             | key_len | ref                | rows | Extra                    |<br />
++----+-------------+-------+--------+-------------------------+-----------------+---------+--------------------+------+--------------------------+<br />
+|  1 | SIMPLE      | T3    | ref    | PRIMARY,idx_aa_0003_aid | idx_aa_0003_aid | 9       | const              |    1 | Using where; Using index |<br />
+|  1 | SIMPLE      | T0    | eq_ref | PRIMARY                 | PRIMARY         | 8       | test.T3.id |    1 |                          |<br />
++----+-------------+-------+--------+-------------------------+-----------------+---------+--------------------+------+--------------------------+<br />
+2 rows in set (0.02 sec)</p>
+<p>--根据查询条件，相同的ID显示的话，执行顺序是从上往下</p>
+<p>root@test 11:00:44&gt;explain SELECT T0.*<br />
+-&gt;     FROM PRODUCT_0000 T0<br />
+-&gt;    WHERE T0.ID = (SELECT T1.ID<br />
+-&gt;                     FROM PRODUCT_0001 T1<br />
+-&gt;                    WHERE T1.ID = (SELECT T2.ID<br />
+-&gt;                                     FROM PRODUCT_0002 T2<br />
+-&gt;                                    WHERE T2.AUC_ID = 5120002050));<br />
++----+-------------+-------+-------+-----------------+-----------------+---------+-------+------+--------------------------+<br />
+| id | select_type | table | type  | possible_keys   | key             | key_len | ref   | rows | Extra                    |<br />
++----+-------------+-------+-------+-----------------+-----------------+---------+-------+------+--------------------------+<br />
+|  1 | PRIMARY     | T0    | const | PRIMARY         | PRIMARY         | 8       | const |    1 |                          |<br />
+|  2 | SUBQUERY    | T1    | const | PRIMARY         | PRIMARY         | 8       |       |    1 | Using index              |<br />
+|  3 | SUBQUERY    | T2    | ref   | idx_aa_0002_aid | idx_aa_0002_aid | 9       |       |    1 | Using where; Using index |<br />
++----+-------------+-------+-------+-----------------+-----------------+---------+-------+------+--------------------------+<br />
+3 rows in set (0.04 sec)</p>
+<p>--如果是子查询，ID的序号会递增，在一组循环中id越大优先级越高，越早被执行</p>
+<p>root@test 11:02:38&gt;explain select s2.* from (<br />
+-&gt;       SELECT T3.id<br />
+-&gt;         FROM  PRODUCT_0003 T3<br />
+-&gt;        WHERE   T3.AUC_ID = 5120002051) s1,<br />
+-&gt;        PRODUCT_0003 s2<br />
+-&gt;        where s1.id = s2.id;<br />
++----+-------------+------------+--------+-----------------+-----------------+---------+-------+------+--------------------------+<br />
+| id | select_type | table      | type   | possible_keys   | key             | key_len | ref   | rows | Extra                    |<br />
++----+-------------+------------+--------+-----------------+-----------------+---------+-------+------+--------------------------+<br />
+|  1 | PRIMARY     | &lt;derived2&gt; | system | NULL            | NULL            | NULL    | NULL  |    1 |                          |<br />
+|  1 | PRIMARY     | s2         | const  | PRIMARY         | PRIMARY         | 8       | const |    1 |                          |<br />
+|  2 | DERIVED     | T3         | ref    | idx_aa_0003_aid | idx_aa_0003_aid | 9       |       |    1 | Using where; Using index |<br />
++----+-------------+------------+--------+-----------------+-----------------+---------+-------+------+--------------------------+<br />
+3 rows in set (0.00 sec)</p>
+<p>--结论：<br />
+mysql执行计划中的ID<br />
+ID如果相同，可以认为是一组，从上往下顺序执行<br />
+在每组中，其中ID越大，优先级越高，越早执行</p>
+<p>--<br />
+mysql的explain参考<br />
+<a href="http://hi.baidu.com/dbaeyes/blog/item/4e527fb321f5c1abd9335a85.html" target="_blank">http://hi.baidu.com/dbaeyes/blog/item/4e527fb321f5c1abd9335a85.html</a></p>
+<p>------------------------------<br />
+附oracle执行计划：<br />
+--oracle--</p>
+<p>1.<br />
+explain plan for SELECT t1.* FROM FEED_RECEIVE_01 t1, FEED_RECEIVE_02 t2<br />
+WHERE t1.id=t2.id AND t2.AUC_NUM_ID = :1;</p>
+<p>Explained.</p>
+<p>Elapsed: 00:00:00.01<br />
+10:27:16 FBADMIN@ feel&gt;select * from table(dbms_xplan.display);</p>
+<p>PLAN_TABLE_OUTPUT<br />
+------------------------------------------------------------------------------------------------------------------------------------<br />
+Plan hash value: 1684331209</p>
+<p>----------------------------------------------------------------------------------------------------------<br />
+| Id  | Operation                    | Name                      | Rows  | Bytes | Cost (%CPU)| Time     |<br />
+----------------------------------------------------------------------------------------------------------<br />
+|   0 | SELECT STATEMENT             |                           |   149 | 41720 |   121   (0)| 00:00:02 |<br />
+|   1 |  NESTED LOOPS                |                           |   149 | 41720 |   121   (0)| 00:00:02 |<br />
+|   2 |   TABLE ACCESS BY INDEX ROWID| FEED_RECEIVE_02           |   149 |  1788 |    61   (0)| 00:00:01 |<br />
+|*  3 |    INDEX RANGE SCAN          | IDX_FEED_RECEIVE_02_AUCID |   149 |       |     2   (0)| 00:00:01 |<br />
+|   4 |   TABLE ACCESS BY INDEX ROWID| FEED_RECEIVE_01           |     1 |   268 |     1   (0)| 00:00:01 |<br />
+|*  5 |    INDEX UNIQUE SCAN         | PK_FEED_RECEIVE_01_ID     |     1 |       |     1   (0)| 00:00:01 |<br />
+----------------------------------------------------------------------------------------------------------</p>
+<p>2.<br />
+explain plan for SELECT /*+ ordered use_nl(t, ff) */<br />
+FF.*<br />
+FROM (SELECT RID<br />
+FROM (SELECT RID, ROWNUM AS RN<br />
+FROM (SELECT ROWID RID<br />
+FROM FEED_RECEIVE_03<br />
+WHERE RATED_UID = :1<br />
+AND (SUSPENDED = 0 OR SUSPENDED = 3 OR<br />
+SUSPENDED = 7 OR SUSPENDED = 5 OR<br />
+SUSPENDED = 6)<br />
+AND RATER_TYPE = 0<br />
+ORDER BY FEEDBACKDATE DESC)<br />
+WHERE ROWNUM &lt;= :2) T<br />
+WHERE RN &gt;= :3) T,<br />
+FEED_RECEIVE_03 FF<br />
+WHERE T.RID = FF.ROWID;</p>
+<p>select * from table(dbms_xplan.display);</p>
+<p>PLAN_TABLE_OUTPUT<br />
+------------------------------------------------------------------------------------------------------------------------------------<br />
+Plan hash value: 2477898939</p>
+<p>-------------------------------------------------------------------------------------------------------------<br />
+| Id  | Operation                       | Name                      | Rows  | Bytes | Cost (%CPU)| Time     |<br />
+-------------------------------------------------------------------------------------------------------------<br />
+|   0 | SELECT STATEMENT                |                           |   366 |   104K|   370   (0)| 00:00:05 |<br />
+|   1 |  NESTED LOOPS                   |                           |   366 |   104K|   370   (0)| 00:00:05 |<br />
+|*  2 |   VIEW                          |                           |   366 |  9150 |     4   (0)| 00:00:01 |<br />
+|*  3 |    COUNT STOPKEY                |                           |       |       |            |          |<br />
+|   4 |     VIEW                        |                           |   366 |  4392 |     4   (0)| 00:00:01 |<br />
+|*  5 |      INDEX RANGE SCAN DESCENDING| IDX_FEED_RECEIVE_03_RATED |   366 | 10614 |     4   (0)| 00:00:01 |<br />
+|   6 |   TABLE ACCESS BY USER ROWID    | FEED_RECEIVE_03           |     1 |   268 |     1   (0)| 00:00:01 |<br />
+-------------------------------------------------------------------------------------------------------------</p>
+<p>Predicate Information (identified by operation id):<br />
+---------------------------------------------------</p>
+<p>2 - filter("RN"&gt;=TO_NUMBER(:3))<br />
+3 - filter(ROWNUM&lt;=TO_NUMBER(:2))<br />
+5 - access("RATED_UID"=TO_NUMBER(:1) AND "RATER_TYPE"=0)<br />
+filter("RATER_TYPE"=0 AND ("SUSPENDED"=0 OR "SUSPENDED"=3 OR "SUSPENDED"=5 OR "SUSPENDED"=6<br />
+OR "SUSPENDED"=7))</p>
+<p>--oracle的执行计划中的ID是顺序增大的，相同的缩进的话从上往下，每组缩进中执行先后根据缩进程序来判断，缩进越多越早执行。</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/mysql/mysql-limit-number-of-scan-lines-and-order-by-index.html" data-toggle="tooltip" data-placement="top" title="mysql limit 扫描行数 & order by 与索引关系">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/web&amp;rt/porsche-tour-5.html" data-toggle="tooltip" data-placement="top" title="保时捷之旅5">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/mysql/mysql-explain-id" data-title="关于MySql explain 中的ID"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="root@test 10:56:20&gt;explain SELECT T0.*
+-&gt;   FROM
+-&gt; PRODUCT_0000 T0,... | Microdust:David's blog"
+                    data-url="http://dbaeyes.github.io/mysql/mysql-explain-id.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">Share to：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        <li><a class="ds-facebook" href="javascript:void(0);" data-service="facebook">Facebook</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/mysql/mysql-explain-id" data-title="关于MySql explain 中的ID" data-url="http://dbaeyes.github.io/mysql/mysql-explain-id.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dbaeyes"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

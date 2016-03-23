@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>SG II: Chapter 12 | Using the Scheduler to Automate Tasks - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/sg-ii-chapter-12-using-the-scheduler-to-automate-tasks.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#study" title="study">study</a>
+                        
+                    </div>
+                    <h1>SG II: Chapter 12 | Using the Scheduler to Automate Tasks</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on May 19, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><strong><em><span style="color: #ff6600;">Automating Tasks with the Scheduler</span></em></strong></p>
+<div>
+<p><span style="color: #3366ff;">• </span>Simplify management tasks by using the Scheduler.<br />
+<span style="color: #3366ff;">• </span>Create a job, program, schedule, and window.<br />
+<span style="color: #3366ff;">• </span>Reuse Scheduler components for similar tasks.<br />
+<span style="color: #3366ff;">• </span>View information about job executions and job instances.</p>
+<p>-----------------------------------------------------------------------</p>
+<p><strong><span style="color: #ff6600;">Scheduler Overview</span></strong><br />
+<strong><em>Jobs</em></strong> A job instructs the Scheduler to run a specific program at a specific time on a specific date.<br />
+Programs A program contains the code (or a reference to the code) that needs to be run to accomplish<br />
+a task. It can also contain parameters that should be passed to the program at runtime. A program can be stored as an independent object that can be referenced by many jobs.<br />
+<strong><em>Schedules</em></strong> A schedule contains a start date, an optional end date, and a repeat interval. With<br />
+these elements, an execution schedule can be calculated. A schedule can be stored as an independent<br />
+object that can be referenced by many jobs.<br />
+<strong><em>Windows</em></strong> A window identifies a recurring block of time during which a specific resource plan should be enabled to govern resource allocation for the database.<br />
+<strong><em>Job groups</em></strong> A job group is a logical method of classifying jobs with similar characteristics. Job<br />
+groups define specific characteristics that will be inherited by all jobs assigned to the group.<br />
+<strong><em>window group</em></strong> is a logical method of grouping windows. They simplify the management of windows by allowing the members of the group to be manipulated as one object.</p>
+<p>--------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Scheduler Architecture</span></strong></p>
+<p>a high-level knowledge of the underlying Scheduler processes will help you create more logical<br />
+Scheduler objects and enable you to troubleshoot problems associated with the Scheduler.</p>
+<p><em><strong>The Job Table</strong></em><br />
+The Scheduler job table is the master container for all enabled jobs in the database. This table stores information about all jobs, including the objects referenced by the job, the owner of the job, and the next run date.<br />
+viewed through the <strong><span style="color: #0000ff;">*_SCHEDULER_JOBS</span></strong> view.</p>
+<p><em><strong>The Job Coordinator</strong></em><br />
+The job coordinator is an Oracle background process with the responsibility of ensuring that jobs are run on schedule.<br />
+The job coordinator controls all aspects of the job slave pool of processes, so it can remove dormant slave processes and spawn new processes as needed to meet the needs of the Scheduler.</p>
+<p><strong><em>The Job Slave Processes</em></strong><br />
+Job slave processes are tasked with carrying out the execution of job programs assigned to them by the job Scheduler.<br />
+When it is ready to execute the program, the job slave creates a new session as the owner of the job, starts a transaction within the session, and then executes the job.</p>
+<p><strong><em>RAC Considerations</em></strong></p>
+<p><strong><span style="color: #ff6600;">Common Administration Tools</span></strong></p>
+<p><strong><em>Using the ENABLE Procedure</em></strong>By default, only schedule objects are enabled at creation time, because they cannot be disabled. All other objects will be disabled by default when they are created.<br />
+how to enable one specific object:<br />
+<span>SQL&gt; begin<br />
+2 dbms_scheduler.enable('BACKUP_JOB');<br />
+3 end;<br />
+4 /</span></p>
+<p>There are a couple of special cases that should be noted about enabling group objects:<br />
+<span style="color: #3366ff;">• </span>When a job group is enabled, all members of that job group will be enabled.<br />
+<span style="color: #3366ff;">• </span>When a window group is enabled, only the window group object is enabled. Windows that are members of the group are not enabled.<br />
+<span style="color: #3366ff;">• </span>When a window or window group is referenced in the ENABLE procedure, it must always<br />
+be prefixed with the SYS schema name as shown in the preceding example (SYS.WINDOW_GROUP_1).</p>
+<p><strong><em>Using the DISABLE Procedure</em></strong></p>
+<p>The FORCE parameter is a Boolean (TRUE or FALSE) value that tells the procedure how to handle the request if dependencies exist. The default value is FALSE.</p>
+<p><span>SQL&gt; begin<br />
+2 dbms_scheduler.disable(<br />
+3 'BACKUP_PROGRAM, BACKUP_JOB, STATS_JOB',TRUE);<br />
+4 end;<br />
+5 /</span></p>
+<p><em><strong>Setting Attributes</strong></em></p>
+<p>to alter a Scheduler object, the DBMS_SCHEDULER.SET_ATTRIBUTE and DBMS_SCHEDULER.SET_ATTRIBUTE_NULL procedures are used.</p>
+<p>When the attributes on an object are changed, Oracle will attempt to disable the object before making the changes. When the attribute has been successfully altered, Oracle will re-enable the object automatically. If the SET_ATTRIBUTE procedure fails, the object will remain disabled (and an error message is returned).</p>
+<p><span>SQL&gt; begin<br />
+2 dbms_scheduler.set_attribute (<br />
+3 name =&gt; 'TEST_JOB',<br />
+4 attribute =&gt; 'ENABLED',<br />
+5 value =&gt; TRUE);<br />
+6 end;<br />
+7 /</span></p>
+<p>-------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Scheduler Jobs</span></strong><br />
+A Scheduler job defines a specific program to be executed, the arguments (or parameters) to be passed to the program, and the schedule defining when the program should be executed.</p>
+<p><strong><span style="color: #ff6600;">Creating Jobs</span></strong><br />
+Scheduler jobs can be created by using the DBMS_SCHEDULER.CREATE_JOB procedure.</p>
+<p><strong><span style="color: #0000ff;">Job Attributes<br />
+</span><em>JOB_NAME</em></strong> The JOB_NAME parameter specifies the name assigned to the new job.</p>
+<p><strong><em>JOB_TYPE</em></strong> The JOB_TYPE parameter specifies the type of job that will be created.<br />
+<em> <strong>PLSQL_BLOCK</strong></em><strong> The job</strong> will execute an anonymous PL/SQL block.<br />
+<em><strong>STORED_PROCEDURE</strong></em> The job will execute a PL/SQL stored procedure.<br />
+<strong><em>EXECUTABLE</em></strong> The job will execute a program that is external to the database.</p>
+<p><strong><em>EXECUTABLE </em></strong>The job will execute a program that is external to the database.</p>
+<p><strong><em>NUMBER_OF_ARGUMENTS</em></strong> The NUMBER_OF_ARGUMENTS parameter specifies the number of arguments that the job accepts. The range is 0 (default) to 255.</p>
+<p><strong><em>PROGRAM_NAME</em></strong> The PROGRAM_NAME parameter specifies the name of the program associated with this job.</p>
+<p><strong><em>START_DATE</em></strong> The START_DATE parameter specifies the first date that the job should be run.</p>
+<p><strong><em>REPEAT_INTERVAL</em></strong> The REPEAT_INTERVAL parameter specifies how often the job should be repeated.</p>
+<p><strong><em>SCHEDULE_NAME</em></strong> The SCHEDULE_NAME parameter specifies the name of the schedule associated with this job.</p>
+<p><strong><em>END_DATE</em></strong> The END_DATE parameter specifies the date when the job will expire. If this parameter is set to NULL, the job will repeat forever.</p>
+<p><strong><em>JOB_CLASS</em></strong> The JOB_CLASS parameter specifies the class to which the job is assigned.</p>
+<p><strong><em>COMMENTS</em></strong> The COMMENTS parameter allows the entry of a comment to document the job.</p>
+<p><strong><em>ENABLED</em></strong> The ENABLED parameter specifies whether the job is created in an enabled state. By default, all jobs are created disabled,so the default value for this parameter is FALSE.</p>
+<p><strong><em>AUTO_DROP</em></strong> The AUTO_DROP parameter specifies whether the job will be automatically dropped once it has been executed (for non-repeating jobs) or when its status is changed to COMPLETED (for repeating jobs). The default value for this parameter is TRUE</p>
+<p><strong><span style="color: #ff6600;">Identifying the CREATE_JOB Procedure Options</span></strong><br />
+Jobs are created by using the DBMS_SCHEDULER.CREATE_JOB procedure.</p>
+<p>By overloading the CREATE_JOB procedure, the Scheduler allows four distinct methods in which jobs can be created:<br />
+<em><strong>Method 1</strong></em> allows the use of inline program and inline schedule definitions. This means that the program and schedule for the job are defined strictly within the confines of the CREATE_JOB procedure. They do not exist as independent Scheduler program or schedule objects.<br />
+<em><strong>Method 2</strong></em> allows the creation of jobs using an existing program object and schedule object. This method shows how the component nature of the Scheduler can be leveraged through object reuse. Rather than recreate an identical schedule or program, an existing one can be utilized instead.<br />
+<strong><em>Method 3</em></strong> combines an existing program with an inline schedule definition.<br />
+<strong><em>Method 4</em></strong> combines an inline program definition with an existing schedule.</p>
+<p><strong><span style="color: #ff6600;">Using the CREATE_JOB Procedure</span></strong></p>
+<p>The following example creates a job that will run once every year to enact cost of living adjustments for all employees:<br />
+<span>SQL&gt; begin<br />
+2 dbms_scheduler.create_job (<br />
+3 job_name =&gt; 'cola_job',<br />
+4 job_type =&gt; 'PLSQL_BLOCK',<br />
+5 job_action =&gt; 'update employee set salary = salary*1.05;',<br />
+6 start_date =&gt; '10-OCT-2004 06:00:00 AM',<br />
+7 repeat_interval =&gt; 'FREQ=YEARLY',<br />
+8 comments =&gt; 'Cost of living adjustment');<br />
+9 end;<br />
+10 /</span></p>
+<p><span>SQL&gt; select job_name, enabled, run_count<br />
+from user_scheduler_jobs;</span></p>
+<p><strong><span style="color: #ff6600;">Copying Jobs</span></strong><br />
+Jobs can be copied by using the DBMS_SCHEDULER.COPY_JOB procedure.<br />
+A copied job will be identical to the original job, with the following exceptions:<br />
+1. The new job will have a different name.<br />
+2. The new job will be created in a disabled state.</p>
+<p><strong><span style="color: #ff6600;">Running Jobs</span></strong><br />
+The Scheduler allows scheduled jobs to be run outside of their normal schedule through the DBMS_SCHEDULER.RUN_JOB procedure.</p>
+<p><span style="color: #ff6600;"><strong>Stopping Jobs</strong></span><br />
+SQL&gt; begin<br />
+2 dbms_scheduler.stop_job(job_name =&gt; 'COLA_JOB',<br />
+3 force =&gt; TRUE);<br />
+4 end;<br />
+5 /</p>
+<p><strong><span style="color: #ff6600;">Dropping Jobs</span></strong><br />
+Jobs can be dropped by using the DBMS_SCHEDULER.DROP_JOB procedure. If an instance of the job is running when you issue the DROP_JOB procedure, an error will result. If you set the FORCE option to TRUE, Oracle will issue an implicit STOP_JOB procedure to kill the current instance and then drop the job.<br />
+<span>SQL&gt; begin<br />
+2 dbms_scheduler.drop_job(job_name =&gt; 'COLA_JOB',<br />
+3 force =&gt; TRUE);<br />
+4 end;<br />
+</span></p>
+<p>-----------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Job Classes</span></strong></p>
+<p>A job class is a container object for the logical grouping of jobs into a larger unit.<br />
+All jobs must belong to exactly one job class. Any job not explicitly assigned to a job class will belong to the DEFAULT_JOB_CLASS class</p>
+<p><strong><span style="color: #0000ff;">Job Class Parameters</span></strong><br />
+<strong><em>JOB_CLASS_NAME</em></strong> The name has to be unique in the SYS schema.<br />
+<strong><em>RESOURCE_CONSUMER_GROUP</em></strong> The RESOURCE_CONSUMER_GROUP parameter associates<br />
+the job group with a specific consumer group.<br />
+<strong><em>SERVICE</em></strong> The SERVICE parameter specifies the service to which the job class belongs.<br />
+<strong><em>LOGGING_LEVEL</em></strong> The Oracle Scheduler can optionally maintain job logs of all job activities.<br />
+DBMS_SCHEDULER.LOGGING_OFF<br />
+DBMS_SCHEDULER.LOGGING_RUNS<br />
+DBMS_SCHEDULER.LOGGING_FULL<br />
+<strong><em>LOG_HISTORY<br />
+COMMENTS</em></strong></p>
+<p><span style="color: #0000ff;"><strong>Creating Job Classes</strong></span></p>
+<p><span>SQL&gt; begin<br />
+2 dbms_scheduler.create_job_class(<br />
+3 job_class_name =&gt; 'LOW_PRIORITY_CLASS',<br />
+4 resource_consumer_group =&gt; 'LOW_GROUP',<br />
+5 logging_level =&gt; DBMS_SCHEDULER.LOGGING_FULL,<br />
+6 log_history =&gt; 60,<br />
+7 comments =&gt; 'LOW PRIORITY JOB CLASS');<br />
+8 end;<br />
+SQL&gt; /</span></p>
+<p><strong><span style="color: #0000ff;">Dropping Job Classes</span></strong></p>
+<p><span>SQL&gt; begin<br />
+2 dbms_scheduler.drop_job_class(<br />
+3 ‘LOW_PRIORITY_CLASS, HIGH_PRIORITY_CLASS’);<br />
+4 end;</span></p>
+<p>------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Scheduler Programs</span></strong></p>
+<p><strong><span style="color: #0000ff;">Program Attributes</span></strong></p>
+<p><strong><em>PROGRAM_NAME</em></strong> it must also be unique within the schema.<br />
+<strong><em>PROGRAM_TYPE<br />
+</em></strong>    <em>PLSQL_BLOCK<br />
+STORED_PROCEDURE<br />
+EXECUTABLE</em> The program is external to the database.<br />
+<strong><em>PROGRAM_ACTION</em></strong> The PROGRAM_ACTION attribute specifies the code to be executed.<br />
+<strong><em>NUMBER_OF_ARGUMENTS<br />
+ENABLED</em></strong> The ENABLED parameter specifies whether the job is created in an enabled state.<br />
+<strong><em>COMMENTS</em></strong></p>
+<p><strong><span style="color: #0000ff;">Creating Programs</span></strong><br />
+New programs can be created by using the <em><strong>DBMS_SCHEDULER.CREATE_PROGRAM</strong></em> procedure.</p>
+<p><span>SQL&gt; begin<br />
+2 dbms_scheduler.create_program(<br />
+3 program_name =&gt; 'STATS_PROGRAM',<br />
+4 program_type =&gt; 'STORED_PROCEDURE',<br />
+5 program_action =&gt; 'DBMS_STATS.GATHER_SCHEMA_STATS',<br />
+6 number_of_arguments =&gt; 1,<br />
+7 comments =&gt; 'Gather stats for a schema');<br />
+8 end;<br />
+9 /</span><br />
+<strong><span style="color: #0000ff;">Dropping Programs</span></strong><br />
+<span>SQL&gt; begin<br />
+2 dbms_scheduler.drop_program (<br />
+3 program_name =&gt; 'STATS_PROGRAM',<br />
+4 force =&gt; TRUE<br />
+5 end;</span></p>
+<p>----------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Schedules</span></strong><br />
+Schedules define when jobs run as well as when windows are opened.</p>
+<p><strong><span style="color: #0000ff;">Schedule Attributes</span></strong></p>
+<p><strong><em>SCHEDULE_NAME<br />
+START_DATE</em></strong> The START_DATE parameter specifies the first date that the schedule is valid.<br />
+<strong><em>END_DATE</em></strong> The END_DATE parameter specifies the date when the schedule will expire.<br />
+<em><strong>REPEAT_INTERVAL</strong></em> The REPEAT_INTERVAL parameter specifies how often the schedule should be repeated.<br />
+<strong><em>COMMENTS</em></strong></p>
+<p><strong><span style="color: #0000ff;">Creating Schedules</span></strong><br />
+By default, schedules are created with access to the PUBLIC role.</p>
+<p>To create a schedule that repeats every night at 8:00 P.M., :<br />
+<span>SQL&gt; begin<br />
+2 dbms_scheduler.create_schedule(<br />
+3 schedule_name =&gt; 'NIGHTLY_8_SCHEDULE',<br />
+4 start_date =&gt; SYSTIMESTAMP,<br />
+5 repeat_interval =&gt; 'FREQ=DAILY; BYHOUR=20',<br />
+6 comments =&gt; 'Runs nightly at 8:00 PM');<br />
+7 end;</span></p>
+<p><strong><span style="color: #0000ff;">Setting Repeat Intervals</span></strong></p>
+<p><span style="color: #0000ff;">Calendaring Syntax Examples<br />
+</span><span>Goal             Expression<br />
+Every Monday         FREQ=WEEKLY; BYDAY=MON;<br />
+Every other Monday      FREQ=WEEKLY; BYDAY=MON; INTERVAL=2;<br />
+Last day of each month             FREQ=MONTHLY; BYMONTHDAY=-1;<br />
+Every January 7             FREQ=YEARLY; BYMONTH=JAN; BYMONTHDAY=7;<br />
+Second Wednesday of each month             FREQ=MONTHLY; BYDAY=2WED;<br />
+Every hour             FREQ=HOURLY;<br />
+Every 4 hours             FREQ=HOURLY; INTERVAL=4;<br />
+Hourly on the first day of each month             FREQ=HOURLY; BYMONTHDAY=1;<br />
+15th day of every other month             FREQ=MONTHLY; BYMONTHDAY=15; INTERVAL=2</span></p>
+<p><span style="color: #0000ff;"><strong>Testing Repeat Intervals</strong></span></p>
+<p><span>Oracle offers the <strong><em>DBMS_SCHEDULER.EVALUATE_CALENDAR_STRING</em></strong> procedure. This procedure allows you to pass in a calendaring syntax expression and a start date, and it will return the time and date that the job will execute next.</span></p>
+<p><span style="color: #3366ff;">SQL&gt; DECLARE<br />
+2 start_date TIMESTAMP;<br />
+3 return_date_after TIMESTAMP;<br />
+4 next_run_date TIMESTAMP;<br />
+5 BEGIN<br />
+6 start_date := to_timestamp_tz(<br />
+7 to_date('2008-10-10 10:00:00','YYYY-MM-DD HH24:MI:SS'));<br />
+8 DBMS_SCHEDULER.EVALUATE_CALENDAR_STRING(<br />
+9 'FREQ=MONTHLY; INTERVAL=2; BYMONTHDAY=15',<br />
+10   start_date, null, next_run_date);<br />
+11   DBMS_OUTPUT.PUT_LINE('next_run_date: ' ||<br />
+12   next_run_date);<br />
+13   END;<br />
+14 /<br />
+next_run_date: 15-10月-08 10.00.00.000000 上午</span></p>
+<p><span>--</span></p>
+<p><span style="color: #3366ff;">SQL&gt; DECLARE<br />
+2 start_date TIMESTAMP;<br />
+3 return_date_after TIMESTAMP;<br />
+4 next_run_date TIMESTAMP;<br />
+5 BEGIN<br />
+6 start_date := to_timestamp_tz(<br />
+7 to_date('2008-10-10 10:00:00','YYYY-MM-DD HH24:MI:SS'));<br />
+8 return_date_after := start_date;<br />
+9 FOR i IN 1..10 LOOP<br />
+10   DBMS_SCHEDULER.EVALUATE_CALENDAR_STRING(<br />
+11   'FREQ=MONTHLY; INTERVAL=2; BYMONTHDAY=15',<br />
+12   start_date, return_date_after, next_run_date);<br />
+13   DBMS_OUTPUT.PUT_LINE(<br />
+14   'next_run_date: ' || next_run_date);<br />
+15   return_date_after := next_run_date;<br />
+16   END LOOP;<br />
+17   END;<br />
+18 /<br />
+next_run_date: 15-10月-08 10.00.00.000000 上午<br />
+next_run_date: 15-12月-08 10.00.00.000000 上午<br />
+next_run_date: 15-2月 -09 10.00.00.000000 上午<br />
+next_run_date: 15-4月 -09 10.00.00.000000 上午<br />
+next_run_date: 15-6月 -09 10.00.00.000000 上午<br />
+next_run_date: 15-8月 -09 10.00.00.000000 上午<br />
+next_run_date: 15-10月-09 10.00.00.000000 上午<br />
+next_run_date: 15-12月-09 10.00.00.000000 上午<br />
+next_run_date: 15-2月 -10 10.00.00.000000 上午<br />
+next_run_date: 15-4月 -10 10.00.00.000000 上午</span></p>
+<p><span style="color: #3366ff;">PL/SQL 过程已成功完成。</span></p>
+<p><span>-------------------------------------------------------</span></p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Scheduler Windows</span></strong></p>
+<p><span style="font-size: small;">windows are created in the SYS schema. They are stored as database objects and therefore must have a valid name that is unique within the SYS schema.</span></p>
+<p><span><strong><span style="color: #0000ff;">Creating Windows</span></strong><br />
+Windows can be created by using the DBMS_SCHEDULER.CREATE_WINDOW procedure.</span></p>
+<p><span><strong><em>WINDOW_NAME<br />
+RESOURCE_PLAN</em></strong> The RESOURCE_PLAN parameter specifies the name of the resource plan that will govern the timeframe of the window.<br />
+<strong><em>START_DATE</em></strong> The START_DATE parameter specifies the first date that the window is scheduled to open.<br />
+<strong><em>DURATION</em></strong> The DURATION attribute specifies how long the window will remain open.<br />
+<strong><em>SCHEDULE_NAME</em></strong> The SCHEDULE_NAME parameter specifies the name of the schedule associated with the window.<br />
+<strong><em>REPEAT_INTERVAL</em></strong> The REPEAT_INTERVAL parameter specifies how often the window should repeat.<br />
+<strong><em>END_DATE</em></strong> The END_DATE parameter specifies the date when the window will be disabled.<br />
+<strong><em>WINDOW_PRIORITY</em></strong> The WINDOW_PRIORITY parameter is relevant only when two windows overlap each other.<br />
+<strong><em>COMMENTS</em></strong></span></p>
+<p><span>SQL&gt; begin<br />
+2 dbms_scheduler.create_window (<br />
+3 window_name =&gt; 'WORK_HOURS_WINDOW',<br />
+4 resource_plan =&gt; 'DAY_PLAN',<br />
+5 schedule_name =&gt; 'WORK_HOURS_SCHEDULE',<br />
+6 duration =&gt; INTERVAL '10' HOUR,<br />
+7 window_priority =&gt; 'HIGH');<br />
+8 end;<br />
+9 /</span></p>
+<p><span style="color: #0000ff;"><strong>Opening and Closing Windows</strong></span></p>
+<p><span>The first is based on the window’s schedule. The second is they can be opened manually by using the DBMS_SCHEDULER.OPEN_WINDOW procedure.</span></p>
+<p><span>SQL&gt; begin<br />
+2 dbms_scheduler.open_window (<br />
+3 window_name =&gt; 'WORK_HOURS_WINDOW',<br />
+4 duration =&gt; INTERVAL ‘20’ MINUTE,<br />
+5 force =&gt; TRUE);<br />
+6 end;<br />
+SQL&gt; /</span></p>
+<p><span>windows can be manually closed by using the DBMS_SCHEDULER.CLOSE_WINDOW procedure.<br />
+<span>SQL&gt; begin<br />
+2 dbms_scheduler.close_window (<br />
+3 window_name =&gt; 'WORK_HOURS_WINDOW');<br />
+4 end;</span></span></p>
+<p><span><em><strong><span style="color: #0000ff;">Window Logging<br />
+</span></strong></em>The Oracle Scheduler maintains window logs of all window activities. <strong><em>DBA_SCHEDULER_WINDOW_LOG</em></strong> view</span></p>
+<p><span><strong><span style="color: #0000ff;">Purging Logs</span></strong><br />
+Scheduler job and window logs will be automatically purged based on the setting of the LOG_HISTORY attribute of the Scheduler itself.</span></p>
+<p><span>SQL&gt; begin<br />
+2 DBMS_SCHEDULER.SET_SCHEDULER_ATTRIBUTE(<br />
+3 ‘LOG_HISTORY’,’60’);<br />
+4 end;</span></p>
+<p>------------------------------------------</p>
+<p><strong><span style="color: #ff6600;">Scheduler Views Available</span></strong></p>
+<p><strong><em>*_SCHEDULER_SCHEDULES</em></strong> Shows information on all defined schedules.<br />
+<strong><em>*_SCHEDULER_PROGRAMS</em></strong> Shows information on all defined programs.<br />
+<em><strong>*_SCHEDULER_PROGRAM_ARGUMENTS</strong></em> Shows all registered program arguments, and the default values if they exist.<br />
+<strong><em>*_SCHEDULER_JOBS</em></strong> Shows all defined jobs, both enabled and disabled.<br />
+*_<strong><em>SCHEDULER_GLOBAL_ATTRIBUTE</em></strong> Shows the current values of all Scheduler attributes.<br />
+<strong><em>*_SCHEDULER_JOB_ARGUMENTS</em></strong> Shows the arguments for all defined jobs.<br />
+<strong><em>*_SCHEDULER_JOB_CLASSES</em></strong> Shows information on all defined job classes.<br />
+<strong><em>*_SCHEDULER_WINDOWS</em></strong> Shows information about all defined windows.<br />
+<strong><em>*_SCHEDULER_JOB_RUN_DETAILS</em></strong> Shows information about all completed (failed or successful) job runs.<br />
+<strong><em>*_SCHEDULER_WINDOW_GROUPS</em></strong> Shows information about all window groups.<br />
+<em><strong>*_SCHEDULER_WINGROUP_MEMBERS</strong></em> Shows the members of all window groups.<br />
+<em><strong>*_SCHEDULER_RUNNING_JOBS</strong></em> Shows the state information on all jobs that are currently being run.</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/recently-busy.html" data-toggle="tooltip" data-placement="top" title="近来比较忙">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/thinking/of-silence.html" data-toggle="tooltip" data-placement="top" title="默哀">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/sg-ii-chapter-12-using-the-scheduler-to-automate-tasks" data-title="SG II: Chapter 12 | Using the Scheduler to Automate Tasks"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Automating Tasks with the Scheduler
+
+• Simplify management tasks by using the... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-12-using-the-scheduler-to-automate-tasks.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/sg-ii-chapter-12-using-the-scheduler-to-automate-tasks" data-title="SG II: Chapter 12 | Using the Scheduler to Automate Tasks" data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-12-using-the-scheduler-to-automate-tasks.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>mysql 分页小测 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/mysql/mysql-page-quiz.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#mysql" title="mysql">mysql</a>
+                        
+                        <a class="tag" href="/Tags/#sql" title="sql">sql</a>
+                        
+                        <a class="tag" href="/Tags/#tuning" title="tuning">tuning</a>
+                        
+                    </div>
+                    <h1>mysql 分页小测</h1>
+                    
+                    <span class="meta">Posted by David on December 18, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>set profiling=1;</p>
+<div>普通分页：<br />
+SELECT  FF.*<br />
+FROM table_a FF<br />
+WHERE USER_ID = 25038378<br />
+AND SUSPENDED = 0<br />
+AND TYPE = 0<br />
+AND DATE_G &gt; '2009-05-21 23:59:59'<br />
+AND DATE_G &lt;= '2009-12-17 23:59:59'<br />
+AND RATE = 1<br />
+ORDER BY DATE_G DESC LIMIT 4000, 40;</p>
+<p>优化分页：<br />
+SELECT c.* FROM (<br />
+SELECT  FF.ID ID<br />
+FROM table_a FF<br />
+WHERE USER_ID = 25038378<br />
+AND SUSPENDED = 0<br />
+AND TYPE = 0<br />
+AND DATE_G &gt; '2009-05-21 23:59:59'<br />
+AND DATE_G &lt;= '2009-12-17 23:59:59'<br />
+AND RATE = 1<br />
+ORDER BY DATE_G DESC LIMIT 4000, 40) t, table_a c<br />
+WHERE t.id =c.id;</p>
+<p>show profiles;</p>
+<p>show profile block io,cpu  for query ***;</p>
+<p>简单的一些统计分析，<br />
+页数    普通    优化<br />
+1    0.000732    0.000832<br />
+5    0.002945    0.001145<br />
+10    0.003743    0.001233<br />
+20    0.009958    0.005825<br />
+50    1    0.05<br />
+100    1.4    0.053<br />
+200    4.8    0.08<br />
+400    8.14    0.11<br />
+2000 24.2 0.8</p>
+<p>根据统计分析：<br />
+使用优化后的写法，在查询5页以后的数据有比较明显的优势，而且这个优势月到后面越明显。<br />
+其他同学的测试表明，在某些情况下查询前3页的话用普通分页写法会比优化的写法快很多，所以如何使用分页需要根据应用场景具体分析。</p>
+<p>--<br />
+下面看一个特殊情况<br />
+sql只查询了前40行数据，但是实际上扫描了35440行，原因应该是数据的分布导致的。 RATE字段99%是1，只有1%的可能是0或者-1，所以在查询数据是会导致回表<br />
+# Query_time: 5  Lock_time: 0  Rows_sent: 40  Rows_examined: 35440<br />
+SELECT FF.*<br />
+FROM TABLE_A FF<br />
+WHERE USER_ID = 23501375<br />
+AND SUSPENDED = 0<br />
+AND TYPE = 0<br />
+AND DATE_G &gt; '2009-05-21 23:59:59'<br />
+AND DATE_G &lt;= '2009-12-17 23:59:59'<br />
+AND RATE = 0<br />
+ORDER BY DATE_G DESC<br />
+LIMIT 0, 40;</p>
+<p>索引字段 IDX_RATED(`USER_ID`,`DATE_G`,`SUSPENDED`,`TYPE`,`RATE`,`VALID`)</p>
+<p>---看sql的执行计划<br />
+root@feel_08 10:24:27&gt;explain  SELECT FF.*<br />
+-&gt;    FROM TABLE_A FF<br />
+-&gt;   WHERE USER_ID = 23501375<br />
+-&gt;     AND SUSPENDED = 0<br />
+-&gt;     AND TYPE = 0<br />
+-&gt;     AND DATE_G &gt; '2009-05-21 23:59:59'<br />
+-&gt;     AND DATE_G &lt;= '2009-12-17 23:59:59'<br />
+-&gt;     AND RATE = 0<br />
+-&gt;   ORDER BY DATE_G DESC<br />
+-&gt;   LIMIT 0, 40\G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: FF<br />
+type: range<br />
+possible_keys: IDX_FDATE,IDX_RATED<br />
+key: IDX_RATED<br />
+key_len: 24<br />
+ref: NULL<br />
+rows: 118650<br />
+Extra: Using where<br />
+1 row in set (0.00 sec)</p>
+<p>直接查询的数据没有在索引列里，先回表了<br />
+--------<br />
+root@feel_08 10:27:52&gt;explain SELECT c.* FROM (<br />
+-&gt;  SELECT FF.ID<br />
+-&gt;    FROM TABLE_A FF<br />
+-&gt;   WHERE USER_ID = 23501375<br />
+-&gt;     AND SUSPENDED = 0<br />
+-&gt;     AND TYPE = 0<br />
+-&gt;     AND DATE_G &gt; '2009-05-21 23:59:59'<br />
+-&gt;     AND DATE_G &lt;= '2009-12-17 23:59:59'<br />
+-&gt;     AND RATE =0<br />
+-&gt;   ORDER BY DATE_G DESC<br />
+-&gt;   LIMIT 0, 40) t, TABLE_A c<br />
+-&gt;  WHERE t.id =c.id\G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: PRIMARY<br />
+table: &lt;derived2&gt;<br />
+type: ALL<br />
+possible_keys: NULL<br />
+key: NULL<br />
+key_len: NULL<br />
+ref: NULL<br />
+rows: 40<br />
+Extra:<br />
+*************************** 2. row ***************************<br />
+id: 1<br />
+select_type: PRIMARY<br />
+table: c<br />
+type: eq_ref<br />
+possible_keys: PRIMARY<br />
+key: PRIMARY<br />
+key_len: 8<br />
+ref: t.ID<br />
+rows: 1<br />
+Extra:<br />
+*************************** 3. row ***************************<br />
+id: 2<br />
+select_type: DERIVED<br />
+table: FF<br />
+type: range<br />
+possible_keys: IDX_FDATE,IDX_RATED<br />
+key: IDX_RATED<br />
+key_len: 24<br />
+ref: NULL<br />
+rows: 118650<br />
+Extra: Using where; Using index<br />
+3 rows in set (0.02 sec)</p>
+<p>因为子查询的数据直接使用索引获取ID，再用id去关联，索引回表的数据只有40条，速度就相当快了<br />
+执行时间是0.4s</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/mysql/mysql-set-names.html" data-toggle="tooltip" data-placement="top" title="mysql set names">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/thinking/taobao-opinion-evaluation-system.html" data-toggle="tooltip" data-placement="top" title="淘宝评价体系的一点看法">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/mysql/mysql-page-quiz" data-title="mysql 分页小测"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="set profiling=1;
+普通分页：
+SELECT  FF.*
+FROM table_a FF
+WHERE USER_ID = 25038378
+... | Microdust:David's blog"
+                    data-url="http://dbaeyes.github.io/mysql/mysql-page-quiz.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">Share to：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        <li><a class="ds-facebook" href="javascript:void(0);" data-service="facebook">Facebook</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/mysql/mysql-page-quiz" data-title="mysql 分页小测" data-url="http://dbaeyes.github.io/mysql/mysql-page-quiz.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dbaeyes"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

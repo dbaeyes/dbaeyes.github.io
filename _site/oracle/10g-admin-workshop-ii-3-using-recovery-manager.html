@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>10g Admin Workshop II - 3 - Using Recovery Manager - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/10g-admin-workshop-ii-3-using-recovery-manager.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#study" title="study">study</a>
+                        
+                    </div>
+                    <h1>10g Admin Workshop II - 3 - Using Recovery Manager</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on March 26, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <h1><strong><span style="color: #ff6600; font-size: small;">Objectives</span></strong></h1>
+<div>
+<p>After completing this lesson, you should be able to do the following:<br />
+• Use the RMAN BACKUP command to create backup sets and image copies<br />
+• Manage the backups and image copies taken with</p>
+<p>Objectives<br />
+Recovery Manager (RMAN) is the component of the Oracle database used to perform backup<br />
+and recovery operations. Enterprise Manager (EM) supplies a graphical interface to the most<br />
+commonly used RMAN functionality.<br />
+The Oracle Database 10g: Administration Workshop I class demonstrates basic RMAN<br />
+operations using the EM Database Control Console; therefore, the graphical interface to<br />
+RMAN is not covered in detail in this lesson.</p>
+<p><span style="color: #ff6600; font-size: small;">Issuing Recovery Manager Commands</span><br />
+• <strong>Interactive client<br />
+</strong>– Enter commands at RMAN prompt.<br />
+– Use when performing analysis, or when running reports or stored scripts.<br />
+• <strong>Batch mode</strong><br />
+– Use with automated jobs.<br />
+– Specify a command file when starting RMAN.<br />
+– Specify the log file name to capture session log.<br />
+•<strong> Pipe interface</strong><br />
+– Specify the PIPE command-line argument.<br />
+– Use to communicate data between sessions or between RMAN and an external application.</p>
+<p><strong><span style="color: #ff6600;">Types of RMAN Commands</span></strong><br />
+RMAN commands are of the following types:<br />
+• <strong>Stand-alone</strong> command:<br />
+– Is executed individually at the RMAN prompt<br />
+– Cannot appear as subcommands within RUN<br />
+• <strong>Job </strong>command:<br />
+– Must be within the braces of a <em>RUN</em> command<br />
+– Is executed as a group<br />
+Some commands can be executed as either a stand-alone or a job command.</p>
+<p>&nbsp;</p>
+<div>
+<p><img src="http://hiphotos.baidu.com/dbaeyes/pic/item/6911b8fcea2ca8ecfc037f93.jpg" alt="" border="0" data-pinit="registered" /></p>
+<p>RMAN Commands: Overview<br />
+The typical RMAN commands that you run against the target database include:<br />
+• <strong>BACKUP</strong> to back up a database, tablespace, data file (current or copy), control file (current or copy), SPFILE, archived log, or backup set for a target or standby database.<br />
+Backing up a backup set is an easy way to move a backup from disk to tape.<br />
+• <strong>DUPLICATE</strong> to create a clone database or a standby database from backups (backup sets or image copies) of the target database<br />
+• <strong>FLASHBACK</strong> to perform a Flashback Database operation, returning the database to (or to just before) a target time, as specified by time, SCN, or log sequence number<br />
+• <strong>RECOVER</strong> to recover, and RESTORE to restore files from backups or image copies The RMAN reporting commands include:<br />
+• <strong>LIST</strong> for querying the recovery catalog or control file and producing a list of the backups, copies, archived redo logs, and database incarnations recorded there<br />
+• <strong>REPORT</strong> for performing detailed analysis of the recovery catalog or control file</p>
+<p>RMAN provides the following command sets for catalog maintenance:<br />
+• <strong>CROSSCHECK</strong> checks the status of a backup or a copy on disk or tape.<br />
+• <strong>DELETE</strong> lists specified backup objects and prompts for confirmation to remove them.<br />
+• <strong>CHANGE</strong> alters the status of backup objects in the repository.<br />
+• <strong>LIST</strong> shows what CROSSCHECK/DELETE EXPIRED would process if run.</p>
+<p><strong><span style="color: #ff6600; font-size: small;">BACKUP Command</span></strong></p>
+<p><span>RMAN&gt; BACKUP AS BACKUPSET<br />
+2&gt; FORMAT '/BACKUP/df_%d_%s_%p.bus'<br />
+3&gt; TABLESPACE hr_data;</span></p>
+<p>When performing a backup using RMAN, you can specify:<br />
+• The <strong>type</strong> of backup to be performed. You can perform backups of the entire database to include every used data block in the files (a FULL backup) or incremental backups (INCREMENTAL). If CONFIGURE CONTROLFILE AUTOBACKUP is enabled, RMAN automatically backs up the control file and the current server parameter file after BACKUP commands.<br />
+• <strong>What to backup</strong>. Valid values are DATABASE, DATAFILE, TABLESPACE, ARCHIVELOG, CURRENT CONTROLFILE, or SPFILE.<br />
+• Whether an <strong>image</strong> <strong>copy</strong> (AS COPY) or <strong>backup set</strong> (AS BACKUPSET) is created<br />
+• The file name format and location for backup pieces (<strong>FORMAT</strong>)<br />
+• Which data files or archived redo logs should be excluded from the backup set (SKIP)<br />
+• A maximum size for a backup set (<strong>MAXSETSIZE</strong>)<br />
+• That the input files should be deleted upon the successful creation of the backup set (DELETE INPUT)</p>
+<p><strong><span style="color: #ff6600;">Backup Constraints</span></strong><br />
+• The database must be mounted or open.<br />
+• You cannot back up online redo logs.<br />
+• Only “clean” backups are usable in NOARCHIVELOG mode.<br />
+• Only “current” data file backups are usable in ARCHIVELOG mode.</p>
+<p><strong><span style="color: #ff6600;">Compressed Backups</span></strong><br />
+<span>RMAN&gt; BACKUP AS COMPRESSED BACKUPSET DATABASE;</span><br />
+You can configure RMAN to automatically make compressed backup sets with the CONFIGURE DEVICE TYPE command:<br />
+<span>RMAN&gt; CONFIGURE DEVICE TYPE DISK PARALLELISM 2<br />
+2&gt; BACKUP TYPE TO COMPRESSED BACKUPSET;</span></p>
+<p><strong><span style="color: #ff6600;">Image Copy</span></strong><br />
+An image copy is a clone of a single data file, archived redo log, or control file. An image copy can be created with the BACKUP AS COPY command or with an OS command.<br />
+When you create the image copy with the RMAN BACKUP AS COPY command, the server session validates the blocks in the file and records the copy in the control file.</p>
+<p><span>RMAN&gt; BACKUP AS COPY<br />
+2&gt; DATAFILE '/ORADATA/users_01_db01.dbf'<br />
+3&gt; FORMAT '/BACKUP/users01.dbf';</p>
+<p>RMAN&gt; BACKUP AS COPY<br />
+4&gt; ARCHIVELOG LIKE 'arch_1060.arc'<br />
+5&gt; FORMAT 'arch_1060.bak';</span></p>
+<p><strong><span style="color: #ff6600;">Tags for Backups and Image Copies</span></strong><br />
+A tag is a meaningful name that you can assign to a backup set or image copy. The advantages of tags are as follows:<br />
+• Tags provide a useful reference to a collection of file copies or a backup set.<br />
+• Tags can be used in the LIST command to locate backed-up files easily.<br />
+• Tags can be used in the RESTORE and SWITCH commands.<br />
+• The same tag can be used for multiple backup sets or file copies.</p>
+<p><span>RMAN&gt; BACKUP TAG 'month_full_backup' DATAFILE 1,2,3,4;</span></p>
+<p><strong><span style="color: #ff6600;">BACKUP Command Options</span></strong><br />
+• Check for physical block corruptions.<br />
+• Scan for logical corruptions and physical corruptions.<br />
+• Set a threshold on the number of detected corruptions allowed before aborting.<br />
+• Validate the target input files before performing a backup operation.<br />
+• Duplex the backup set.<br />
+• Overwrite an existing backup set or image copy.<br />
+• Pass control of the data transfer between storage devices and the data files on disk to the media management layer.<br />
+• Encrypt the backup files.</p>
+<p><strong><span style="color: #0000ff;">Backing Up Archived Redo Logs</span></strong><br />
+• Online redo log file switch is automatic.<br />
+• Archived log failover is performed.<br />
+• You can specify a range of archived redo logs to back up.<br />
+• Backup sets of archived redo log files cannot contain any other type of file.<br />
+<span>RMAN&gt; BACKUP<br />
+2&gt; FORMAT '/disk1/backup/ar_%t_%s_%p'<br />
+3&gt; ARCHIVELOG FROM SEQUENCE=234<br />
+4&gt; DELETE INPUT;</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="color: #ff6600;">Whole Database Backup</span></strong><br />
+A whole database backup is a copy of all data files and the control file. You can optionally include the SPFILE and archived log files. Using Recovery Manager to make an image copy of all the database files is as easy as mounting the database, starting RMAN, and entering the BACKUP command shown in the slide.<br />
+This is possible if you have already issued the following CONFIGURE commands:<br />
+• CONFIGURE DEFAULT DEVICE TYPE TO disk;<br />
+• CONFIGURE DEVICE TYPE DISK BACKUP TYPE TO COPY;<br />
+• CONFIGURE CONTROLFILE AUTOBACKUP ON;</p>
+<p><strong><span style="color: #ff6600; font-size: small;">RMAN Backup Types</span></strong><br />
+• A full backup contains all used data file blocks.<br />
+• A level 0 incremental backup is equivalent to a full backup that has been marked as level 0.<br />
+• A <strong>cumulative</strong> level 1 incremental backup contains only blocks modified since the last level 0 incremental backup.<br />
+• A <strong>differential</strong> level 1 incremental backup contains only blocks modified since the last incremental backup.</p>
+<p>The only difference is that the level 0 backup can be used as the base for a level 1 backup, but a full backup can never be used as the base for a level 1 backup.</p>
+<p>Examples<br />
+• To perform an incremental backup at level 0, use the following command:<br />
+<span>RMAN&gt; BACKUP INCREMENTAL LEVEL 0 DATABASE;</span><br />
+• To perform a differential incremental backup, use the following command:<br />
+<span>RMAN&gt; BACKUP INCREMENTAL LEVEL 1 DATABASE;</span><br />
+• To perform a cumulative incremental backup, use the following command:<br />
+<span>RMAN&gt; BACKUP INCREMENTAL LEVEL 1 CUMULATIVE DATABASE;</span></p>
+<p>&nbsp;</p>
+<p><strong><span style="color: #ff6600; font-size: small;">Block Change Tracking</span></strong><br />
+The goal of an incremental backup is to back up only those data blocks that have changed since a previous backup. The entire data file is read during each incremental backup, even if just a very small part of that file has changed since the last incremental backup.<br />
+The block change tracking feature uses the change tracking writer (<strong>CTWR</strong>) background process to record the physical location of all database changes in a new type of file called the <em>change tracking file</em>. After enabling change tracking, the first level 0 incremental backup still has to scan the entire data file because the change tracking file does not yet reflect the status of the blocks.For subsequent incremental backups, RMAN uses the change tracking data to determine which blocks to read during an incremental backup, improving performance by eliminating the need to read the entire data file.</p>
+<p><strong><span style="color: #ff6600;">Enabling Block Change Tracking</span></strong><br />
+<span>SQL&gt; ALTER DATABASE ENABLE<br />
+2&gt; BLOCK CHANGE TRACKING<br />
+3&gt; USING FILE '/mydir/rman_change_track.f'<br />
+4&gt; REUSE;</span></p>
+<p>You do not have to specify a name for the block change tracking file if the db_create_file_dest parameter is set, in which case an Oracle-managed file is created.</p>
+<p><span style="color: #3366ff;">SQL&gt; ALTER DATABASE ENABLE BLOCK CHANGE TRACKING;<br />
+SQL&gt; ALTER DATABASE DISABLE BLOCK CHANGE TRACKING;</span></p>
+<p>The view: V$BLOCK_CHANGE_TRACKING;</p>
+<p><strong><span style="color: #ff6600;">Incrementally Updating Backups</span></strong><br />
+With the Incrementally Updated Backups feature, you can use RMAN to apply incremental backups to data file image copies. With this recovery method, RMAN can recover a copy of a data file, or roll forward the image copy, to the specified point in time by applying the incremental backups.</p>
+<p><strong><span style="color: #ff6600;">LIST Command</span></strong><br />
+• List backup sets and copies of data files:<br />
+<span>RMAN&gt; LIST BACKUP OF DATAFILE</p>
+<p>2&gt; "/db01/ORADATA/u03/users01.dbf";<br />
+RMAN&gt; LIST BACKUP OF DATABASE;</span></p>
+<p>• List backup sets and copies of any data file for a specified tablespace:<br />
+<span>RMAN&gt; LIST COPY OF TABLESPACE "SYSTEM";</span></p>
+<p>• List backup sets and copies containing archive logs for a specified range:<br />
+<span>RMAN&gt; LIST COPY OF DATABASE ARCHIVELOG<br />
+2&gt; FROM TIME='SYSDATE-7';</span></p>
+<p><strong><span style="color: #ff6600; font-size: small;">REPORT Command</span></strong><br />
+With this command, you can analyze information in the RMAN repository in more detail.<br />
+Reports can be produced for a variety of questions, such as:<br />
+• What is the structure of the database?<br />
+<span style="color: #3366ff;">RMAN&gt; REPORT SCHEMA;</span><br />
+• Which files need to be backed up?<br />
+<span style="color: #3366ff;">RMAN&gt; REPORT NEED BACKUP ...;</span><br />
+• Which backups can be deleted (that is, are obsolete)?<br />
+<span style="color: #3366ff;">RMAN&gt; REPORT OBSOLETE;</span><br />
+• Which files are not recoverable because of unrecoverable operations?<br />
+<span style="color: #3366ff;">RMAN&gt; REPORT UNRECOVERABLE ...;</span></p>
+<p><strong><span style="color: #ff6600;">REPORT NEED BACKUP Command</span></strong><br />
+The REPORT NEED BACKUP command is used to identify all data files that need a backup.<br />
+The report assumes that the most recent backup would be used in the event of a restore.<br />
+There are four options:</p>
+<p>• <strong>Incremental</strong>: An integer that specifies the maximum number of incremental backups that should be restored during recovery. If complete recovery of a data file requires more than the specified number of incremental backups, then the data file requires a new full backup.<br />
+For example, to report files that need three or more incremental backups for recovery:<br />
+<span>RMAN &gt; REPORT NEED BACKUP incremental 3 database;<br />
+</span><br />
+• <strong>Days</strong>: An integer that specifies the maximum number of days since the last full or incremental backup of a file. The file needs a backup if the most recent backup is equal to or greater than this number.<br />
+For example, to report what system files have not been backed up for three days:<br />
+<span>RMAN &gt; REPORT NEED BACKUP days 3 tablespace system;</span></p>
+<p><strong>• Redundancy</strong>: An integer that specifies the minimum level of redundancy considered necessary.<br />
+For example, redundancy level two requires a backup if there are not two or more backups.<br />
+<span>RMAN&gt; REPORT NEED BACKUP redundancy 2;</span></p>
+<p><strong>• Recovery window</strong>: A time window in which RMAN should be able to recover the database<br />
+For example, Backup needed to recover to three days ago:<br />
+<span>RMAN&gt; REPORT NEED BACKUP<br />
+2&gt; recovery window of 3 days;</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="color: #ff6600;">REPORT OBSOLETE and DELETE OBSOLETE</span></strong><br />
+• Find all recovery files that are deemed obsolete according to the current retention policy settings:<br />
+<span>RMAN&gt; REPORT OBSOLETE REDUNDANCY 2;<br />
+</span><br />
+• List the obsolete recovery files, if no more than two backup copies are needed:<br />
+<span>RMAN&gt; REPORT OBSOLETE;</span></p>
+<p>• Delete the backup set with a backup set key of 4:<br />
+<span>RMAN&gt; DELETE BACKUPSET 4;</span></p>
+<p>• Delete the recovery files considered obsolete, because they have more than two backups:<br />
+<span>RMAN&gt; DELETE OBSOLETE REDUNDANCY 2;</span><br />
+<strong><span style="color: #ff6600; font-size: small;">RMAN Dynamic Views</span></strong><br />
+You can use the following views to obtain RMAN information stored in the control file:<br />
+<span style="color: #0000ff;">• V$ARCHIVED_LOG</span> shows which archives have been created, backed up, and cleared in the database.<br />
+<span style="color: #0000ff;">• V$BACKUP_CORRUPTION</span> shows which blocks have been found to be corrupt during a backup of a backup set.<br />
+<span style="color: #0000ff;">• V$BACKUP_DATAFILE</span> is useful for creating equal-sized backup sets by determining the number of blocks in each data file. It can also help you find the number of corrupt blocks in the data file.<br />
+<span style="color: #0000ff;">• V$BACKUP_DEVICE</span> displays information about supported backup devices. The special device type DISK is not returned by this view because it is always available.<br />
+<span style="color: #0000ff;">• V$BACKUP_FILES</span> displays information about all RMAN backups (both image copies and backup sets) and archived logs. This view simulates the LIST BACKUP and LIST COPY RMAN commands.<br />
+<span style="color: #0000ff;">• V$BACKUP_PIECE</span> shows backup pieces created for backup sets.<br />
+<span style="color: #0000ff;">• V$BACKUP_REDOLOG</span> shows archived logs stored in backup sets.<br />
+<span style="color: #0000ff;">• V$BACKUP_SET</span> shows backup sets that have been created.<br />
+<span style="color: #0000ff;">• V$BACKUP_SPFILE</span> displays information about server parameter files in backup sets.<br />
+<span style="color: #0000ff;">• V$COPY_CORRUPTION</span> shows which blocks have been found to be corrupt during an image copy.<br />
+<span style="color: #0000ff;">• V$DATABASE_BLOCK_CORRUPTION</span> lists database blocks marked as corrupt during the most recent RMAN backup.<br />
+<span style="color: #0000ff;">• V$RMAN_CONFIGURATION</span> lists information about RMAN persistent configuration settings.<br />
+If you use proxy settings for RMAN, you can query:<br />
+<span style="color: #0000ff;">• V$PROXY_ARCHIVEDLOG<br />
+• V$PROXY_DATAFILE</span><br />
+For backup performance statistics, you can query:<br />
+<span style="color: #0000ff;">• V$BACKUP_ASYNC_IO<br />
+• V$BACKUP_SYNC_IO</span></p>
+<p>&nbsp;</p>
+<p><strong><span style="color: #ff6600; font-size: small;">Monitoring RMAN Backups</span></strong><br />
+To correlate a process with a channel during a backup, perform the following steps:<br />
+1. Start Recovery Manager and connect to the target database and, optionally, the recovery catalog.</p>
+<p>2. Set the COMMAND ID parameter after allocating the channels and then copy the desired object. The string specified by the SET COMMAND ID command is entered into the V$SESSION.CLIENT_INFO column of all allocated channels.<br />
+<span>run {<br />
+allocate channel t1 type disk;<br />
+set command id to 'rman';<br />
+backup datafile 1;<br />
+release channel t1;}</span></p>
+<p>3. Query the V$PROCESS and V$SESSION views to get the session identifier (SID) and the operating system process identifier (SPID) for the channels using the previously specified COMMAND ID string.<br />
+SELECT sid, spid, client_info<br />
+FROM v$process p, v$session s<br />
+WHERE p.addr = s.paddr<br />
+AND client_info LIKE '%id=rman%';</p>
+<p>4. Query the V$SESSION_LONGOPS view to get the status of the copy.<br />
+<span>SELECT sid, serial#, context, sofar, totalwork,<br />
+round(sofar/totalwork*100,2) "% Complete"<br />
+FROM V$SESSION_LONGOPS<br />
+WHERE opname LIKE 'RMAN:%'<br />
+AND opname NOT LIKE 'RMAN: aggregate%'<br />
+AND totalwork != 0;</span></p>
+<p>5. If you use a channel of type sbt and the copy process appears to hang, query V$SESSION_WAIT by using the SID obtained in step 3 to determine whether RMAN is waiting for a media manager function call to complete.<br />
+<span>SELECT * FROM V$SESSION_WAIT WHERE event LIKE '%sbt%';</span></p>
+<p>-- EOF --</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/10g-admin-workshop-ii-1-introduction.html" data-toggle="tooltip" data-placement="top" title="10g Admin Workshop II - 1 - Introduction">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/10g-admin-workshop-ii-4-recovering-from-noncritical-losses.html" data-toggle="tooltip" data-placement="top" title="10g Admin Workshop II - 4 - Recovering from Noncritical Losses">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/10g-admin-workshop-ii-3-using-recovery-manager" data-title="10g Admin Workshop II - 3 - Using Recovery Manager"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Objectives
+
+After completing this lesson, you should be able to do the follow... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/10g-admin-workshop-ii-3-using-recovery-manager.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/10g-admin-workshop-ii-3-using-recovery-manager" data-title="10g Admin Workshop II - 3 - Using Recovery Manager" data-url="http://dbaeyes.github.io/oracle/10g-admin-workshop-ii-3-using-recovery-manager.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

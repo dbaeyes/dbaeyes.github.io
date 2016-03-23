@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>PL SQL 小结 -- zt - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/summary-of-pl-sql-zt.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#plsql" title="plsql">plsql</a>
+                        
+                    </div>
+                    <h1>PL SQL 小结 -- zt</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on July 9, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>1．SQL并行查询</p>
+<div>alter session enable parallel dml<br />
+execute immediate 'alter session enable parallel dml'; --修改会话并行DML<br />
+select /*+parallel(a,4)*/ * from table_name a<br />
+select /*+parallel(a,8)*/ * from table_name a<br />
+select /*+parallel(a,4) parallel(b,4) parallel(c,4)*/ a.*,b.*,c.*<br />
+from table_name1 a,table_name2 b,table_name c<br />
+insert /*+parallel(t,4)*/ into table_name t<br />
+insert /*+parallel(t,8)*/ into table_name t<br />
+/*+parallel(t,8)*/ 并行处理，一般为CPU的倍数如：4，8等,在执行类型SQL必须先运行:alter session enable parallel dml<br />
+2．删除表分区数据<br />
+alter table masamk.tb_mk_sc_user_mon truncate partition mk_user_mon_'||trim(iv_month) 删除指定表分区数据<br />
+3．minus(差集)与intersect(交集)<br />
+minus      指令是运用在两个 SQL 语句上。它先找出第一个 SQL 语句所产生的结果，然后看这些结果有没有在第二个 SQL 语句的结果中,如果有的话，那这一笔资料就被去除，而不会在最后的结果中出现; 如果第二个 SQL 语句所产生的结果并没有存在于第一个 SQL 语句所产生的结果内，那这笔资料就被抛弃。<br />
+intersect 指令是运用在两个SQL语句上，如果两个SQL语句的记录完全相同则显示相应记录，否则将不在结果中出现<br />
+4．Order by 中的 nulls last<br />
+order by area_code,bill_month nulls last --nulls last 将排序字段为null记录放在最后面<br />
+5．nvl的几个不同函数<br />
+nvl(a,1)   如果 a 为 null 返回 1,否则返回 a<br />
+nvl2(a,1,0)      如果 a 为 null 返回 0,否则返回 1<br />
+nullif(a,b)       如果 a = b 返回 null ,否则返回 a<br />
+6．怎样确保最终用户在数据库中只有N个会话(如果N 为1则只有1个会话)<br />
+create profile one_session limit sessions_per_user N; --创建参数文件(N为任意整数)<br />
+alter user &lt;用户&gt; profile one_session; --设置用户的参数文件<br />
+alter system set resource_limit=true; --设置资源限定<br />
+7．表的字段参照另外表的字段<br />
+create table resources ( resource_name varchar2(10) primary key,,,,);<br />
+create table schedules (resource_name references resources,….);<br />
+8．绑定变量的使用<br />
+1)        sql中的绑定变量<br />
+定义绑定变量：variable emplno varchar2(10);<br />
+给绑定变量赋值：execute :emplno := ‘1234567890’;<br />
+sql/plus中使用绑定变量：select * from emp where empno = :emplno;<br />
+pl/sql中使用绑定变量：execute immediate ‘insert into t values(:x)’ using x;<br />
+游标中使用绑定变量：open c1 for ‘select * from emp where empno=:empno’ using empno;<br />
+2)        DDL语句中不允许使用绑定变量,如:execute immediate ‘create table a as selct * from b where x=:x’ using x;<br />
+3)        pl/sql中的批量绑定变量（forall）<br />
+a)       forall i in 1..x.count<br />
+dml;--只能有一条语句(update,insert,delete)<br />
+sql%bulk_rowcount(i):用于取得在执行批量绑定操作时的第i个元素作用的行数<br />
+b)       bulk collect 子句：用于取得批量数据，它只适用于select into、fetch into和DML返回子句<br />
+语法：…BULK COLLECT INTO collection_name…<br />
+i.              select 中使用bulk collect<br />
+declare<br />
+type emp_table_type is table emp%rowtype index by binary_integer;<br />
+emp_table emp_table_type;<br />
+begin<br />
+select * bulk collect into emp_table from emp where deptno=&amp;no;<br />
+for i in 1..emp_table.count loop<br />
+dbms_output.put_line(emp_table(i).emp);<br />
+end loop;<br />
+forall i in 1..emp.table.count<br />
+update sal set deptno = emp_table(i).deptno<br />
+where empno = emp_table(i).empno;<br />
+dbms_output.put_line('第2个元素更新的行数为：'||sql%bulk_rowcount(2));<br />
+end;<br />
+ii.              dml的返回子句中使用bulk collect<br />
+declare<br />
+type ename_table_type is table of emp.ename%type;<br />
+ename_table ename_table_type;<br />
+begin<br />
+delete emp where deptno=&amp;no<br />
+returning ename bulk collect into ename_table;<br />
+for i in 1..ename_table.count loop<br />
+dbms_output.put_line(ename_table(i));<br />
+end loop;<br />
+end;<br />
+c)       fetch c1 bulk collect into collect1,collect2,…[limit rows]<br />
+9．在SQL中锁定记录<br />
+锁(lock)机制用于管理对共享资料的并发访问，并提供数据完整性和一致性<br />
+锁的类型：DML锁、DDL锁、内部锁和闩<br />
+1)      DML锁<br />
+a． 事务锁(TX锁)：事务发起第一个修改时会得到TX锁，直到事务提交或回滚<br />
+b． DML Enqueue锁(TM锁)：用于确保在修改表的内容时，表的结构不会改变<br />
+2)      DDL锁<br />
+a． 排他DDL锁(Exclusive DDL Lock)：这会防止其他会话得到它们自己的DDL锁或TM(DML)锁(即其他会话只能对该表执行select )。如：alter table<br />
+b． 共享DDL锁(Share DDL Lock)：这些锁会保护所引用对象的结构，使之不会被其他会话修改，但是允许修改数据。如在创建VIEW时，对原始表就会加共享锁，此时原始可以修改数据，但不能修改表结构<br />
+c． 可中断解析锁(Breakable parse locks)：这些锁允许一个对象向另外某个对象注册其依赖性<br />
+3)      闩(latch)：是轻量级的串行化设备，用于协调对共享数据结构、对象和文件的多用户访问；闩用于保护某些内存结构，如数据库块缓冲区缓存或共享池中的库缓存<br />
+4)      手动锁定和用户定义锁<br />
+a． 通过一条SQL语句手动地锁定数据。<br />
+i.              select … for update [nowait/wait [n]]<br />
+ii.              select … for update of table_name   --多表关联时锁定指定表的数据行<br />
+iii.              lock table in exclusive mode<br />
+b． 通过DBMS_LOCK包创建我们自己的锁<br />
+5)      select … for update [nowait/wait [n]] [skip locked] 详解<br />
+select * from resources where resource_name=’abc’ for update [nowait/wait [n]] [skip locked];<br />
+nowait：立即执行，如果另有会话正在修改该记录会立即报告错误：ORA-00054: 资源正忙，要求指定 NOWAIT；如果不选择nowait选项则会一直处理等待状态。<br />
+wait [n]：等待n秒，如果另有会话正在修改该记录会报告错误：ORA-30006: 资源已被占用; 执行操作时出现 WAIT 超时<br />
+skip locked：跳过已被别的会话锁定的记录<br />
+6)      set transaction read only(只读事务)：使会话取得特定时间点的数据，即使其它会话已经修改并提交新数据，当前会话也只能看到锁定时的数据，同时当前会话不能执行DML.<br />
+7)      set transaction isolation level { serializable | read committed }(顺序事务)：同只读事务，但允许执行DML语句。<br />
+10．数据库与实例的关系<br />
+数据库(Database)：物理操作系统文件或磁盘的集合。(数据库是磁盘上存储的数据文件集合)<br />
+实例(instance)：一组Oracle后台进程/线程以及一个共享内存区，这些内存由同一个计算机上运行的统一线程/进和所共享。(实例就是一组后进程和共享内存)<br />
+实例与数据库之间的关系是：数据库可以由多个实例装载和打开，而实例可以在任何时间点装载和打开一个数据库。<br />
+11．Oralce数据库所包含的文件类型<br />
+1)      与实例相关的文件：参数文件(parameter file)、跟踪文件(trace file)、警告文件(alert file)<br />
+2)      构成数据库的文件：数据文件(data file)、临时文件(temp file)、控制文件(control file)、重做日志文件(redo log file)、密码文件(password file)<br />
+3)      Oracle 10g新增文件：修改跟踪文件(change tracking file)、闪回日志文件(flashback log file)<br />
+4)      其他类型文件：转储文件(DMP file)、数据泵文件(Data Pumn file)、平面文件(flat file)<br />
+12．表空间(tablespace)、段(segment)、区段(extent)、块(block)的关系<br />
+1)      表空间(tablespace)：是Oracle中的一个逻辑存储容器，位于存储层次体系的顶层，包含           一个或多个数据文件<br />
+2)      段(segment)：占用存储空间的数据为对象，如表、索引、回滚段等；段由一个或多个区段组成<br />
+3)      区段(extent)：是文件中一个逻辑上连续分配的空间；区段由块组成<br />
+4)      块(block)：是Oracle中最小的空间分配单位；数据行、索引条目或临时排序结果就存储在块中；Oracle中常见的块大小：2K、4K、8K、16K(最大不能超过32K)<br />
+5)      它们之间的关系：数据库由一个或多个表空间组成，表空间由一个或多个数据文件组成，表空间包含段，段由一个或多个区段组成，区段则由连续的块组成<br />
+13．名称解释<br />
+1)      决策支持系统(DSS)：Decision Support System<br />
+2)     联机事务处理(OLTP)：On-line Transaction Processing<br />
+3)     联机分析处理(OLAP)：On-Line Analytical Processing也称为在线分析处理。<br />
+4)     ETL(Extraction-Transformation-Loading)：抽取(Extraction)、转换 (Transformation)、载入(Loading) ETL负责将分布的、异构数据源中的数据如关系数据、平面数据文件等抽取到临时中间层后进行清洗、转换、集成，最后加载到数据仓库或数据集市中，成为联机分析处理、数据挖掘的基础。 ETL是数据仓库中的非常重要的一环。<br />
+5)     关系数据库管理系统(RDBMS)：Relational Database Management System<br />
+6)     表的三种联接方式:nested loop(嵌套循环连接)、sort merge join(排序合并连接)、hash join(哈希连接)<br />
+7)     数据查询语言(Select):用于检索数据库数据<br />
+8)     数据定义语言(DDL)：Data Definition Language(如 create table、alter table、truncate table):用于建立、修改和删除数据为对象(采用先提交(commit)，再执行DDL，再COMMIT，所有如果有必须回滚的事务，DDL不会回滚而会直接提交(commit))<br />
+9)     数据操纵语言(DML): Data Manipulation Language(包含:insert、update、delete):用于改变数据库数据<br />
+10) 数据控制语言(DCL): Data Control Language(包含:grant、revoke):用于执行权限授予和收回操作(同数据操纵语言DML会自动提交事务)<br />
+11) 事务控制语言(TCL):Transactional Control Language(Commit、Rollback、Savepoint)：用于维护数据的一致性<br />
+12) Recursive Calls：Number of recursive calls generated at both the user and system level.（用户与系统造成的递归调用数）<br />
+13) DB Block Gets：请求的数据块在buffer能满足的个数(Number of times a CURRENT block was requested.)<br />
+14) Consistent(一致性) Gets：数据请求在回滚段Buffer中的总数 (Number of times a consistent read was requested for a block.)<br />
+15) Physical Reads：从磁盘读到Buffer Cache数据块数量(Total number of data blocks read from disk. This number equals the value of "physical reads direct" plus all reads into buffer cache)<br />
+16) Sorts (disk)：Number of sort operations that required at least one disk write. Sorts that require I/O to disk are quite resource intensive. Try increasing the size of the initialization parameter SORT_AREA_SIZE.(排序运算需要的最小磁盘写)<br />
+17) PCTFREE：PCTFREE参数用于指定块中必须保留的最小空闲空间比例.之所以要为块保留一些空闲空间,是因为在对块中存储的数据进行修改时 (UPDATE操作),有可能会需要更多的存储空间.这时如果块中存储空间不足,就必须分配新块,此时会产生指针,降低性能.而如果每块在最初填写数据时均不填满,保留一部分可用空间,比如20%,则可以尽量避免上述问题. 当一些块在以后使用时,比如进行update操作时,则可以使用那20%的空间.而如果一些块中的数据后来又没有了或减少了,比如由原来的90%变为 70%,因为已符合PCTFREE的规定,那么如果有INSERT操作的话,则该块又可以被使用了,但实际上这个块只有10%的空间可以给INSERT操作使用,所以这种情况应该避免.那就用到了下面的参数(PCTUSED)<br />
+18) PCTUSED：PCTUSED参数用于指定一个百分比,当块中已经使用的存储空间降低到这个百分比之下时,这个块才被标记为可用,否则按上面的即使块中已经有30%的可用空间,块依然不可用. 这是ORACLE为了防止出现太大的数据碎片导至降低数据库性能及防止浪费空间而导至磁盘利用率低的一个提供给专业用户使用的参数！<br />
+当一个块写到pctused所指定的值时（如：80%），这个块就被标记为已用，不可以再朝里边写数据，以为日后修改此块内的某条记录（主要是增加数据量）提供条件<br />
+当一个块因为修改及删除记录而使其占用率降低到pctfree所指定的值时（如：20%）， 在数据字典里这个块被标记为可用，新增加的记录就可以朝这个块里写数据<br />
+这个参数非常专业，一定要你非常熟悉磁盘调整及了解自己数据库的应用特点才可以调整，而且调整此参数一定要很有经验，建议不是很确定不要随意调整，因为会大大降低数据库效率的<br />
+19) INITRANS：参数确定为事务处理项预分配多少数据块头部的空间。当您预计有许多并发事务处理要涉及某个块时，可为相关的事务处理项预分配更多的空间，以避免动态分配该空间的开销。<br />
+20) MAXTRANS：参数限制并行使用某个数据块的事务处理的数量。当您预计有许多事务处理将并行访问某个小表时，则当创建表时，应设置该表的事务处理项预分配更多的块空间，较高的MAXTRANS 参数值允许许多事务处理并行访问该表INITRANS和MAXTRANS 参数的设置可能相应低一些（如分别为2和5）。<br />
+14．数据库分析技术<br />
+用analyze语句产生分析数据<br />
+分析表：analyze table zl_yhjbqk estimate statistics sample 20 percent<br />
+分析索引：analyze index用户资料表主键compute statistics<br />
+分析列：analyze table zl_yhjbqk compute statistics for columns hbs_bh<br />
+分析索引列：analyze table zl_yhjbqk compute statistics for all indexed columns<br />
+用sys.dbms_utility包分析数据<br />
+分析数据库（包括所有的用户对象和系统对象）：analyze_database<br />
+分析用户所有的对象（包括用户方案内的表、索引、簇）：analyze_schema<br />
+用sys.dbms_stats包处理分析数据<br />
+分析数据库（包括所有的用户对象和系统对象）：gather_database_stats<br />
+分析用户所有的对象（包括表、索引、簇）：gather_schema_stats<br />
+分析表：gather_table_stats<br />
+分析索引：gather_index_stats<br />
+删除数据库统计信息：delete_database_stats<br />
+删除用户方案统计信息：delete_schema_stats<br />
+删除表统计信息：delete_table_stats<br />
+删除索引统计信息：delete_index_stats<br />
+删除列统计信息：delete_column_stats<br />
+设置表统计信息：set_table_stats<br />
+设置索引统计信息：set_index_stats<br />
+设置列统计信息：set_column_stats<br />
+ORACLE推荐用户采用sys.dbms_stats包体进行分析，因为在ORACLE9i及其以上的版本全面扩充的此包体的功能。 sys.dbms_utility包体进行分析时会对所有的信息全部分析一遍，时间比较长，而在9i中sys.dbms_stats可以利用表修改监控技术来判断需统计分析的表进行，节省了用户的分析资源。<br />
+15．Oracle数据库中心后台进程<br />
+1)     进行监视器(PMON:Process Monitor)：负责在出现异常中止的连接之后完成清理、监视其他Oracle后台进程并在必要时重启这些后台进程、向Oracle TNS监听器注册实例<br />
+2)     系统监视器(SMON:System Monitor SMON)：进行要完成所有”系统级”任务：清理临时空间、合并空闲空间、针对原来不可用的文件恢复活动的事务、执行RAC中失败节点的实例恢复、清理 OBJ$(OBJ$是一个低级数据字典表，其中几乎对每个对象都包含一个条目)、收缩回滚段、“离线”回滚段<br />
+3)     分布式数据库恢复(RECO:Distributed Database Recovery)<br />
+4)     检查点进程(CKPT:Checkpoint Process)：更新数据文件的文件首部，以辅助真正建立检查点的进程(DBWn)<br />
+5)     数据库导写入器(DBWn:Database Block Writer):负责将脏块写入磁盘的后台进程<br />
+6)     日志写入器(LGWR:Log Writer)：负责半SGA中重做日志缓冲区的内容刷新输出到磁盘。如果满足以下某个条件，就会做这个工作：<br />
+a.每3秒会刷新输出一次<br />
+b.任何事务发出一个提交时<br />
+c.重做日志缓冲区1/3满，或者已经包含1MB的缓冲数据<br />
+7)     归档里程(ARCn:Archive Process)：当LGWR将在线重做日志文件填满时，就将其复制到另一个位置。<br />
+8)     其他中心进程：取决于所用的Oracle特性，可能还会看到其他一些中心进程<br />
+a.自动存储管理后台(ASMB:Automatic Storage Management Background):在使用了ASM的数据库实例中运行，负责与管理存储的ASM实例通信、向ASM实例提供更新统计信息<br />
+b.重新平衡(RBAL:Rebalance):在使用了ASM的数据库实例中运行。向ASM磁盘组增加或去除磁盘时，RBAL进行负责处理重新平衡的请求<br />
+16．Oracle数据库工具后台进程<br />
+1)     作业队列(CJQ0:job queue coordinator,Jnnn)<br />
+2)     高级队列(QMNC,Qnnn)<br />
+3)     事件监视器进程(EMNn:Event Monitor Process)<br />
+4)     内存管理器(MMAN:Memory Manager)<br />
+5)     可管理性监视器(Manageability Monitor:MMON、MMNL、Mnnn)<br />
+6)     修改跟踪进程(CTWR:Change Tracking Process)<br />
+7)     恢复写入器(RVWR:Recover Writer)<br />
+17．Oracle数据库从属进程<br />
+1)     I/O从属进程：用于不支持异步I/O的系统或设备模拟异步I/O。DBWn和LGWR可以利用I/O从属进程来模拟异步I/O;另外RMAN写磁带进也可能利用I/O从属进程。有两个参数控制I/O从属进程的使用：BACKUP_TAPE_IO_SLAVES、DBWR_IO_SLAVES<br />
+2)     并行查询从属进程：对SELECT、CREATE TABLE、CREATE INDEX、UPDATE等SQL语句，创建一个执行计划，其中包含可以同时完成的多个(子)执行计划<br />
+3)<br />
+18．insert语句的用法<br />
+1)     insert into table_name(column_id…) values(values1…);<br />
+2)     insert /*+append */ into table_name(column_id…) values(values1…);<br />
+3)     多表插入数据:<br />
+insert all when deptno=01 then into dept01(column_id…) values(…)<br />
+when deptno=02 then into dept01(column_id…) values(…)<br />
+else into dept(column_id…) values(…)<br />
+select deptno from emp;<br />
+insert first when deptno=01 then into dept01(column_id…) values(…)<br />
+when deptno=02 then into dept01(column_id…) values(…)<br />
+else into dept(column_id…) values(…)<br />
+select deptno from emp;<br />
+说明:当大量数据插入时，使用2)将快于1),2)是直接插入，不写日志.<br />
+19．commit、rollback、savepoint的使用<br />
+commit：用于提交事务<br />
+savepoint：设置保存点(如：savepoint a; dbms_transaction.savepoint(a))<br />
+rollback：回滚事务(如：rollback;--回滚所有事务 rollback to a;--回滚保存点a后所有事务)<br />
+20．PL/SQL中的复合数据类型<br />
+1)        PL/SQL中的记录：type type_name is record(filed_declaretion…)：用于处理单行多列<br />
+a)         type t_record is record(emplno varchar2(10));<br />
+e_record    t_record;<br />
+b)        e_record   hrs101t0%rowtype;<br />
+2)        PL/SQL中的集合：用于处理多行单列<br />
+a)         索引表：<br />
+type type_name is table of element_type [not null] index by binary_integer/pls_integer;<br />
+identifier type_name;<br />
+如：type t_emp is table of emp%rowtype index by binary_integer;<br />
+type t_no is table of emp.empno%type index by binary_integer;<br />
+b)        嵌套表：当使用嵌套表元素时，必须先使用期构造方法初始化嵌套表<br />
+type type_name is table of element_type;<br />
+identifier type_name;<br />
+c)        变长数组<br />
+type type_name is varray(size_limit) of element_type [not null];<br />
+identifier type_name;<br />
+d)        记录表：用于处理多行多列<br />
+type emp_table_type is table of emp%type index by binary_integer;<br />
+emp_table emp_table_type;<br />
+e)         多级集合<br />
+i.              多级varray(变长数组)<br />
+type a1_varray_type is varray(10) of int;<br />
+type na1_varray_type is varray(10) of a1_varray_type;<br />
+na1 na1_varray_type;<br />
+ii.              多维嵌套表<br />
+type a1_table_type is table of int;<br />
+type nal_table_type is table of a1_table_type;<br />
+na1 na1_table_type;<br />
+iii.              多级索引表<br />
+type a1_table_type is table of int index by binary_integer;<br />
+type na1_table_type is table of a1_table_type index by binary_integer;<br />
+na1 na1_table_type;<br />
+f)       集合方法：是Oracle所提供的用于操纵集合变量的内置函数或过程，其中exists、       count、limit、first、next、prior、next是函数，extend、trim、delete是过程。<br />
+i.              exists：用于确定集合元素是否存在，如果成在则返回TRUE，否则返回FLASE<br />
+使用方法：if ename_table.exists(1) then….<br />
+ii.              count：用于返回当前集合变量的元素总个数<br />
+使用方法：ename_table.count;<br />
+iii.              limit：用于返回集合元素的最大个数<br />
+使用方法：ename_table.limit<br />
+iv.              first、last：用于返回集合变量第一/最后元素的下标<br />
+使用方法：ename_table.first<br />
+使用方法：ename_table.last<br />
+v.              prior、next：用于返回集合元素的前一个/后一个元素的下标<br />
+使用方法：ename_table.prior<br />
+使用方法：ename_table.next<br />
+vi.              extend：用于扩展集合变量的尺寸，并为它们增加元素。该方法只适用于嵌套表和VARRAY。方法有：EXTEND、EXTEND(n)、EXTEND(n,i)<br />
+使用方法：ename_table.extend：添加一个null元素<br />
+ename_table.extend(n)：添加n个null元素<br />
+ename_table.extend(n,i): 添加n个元素(值与i元素相同)<br />
+vii.              trim：用于从集合尾部删除元素；该方法只适用于嵌套表和VARRAY<br />
+使用方法：ename_table.trim：从集合尾部删除一个元素<br />
+ename_table.trim(n)：从集合尾部删除n个元素<br />
+viii.              delete：用于删除集合元素；该方法只适用于嵌套表和索引表<br />
+使用方法：ename_table.delete：删除集合变量的所有元素<br />
+使用方法：ename_table.delete(n)：删除集合变量的第n个元素<br />
+g)                     集合赋值<br />
+21．游标的使用<br />
+1)        显示游标<br />
+a)         定义游标：cursor c1 is select_statement;<br />
+b)        打开游标：open c1;<br />
+c)        提取数据：fetch c1 into variable1,variable2,...;--提取1条数据<br />
+fetch c1 bulk collect into collect1,collect2,…; 提取全部数据<br />
+fetch c1 bulk collect into collect1,collect2,…[limit n];--一次提取n条数据<br />
+d)        关闭游标：close c1;<br />
+2)        显示游标属性<br />
+a)         %isopen：用于确定游标是否已经打开，如果已经打开返回true,否则为false<br />
+使用方法：if c1%isopen then…else….end if;<br />
+b)        %found：用于检查是否从结果集中提取到了数据，提取到数据为true, 否则为false<br />
+使用方法：if c1%found then… else exit; end if;<br />
+c)        %notfound：与%found相反<br />
+一般使用方法：exit when c1%notfound;<br />
+d)        %rowcount：用于返回到当前为止已经提取的实际行数<br />
+3)        参数游标：cursor c1(parameter_name datatype…) is select_statement;<br />
+4)        使用游标更新或删除数据<br />
+a)         update table_name set column=.. where current of c1;<br />
+b)        delete table_name set column = .. where current of c1;<br />
+5)        游标for循环：<br />
+a)         for r1 in c1 loop statement;…. end loop;<br />
+b)        for r1 in (select ….) loop statement;… end loop;<br />
+6)        使用游标变量<br />
+a)       定义REF CURSOR类型和游标变量<br />
+i.              TYPE ref_type_name IS REF CURSOR [RETURN return_type];<br />
+ii.              cursor_variable ref_type_name;<br />
+b)       打开游标<br />
+i.              OPEN cursor_variable FOR select_statement;<br />
+c)       提取游标数据<br />
+i.              FETCH cursor_variable INTO variable1,variable2…;<br />
+ii.              FETCH cursor_variable BULK COLLECT INTO collect1…[LIMIT n];<br />
+d)       关闭游标变量<br />
+i.              CLOSE cursor_variable;<br />
+7)       使用CURSOR表达式：是Oracle9i新增的特性，用于返回嵌套游标<br />
+a)       语法：CURSOR(subquery)<br />
+b)       例子：TYPE recursor IS REF CURSOR<br />
+CURSOR dept_cursor(v_deptno varchar2) is<br />
+select a.deptno,a.deptname,cursor(select emplno,emplnm from emp<br />
+where deptno = a.deptno)<br />
+from dept where a.deptno=v_deptno;<br />
+empcur refcursor;<br />
+v_deptno dept.deptno%type;<br />
+v_deptname dept.deptname%type;<br />
+v_emplno emp.emplno%type;<br />
+v_emplnm emp.emplnm%type;<br />
+begin<br />
+OPEN dept_cursor(v_deptno);<br />
+loop<br />
+fetch dept_cursor into v_deptno,v_deptname,empcur;<br />
+exit when dept_cursor%NOTFOUND;<br />
+dbms_output.put_line(v_detpno||v_deptname);<br />
+loop<br />
+fetch empcur into v_emplno,v_emplnm;<br />
+exit when empcur%notfound;<br />
+dbms_output.put_line(v_emplno||v_emplnm);<br />
+end loop;<br />
+end loop;<br />
+close dept_cursor;<br />
+end;</p>
+<p>22．异常处理<br />
+1)        预定义异常<br />
+a)         access_not_null：ora-06530 对象未初始化<br />
+b)        case_not_found：ora-06592 给定条件未包含在CASE语句中<br />
+c)        collection_is_null：ora-06531 没有初始化集合元素<br />
+d)        cursor_already_open：ora-06511 重新找开已经找开的游标<br />
+e)         dup_val_on_index：ora-00001 在唯一鍵值插入重复值<br />
+f)         invalid_curosr：ora-010001 试图在不合法的游标上执行操作<br />
+g)        invalid_number：ora-01722 不能有效地将字符转为数字<br />
+h)        no_data_found：ora-1403 执行select into 未返回行<br />
+i)          too_many_rows：ora-01422执行select into 返回多行数据<br />
+j)          zero_divide：ora-01476 使用数字除以0<br />
+k)        subscript_beyond_count：ora-06533 使用嵌套表或VARRAY元素时下标出界<br />
+l)          subscript_outside_limit：ora-06532使用嵌套表或VARRAY元素时下标为负值<br />
+m)      value_error：ora-06502 变量长度不够<br />
+2)        自定义异常<br />
+a)         定义：excep EXCEPTION;<br />
+b)        初始化：PRAGMA EXCEPTION_INIT(excep,-2291) –2291为Oracle错误代码<br />
+c)        代号中激活异常：RAISE excep;<br />
+d)        处理异常：when excep then<br />
+3)        使用例外函数<br />
+a)         SQLCODE 返回Oracle错误号<br />
+b)        SQLERRM 返回错误号对应的错误消息<br />
+c)        raise_application_error：用于自定义错误消息(用于程序段中)<br />
+i.              语法：raise_application_error(error_number,message[,(TRUE | FLASE)]);<br />
+ii.              error_number取值：-20000到-20999</p></div>
+<div>23．触发器<br />
+1)       DML触发器<br />
+a)       语句触发器<br />
+i.              语法：CREATE OR REPLACE TRIGGER trigger_name<br />
+timing event1 [or event2 or event3]<br />
+ON table_name<br />
+[DECLARE<br />
+变量定义]<br />
+BEGIN<br />
+END;<br />
+ii.              timing：BEFORE或AFTER<br />
+iii.              event：INSERT、UPDATE、DELETE<br />
+iv.              使用条件谓词<br />
+1.       INSERTING：当触发事件是INSERT操作时，返回值为TRUE<br />
+2.       UPDATING：当触发事件是UPDATE操作时，返回值为TRUE<br />
+3.       DELETING：当触发事件是DELETE操作时，返回值为TRUE<br />
+4.       用法：case when inserting/updating/deleting then ….<br />
+b)       行及触发器<br />
+i.              语法：CREATE OR REPLACE TRIGGER trigger_name<br />
+timing event1 [OR event2 OR event3]<br />
+ON table_name [REFERENCING OLD AS old | NEW AS new]<br />
+FOR EACH ROW [WHEN condition]<br />
+[DECLARE<br />
+变量定义]<br />
+BEGIN<br />
+…<br />
+END;<br />
+ii.              timing：BEFORE/AFTER<br />
+iii.              event：INSERT/UPDATE/DELETE<br />
+iv.              REFERENCING子名用于指定引用新、旧数据的方式，默认为old修饰符引用旧数据，new修饰符引用新数据<br />
+v.              FOR EACH ROW表示建立行触发器<br />
+vi.              WHEN子句用于指定触发条件,如：WHEN (old.emplno= '12345678')<br />
+2)       INSTEAD OF 触发器<br />
+a)       语法：CREATE OR REPLACE TRIGGER trigger_name<br />
+INSTEAD OF INSERT[ OR DELETE OR UPDATE] ON view_name<br />
+FOR EACH ROW<br />
+[DECLARE<br />
+变量定义;]<br />
+BEGIN<br />
+END;<br />
+b)       注意事项<br />
+i.              INSTEAD OF触发器只适用于视图<br />
+ii.              当基于视图建立触发器时，不能指定BEFORE和AFTER选项<br />
+iii.              在建立INSTEAD OF触发器时，必须指定FOR EACH ROW 选项<br />
+3)       系统事件触发器<br />
+a)       常用事件发生函数<br />
+函数名称<br />
+函数描述</p>
+<p>ora_client_ip_address<br />
+用于返回客户端的IP地址</p>
+<p>ora_database_name<br />
+用于返回当前数据库名</p>
+<p>ora_des_encrypted_password<br />
+用于返回DES加密扣的用户口令</p>
+<p>ora_dict_obj_name<br />
+用于返回DDL操作对应的数据为对象名</p>
+<p>ora_dict_obj_name_list<br />
+用于返回在事件中被修改的对象名列表</p>
+<p>ora_dict_obj_owner<br />
+用于返回DDL操作所对应对象的所有者</p>
+<p>ora_dict_obj_owner_list(owner_list OUT ora_name_list_t)<br />
+用于返回在事件中被修改的对象的所有者列表</p>
+<p>ora_dict_obj_type<br />
+返回DDL操作所对应的数据库对象类型</p>
+<p>ora_grantee<br />
+用于返回授权事件的授权者</p>
+<p>ora_instance_num<br />
+用于返回例程号</p>
+<p>ora_is_alter_column(column in varchar2)<br />
+用于检测特定列是否被修改</p>
+<p>ora_is_creating_nested_table<br />
+用于检测是否正在建立嵌套表</p>
+<p>ora_is_drop_column(column in varchar2)<br />
+用于检测特定列是否被删除</p>
+<p>ora_is_serverror(error_number)<br />
+用于检测是否返回了特定Oracle错误</p>
+<p>ora_login_user<br />
+用于返回登录用户名</p>
+<p>ora_sysevent<br />
+用于返回触发器的系统事件名</p>
+<p>b)       建立例程启动和关闭触发器<br />
+i.              建立例程启动触发器(只能使用AFTER关键字)<br />
+语法:CREATE OR REPLACE TRIGGER tr_startup<br />
+AFTER STARTUP ON DATABASE<br />
+BEGIN<br />
+END;<br />
+ii.              建立例程关闭触发器(只能使用BEFORE关键字)<br />
+语法:CREATE OR REPLACE TRIGGER tr_shutdown<br />
+BEFORE SHUTDOWN ON DATABASE<br />
+BEGIN<br />
+END;<br />
+c)       建立用户登录和退出触发器<br />
+i.              登录触发器(只能使用AFTER关键字)<br />
+语法：CRETAE OR REPLACE TRIGGER tr_logon<br />
+AFTER LOGON ON DATABASE<br />
+BEGIN<br />
+END;<br />
+ii.              退出触发器(只能使用BEFORE关键字)<br />
+语法：CREATE OR REPLACE TRIGGER tr_logoff<br />
+BEFORE LOGOFF ON DATABASE<br />
+BEGIN<br />
+END;<br />
+4)       建立DDL触发器(必须使用AFTER关键字)<br />
+语法：CREATE OR REPLACE TRIGGER tr_ddl<br />
+AFTER DDL ON table_name<br />
+BEGIN<br />
+END;<br />
+5)       管理触发器<br />
+a)       显示触发器：select * from user_triggers;<br />
+b)       禁止触发器：alter trigger trigger_name disable;<br />
+c)       激活触发器：alter trigger trigger_name enable;<br />
+d)       禁止或激活表的所有触发器：alter table t_name disable/enable all triggers;<br />
+e)       重新编译触发器：alter trigger trigger_name compile;<br />
+f)       删除触发器：drop trigger trigger_name;</p>
+<p>24．动态SQL<br />
+1)       使用EXECUTE IMMEDIATE语句<br />
+a)       语法：EXECUTE IMMEDIATE dynamic_string<br />
+[INTO {define_variable1[,define+variable]…|record}]<br />
+[USING [IN | OUT | IN OUT] bind_argument]<br />
+[,[IN | OUT | IN OUT] bind_argument1]…]<br />
+[(RETURNING | RETURN) INTO bind_argument[,bind_argument]…]<br />
+b)       处理DDL操作: EXECUTE IMMEDIATE 'drop table test';<br />
+c)       处理DCL操作：EXECUTE IMMEDIATE 'grant create table to scott'<br />
+d)       处理DML操作<br />
+i.              EXECUTE IMMEDIATE 'update emp set sal=sal*1.1 where deptno=30';<br />
+ii.              EXECUTE IMMEDIATE 'update emp set sal=sal*:rate where deptno=:dept' using &amp;1,&amp;2;<br />
+iii.              EXECUTE IMMEDIATE 'update emp set sal = sal*:rate where deptno=:dept RETURNING sal INTO :salary' USING &amp;1,&amp;2 RETURNING INTO salary;<br />
+e)       处理单行查询：EXECUTE IMMEDIATE 'select * from emp where emplno=:eno' into emp_record USING &amp;1;<br />
+2)       处理多行查询：使用OPEN-FOR，FETCH和CLOSE语句<br />
+a)       定义游标变量：<br />
+TYPE refcursore IS REF CURSOR;<br />
+cursor_variable refcursor;<br />
+b)       打开游标变量：<br />
+OPEN cursor_variable FOR dynamic_string<br />
+[USING bind_argument[,bing_argument1]…]<br />
+c)       循环提取数据：<br />
+FETCH cursor_variable INTO {var1[,var2]… | record_var};<br />
+d)       关闭游标变量<br />
+CLOSE cursor_variable;<br />
+3)       使用批量动态SQL：在动态SQL中使用BULK子句<br />
+a)       在EXECUTE IMMEDIATE语句中使用动态BULK子句<br />
+EXECUTE IMMEDIATE dynamic_string<br />
+[BULK COLLECT INTO define_variable[,define_variable…]]<br />
+[USING bind_argument[,bind_argument…]]<br />
+[{RETURNING | RETURN} BULK COLLECT INTO v_return[,v_retrun…]]<br />
+b)       在FETCH语句中使用BULK子句<br />
+FETCH dynamic_cursor BULK COLLECT INTO define_variable[…];<br />
+c)       在FORALL语句中使用BULK子句<br />
+FORALL index in lower bound..upper bound<br />
+EXECUTE IMMEDIATE dynamic_string | dml_statement<br />
+[USING bind_argument…]<br />
+[{RETURNING | RETURN} BULK COLLECT INTO bind_argument…]</p>
+<p>25．Oracle系统包</p>
+<p>1)       DBMS_OUTPUT<br />
+a) 启用 i. dbms_output.enable(buffer_size in integer default 20000);<br />
+ii. set serveroutput on;<br />
+b) 禁用 i. dbms_output.disable;<br />
+c) PUT和PUT_LINE i. PUT：所有信息显示在同一行 ii. PUT_LINE：信息显示后，自动换行<br />
+d) NEW_LINE：用于在行的尾部追加行结束符，一般用PUT同时使用<br />
+e) GET_LINE和GET_LINES i. DBMS_OUTPUT.GET_LINE(line OUT VARCHAR2,status OUT INTEGER)：用于取缓冲区的单行信息<br />
+ii. DBMS_OUTPUT.GET_LINES(lines OUT chararr,numlies IN OUT INTEGER)：用于取得缓冲区的多行信息</p>
+<p>2)       DBMS_JOB<br />
+a) SUBMIT:用于建立一个新作业 语法： DBMS_JOB.SUBMIT( job OUT BINARY_INTEGER, what IN VARCHAR2, next_date IN DATE DEFATULT SYSDATE, interval IN VARCHAR2 DEFAULT 'NULL', no_parse IN BOOLEAN DEFAULT FALSE, instance IN BINARY_INTEGER DEFAULT any_instance, force     IN DEFAULT FALSE);<br />
+例子： VAR jobno NUMBER;<br />
+BEGIN<br />
+DBMS_JOB.SUBMI( :jobno, 'pro_hrs101d0_ins_hrs101t0', sysdate, ‘sysdate+1’);<br />
+END;<br />
+b) REMOVE:用于删除作业队列中的特定作业 语法：DBMS_JOB.REMOVE(jov IN BINARY_INTEGER);<br />
+例子：DBMS_JOB.REMOVE(10); --删除JOB号为10的JOB；<br />
+c) CHANGE：用于改变与作业相关的所有信息语法： DBMS_JOB.CHANGE( job IN BINARY_INTEGER, what IN VARCHAR2, next_date IN DATE, interval IN VARCHAR2, instance IN BINARY_INTEGER DEFAULT NULL, force     IN BOOLEAN DEFAULT FALSE);<br />
+例子：execute dbms_job.change(2,null,null,'sysdate+7') –修改2号job的间隔时间为7天<br />
+d) WHAT：用于改变作业要执行的操作 语法：DBMS_JOB.WHAT(job IN BINARY_INTEGER,what IN VARCHAR2);<br />
+e) NEXT_DATE：用于改变作业的下次运行日期 语法：DBMS_JOB.NEXT_DATE(job in BINARY_INTEGER,next_date IN DATE);<br />
+f) INSTANCE：用于改变运行作业的例程语法：DBMS_JOB.INSTANCE(job IN BINARY_INTEGER, INSTANCE IN BINARY_INTEGER, force IN BOOLEAN DEFAULT FALSE);<br />
+g) INTERVAL：用于改变作业的运行时间间隔语法：DBMS_JOB.INTERVAL(job IN BINARY_INTEGER,interval IN VARCHAR2);<br />
+h) BROKEN：用于设置作业的中断标记.当中断了作业之后，作业将不会被运行 语法：DBMS_JOB.BROKEN(job IN BINARY_INTEGER, broken IN BOOLEAN, next_date IN DATE DEFAULT SYSDATE);<br />
+i) RUN：用于运行已存在的作业 语法：DBMS_JOB.RUN(job in BINARY_INTEGER,force IN BOOLEAN DEFAULT FALSE);</p>
+<p>3)       DBMS_PIPE:在同一例程的不同会话之间的管道通信<br />
+a) CREATE_PIPE：用于建立公用或私有管道.如果参数private为TRUE则为私有管道<br />
+语法：<br />
+DBMS_PIPE.CREATE_TYPE( pipename IN VARCHAR2,--指定管道的名称 maxpipesize IN INTEGER DEFAULT 8192,--指定管道消息的最大尺寸<br />
+private IN BOOLEAN DEFAULT TRUE) --TRUE为私有，FALSE为公用<br />
+REURN INTEGER;--如果返回为0，则管道建立成功，否则为建立管道失败<br />
+b) PACK_MESSAGE：用于将消息写入到本地消息缓冲区。<br />
+语法：DBMS_PIPE.PACK_MESSAGE(item IN VARCHAR2/NCHAR/NUMBER/DATE);<br />
+DBMS_PIPE.PACK_MESSAGE_RAW(item IN RAW);<br />
+DBMS_PIPE.PACK_MESSAGE_ROWID(item IN ROWID);<br />
+c)       SEND_MESSAGE：用于将本地消息缓冲区的内容发送到管道<br />
+语法：DBMS_PIPE.SEND_MESSAGE(         pipename IN VARCHAR2,         timeout IN INTEGER DEFAULT MAXWAIT,--指定发送消息的超时时间         maxpipesize IN INTEGER DEFAULT 8192)<br />
+RETURN INTEGER;--如果返回为0，则发送成功，1为超时，3为出现中断<br />
+d) RECEIVE_MESSAGE：用于接收管道消息，并将消息写入本地消息缓冲区<br />
+语法：DBMS_PIPE.RECEIVE_MESSAGE(<br />
+pipename IN VARHCAR2,<br />
+timeout IN INTEGER DEFAULT MAXWAIT)<br />
+RETURN INTEGER;--同SEND_MESSAGE,2表示本地缓冲区不能容纳管道消息<br />
+d) NEXT_ITEM_TYPE：确定本地消息缓冲区下项的数据类型，在调用RECEIVE_MESSAGE之后调用该函数<br />
+语法：DBMS_PIPE.NEXT_ITEM_TYPE RETURN INTEGER;--如果返回为0，表示管道没有任何消息，6-NUMBER，9-ARCHAR2，11-ROWID，12-DATE，23-RAW<br />
+f) UNPACK_MESSAGE：用于将消息缓冲区的内容写入到变量中，在使用函数RECEVIE_MESSAGE接收管道消息之后使用取得消息缓冲区的消息,每次取一条消息<br />
+语法：DBMS_PIPE.UNPACK_MESSAGE(item OUT VARCHAR2/NCHAR/NUMBER/DATE);<br />
+DBMS_PIPE.UNPACK_MESSAGE_RAW(item OUT RAW);<br />
+DBMS_PIPE.UNPACK_MESSAGE_ROWID(item OUT ROWID);<br />
+g) REMOVE_PIPE：用于删除已经建立的管道     语法：DBMS_PIPE.REMOVE_PIPE(pipename IN VARCHAR2) RETURN INTEGER;<br />
+h) PURGE：用于清除管道中的内容     语法：DBMS_PIPE.PURGE(pipename IN VARCHAR2);<br />
+i) RESET_BUFFER：用于复位管道缓冲区。在使用新管道之前应该复位管道缓冲区<br />
+语法：DBMS_PIPE.REST_BUFFER; j)<br />
+UNIQUE_SESSION_NAME：用于为特定会话返回唯一的名称，名称最大长度为30字节语法：<br />
+DBMS_PIPE.UNIQUE_SESSION_NAME();</p>
+<p>4)       DBMS_ALERT：适用于生成并传递数据库预警信息。合理使用包和数据库触发器，可以使得在和生特定数据库事件时将信息传递给应用程序。<br />
+a) REGISTER：注册预警事件 语法：DBMS_ALERT.REGISTER(name IN VARCHAR2)<br />
+b) REMOVE：删除会话不需要的预警事件 语法：DBMS_ALERT.REMOVE(name IN VARCHAR2);<br />
+c) REMOVEALL：删除当前会话所有已经注册的预警事件<br />
+语法：DBMS_ALERT.REMOVEALL();<br />
+d) SET_DEFAULTS：设置检测预警事件的时间间隔，默认时间间隔为5秒<br />
+语法：DBMS_ALERT.SET_DEFAULTS(sensitivity IN NUMBER);<br />
+e) SIGNAL：指定预警所对应的预警消息事件 语法：DBMS_ALERT.SIGNAL(name IN VARCHAR2,message IN VARCHAR2);<br />
+f) WAITANY：等待当前会话的任何预警事件，并且在预警事件发生时输出相应信息<br />
+语法：DBMS_ALERT.WAITANY( name OUT VARCHAR2, message OUT VARCHAR2, status OUT INTEGER,--返回0表示发生了预警事件，1表示超时 timeout IN NUMBER DEFAULT MAXWAIT);--设置等待预警事的超时时间<br />
+g) WAITONE：等待当前会话的特定预警事件，并且在发生预警事件时输出预警消息<br />
+语法：DBMS_ALERT.WAITONE( name OUT VARCHAR2, message OUT VARCHAR2, status OUT INTEGER,--返回0表示发生了预警事件，1表示超时<br />
+timeout IN NUMBER DEFAULT MAXWAIT);--设置等待预警事的超时时间</p>
+<p>5)       DBMS_SESSION:提供使用PL/SQL实现ALTER SESSION命令,SET ROLE命令和其他会话住处的方法<br />
+a) SET_INENTIFIER:该过程用于设置会话的客户ID号<br />
+语法:DBMS_SESSION.SET_IDENTIFIER(client_id VARCHAR2);<br />
+b) SET_CONTEXT:该过程用于设置应用上下文属性<br />
+语法:<br />
+DMBS_SESSION.SET_CONTEXT(        namespace VARCHAR2,--指定应用上下文的命名空间<br />
+attribute VARCHAR2,--指定应用上下文的属性<br />
+value     varchar2);--指定属性值<br />
+DMBS_SESSION.SET_CONTEXT(        namespace VARCHAR2,        attribute VARCHAR2,        value     varchar2, username VARCHAR2,--指定应用上下文的用户名属性 client_id VARCHAR2);<br />
+c) CLEAR_CONTEXT:用于清除应用上下文的属性设置<br />
+d) CLEAR_IDENTIFIER:删除会话的set_client_id<br />
+e) SET_ROLE:激活或禁止会话角色，与SQL语句的SET ROLE作用相同<br />
+f) SET_SQL_TRACE:激活或禁止当前会话的SQL跟踪,同ALTER SESSION SET SQL_TRACE<br />
+g) SET_NLS:设置NLS特征,同ALTER SESSION SET &lt;nls_param&gt;=&lt;value&gt;<br />
+h) CLOSE_DATABASE_LINK:关闭已经打开的远程数据库链<br />
+i) SET_PACKAGE:复位当前会话的所有包,并且会释放包状态<br />
+j) MODIFY_PACKAGE_STATE:用于修改当前会话的PL/SQL程序单元的状态<br />
+k) UNIQUE_SESSION_ID:返回当前会话的唯一标识符 l)       IS_ROLE_ENABLED:确定当前会话是否激活了特定角色 m)       IS_SESSION_ALIVE:确定特定会话是否处于活动状态<br />
+n) SET_CLOSE_CACHED_OPEN_CURSORS:打开或关闭close_cached_open_cursors<br />
+o) FREE_UNUSED_USER_MEMORY:在执行了大内存操作之后回收未用内存<br />
+p) LIST_CONTEXT:返回当前会话的命名空间和上下文列表<br />
+q) SWITCH_CURRENT_CONSUMER_GROUP:改变当前会话的资源使用组</p>
+<p>6) DBMS_RLS：用于实现清细访问控制(VPD：虚拟专用数据库)，并且精细访问控制是通过在SQL语句中动态增加谓词(where子句)来实现。<br />
+a) ADD_POLICY：用于为表、视图或同义词增加一个安全策略,当执行该操作结束时会自动提交事务<br />
+语法：<br />
+DBMS_RLS.ADD_POLICY( object_schema IN VARCHAR2 NULL,--指定包含表、视图或同义词的方案/用户<br />
+object_name IN VARCHAR2，--指定要增加安全策略的表、视图或同义词<br />
+policy_name IN VARCHAR2,--指定要增加的安全策略名称<br />
+function_schema IN VARCHAR2 NULL,--指定策略函数的所在方案/用户<br />
+policy_function IN VARCHAR2,-- 指定生成安全策略谓词的函数名<br />
+statement_types IN VARCHAR2 NULL,--指定使用安全策略的SQL语句(默认值NULL表于适用于SELECT、INSERT、UDPATE以及DELETE语句)<br />
+update_check IN BOOLEAN FALSE,--指定在执行INSERT或UPDATE时是否检查安全策略<br />
+enable IN BOOLEAN TRUE,--指定是否激活安全策略 static_policy IN BOOLEAN FALSE);--指定是否要生成静态的安全策略<br />
+b) DROP_POLICY：用于删除定义在特定表、视图或同义词上的安全策略<br />
+语法：<br />
+DBMS_RLS.DROP_POLICY(<br />
+object_schema IN VARCHAR2 NULL,<br />
+object_name   IN VARCHAR2,<br />
+policy_name   IN VARCHAR2);<br />
+c) REFRESH_POLICY：用于刷新与安全策略修改相关的所有SQL语句，并使得Oracle重新解析相关SQL语句<br />
+语法：<br />
+DBMS_RLS.REFRESH_POLICY(<br />
+object_schema IN VARCHAR2 NULL,<br />
+object_name   IN VARCHAR2,<br />
+policy_name   IN VARCHAR2);<br />
+d) ENABLE_POLICY：用于激活或禁止特定的安全策略<br />
+语法：<br />
+DBMS_RLS.ENABLE_POLICY(<br />
+object_schema IN VARCHAR2 NULL,<br />
+object_name   IN VARCHAR2,<br />
+policy_name   IN VARCHAR2， enable IN BOOLEAN);<br />
+e) CREATE_POLICY_GROUP用于建立安全策略组<br />
+语法：<br />
+DBMS_RLS.CREATE_POLICY_GROUP(<br />
+object_schema IN VARCHAR2 NULL,<br />
+object_name   IN VARCHAR2,<br />
+policy_group IN VARCHAR2)<br />
+f) ADD_GROUP_POLICY：用于增加与特定策略组相关的安全策略语法：<br />
+DBMS_RLS.CREATE_POLICY_GROUP(<br />
+object_schema IN VARCHAR2 NULL,<br />
+object_name   IN VARCHAR2,<br />
+policy_group IN VARCHAR2,<br />
+policy_name   in VARCHAR2,<br />
+function_schema VARCHAR2,<br />
+policy_function VARCHAR2,<br />
+statement_types VARCHAR2,<br />
+update_check     BOOLEAN,<br />
+enabled          BOOLEAN,<br />
+static_policy BOOLEAN FALSE);<br />
+g) ADD_POLICY_CONTEXT：用于为应用增加上下文<br />
+h) DELETE_POLICY_GROUP：用于删除安全策略组<br />
+i) DROP_GROUP_POLICY:用于删除特定策略组的安全策略<br />
+j) DROP_POLICY_CONTEXT:用于删除对象的上下文<br />
+k) ENABLE_GROUPED_POLICY:用于激活或禁止特定策略组的安全策略<br />
+l) REFRESH_GROUPED_POLICY:用于刷新与特定安全策略组的安全策略相关的SQL语句</p>
+<p>7) DMBS_DDL:该包提供了在PL/SQL块中执行DDL语句的方法<br />
+a) ALETER_COMPLIE:重新编译过程、函数、包<br />
+语法： DBMS_DDL.ALTER_COMPILE(type VARCHAR2,schema VARCHAR2,name VHARCHAR2);<br />
+b) ANALYZE_OBJECT:分析表、索引、簇并生成统计数据<br />
+语法：<br />
+DBMS_DDL.ANALYZE_OBJECT(<br />
+type    VARCHAR2,--指定对象类型(TABLE、INDEX、CLUSTER)<br />
+schema VARCHAR2,         name    VARCHAR2,<br />
+method VARCHAR2,--指定分析方法（COMPUTE、ESTIMATE、DELETE）<br />
+estimate_rows NUMBER DEFAULT NULL,--指定要估计的行数<br />
+estimate_percent NUMBER DEFAULT NULL,--指定要估计的百分比<br />
+method_opt VARCHAR2 DEFAULT NULL,--指定分析方法选项(FOR TABLE、FOR ALL COLUMNS等)<br />
+partname   VARCHAR2 DEFAULT NULL);--指定要分析的分区<br />
+c) IS_TRIGGER_FIRE_ONCE:检测特定的DML或DDL触发器是否只触发一次<br />
+语法：<br />
+DBMS_DDL.IS_TRIGGER_FIRE_ONCE(<br />
+trigger_owner IN VARCHAR2,--触发器所有者<br />
+trigger_name IN VARCHAR2);--触发器名<br />
+RETURN BOOLEAN;--返回为TRUE则表示触发器只被触发一次<br />
+d) SET_TRIGGER_FIRING_PROPERTY：设置DML/DDL触发器的触发属性<br />
+语法：<br />
+DBMS_DDL.SET_TRIGGER_FIRING_PROPERTY(<br />
+trigger_owner IN VARCHAR2,<br />
+trigger_name IN VARCHAR2,<br />
+fire_once     IN BOOLEAN);--设置为TRUE只触发一次,否则总是被触发</p>
+<p>8) DBMS_RANDOM:提供内置的随机数生成器，可以用于快速生成随机数<br />
+a) INITIALIZE：初始化DBMS_RANDOM包，初始化时，必须要提供随机数种子<br />
+语法： DBMS_RANDOM.INITIALIZE(seed IN BINARY_INTEGER)--生成小于seed的随机数<br />
+b) SEED:用于复位随机数种子 语法：DMBS_RANDOM.SEED(seed IN BINARY_INTEGER);<br />
+c) RANDOM:生成随机数 语法：DBMS_RANDOM.RANDOM RETURN BINARY_INTEGER;<br />
+d) value(x,y):产生介于x与y的随机数 语法：DBMS_RANDOM.VALUE(1,100);<br />
+e) TERMINATE:关闭DBMS_RANDOM包 语法：DBMS_RANDOM.TERMINATE;</p>
+<p>9) UTL_FILE:用于读写OS文件<br />
+a) FILE_TYPE:该类型是UTL_FALE包中所定义的记录类型,其成员是私有的,不能直接引用。<br />
+该类型的定义如下： TYPE file_type IS RECODR(id BINARY_INTEGER,datatype BINARY_INTEGER);<br />
+b) FOPEN:用于打OS文件，最多可以同时打开50个文件<br />
+语法：UTL_FILE.FOPEN( location IN VARCHAR2,--文件目录 filename IN varchar2,--文件名 open_mode IN VARCHAR2,--打开方式：'r'、'w' max_linesize IN BINARY_INTEGER);--每行的字节数               RETURN file_type;<br />
+c) FOPEN_NCHAR：以UNICODE方式打开文件。<br />
+语法：UTL_FILE.FOPEN_NCHAR ( location IN VARCHAR2,--文件目录 filename IN varchar2,--文件名 open_mode IN VARCHAR2,--打开方式：'r'、'w' max_linesize IN BINARY_INTEGER);--每行的字节数               RETURN file_type;<br />
+d) IS_OPEN：确定文件是否已经打开<br />
+语法：UTL_FILE.IS_OPEN(file IN FILE_TYPE) RETURN BOOLEAN;<br />
+e) FCLOSE：用于关闭已经打开的文件<br />
+语法：UTL_FILE.FCLOSE(file in out file_type);<br />
+f) FCLOSE_ALL：用于关闭当前佳话打开的所有文件<br />
+语法：UTL_FILE.FCLOSE_ALL;<br />
+g) GET_LINE:从已经打开的文件中读取行内容，行内容被读取到输出缓冲区<br />
+语法：<br />
+UTL_FILE.GET_LINE(<br />
+file    IN FILE_TYPE,<br />
+buffer   OUT VARCHAR2,--用于存储读取信息<br />
+linesize IN NUMBER,--指定读取的最大字节数<br />
+len IN PLS_INTEGER DEFAULT NULL);--指定实际读取的长度<br />
+h) GET_LINE_NCHAR：以UNICODE方式读取已打开文件的行内容<br />
+语法：<br />
+UTL_FILE.GET_LINE_NCHAR(<br />
+file IN FILE_TYPE,<br />
+buffer OUT VARCHAR2,<br />
+len    IN PLS_INTEGER DEFAULT NULL);<br />
+i) GET_RAW:从文件中读取RAW字符串，关调节文件指针到读取位置<br />
+j) PUT：用于将缓冲区内容写入到文件中，如果要结束行使用NEW_LINE<br />
+语法：UTL_FILE.PUT(file IN file_type,buffer IN VARCHAR2);<br />
+k) PUT_NCHAR:将缓冲区内容以UNICODE方式写入到文件<br />
+l) PUT_RAW：将RAW缓冲区中的数据写入到OS文件<br />
+m) NEW_LINE：用于为文件增加终止符<br />
+语法：UTL_FILE.NEW_LINE(file IN file_type,lines IN NATURAL :=1); lines:用于指定要增加的行终止符个数<br />
+n) PUT_LINE：用于将文本缓冲区内容写入到文件，并自动追加行终止符<br />
+语法：UTL_FILE.PUT_LINE( file IN file_type buffer IN VARCHAR2, autoflush IN BOOLEAN DEFAULT FALSE);<br />
+o) PUT_LINE_NCHAR：将文本缓冲内容以UNICODE方式写入文件<br />
+p) PUTF：以特定格式将文本内容写入到OS文件，其中%s表示字符串，\n为终止符<br />
+q) PUT_NCHAR：以特定格式将文本内容以UNICODE方式写入到OS文件<br />
+r) FFLUSH：将数据强制性写到OS文件。正常情况下，当给文件写入数据时，数据会被暂存放在缓存中，过程FFLUSH用于强制将数据写入到OS文件<br />
+语法：UTL_FILE.FFLUSH(file IN FILE_TYPE);<br />
+s)       FSEEK:用于移动文件指针到特定位置<br />
+语法：<br />
+UTL_FILE.FSEEK( fid IN UTL_FILE.FILE_TYPE,<br />
+absolute_offset IN PLS_INTEGER DEFAULT NULL,--指定绝对位置<br />
+relative_offset IN PLS_INTEGER DEFAULT NULL)—指定相对位置<br />
+t)       FREMOVE：删除磁盘文件<br />
+语法：UTL_FILE.FREMOVE(location IN VARCHAR2,filename IN VARCHAR2);<br />
+u) FCOPY:将源文件的全部或部分内容复制到目标文件中。当使用该过程时，如果不设置起始行和结束行，则将复制文件的所有内容<br />
+语法：<br />
+UTL_FILE.FCOPY( location IN VARCHAR2,--源文件的目录<br />
+filename IN VARCHAR2,--源文件名<br />
+dest_dir IN VARCHAR2,--目标文件的目录 dest_file IN VARCHAR2,--目标文件名<br />
+start_line IN PLS_INTEGER DEFAULT 1,--指定起始行号<br />
+end_line   IN PLS_INTEGER DEFAULT NULL );--指定结束行号<br />
+v) FGETPOS：返回文件指针所有偏移位置<br />
+语法：UTL_FILE.FGETPOS(file IN file_type) RETURN PLS_INTEGER;<br />
+w) FGETATTR：读取磁盘文件，并返回文件属性<br />
+语法：<br />
+UTL_FILE.FGETATTR( location IN VARCHAR2,--目录 filename IN VARCHAR2,--文件名称<br />
+exists    OUT BOOLEAN,--确定文件是否存在； file_length OUT NUMBER,--取得文件长度 blocksize   OUT NUMBER)；--取得OS块的尺寸<br />
+x) FRENAME：修改已经存在的OS文件名，通过overwrite指定是否覆盖已存在的文件<br />
+语法：<br />
+UTL_FILE.FRENAME(<br />
+location IN VARCHAR2,<br />
+filename IN VARCHAR2,<br />
+dest_dir IN VARCHAR2,<br />
+dest_file IN VARCHAR2,<br />
+overwrite IN BOOLEAN DEFAULT FALSE）</p>
+<p>10) UTL_INADDR：用于取得局域网或Internet环境中的主机名和IP地址<br />
+a) GET_HOST_NAME:取得指定IP地址所对应的主机名<br />
+语法：UTL_INADDR.GET_HOST_NAME(ip IN VARCHAR2 DEFAULT NULL) RETURN VARCHAR2<br />
+b) GET_HOST_ADDRESS:取得指定主机所对应的IP地址<br />
+语法：UTL_INADDR.GET_HOST_ADDRESS(host IN VARCHAR2 DEFAULT NULL) RETURN VARCHAR2;</p>
+<p>11) DBMS_LOCK:<br />
+a) SLEEP:暂停n秒 语法：DBMS_LOCK.SLEEP(n);--暂停n秒</p></div>
+<div>26．Hint的用法<br />
+1. /*+ALL_ROWS*/<br />
+表明对语句块选择基于开销的优化方法,并获得最佳吞吐量,使资源消耗最小化.<br />
+例如:<br />
+SELECT /*+ALL_ROWS*/ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO='SCOTT';<br />
+2. /*+FIRST_ROWS*/<br />
+表明对语句块选择基于开销的优化方法,并获得最佳响应时间,使资源消耗最小化.<br />
+例如:<br />
+SELECT /*+FIRST_ROWS*/ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO='SCOTT';<br />
+3. /*+CHOOSE*/<br />
+表明如果数据字典中有访问表的统计信息,将基于开销的优化方法,并获得最佳的吞吐量;<br />
+表明如果数据字典中没有访问表的统计信息,将基于规则开销的优化方法;<br />
+例如:<br />
+SELECT /*+CHOOSE*/ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO='SCOTT';<br />
+4. /*+RULE*/<br />
+表明对语句块选择基于规则的优化方法.<br />
+例如:<br />
+SELECT /*+ RULE */ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO='SCOTT';<br />
+5. /*+FULL(TABLE)*/<br />
+表明对表选择全局扫描的方法.<br />
+例如:<br />
+SELECT /*+FULL(A)*/ EMP_NO,EMP_NAM FROM BSEMPMS A WHERE EMP_NO='SCOTT';<br />
+6. /*+ROWID(TABLE)*/<br />
+提示明确表明对指定表根据ROWID进行访问.<br />
+例如:<br />
+SELECT /*+ROWID(BSEMPMS)*/ * FROM BSEMPMS WHERE ROWID&gt;='AAAAAAAAAAAAAA'<br />
+AND EMP_NO='SCOTT';<br />
+7. /*+CLUSTER(TABLE)*/<br />
+提示明确表明对指定表选择簇扫描的访问方法,它只对簇对象有效.<br />
+例如:<br />
+SELECT /*+CLUSTER */ BSEMPMS.EMP_NO,DPT_NO FROM BSEMPMS,BSDPTMS<br />
+WHERE DPT_NO='TEC304' AND BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;<br />
+8. /*+INDEX(TABLE INDEX_NAME)*/<br />
+表明对表选择索引的扫描方法.<br />
+例如:<br />
+SELECT /*+INDEX(BSEMPMS SEX_INDEX) USE SEX_INDEX BECAUSE THERE ARE FEWMALE BSEMPMS */ FROM BSEMPMS WHERE SEX='M';<br />
+9. /*+INDEX_ASC(TABLE INDEX_NAME)*/<br />
+表明对表选择索引升序的扫描方法.<br />
+例如:<br />
+SELECT /*+INDEX_ASC(BSEMPMS PK_BSEMPMS) */ FROM BSEMPMS WHERE DPT_NO='SCOTT';<br />
+10. /*+INDEX_COMBINE*/<br />
+为指定表选择位图访问路经,如果INDEX_COMBINE中没有提供作为参数的索引,将选择出位图索引的布尔组合方式.<br />
+例如:<br />
+SELECT /*+INDEX_COMBINE(BSEMPMS SAL_BMI HIREDATE_BMI)*/ * FROM BSEMPMS<br />
+WHERE SAL&lt;5000000 AND HIREDATE<br />
+11. /*+INDEX_JOIN(TABLE INDEX_NAME)*/<br />
+提示明确命令优化器使用索引作为访问路径.<br />
+例如:<br />
+SELECT /*+INDEX_JOIN(BSEMPMS SAL_HMI HIREDATE_BMI)*/ SAL,HIREDATE<br />
+FROM BSEMPMS WHERE SAL&lt;60000;<br />
+12. /*+INDEX_DESC(TABLE INDEX_NAME)*/<br />
+表明对表选择索引降序的扫描方法.<br />
+例如:<br />
+SELECT /*+INDEX_DESC(BSEMPMS PK_BSEMPMS) */ FROM BSEMPMS WHERE DPT_NO='SCOTT';<br />
+13. /*+INDEX_FFS(TABLE INDEX_NAME)*/<br />
+对指定的表执行快速全索引扫描,而不是全表扫描的办法.<br />
+例如:<br />
+SELECT /*+INDEX_FFS(BSEMPMS IN_EMPNAM)*/ * FROM BSEMPMS WHERE DPT_NO='TEC305';<br />
+14. /*+ADD_EQUAL TABLE INDEX_NAM1,INDEX_NAM2,...*/<br />
+提示明确进行执行规划的选择,将几个单列索引的扫描合起来.<br />
+例如:<br />
+SELECT /*+INDEX_FFS(BSEMPMS IN_DPTNO,IN_EMPNO,IN_SEX)*/ * FROM BSEMPMS WHERE EMP_NO='SCOTT' AND DPT_NO='TDC306';<br />
+15. /*+USE_CONCAT*/<br />
+对查询中的WHERE后面的OR条件进行转换为UNION ALL的组合查询.<br />
+例如:<br />
+SELECT /*+USE_CONCAT*/ * FROM BSEMPMS WHERE DPT_NO='TDC506' AND SEX='M';<br />
+16. /*+NO_EXPAND*/<br />
+对于WHERE后面的OR 或者IN-LIST的查询语句,NO_EXPAND将阻止其基于优化器对其进行扩展.<br />
+例如:<br />
+SELECT /*+NO_EXPAND*/ * FROM BSEMPMS WHERE DPT_NO='TDC506' AND SEX='M';<br />
+17. /*+NOWRITE*/<br />
+禁止对查询块的查询重写操作.<br />
+18. /*+REWRITE*/<br />
+可以将视图作为参数.<br />
+19. /*+MERGE(TABLE)*/<br />
+能够对视图的各个查询进行相应的合并.<br />
+例如:<br />
+SELECT /*+MERGE(V) */ A.EMP_NO,A.EMP_NAM,B.DPT_NO FROM BSEMPMS A (SELET DPT_NO<br />
+,AVG(SAL) AS AVG_SAL FROM BSEMPMS B GROUP BY DPT_NO) V WHERE A.DPT_NO=V.DPT_NO<br />
+AND A.SAL&gt;V.AVG_SAL;</p>
+<p>20. /*+NO_MERGE(TABLE)*/<br />
+对于有可合并的视图不再合并.<br />
+例如:<br />
+SELECT /*+NO_MERGE(V) */ A.EMP_NO,A.EMP_NAM,B.DPT_NO FROM BSEMPMS A (SELECT DPT_NO,AVG(SAL) AS AVG_SAL FROM BSEMPMS B GROUP BY DPT_NO) V WHERE A.DPT_NO=V.DPT_NO AND A.SAL&gt;V.AVG_SAL;<br />
+21. /*+ORDERED*/<br />
+根据表出现在FROM中的顺序,ORDERED使ORACLE依此顺序对其连接.<br />
+例如:<br />
+SELECT /*+ORDERED*/ A.COL1,B.COL2,C.COL3 FROM TABLE1 A,TABLE2 B,TABLE3 C WHERE A.COL1=B.COL1 AND B.COL1=C.COL1;<br />
+22. /*+USE_NL(TABLE)*/<br />
+将指定表与嵌套的连接的行源进行连接,并把指定表作为内部表.<br />
+例如:<br />
+SELECT /*+ORDERED USE_NL(BSEMPMS)*/ BSDPTMS.DPT_NO,BSEMPMS.EMP_NO,BSEMPMS.EMP_NAM FROM BSEMPMS,BSDPTMS WHERE BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;<br />
+23. /*+USE_MERGE(TABLE)*/<br />
+将指定的表与其他行源通过合并排序连接方式连接起来.<br />
+例如:<br />
+SELECT /*+USE_MERGE(BSEMPMS,BSDPTMS)*/ * FROM BSEMPMS,BSDPTMS WHERE BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;<br />
+24. /*+USE_HASH(TABLE)*/<br />
+将指定的表与其他行源通过哈希连接方式连接起来.<br />
+例如:<br />
+SELECT /*+USE_HASH(BSEMPMS,BSDPTMS)*/ * FROM BSEMPMS,BSDPTMS WHERE BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;<br />
+25. /*+DRIVING_SITE(TABLE)*/<br />
+强制与ORACLE所选择的位置不同的表进行查询执行.<br />
+例如:<br />
+SELECT /*+DRIVING_SITE(DEPT)*/ * FROM BSEMPMS,DEPT@BSDPTMS WHERE BSEMPMS.DPT_NO=DEPT.DPT_NO;<br />
+26. /*+LEADING(TABLE)*/<br />
+将指定的表作为连接次序中的首表.<br />
+27. /*+CACHE(TABLE)*/<br />
+当进行全表扫描时,CACHE提示能够将表的检索块放置在缓冲区缓存中最近最少列表LRU的最近使用端<br />
+例如:<br />
+SELECT /*+FULL(BSEMPMS) CAHE(BSEMPMS) */ EMP_NAM FROM BSEMPMS;<br />
+28. /*+NOCACHE(TABLE)*/<br />
+当进行全表扫描时,CACHE提示能够将表的检索块放置在缓冲区缓存中最近最少列表LRU的最近使用端<br />
+例如:<br />
+SELECT /*+FULL(BSEMPMS) NOCAHE(BSEMPMS) */ EMP_NAM FROM BSEMPMS;<br />
+29. /*+APPEND*/<br />
+直接插入到表的最后,可以提高速度.<br />
+insert /*+append*/ into test1 select * from test4 ;<br />
+30. /*+NOAPPEND*/<br />
+通过在插入语句生存期内停止并行模式来启动常规插入.<br />
+insert /*+noappend*/ into test1 select * from test4 ;<br />
+31./*+ parallel(tablename,parallel-degree)*/<br />
+调整并行执行的目的是：最大地发挥硬件的能力。如果你有一个高性能的系统，有高优先的SQL语句在运行，则并行语句就可以使用所有有效的资源。Oracle可以执行的下面的并行：<br />
+并行查询；<br />
+并行DML(包括 INSERT, UPDATE, DELETE; APPEND提示，并行索引扫描)；<br />
+并行 DDL；<br />
+如果你的系统缺少以下这些特点，则并行可能不会有多大改善。<br />
+对称多处理器（SMP), 集群或强大的并行系统；<br />
+有效的I/O带宽；<br />
+低利用的或闲置的CPU（如CPU使用小于30%）；<br />
+对附加的内存无效，如分类、哈西索引及I/O缓冲区等。<br />
+如果指定的并行度大于实际可用的资源(硬件资源&gt;parallel_max_server&gt;你指定的并行度)，将会使用最大的可用资源的并行度来处理。<br />
+如果多人同时使用并行, sum(parallel_degree)&gt;parallel_max_server ；可能产生等待使效率下降。<br />
+例子：<br />
+execute immediate 'alter session enable parallel dml'; --修改会话并行DML<br />
+select /*+parallel(a,4)*/ * from table_name a<br />
+select /*+parallel(a,8)*/ * from table_name a<br />
+select /*+parallel(a,4) parallel(b,4) parallel(c,4)*/ a.*,b.*,c.* from table_name1 a,table_name2 b,table_name c<br />
+insert /*+parallel(t,4)*/ into table_name t<br />
+insert /*+parallel(t,8)*/ into table_name t</p>
+<p>/*+parallel(t,8)*/ 并行处理，一般为CPU的倍数如：4，8等,在执行类型SQL必须先运行:alter session enable parallel dml</p>
+<p>27．索引的分类<br />
+索引按存储方法分类<br />
+B*树索引<br />
+B*树索引是最常用的索引，其存储结构类似书的索引结构，有分支和叶两种类型的存储数据块，分支块相当于书的大目录，叶块相当于索引到的具体的书页。一般索引及唯一约束索引都使用B*树索引。<br />
+位图索引<br />
+位图索引储存主要用来节省空间，减少ORACLE对数据块的访问，它采用位图偏移方式来与表的行ID号对应，采用位图索引一般是重复值太多的表字段。位图索引在实际密集型OLTP（数据事务处理）中用得比较少，因为OLTP会对表进行大量的删除、修改、新建操作，ORACLE每次进行操作都会对要操作的数据块加锁，所以多人操作很容易产生数据块锁等待甚至死锁现象。在OLAP（数据分析处理）中应用位图有优势，因为OLAP中大部分是对数据库的查询操作，而且一般采用数据仓库技术，所以大量数据采用位图索引节省空间比较明显。<br />
+索引按功能分类<br />
+唯一索引<br />
+唯一索引有两个作用，一个是数据约束，一个是数据索引，其中数据约束主要用来保证数据的完整性，唯一索引产生的索引记录中每一条记录都对应一个唯一的ROWID。<br />
+主关键字索引<br />
+主关键字索引产生的索引同唯一索引，只不过它是在数据表建立主关键字时系统自动建立的。<br />
+一般索引<br />
+一般索引不产生数据约束作用，其功能主要是对字段建立索引表，以提高数据查询速度。<br />
+索引按索引对象分类<br />
+单列索引（表单个字段的索引）<br />
+多列索引（表多个字段的索引）<br />
+函数索引（对字段进行函数运算的索引）<br />
+应用索引的扫描分类<br />
+INDEX UNIQUE SCAN（按索引唯一值扫描）<br />
+select * from zl_yhjbqk where hbs_bh='5420016000'<br />
+INDEX RANGE SCAN（按索引值范围扫描）<br />
+select * from zl_yhjbqk where hbs_bh&gt;'5420016000'<br />
+select * from zl_yhjbqk where qc_bh&gt;'7001'<br />
+INDEX FAST FULL SCAN（按索引值快速全部扫描）<br />
+select hbs_bh from zl_yhjbqk order by hbs_bh<br />
+select count(*) from zl_yhjbqk<br />
+select qc_bh from zl_yhjbqk group by qc_bh<br />
+什么情况下应该建立索引<br />
+表的主关键字<br />
+自动建立唯一索引<br />
+如zl_yhjbqk（用户基本情况）中的hbs_bh（户标识编号）<br />
+表的字段唯一约束<br />
+ORACLE利用索引来保证数据的完整性<br />
+如lc_hj（流程环节）中的lc_bh+hj_sx（流程编号+环节顺序）<br />
+直接条件查询的字段<br />
+在SQL中用于条件约束的字段<br />
+如zl_yhjbqk（用户基本情况）中的qc_bh（区册编号）<br />
+select * from zl_yhjbqk where qc_bh=’7001’<br />
+查询中与其它表关联的字段<br />
+字段常常建立了外键关系<br />
+什么情况下应不建或少建索引<br />
+表记录太少<br />
+经常插入、删除、修改的表<br />
+数据重复且分布平均的表字段<br />
+经常和主字段一块查询但主字段索引值比较多的表字段<br />
+如何重建索引<br />
+alter index index_name rebuild</p>
+<p>28．如何启用sqlplus的AutoTrace功能<br />
+通过以下方法可以把Autotrace的权限授予Everyone，<br />
+如果你需要限制Autotrace权限，可以把对public的授权改为对特定user的授权。</p>
+<p>D:\oracle\ora92&gt;sqlplus /nolog<br />
+SQL*Plus: Release 9.2.0.1.0 - Production on 星期二 6月 3 15:16:03 2003<br />
+Copyright (c) 1982, 2002, Oracle Corporation. All rights reserved.<br />
+SQL&gt; connect sys as sysdba<br />
+请输入口令:<br />
+已连接。<br />
+SQL&gt; @?\rdbms\admin\utlxplan<br />
+表已创建。<br />
+SQL&gt; create public synonym plan_table for plan_table;<br />
+同义词已创建。<br />
+SQL&gt; grant all on plan_table to public ;<br />
+授权成功。<br />
+SQL&gt; @?\sqlplus\admin\plustrce<br />
+SQL&gt;<br />
+SQL&gt; drop role plustrace;<br />
+drop role plustrace<br />
+*<br />
+ERROR 位于第 1 行:<br />
+ORA-01919: 角色'PLUSTRACE'不存在<br />
+SQL&gt; create role plustrace;<br />
+角色已创建<br />
+SQL&gt;<br />
+SQL&gt; grant select on v_$sesstat to plustrace;<br />
+授权成功。<br />
+SQL&gt; grant select on v_$statname to plustrace;<br />
+授权成功。<br />
+SQL&gt; grant select on v_$session to plustrace;<br />
+授权成功。<br />
+SQL&gt; grant plustrace to dba with admin option;<br />
+授权成功。<br />
+SQL&gt;<br />
+SQL&gt; set echo off</p>
+<p>DBA用户首先被授予了plustrace角色,然后我们可以把plustrace授予public<br />
+这样所有用户都将拥有plustrace角色的权限.<br />
+SQL&gt; grant plustrace to public ;</p>
+<p>授权成功。</p>
+<p>然后我们就可以使用AutoTrace的功能了.<br />
+SQL&gt; connect eqsp/eqsp<br />
+已连接。<br />
+SQL&gt; set autotrace on<br />
+SQL&gt; set timing on –-显示执行时间<br />
+SQL&gt;</p>
+<p>关于Autotrace几个常用选项的说明:<br />
+SET AUTOTRACE OFF ------------ 不生成AUTOTRACE 报告，这是缺省模式<br />
+SET AUTOTRACE ON EXPLAIN ----- AUTOTRACE只显示优化器执行路径报告<br />
+SET AUTOTRACE ON STATISTICS -- 只显示执行统计信息<br />
+SET AUTOTRACE ON ------------- 包含执行计划和统计信息<br />
+SET AUTOTRACE TRACEONLY ------ 同set autotrace on，但是不显示查询输出<br />
+SQL&gt; set autotrace traceonly<br />
+SQL&gt; select table_name from user_tables;</p>
+<p>已选择98行。</p>
+<p>已用时间: 00: 00: 00.04</p>
+<p>Execution Plan<br />
+----------------------------------------------------------<br />
+0 SELECT STATEMENT Optimizer=CHOOSE<br />
+1 0 NESTED LOOPS<br />
+2 1 NESTED LOOPS (OUTER)<br />
+3 2 NESTED LOOPS (OUTER)<br />
+4 3 NESTED LOOPS (OUTER)<br />
+5 4 NESTED LOOPS (OUTER)<br />
+6 5 NESTED LOOPS<br />
+7 6 TABLE ACCESS (BY INDEX ROWID) OF 'OBJ$'<br />
+8 7 INDEX (RANGE SCAN) OF 'I_OBJ2' (UNIQUE)<br />
+9 6 TABLE ACCESS (CLUSTER) OF 'TAB$'<br />
+10 9 INDEX (UNIQUE SCAN) OF 'I_OBJ#' (NON-UNIQUE)<br />
+11 5 TABLE ACCESS (BY INDEX ROWID) OF 'OBJ$'<br />
+12 11 INDEX (UNIQUE SCAN) OF 'I_OBJ1' (UNIQUE)<br />
+13 4 INDEX (UNIQUE SCAN) OF 'I_OBJ1' (UNIQUE)<br />
+14 3 TABLE ACCESS (CLUSTER) OF 'USER$'<br />
+15 14 INDEX (UNIQUE SCAN) OF 'I_USER#' (NON-UNIQUE)<br />
+16 2 TABLE ACCESS (CLUSTER) OF 'SEG$'<br />
+17 16 INDEX (UNIQUE SCAN) OF 'I_FILE#_BLOCK#' (NON-UNIQUE)<br />
+18 1 TABLE ACCESS (CLUSTER) OF 'TS$'<br />
+19 18 INDEX (UNIQUE SCAN) OF 'I_TS#' (NON-UNIQUE)<br />
+Statistics<br />
+----------------------------------------------------------<br />
+0 recursive calls<br />
+0 db block gets<br />
+1389 consistent gets<br />
+0 physical reads<br />
+0 redo size<br />
+2528 bytes sent via SQL*Net to client<br />
+569 bytes received via SQL*Net from client<br />
+8 SQL*Net roundtrips to/from client<br />
+0 sorts (memory)<br />
+0 sorts (disk)<br />
+98 rows processed</p>
+<p>SQL&gt;</p>
+<p>29．如何从结果集中获得随机结果<br />
+从Oracle8i开始Oracle提供采样表扫描特性。<br />
+Oracle访问数据的基本方法有:<br />
+1.全表扫描<br />
+2.采样表扫描<br />
+全表扫描(Full table Scan)<br />
+全表扫描返回表中所有的记录。<br />
+执行全表扫描，Oracle读表中的所有记录，考查每一行是否满足WHERE条件。Oracle顺序的读分配给该表的每一个数据块，这样全表扫描能够受益于多块读.<br />
+每个数据块Oracle只读一次.<br />
+采样表扫描(sample table scan)<br />
+采样表扫描返回表中随机采样数据。<br />
+这种访问方式需要在FROM语句中包含SAMPLE选项或者SAMPLE BLOCK选项.<br />
+SAMPLE选项:<br />
+当按行采样来执行一个采样表扫描时，Oracle从表中读取特定百分比的记录，并判断是否满足WHERE子句以返回结果。<br />
+SAMPLE BLOCK选项:<br />
+使用此选项时，Oracle读取特定百分比的BLOCK，考查结果集是否满足WHERE条件以返回满足条件的纪录.<br />
+Sample_Percent:<br />
+Sample_Percent是一个数字，定义结果集中包含记录占总记录数量的百分比。<br />
+Sample值应该在[0.000001,99.999999]之间。<br />
+1.使用SAMPLE选项<br />
+SQL&gt; select * from employee SAMPLE(30);</p>
+<p>EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO<br />
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------<br />
+7369 SMITH      CLERK           7902 17-DEC-80        800                    20<br />
+7788 SCOTT      ANALYST         7566 19-APR-87       3000                    20<br />
+7839 KING       PRESIDENT            17-NOV-81       5000                    10<br />
+Execution Plan<br />
+----------------------------------------------------------<br />
+0      SELECT STATEMENT Optimizer=CHOOSE (Cost=2 Card=25 Bytes=2175)<br />
+1    0   TABLE ACCESS (SAMPLE) OF 'EMPLOYEE' (Cost=2 Card=25 Bytes=2175)<br />
+Statistics<br />
+----------------------------------------------------------<br />
+0 recursive calls<br />
+0 db block gets<br />
+5 consistent gets<br />
+0 physical reads<br />
+0 redo size<br />
+880 bytes sent via SQL*Net to client<br />
+503 bytes received via SQL*Net from client<br />
+2 SQL*Net roundtrips to/from client<br />
+0 sorts (memory)<br />
+0 sorts (disk)<br />
+3 rows processed<br />
+SQL&gt; select * from employee SAMPLE(20);<br />
+EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO<br />
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------<br />
+7654 MARTIN     SALESMAN        7698 28-SEP-81       1250       1400         30<br />
+7844 TURNER     SALESMAN        7698 08-SEP-81       1500          0         30<br />
+Execution Plan<br />
+----------------------------------------------------------<br />
+0      SELECT STATEMENT Optimizer=CHOOSE (Cost=2 Card=16 Bytes=1392)<br />
+1    0   TABLE ACCESS (SAMPLE) OF 'EMPLOYEE' (Cost=2 Card=16 Bytes=1392)<br />
+Statistics<br />
+----------------------------------------------------------<br />
+0 recursive calls<br />
+0 db block gets<br />
+5 consistent gets<br />
+0 physical reads<br />
+0 redo size<br />
+839 bytes sent via SQL*Net to client<br />
+503 bytes received via SQL*Net from client<br />
+2 SQL*Net roundtrips to/from client<br />
+0 sorts (memory)<br />
+0 sorts (disk)<br />
+2 rows processed</p>
+<p>2.使用SAMPLE BLOCK选项<br />
+SQL&gt; SELECT * FROM employee SAMPLE BLOCK (50);</p>
+<p>EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO<br />
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------<br />
+7369 SMITH      CLERK           7902 17-DEC-80        800                    20<br />
+7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30<br />
+7521 WARD       SALESMAN        7698 22-FEB-81       1250        500         30<br />
+7566 JONES      MANAGER         7839 02-APR-81       2975                    20<br />
+7654 MARTIN     SALESMAN        7698 28-SEP-81       1250       1400         30<br />
+7698 BLAKE      MANAGER         7839 01-MAY-81       2850                    30<br />
+7782 CLARK      MANAGER         7839 09-JUN-81       2450                    10<br />
+7788 SCOTT      ANALYST         7566 19-APR-87       3000                    20<br />
+7839 KING       PRESIDENT            17-NOV-81       5000                    10<br />
+7844 TURNER     SALESMAN        7698 08-SEP-81       1500          0         30<br />
+10 rows selected.<br />
+Execution Plan<br />
+----------------------------------------------------------<br />
+0      SELECT STATEMENT Optimizer=CHOOSE (Cost=2 Card=41 Bytes=3567)<br />
+1    0   TABLE ACCESS (SAMPLE) OF 'EMPLOYEE' (Cost=2 Card=41 Bytes=3567)<br />
+Statistics<br />
+----------------------------------------------------------<br />
+0 recursive calls<br />
+0 db block gets<br />
+4 consistent gets<br />
+0 physical reads<br />
+0 redo size<br />
+1162 bytes sent via SQL*Net to client<br />
+503 bytes received via SQL*Net from client<br />
+2 SQL*Net roundtrips to/from client<br />
+0 sorts (memory)<br />
+0 sorts (disk)<br />
+10 rows processed<br />
+SQL&gt;</p>
+<p>3.采样前n条记录的查询<br />
+也可以使用dbms_random包实现<br />
+SQL&gt; select * from (<br />
+2 select * from employee</p>
+<p>3 order by dbms_random.value )<br />
+4 where rownum &lt;= 4;</p>
+<p>EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO<br />
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------<br />
+7654 MARTIN     SALESMAN        7698 28-SEP-81       1250       1400         30<br />
+7839 KING       PRESIDENT            17-NOV-81       5000                    10<br />
+7369 SMITH      CLERK           7902 17-DEC-80        800                    20<br />
+7788 SCOTT      ANALYST         7566 19-APR-87       3000                    20<br />
+Execution Plan<br />
+----------------------------------------------------------<br />
+0      SELECT STATEMENT Optimizer=CHOOSE<br />
+1    0   COUNT (STOPKEY)<br />
+2    1     VIEW<br />
+3    2       SORT (ORDER BY STOPKEY)<br />
+4    3         TABLE ACCESS (FULL) OF 'EMPLOYEE'<br />
+Statistics<br />
+----------------------------------------------------------<br />
+0 recursive calls<br />
+0 db block gets<br />
+3 consistent gets<br />
+0 physical reads<br />
+0 redo size<br />
+927 bytes sent via SQL*Net to client<br />
+503 bytes received via SQL*Net from client<br />
+2 SQL*Net roundtrips to/from client<br />
+1 sorts (memory)<br />
+0 sorts (disk)<br />
+4 rows processed</p>
+<p>对比一下SAMPLE选项<br />
+SQL&gt; SELECT * FROM employee SAMPLE (40);</p>
+<p>EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO<br />
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------<br />
+7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30<br />
+7521 WARD       SALESMAN        7698 22-FEB-81       1250        500         30<br />
+7698 BLAKE      MANAGER         7839 01-MAY-81       2850                    30<br />
+7839 KING       PRESIDENT            17-NOV-81       5000                    10<br />
+7844 TURNER     SALESMAN        7698 08-SEP-81       1500          0         30<br />
+Execution Plan<br />
+----------------------------------------------------------<br />
+0      SELECT STATEMENT Optimizer=CHOOSE (Cost=2 Card=33 Bytes=2871)<br />
+1    0   TABLE ACCESS (SAMPLE) OF 'EMPLOYEE' (Cost=2 Card=33 Bytes=2871)<br />
+Statistics<br />
+----------------------------------------------------------<br />
+0 recursive calls<br />
+0 db block gets<br />
+5 consistent gets<br />
+0 physical reads<br />
+0 redo size<br />
+961 bytes sent via SQL*Net to client<br />
+503 bytes received via SQL*Net from client<br />
+2 SQL*Net roundtrips to/from client<br />
+0 sorts (memory)<br />
+0 sorts (disk)<br />
+5 rows processed<br />
+SQL&gt;</p>
+<p>主要注意以下几点:<br />
+1.sample只对单表生效，不能用于表连接和远程表<br />
+2.sample会使SQL自动使用CBO</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/riverside-new-life.html" data-toggle="tooltip" data-placement="top" title="滨江新生活">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/web&amp;rt/grid-drift.html" data-toggle="tooltip" data-placement="top" title="GRID 漂移">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/summary-of-pl-sql-zt" data-title="PL SQL 小结 -- zt"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="1．SQL并行查询
+alter session enable parallel dml
+execute immediate 'alter session ... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/summary-of-pl-sql-zt.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/summary-of-pl-sql-zt" data-title="PL SQL 小结 -- zt" data-url="http://dbaeyes.github.io/oracle/summary-of-pl-sql-zt.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

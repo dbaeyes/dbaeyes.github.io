@@ -1,0 +1,58 @@
+---
+layout: post
+title: 跟踪 优化 SQL
+date: 2008-08-05 13:54:18.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- sql
+- turning
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '903'
+---
+<p>1.获取用户连接</p>
+<div>
+select s.sid sid, s.SERIAL# "serial#", s.username, s.machine, s.program,<br />
+p.spid ServPID, s.server<br />
+from v$session s, v$process p<br />
+where p.addr = s.paddr ;</p>
+<p>2. 启动跟踪功能<br />
+SQL&gt; exec sys.dbms_system.set_sql_trace_in_session(141,982, true);</p>
+<p>3. 运行141,982对应session下的sql语句</p>
+<p>4. 关闭跟踪功能<br />
+SQL&gt; exec sys.dbms_system.set_sql_trace_in_session(141,982,false);</p>
+<p>5. 格式化跟踪数据<br />
+&gt; tkprof dgtest_ora_3420.trc dgtest_ora_3420.out sys=no explain=hr/hr</p>
+<p>&gt; tkprof dgtest_ora_3420.trc dgtest_ora_3420.out sys=no explain=hr/hr SORT=(EXECPU,FCHCPU)</p>
+<p>============主体部分===================<br />
+update t set owner = 'OOO'<br />
+WHERE<br />
+OWNER = 'SYS'</p>
+<p>call     count       cpu    elapsed       disk      query    current        rows<br />
+------- ------ -------- ---------- ---------- ---------- ---------- ----------<br />
+Parse        1      0.00       0.02          0          4          0           0<br />
+Execute      1      0.42       1.85        682      13417      24725       23236<br />
+Fetch        0      0.00       0.00          0          0          0           0<br />
+------- ------ -------- ---------- ---------- ---------- ---------- ----------<br />
+total        2      0.42       1.88        682      13421      24725       23236</p>
+<p>Misses in library cache during parse: 1<br />
+Optimizer mode: ALL_ROWS<br />
+Parsing user id: 56 (HR)</p>
+<p>Rows     Row Source Operation<br />
+------- ---------------------------------------------------<br />
+0 UPDATE T (cr=13461 pr=680 pw=0 time=1816660 us)<br />
+47174   TABLE ACCESS FULL T (cr=13403 pr=680 pw=0 time=94492 us)</p>
+<p>Rows     Execution Plan<br />
+------- ---------------------------------------------------<br />
+0 UPDATE STATEMENT   MODE: ALL_ROWS<br />
+0   UPDATE OF 'T'<br />
+47174    TABLE ACCESS   MODE: ANALYZED (FULL) OF 'T' (TABLE)</p>
+<p>解释：<br />
+1) sql语句的统计信息<br />
+我们把select语句的执行过程分成3个阶段(分析</p></div>

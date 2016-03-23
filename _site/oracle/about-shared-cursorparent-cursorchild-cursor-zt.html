@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>about shared cursor,parent cursor,child cursor --zt - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/about-shared-cursorparent-cursorchild-cursor-zt.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                    </div>
+                    <h1>about shared cursor,parent cursor,child cursor --zt</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on January 11, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>近日有朋友问到 cursor 如何确定是否sharable的，Metalink Note 296377.1 说得比较好，简单注释如下：</p>
+<div>
+<p><strong>1. shared <a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span style="text-decoration: underline;"><strong>SQL</strong></span></a>,parent cursor,child cursor 概念：</strong></p>
+<p>所有SQL都是Oracle暗式共享的(implicitly sharable)。当用户A发出一条SQL后，Oracle会根据SQL文本内容生成hash value(<a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span style="text-decoration: underline;"><strong>10g</strong></span></a>还有唯一的SQL_ID)，以便能够快速找到 Shared pool已经存在的相同SQL。如果找不到，则Oracle会为这个SQL创建一个parent cursor和一个child cursor，这与SQL是否共享是没有关系的。</p>
+<p>parent cursor包含了SQL TEXT和相关的hash value，v$sqlarea中的每一行代表了一个parent cursor，根据address表示了其内存地址。</p>
+<p>child cursor包含了SQL的metadata，即使得这个SQL可以执行的所有相关信息，如OBJECT和权限，优化器设置，执行计划等。v$sql中中 的每一行表示了一个child cursor，根据hash value和address与parent cursor 关联。child cursor有自己的address，即V$SQL.CHILD_ADDRESS。</p>
+<p>第一个child cursor总是使用0来表示其创建顺序，V$SQL.CHILD_NUMBER = 0。因此，当从V$SQL_PLAN中查找某个SQL的执行计划时，要注意你写对了CHILD_NUMBER 。</p>
+<p>如果有多个child cursor，则表示parent cursor有多个版本，v$sqlarea中的version_count字段就会纪录下来。</p>
+<p><strong>2. 如何确定SQL 是否可以共享：</strong></p>
+<p>假设用户A执行完一条SQL后，退出然后重新登陆，发出同一条SQL，则根据hash value找到Shared pool中已经存在的parent cursor，然后把 此parent cursor下的child cursor list搜寻一边，判断metadata是否完全相同，如果是，则这条sql可以共享，就完成了一次soft parse。</p>
+<p>假设用户B之后发出一条SQL文本完全一样的SQL，但访问的table不是A用户的，而是B用户自己的，则metadata出现AUTH_CHECK_MISMATCH 和<br />
+TRANSLATION_MISMATCH ，无法共享child cursor。Oracle会因此在此parent cursor 下创建一个新的child cursor，也就是一个hard parse。</p>
+<p>因此，SQL 是否可以共享是与parent cursor无关的，而是由child cursor决定的。</p>
+<p>从v$sql_shared_cursor可以获得详细的无法共享的原因：<br />
+select * from v$sql_shared_cursor where kglhdpar = &lt;parent address&gt;  --or sql_id = ''<br />
+select * from v$sql_shared_cursor where address = &lt;parent address&gt;   --or sql_id = ''</p>
+<p>一般常见的mismatch是：</p>
+<p>OPTIMIZER_MISMATCH  : 优化器环境设置不同，一般是optimizer相关参数<br />
+BIND_MISMATCH      : 绑定变量的值的长度在第二次执行的时候发生显著的变化    AUTH_CHECK_MISMATCH : 授权关系不匹配<br />
+TRANSLATION_MISMATCH: 事务环境不匹配</p>
+<p>其实最常见的是 BIND_MISMATCH ，在10g中可以<a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span style="text-decoration: underline;"><strong>测试</strong></span></a>一下：</p>
+<p>create table t1(col1 varchar2(4000));</p>
+<p>declare<br />
+v_col1 varchar2(4000);<br />
+begin<br />
+v_col1 := 't';<br />
+for i in 1..30 loop<br />
+v_col1 := v_col1 ||'t';<br />
+insert into t1 values(v_col1);<br />
+end loop;<br />
+end;<br />
+/</p>
+<p>--可以看出，变量长度在30以下的时候，还是只有一个child cursor:</p>
+<p>SQL_TEXT                    EXECUTIONS CHILD_NUMBER  ADDRESS  HASH_VALUE<br />
+--------------------------- ---------- ------------  -------- ----------<br />
+INSERT INTO T1 VALUES(:B1 )         30            0  9E355F10 2351142747</p>
+<p>declare<br />
+v_col1 varchar2(4000);<br />
+begin<br />
+v_col1 := 'tttttttttttttttttttttttttttttt';<br />
+for i in 31..4000 loop<br />
+v_col1 := v_col1 ||'t';<br />
+insert into t1 values(v_col1);<br />
+end loop;<br />
+end;<br />
+/</p>
+<p>--可以看出，变量长度变化导致了四个child cursor 存在：</p>
+<p>SQL_TEXT                     EXECUTIONS CHILD_NUMBER CHILD_ADDRESS  ADDRESS  HASH_VALUE<br />
+---------------------------- ---------- ------------ -------------  -------- ----------<br />
+INSERT INTO T1 VALUES(:B1 )          32            0 9E355DCC       9E355F10 2351142747<br />
+INSERT INTO T1 VALUES(:B1 )          96            1 9E34BA18       9E355F10 2351142747<br />
+INSERT INTO T1 VALUES(:B1 )        1872            2 9E34B8D4       9E355F10 2351142747<br />
+INSERT INTO T1 VALUES(:B1 )        2060            3 9E34B790       9E355F10 2351142747</p>
+<p><strong>3. 使用cursor trace获得child cursor 无法共享的详细原因：</strong></p>
+<p>--9i<br />
+alter session set events '10270 trace name context forever, level 10';</p>
+<p>--10g<br />
+alter system set events 'immediate trace name cursortrace level 577, address &lt;hash_value&gt;';<br />
+--(level 578/580 can be used for high level tracing (577=level 1, 578=level 2, 580=level 3)</p>
+<p>alter system set events 'immediate trace name cursortrace level 2147483648, address 1';</p>
+<p><strong>4. cursor_sharing=similar 和 force 时的行为</strong></p>
+<p>cursor_sharing=similar 时</p>
+<p>如果 predicate 为范围( &gt;,&lt;,&gt;=,&lt;= )，则出现literal replacement 时，一般不会share cursor，除非literal 完全相等；<br />
+因为在CBO下，这个时候的literal被用来确定执行计划，literal replacement会被认 为是UNSAFE的，无法共享。<br />
+在RBO时候，CURSOR是会共享的。</p>
+<p>CBO下，如果 predicate 为=，则出现literal replacement 时，是否share cursor，取决于这个column是否有histgrams。</p>
+<p>cursor_sharing=force 时，不管 predicate，如果出现literal replacement ，则会shared cursor，但往往容易得到性能较差的执行计划。</p>
+<p>可以使用10046 判断一个bind variable 是否 unsafe：</p>
+<p>The flag oacfl2 in 9i and fl2 in 10g will show if a variable is unsafe.</p>
+<p>BINDS #2:<br />
+bind 0: dty=2 mxl=22(04) mal=00 scl=00 pre=00 acflg=10 oacfl2=500 size=24 ffset=0 bfp=1036d6408 bln=22 avl=04 flg=09 value=16064<br />
+bind 1: dty=2 mxl=22(04) mal=00 scl=00 pre=00 acflg=10 oacfl2=500 size=24 ffset=0 bfp=1036d4340 bln=22 avl=04 flg=09</p>
+<p>If you note oacfl2=500<br />
+#define UACFBLTR 0x00000100 /* Bind was generated by LiTeRal replacement */<br />
+#define UACFUNSL 0x00000200 /* UNSafe Literal */<br />
+#define UACFNDTL 0x00000400 /* Non-DaTa LiteRal */</p>
+<p>在11g中，child cursor 共享这部分改动不小，如果从10g升级上去，AWR往往发现某些SQL的VERSION COUNT会变多，可能会命中BUG。</p>
+<p>--from :<a href="http://space.itpub.net/50897/viewspace-584304" target="_blank"> http://space.itpub.net/50897/viewspace-584304</a></p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/n73-disassemble.html" data-toggle="tooltip" data-placement="top" title="N73 拆解">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/toothache.html" data-toggle="tooltip" data-placement="top" title="牙疼">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/about-shared-cursorparent-cursorchild-cursor-zt" data-title="about shared cursor,parent cursor,child cursor --zt"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="近日有朋友问到 cursor 如何确定是否sharable的，Metalink Note 296377.1 说得比较好，简单注释如下：
+
+1. share... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/about-shared-cursorparent-cursorchild-cursor-zt.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/about-shared-cursorparent-cursorchild-cursor-zt" data-title="about shared cursor,parent cursor,child cursor --zt" data-url="http://dbaeyes.github.io/oracle/about-shared-cursorparent-cursorchild-cursor-zt.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

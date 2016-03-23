@@ -1,0 +1,42 @@
+---
+layout: post
+title: How to do with the duplicated data in MySQL
+date: 2012-09-29 22:02:25.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- duplicated
+- mysql
+- sql
+meta:
+  _edit_last: '1'
+  posturl_add_url: 'yes'
+  views: '2302'
+---
+<p>MySQL: 5.1.48<br />
+Phase: the trade_id are duplicated in table tmp_xf_test<br />
+Purpose: select the record which the gmt_modified is minimum and the trade_id are duplicated.</p>
+<p>Because MySQL get the record in order.<br />
+[cc lang='sql']select * from<br />
+(select id,trade_id,gmt_modified from tmp_xf_2<br />
+            order by trade_id,gmt_modified) t<br />
+group by trade_id;[/cc]</p>
+<p>Another way (more complicated)<br />
+[cc lang='sql']select b.* from (select trade_id, min(gmt_modified) as dt<br />
+from tmp_xf_test<br />
+group by trade_id) a, tmp_xf_test b<br />
+where a.trade_id = b.trade_id<br />
+and a.dt = b.gmt_modified;[/cc]</p>
+<p>--<br />
+Purpose: delete the duplicated rows and keep one which the 'gmt_modified' is mininum</p>
+<p>[cc lang='sql']delete a from tmp_xf_test a,<br />
+(select *, min(gmt_modified) as bid<br />
+from tmp_xf_test<br />
+group by trade_id<br />
+having count(1) &gt; 1) as b<br />
+where a.trade_id = b.trade_id<br />
+and a.gmt_modified &gt; b.bid;[/cc]</p>
+<p>Have fun</p>

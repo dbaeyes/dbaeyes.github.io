@@ -7,14 +7,6 @@
 		<atom:link href="/" rel="self" type="application/rss+xml" />
 		
 			<item>
-				<title>test for alice</title>
-				<description></description>
-				<pubDate>Mon, 20 Apr 2015 15:09:05 +0800</pubDate>
-				<link>/test-for-alice.html</link>
-				<guid isPermaLink="true">/test-for-alice.html</guid>
-			</item>
-		
-			<item>
 				<title>什么心情</title>
 				<description>&lt;p&gt;负面的情绪会直接影响人的心情！&lt;br /&gt;
 有些人就是这样，很难变的。 知道就好了，没有必要为了别人生气&lt;/p&gt;
@@ -22,7 +14,7 @@
 &lt;p&gt;昨天把葡萄酒的书浏览了下，感觉离葡萄酒还比较远。 喜欢就好，不用纠结！&lt;/p&gt;
 &lt;p&gt;最近坚持游泳有段时间了，感觉挺好的！最近一个人的日子时间比较自由，晚上下班都是自己的时间，但时间花在什么地方比较好呢，有点吃不准，锻炼肯定是的。然后其他时间只要做喜欢的事情，不要浪费发呆就好&lt;/p&gt;
 </description>
-				<pubDate>Wed, 11 Mar 2015 07:21:52 +0800</pubDate>
+				<pubDate>Wed, 11 Mar 2015 09:51:52 +1030</pubDate>
 				<link>/my%20life/what-mood.html</link>
 				<guid isPermaLink="true">/my%20life/what-mood.html</guid>
 			</item>
@@ -35,18 +27,9 @@
 &lt;p&gt;好吧，晚上尽量在11点睡觉，早上6点半到7点起来就差不多了。 &lt;/p&gt;
 &lt;p&gt;早上时间很好，可以学习下英语，看看书！！！&lt;/p&gt;
 </description>
-				<pubDate>Sun, 08 Mar 2015 19:34:03 +0800</pubDate>
+				<pubDate>Sun, 08 Mar 2015 22:04:03 +1030</pubDate>
 				<link>/thinking/not-self-willed.html</link>
 				<guid isPermaLink="true">/thinking/not-self-willed.html</guid>
-			</item>
-		
-			<item>
-				<title>手机来测试一个</title>
-				<description>&lt;p&gt;用手机写写也不错哦&lt;/p&gt;
-</description>
-				<pubDate>Thu, 26 Feb 2015 10:27:43 +0800</pubDate>
-				<link>/my%20life/phone-to-test-a.html</link>
-				<guid isPermaLink="true">/my%20life/phone-to-test-a.html</guid>
 			</item>
 		
 			<item>
@@ -59,7 +42,7 @@
 &lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/16442825447/player/&quot; width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen&gt;&lt;/iframe&gt;&lt;/p&gt;
 &lt;p&gt;&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/16462730480/in/photostream/player/&quot; width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen&gt;&lt;/iframe&gt;&lt;/p&gt;
 </description>
-				<pubDate>Thu, 26 Feb 2015 09:54:29 +0800</pubDate>
+				<pubDate>Thu, 26 Feb 2015 12:24:29 +1030</pubDate>
 				<link>/my%20life/keep-writing-blog.html</link>
 				<guid isPermaLink="true">/my%20life/keep-writing-blog.html</guid>
 			</item>
@@ -75,7 +58,7 @@
 &lt;p&gt;哦，有个事情已经要说下！&lt;/p&gt;
 &lt;p&gt;最近长胖了，应该是壮了，也是在不知不觉中发生的变化。感觉应该是4个月前开始的游泳有关系，游泳真的是个好运动，现在差不多每周游2-3次，每次30-40分钟。 感觉非常棒，还学会了自由泳。&lt;/p&gt;
 </description>
-				<pubDate>Thu, 30 Oct 2014 19:13:33 +0800</pubDate>
+				<pubDate>Thu, 30 Oct 2014 21:43:33 +1030</pubDate>
 				<link>/thinking/time-change.html</link>
 				<guid isPermaLink="true">/thinking/time-change.html</guid>
 			</item>
@@ -146,7 +129,7 @@ MySQL converts TIMESTAMP values from the current time zone to UTC for storage, a
 2. 调整MySQL的启动参数文件： 在[mysqld]下面加上  default-time-zone=timezone 比如 default-time-zone=&#39;+8:00&#39; 。 通过登录后的set time-zone 是session级别的，不能做为全局使用，但也有其使用的场景&lt;/p&gt;
 &lt;p&gt;--eof&lt;/p&gt;
 </description>
-				<pubDate>Tue, 15 Jul 2014 13:47:08 +0800</pubDate>
+				<pubDate>Tue, 15 Jul 2014 15:17:08 +0930</pubDate>
 				<link>/mysql/time-zone-timestamp-datetime-in-mysql.html</link>
 				<guid isPermaLink="true">/mysql/time-zone-timestamp-datetime-in-mysql.html</guid>
 			</item>
@@ -160,7 +143,7 @@ MySQL converts TIMESTAMP values from the current time zone to UTC for storage, a
 上周六团队组织了一次足球活动，7v7的场地很不多，跑了两个多小时（中途休息了很多次^_^），出汗的感觉真好，发现太久没踢球了，对球的距离感和脚感已经比较糟糕了，如果多踢踢应该会好，不过貌似周边当前情况下，氛围比较少。&lt;br /&gt;
 先写到这里了。&lt;/p&gt;
 </description>
-				<pubDate>Tue, 15 Jul 2014 07:12:09 +0800</pubDate>
+				<pubDate>Tue, 15 Jul 2014 08:42:09 +0930</pubDate>
 				<link>/my%20life/world-cup-2014.html</link>
 				<guid isPermaLink="true">/my%20life/world-cup-2014.html</guid>
 			</item>
@@ -171,7 +154,7 @@ MySQL converts TIMESTAMP values from the current time zone to UTC for storage, a
 &lt;p&gt;父母健康是儿女最大的心愿！早日康复&lt;/p&gt;
 &lt;p&gt;以后要多陪陪父母，有什么时候要尽快赶回到父母的身边，这是对父母最好的会报。&lt;/p&gt;
 </description>
-				<pubDate>Tue, 24 Jun 2014 21:15:14 +0800</pubDate>
+				<pubDate>Tue, 24 Jun 2014 22:45:14 +0930</pubDate>
 				<link>/my%20life/physical-health.html</link>
 				<guid isPermaLink="true">/my%20life/physical-health.html</guid>
 			</item>
@@ -186,9 +169,72 @@ MySQL converts TIMESTAMP values from the current time zone to UTC for storage, a
 &lt;p&gt;--&lt;/p&gt;
 &lt;p&gt;本次发烧小结：过程持续4天多，温度很高（最高39.8%），没挂水，吃了散利痛退烧药和克林霉素消炎药，验血说是细菌感染。说下体会，丫的，发热很难受，吃了退烧药会出汗然后体温就会降下去，这个过程很爽。退烧药的药效时间在4到5个小时。发烧后晚上睡觉很难受，中途会醒过来，还会出现噩梦和幻觉需要及时降温。 下次出现温度比较高情况39℃以上，还是第一时间挂水吧，不折腾自己了，虽然挂水照样需要4-5才能好，但不至于这么难受&lt;/p&gt;
 </description>
-				<pubDate>Tue, 17 Jun 2014 14:35:23 +0800</pubDate>
+				<pubDate>Tue, 17 Jun 2014 16:05:23 +0930</pubDate>
 				<link>/my%20life/dont-burn-easily.html</link>
 				<guid isPermaLink="true">/my%20life/dont-burn-easily.html</guid>
+			</item>
+		
+			<item>
+				<title>巴西世界杯 2014</title>
+				<description>&lt;p&gt;&lt;!--?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?--&gt;    四年一度的世界杯又开始了，算算我和小隽都出生世界杯年。&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;div&gt;   最近几年工作和各种事情，使得足球的爱好已经慢慢消磨了。 所以趁此世界杯之际，再燃烧起一把热情。&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;
+&lt;div&gt;    2014年巴西世界杯，桑巴的节奏。 尽管巴西世界杯遭受了巴西国内的抵制，巴西国内治安也不靠谱的影响，再说开幕式跟咋中华民族的各类开幕式，真的是小巫见大巫。 但世界杯就是开幕了，我们看球不就是为了纯粹的足球么。&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;
+&lt;div&gt;    一直喜欢的国家队是阿根廷，虽然前几届阿根廷表现都不咋滴，但是喜欢就是喜欢，还有梅西。 看我的微信头像都换成梅西了。 好好享受足球，享受足球带来的欢乐。&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;
+&lt;div&gt;    以后有机会，多多运动，多多足球。&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;
+&lt;div&gt;    话说最近对自己的体重增加非常满意，已经达到了之前的目标，以前看起来非常艰难的目标，就这么达到了。 已经连续游泳2个多月了，平时也有进行无器械运动！ 加油！&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;
+</description>
+				<pubDate>Sun, 15 Jun 2014 21:25:15 +0930</pubDate>
+				<link>/my%20life/brazil-world-cup-2014.html</link>
+				<guid isPermaLink="true">/my%20life/brazil-world-cup-2014.html</guid>
+			</item>
+		
+			<item>
+				<title>美食之行 -- 成都 outing</title>
+				<description>&lt;p&gt;每年一度的outing，这次选择去了成都，美食、美景、美女。确实没有让人失望&lt;/p&gt;
+&lt;p&gt;第一天上午参观了武侯祠，熊猫基地（熊猫中午都睡觉了，总体感觉一般了）&lt;/p&gt;
+&lt;p&gt;&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14225991167/player/4d9a17e3fb&quot; height=&quot;577&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;br /&gt;
+&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14432655033/player/34ecd62f4c&quot; height=&quot;534&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;路过锦里&lt;br /&gt;
+&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14411289204/player/d244c4ae5f&quot; height=&quot;800&quot; width=&quot;534&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;br /&gt;
+&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14225839119/player/45a55e109e&quot; height=&quot;800&quot; width=&quot;534&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;下午休闲的在宽窄巷逛逛，喝茶，休闲的生活&lt;br /&gt;
+&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14225851449/player/2881586e72&quot; height=&quot;800&quot; width=&quot;534&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;br /&gt;
+&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14411203322/player/281c22e666&quot; height=&quot;534&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;中午陈麻婆豆腐，好吃&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14226052177/player/1cc00a3424&quot; height=&quot;534&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;br /&gt;
+晚上蜀九香火锅，香的太好吃了&lt;br /&gt;
+&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14412540285/player/5490601aac&quot; height=&quot;534&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;第二天本来计划坐大巴去都江堰，结果跑错了车站，后临时改租车自驾去都江堰和青城山。还是第一次在国内租车，自驾游。好吧，感觉不错，同车的同学都没带驾照，我就自然成了司机。总体来看，自驾非常方便，而且价格也很实在。以后出现的一个好方式了！&lt;br /&gt;
+同行的伙伴&lt;br /&gt;
+&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14389424946/player/92120f26c4&quot; height=&quot;548&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14225961760/player/0ce8023cb9&quot; height=&quot;446&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;都江堰确实牛逼，最为当时最牛逼的架构师--李冰父子 主持修建了都江堰，灌溉万亩良田，川西千古气功啊！&lt;/p&gt;
+&lt;p&gt;然后驾车去青城后山，不过时间已晚，开到山上时，已经5点多，索道已经停了，我们逛了下。 话说上山的小路开车真的很爽，有秋名山飙车的感觉，呃。。。&lt;br /&gt;
+&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14225923269/player/99c87948e8&quot; height=&quot;572&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;哦，对了中午在都江堰的三千浪鱼头吃鱼头火锅，纯鱼头，那个味道太赞了，鲜嫩的鱼头，5个人吃了7.6斤。&lt;br /&gt;
+&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14411403402/player/7e3307e434&quot; height=&quot;600&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;br /&gt;
+晚上吃了皇城坝小吃，嘿嘿，名小吃哦，味道不错！&lt;/p&gt;
+&lt;p&gt;第三天白天随意逛了下天府广场，下午去锦里转了下，看了下川戏变量，一般般喽，咱们都是见过市面的人，哈哈。&lt;br /&gt;
+&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14226289088/player/b1282d868c&quot; height=&quot;534&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/14432737723/player/a786f16dfd&quot; height=&quot;534&quot; width=&quot;800&quot; allowfullscreen=&quot;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;--&lt;br /&gt;
+感谢队长rose的组织，很尽心，很辛苦哈。&lt;br /&gt;
+成都是很大气的城市，城里交通也比较发达方便，很漂亮！大家都玩的很开心，下次有机会还值得再去！&lt;br /&gt;
+最后来一张rose团的合照！&lt;br /&gt;
+&lt;a href=&quot;https://www.flickr.com/photos/dbaeyes/14226200849/&quot; title=&quot;Flickr 上 玄风 的 成都 002&quot;&gt;&lt;img src=&quot;https://farm3.staticflickr.com/2907/14226200849_01c37f831f_c.jpg&quot; width=&quot;800&quot; height=&quot;534&quot; alt=&quot;成都 002&quot; /&gt;&lt;/a&gt;&lt;br /&gt;
+--eof&lt;/p&gt;
+</description>
+				<pubDate>Fri, 13 Jun 2014 22:49:10 +0930</pubDate>
+				<link>/my%20life/travel/1660.html</link>
+				<guid isPermaLink="true">/my%20life/travel/1660.html</guid>
 			</item>
 		
 	</channel>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>Linux操作系统平台Vi指令大全 (zt) - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/os/vi-directive-daquan-linux-operating-system-platform-zt.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#linux" title="linux">linux</a>
+                        
+                        <a class="tag" href="/Tags/#vi" title="vi">vi</a>
+                        
+                    </div>
+                    <h1>Linux操作系统平台Vi指令大全 (zt)</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on November 11, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><strong>进入vi的命令</strong></p>
+<div>
+<p>vi filename: 打开或新建文件，并将光标置于第一行首</p>
+<p>vi +n filename: 打开文件，并将光标置于第n行首</p>
+<p>vi + filename: 打开文件，并将光标置于最后一行首</p>
+<p>vi +/pattern filename: 打开文件，并将光标置于第一个与pattern匹配的串处</p>
+<p>vi -r filename: 在上次正用vi编辑时发生系统崩溃，恢复filename</p>
+<p>vi filename……filename: 打开多个文件，依次进行编辑</p>
+<p><strong>移动光标类命令</strong></p>
+<p>h: 光标左移一个字符</p>
+<p>l: 光标右移一个字符</p>
+<p>space: 光标右移一个字符</p>
+<p>Backspace: 光标左移一个字符</p>
+<p>k或Ctrl+p: 光标上移一行</p>
+<p>j或Ctrl+n: 光标下移一行</p>
+<p>Enter: 光标下移一行</p>
+<p>w或W : 光标右移一个字至字首</p>
+<p>b或B : 光标左移一个字至字首</p>
+<p>e或E : 光标右移一个字至字尾</p>
+<p>): 光标移至句尾</p>
+<p>(: 光标移至句首</p>
+<p>}: 光标移至段落开头</p>
+<p>{: 光标移至段落结尾</p>
+<p>nG: 光标移至第n行首</p>
+<p>n+: 光标下移n行</p>
+<p>n-: 光标上移n行</p>
+<p>n$: 光标移至第n行尾</p>
+<p>H: 光标移至屏幕顶行</p>
+<p>M: 光标移至屏幕中间行</p>
+<p>L: 光标移至屏幕最后行</p>
+<p>0: 光标移至当前行首</p>
+<p>$: 光标移至当前行尾</p>
+<p><strong>屏幕翻滚类命令</strong></p>
+<p>Ctrl+u: 向文件首翻半屏</p>
+<p>Ctrl+d: 向文件尾翻半屏</p>
+<p>Ctrl+f: 向文件尾翻一屏</p>
+<p>Ctrl＋b: 向文件首翻一屏</p>
+<p>nz: 将第n行滚至屏幕顶部，不指定n时将当前行滚至屏幕顶部。</p>
+<p><strong>       插入文本类命令</strong></p>
+<p>i: 在光标前</p>
+<p>I: 在当前行首</p>
+<p>a: 光标后</p>
+<p>A: 在当前行尾</p>
+<p>o: 在当前行之下新开一行</p>
+<p>O: 在当前行之上新开一行</p>
+<p>r: 替换当前字符</p>
+<p>R: 替换当前字符及其后的字符，直至按ESC键</p>
+<p>s: 从当前光标位置处开始，以输入的文本替代指定数目的字符</p>
+<p>S: 删除指定数目的行，并以所输入文本代替之</p>
+<p>ncw或nCW: 修改指定数目的字</p>
+<p>nCC: 修改指定数目的行</p>
+<p><strong>删除命令</strong></p>
+<p>ndw或ndW: 删除光标处开始及其后的n-1个字</p>
+<p>do: 删至行首</p>
+<p>d$: 删至行尾</p>
+<p>ndd: 删除当前行及其后n-1行</p>
+<p>x或X: 删除一个字符，x删除光标后的，而X删除光标前的</p>
+<p>Ctrl+u: 删除输入方式下所输入的文本</p>
+<p><strong>搜索及替换命令</strong></p>
+<p>/pattern: 从光标开始处向文件尾搜索pattern</p>
+<p>?pattern: 从光标开始处向文件首搜索pattern</p>
+<p>n: 在同一方向重复上一次搜索命令</p>
+<p>N: 在反方向上重复上一次搜索命令</p>
+<p>:s/p1/p2/g: 将当前行中所有p1均用p2替代</p>
+<p>:n1,n2s/p1/p2/g: 将第n1至n2行中所有p1均用p2替代</p>
+<p>:g/p1/s//p2/g: 将文件中所有p1均用p2替换</p>
+<p><strong>        选项设置</strong></p>
+<p>all: 列出所有选项设置情况</p>
+<p>term: 设置终端类型</p>
+<p>ignorance: 在搜索中忽略大小写</p>
+<p>list: 显示制表位(Ctrl+I)和行尾标志($)</p>
+<p>number: 显示行号</p>
+<p>report: 显示由面向行的命令修改过的数目</p>
+<p>terse: 显示简短的警告信息</p>
+<p>warn: 在转到别的文件时若没保存当前文件则显示NO write信息</p>
+<p>nomagic: 允许在搜索模式中，使用前面不带“\”的特殊字符</p>
+<p>nowrapscan: 禁止vi在搜索到达文件两端时，又从另一端开始</p>
+<p>mesg: 允许vi显示其他用户用write写到自己终端上的信息</p>
+<p><strong>最后行方式命令</strong></p>
+<p>:n1,n2 co n3: 将n1行到n2行之间的内容拷贝到第n3行下</p>
+<p>:n1,n2 m n3:将n1行到n2行之间的内容移至到第n3行下</p>
+<p>:n1,n2 d: 将 n1行到n2行之间的内容删除</p>
+<p>:w: 保存当前文件</p>
+<p>:e filename: 打开文件filename进行编辑</p>
+<p>:x: 保存当前文件并退出</p>
+<p>:q: 退出vi</p>
+<p>:q!: 不保存文件并退出vi</p>
+<p>:!command: 执行shell命令command</p>
+<p>:n1,n2 w!command: 将文件中n1行至n2行的内容作为command的输入并执行之， 若不指定n1，n2，则表示将整个文件内容作为command的输入</p>
+<p>:r!command: 将命令command的输出结果放到当前行</p>
+<p><strong>寄存器操作</strong></p>
+<p>"?nyy: 将当前行及其下n行的内容保存到寄存器？中，其中?为一个字母，n为一个数字</p>
+<p>"?nyw: 将当前行及其下n个字保存到寄存器？中，其中?为一个字母，n为一个数字</p>
+<p>"?nyl: 将当前行及其下n个字符保存到寄存器？中，其中?为一个字母，n为一个数字</p>
+<p>"?p: 取出寄存器？中的内容并将其放到光标位置处。这里？可以是一个字母，也可以是一个数字</p>
+<p>ndd: 将当前行及其下共n行文本删除，并将所删内容放到1号删除寄存器中</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/os/etchosts-file-under-linux-operating-system-configuration-method-zt.html" data-toggle="tooltip" data-placement="top" title="Linux操作系统下/etc/hosts文件配置方法 (zt)">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/using-materialized-views-brush-table.html" data-toggle="tooltip" data-placement="top" title="使用物化视图刷表">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/os/vi-directive-daquan-linux-operating-system-platform-zt" data-title="Linux操作系统平台Vi指令大全 (zt)"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="进入vi的命令
+
+vi filename: 打开或新建文件，并将光标置于第一行首
+vi +n filename: 打开文件，并将光标置于第n行首
+vi +... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/os/vi-directive-daquan-linux-operating-system-platform-zt.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/os/vi-directive-daquan-linux-operating-system-platform-zt" data-title="Linux操作系统平台Vi指令大全 (zt)" data-url="http://dbaeyes.github.io/os/vi-directive-daquan-linux-operating-system-platform-zt.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

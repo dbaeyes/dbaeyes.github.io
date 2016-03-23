@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>Shared Server Info - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/shared-server-info.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                    </div>
+                    <h1>Shared Server Info</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on September 14, 2007</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <h1></h1>
+<div>
+<p>If your system is being negatively impacted by the resource demands of the dedicated server architecture you have two options:</p>
+<p>l         Increase system resources by adding more memory and additional CPU capability.</p>
+<p>l         Use the Oracle Shared Server architecture.</p>
+<p><img src="http://hiphotos.baidu.com/dbaeyes/pic/item/a0cc4bc7bc4190d6d10060ee.jpg" alt="" data-pinit="registered" /></p>
+<p><strong>Processing a Request</strong></p>
+<p>When a user connects through the Shared Server architecture submits a database request:</p>
+<p>1.   The user process forwards the request to its dispatcher.</p>
+<p>2.   The dispatcher places the request into the common request queue in the SGA.</p>
+<p>3.   The next available shared server picks up the request from the request queue and processes the request.</p>
+<p>4.   The shared server places the response on the calling dispatcher°s response queue. Each dispatcher has its own response queue.</p>
+<p>5.   The dispatcher retrieves the response from its response queue.</p>
+<p>6.   The dispatcher returns the response to the user.</p>
+<p>After the user call has been completed, the shared server process is released and is available to service another user call in the request queue.</p>
+<p><strong>Request Queue</strong></p>
+<p>l         One request queue is shared by all dispatchers.</p>
+<p>l         Shared servers monitor the request queue for new requests.</p>
+<p>l         Requests are processed on a first-in, first-out (FIFO) basis. There is no priority setting.</p>
+<p>&nbsp;</p>
+<p><img src="http://hiphotos.baidu.com/dbaeyes/pic/item/5a81c9012ced9e09738da5e8.jpg" alt="" data-pinit="registered" /></p>
+<div></div>
+<p>&nbsp;</p>
+<p><strong>The SGA and PGA</strong></p>
+<p>The contents of the System Global Area (SGA) and the Program Global Area (PGA) differ when dedicated servers or shared servers are used.</p>
+<p>? Text and parsed forms of all SQL statements are stored in the SGA.</p>
+<p>? The cursor state contains run-time memory values for the SQL statement, such as rows retrieved.</p>
+<p>? User-session data includes security and resource usage information.</p>
+<p>? The stack space contains local variables for the process.</p>
+<p><strong>Technical Note</strong></p>
+<p>The change in the SGA and PGA is transparent to the user; however, if supporting multiple users, you need to increase the <strong>LARGE_POOL_SIZE.</strong> Each shared server process needs to access the data spaces of all sessions so that any server can handle requests from any session. Space is allocated in the SGA for each session’s data space. You can limit the amount of space that a session can allocate by setting the <strong>PRIVATE_SGA</strong> resource limit in the Database Services region of the General page of the user’s profile.</p>
+<p>&nbsp;</p>
+<p><strong>Configuring Oracle Shared Server</strong></p>
+<p>To configure Oracle Shared Server, you must edit the initialization parameters for your instance. Most of the optional parameters have sensible defaults. On many systems, the only parameter that must be configured is <strong>DISPATCHERS</strong>.</p>
+<p>Depending on the options selected when you created your database, the <strong>DISPATCHERS </strong>parameter</p>
+<p>may already be configured to start one dispatcher to service theXML database. The <strong>DISPATCHERS</strong> parameter accepts multiple sets of values in the format:</p>
+<p><em>‘&lt;parameters for first set&gt;’,’&lt;parameters for second set&gt;’</em></p>
+<p>&nbsp;</p>
+<p><strong>When Not to Use Shared Server</strong></p>
+<p>Certain types of database work should not be performed using shared servers:</p>
+<p>l         Database administration</p>
+<p>l         Backup and recovery operations</p>
+<p>l         Batch processing and bulk load operations</p>
+<p>l         Data warehouse operations</p>
+<p>&nbsp;</p>
+<p><strong>如何配置</strong><strong>Oracle shared server</strong><strong>环境</strong><strong></strong></p>
+<p>―― <a href="http://blog.sina.com.cn/s/blog_4b1c9e12010007w9.html">http://blog.sina.com.cn/s/blog_4b1c9e12010007w9.html</a></p>
+<p>可以通过多种方法来配置shared server，包括创建数据库的时候指定参数、EM、修改初始化参数文件，还有可以通过Alter system进行修改，因为这些参数都是动态参数。<br />
+1） DISPATCHERS：指定调度器的数量、响应的协议等等。</p>
+<p align="left">其中最经常使用的两个属性值就是DISPATCHERS和PROTOCOL。<br />
+DISPATCHERS = “(PRO=TCP)(DIS=3)(PRO=IPC)(DIS=2)”<br />
+上面表示配置了3个TCP协议的调度器，2个IPC协议的调度器。那么，调度器的数量应该如何确定呢？主要考虑数据库最大的连接数和每个调度器服务的连接数，可以通过下面的公式进行计算：<br />
+调度器数量 = 数据库最大session数 /每个调度器服务的session数；<br />
+数据库的session数可以通过下面的视图获得：<br />
+1、 v$session:获得当前数据库的session数<br />
+SQL&gt; select count(*) from v$session where username is not null;<br />
+2、 V$LICENSE：获得当前数据库的session数及数据库启动以来最大的session数<br />
+SQL&gt; select sum(sessions_current) cur_sessions,sum(sessions_highwater) high_sessions from V$LICENSE;<br />
+比如数据库当前有500个TCP/IP session，每个调度器管理50个session，那么就需要10（500/50）个调度器。参数设置如下：<br />
+DISPATCHERS=”(PRO=TCP)(DIS=10)”<br />
+当然也可以根据数据库当前的负载，使用ALTER SYSTEM命令动态的增加或减少调度器的数据，如下：<br />
+ALTER SYSTEM SET DISPATCHERS=”(PRO=TCP)(DIS=5)”;</p>
+<p align="left">设置连接池：<br />
+DISPATCHERS="(PROTOCOL=tcp)(DISPATCHERS=1)(POOL=on)(TICK=1)(CONNECTIONS=500)(SESSIONS=1000)"<br />
+上面表示启动连接池，一个调度器的连接数最大为500个，sessions数目最大为1000个，并10分钟后自动断开未活动的连接。（TICK=1表示10分钟）<br />
+2） MAX_DISPATCHERS:设置最大的调度器数，可以动态调整<br />
+ALTER SYSTEM SET MAX_DISPATCHERS=10;<br />
+3） SHARED_SERVERS：设置数据库启动时启动的最小SHARED_SERVER数，默认值库1。设置为0表示不使用SHARED_SERVER。<br />
+ALTER SYSTEM SET SHARED_SERVERS = 5;<br />
+4） SHARED_SERVER_SESSIONS：设置ORACLE SHARED SERVER的最大session数。<br />
+当连接到SHARED SERVER的session数超过此值的话，将报错：<br />
+ERROR:<br />
+ORA-00018 maximum number of sessions exceeded<br />
+不过当数据库session超过此值的时候，仍然可以通过专用服务器连接进行连接。<br />
+ALTER SYSTEM SET SHARED_SERVER_SESSIONS = 5;<br />
+5） MAX_SHARED_SERVERS：设置最大的SHARED_SERVER数。如果未给此参数附值，那么SHARED_SERVER数库无限制。<br />
+ALTER SYSTEM SET MAX_SHARED_SERVERS = 20;<br />
+下面谈谈ORACLE SHARED SERVER环境的管理：<br />
+1）从监听获得信息<br />
+D:\&gt;lsnrctl services<br />
+LSNRCTL for 32-bit Windows: Version 10.1.0.2.0 - Production on 21-APR-2004<br />
+20:50:35<br />
+Copyright (c) 1991, 2004, Oracle. All rights reserved.<br />
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=MJW01)<br />
+(PORT=1521)))<br />
+Services Summary...<br />
+Service "PLSExtProc" has 1 instance(s).<br />
+Instance "PLSExtProc", status UNKNOWN, has 1 handler(s) for this service...<br />
+Handler(s):<br />
+"DEDICATED" established:0 refused:0<br />
+LOCAL SERVER<br />
+Instance "MJW", status READY, has 3 handler(s) for this service...<br />
+Handler(s):<br />
+"DEDICATED" established:0 refused:0 state:ready<br />
+LOCAL SERVER<br />
+"D001" established:11 refused:1 current:1 max:1002 state:ready<br />
+DISPATCHER<br />
+(ADDRESS=(PROTOCOL=tcp)(HOST=MJW01)<br />
+(PORT=4152))<br />
+"D000" established:15 refused:3 current:2 max:1002 state:ready<br />
+DISPATCHER<br />
+(ADDRESS=(PROTOCOL=tcp)(HOST=MJW01)<br />
+(PORT=3845))<br />
+The command completed successfully<br />
+上面的信息表明当前数据库拥有两个调度器，分别库"D000"和"D001"，与"D000"建立连接的总共有15个，拒绝掉的有3个，当前活动的连接有2个；与"D001"建立连接的总共有11个，拒绝掉的有1个，当前活动的连接有1个。<br />
+2）从动态性能图获得信息：<br />
+V$DISPATCHER：显示当前调度器的一些信息，包括调度器的状态（等待还是繁忙）、当前的连接数、历史的连接数等等。<br />
+V$DISPATCHER_CONFIG：显示调度器的一些配置参数。<br />
+V$SHARED_SERVER：显示当前数据库SHARED SERVER的一些状态信息<br />
+V$SHARED_SERVER_MONITOR：显示当前数据库SHARED SERVER的一些统计信息，包括SHARED SERVER的最大连接数，会话数及启动的SHARED SERVER数等等。<br />
+同时，在ORACLE SHARED SERVER环境中，也可以配置专用服务器连接，但只有当你是使用Localnaming方法的时候才可以，如果你是使用Hostnaming方法的话则不可以。有几个方法进行配置，如下：<br />
+1、 手工修改Tnsname文件<br />
+ora10g =<br />
+(DESCRIPTION =<br />
+(ADDRESS_LIST =<br />
+(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.0.172)(PORT = 1521))<br />
+)<br />
+(CONNECT_DATA =<br />
+(SERVER = DEDICATED)<br />
+(SERVICE_NAME = ora10g)<br />
+)<br />
+)<br />
+2、通过Oracle net manager进行配置<br />
+3）对于配置了ORACLE SHARED SERVER的数据库，有一些参数需要值得我们的关注：<br />
+1、LARGE POOL SIZE<br />
+在ORACLE SHARED SERVER环境中，ORACLE 将UGA存放在LARGE POOL中，而在没有LARGE POOL或者LARGE POOL太小的数据库中，UGA将存放于SHARED POOL中，这样将影响到数据库其它的性能。所以LARGE POOL的大小也值得我们考究。LARGE POOL最小为300K，最大为2G（不同操作系统可能有所不同）。一般来讲，在ORACLE SHARED SERVER环境中，一个连接将占用1-3M的内存，不过要看会话做了哪些操作。我们可以通过下面的语句获得数据库启动以来，最大的UGA值：<br />
+select sum(value) "Max MTS Memory Allocated"from v$sesstat ss, v$statname st where name = 'session uga memory max'and ss.statistic# =st.statistic#;<br />
+Max MTS Memory Allocated<br />
+------------------------------------<br />
+244416</p>
+<p>可以看到，ORACLE分配的最大UGA库240K，如果数据库同时支持100个并发连接，那么可以将LARGE POOL设置库23M（240K*100）。如果LARGE POOL设置过小，可能遇到下面的错误：<br />
+ORA-04031: unable to allocate 490 bytes of shared memory<br />
+("large pool","MWEIS","session heap","define var info")<br />
+可以通过ALTER SYSTEM命令进行动态修改。<br />
+ALTER SYSTEM SET LARGE_POOL_SIZE = 51200000 SCOPE=SPFILE；<br />
+2、 调度器数目<br />
+可以通过查询V$DISPATCHER视图来查看调度器的状态：<br />
+SQL&gt; desc v$dispatcher;<br />
+Name      Type          Nullable Default Comments<br />
+--------- ------------- -------- ------- --------<br />
+NAME      VARCHAR2(4)   Y<br />
+NETWORK   VARCHAR2(128) Y<br />
+PADDR     RAW(4)        Y<br />
+STATUS    VARCHAR2(16) Y<br />
+ACCEPT    VARCHAR2(3)   Y<br />
+MESSAGES NUMBER        Y<br />
+BYTES     NUMBER        Y<br />
+BREAKS    NUMBER        Y<br />
+OWNED     NUMBER        Y<br />
+CREATED   NUMBER        Y<br />
+IDLE      NUMBER        Y<br />
+BUSY      NUMBER        Y<br />
+LISTENER NUMBER        Y<br />
+CONF_INDX NUMBER        Y<br />
+SQL&gt; Select name, (busy / (busy + idle))*100<br />
+2 "Dispatcher % busy Rate"<br />
+3 From V$DISPATCHER<br />
+4 /</p>
+<p align="left">NAME Dispatcher % busy Rate<br />
+---- ----------------------<br />
+D000     0.0052861386871346<br />
+如果繁忙的百分比超过50%，那么可以考虑增加调度器，可以使用下面的语句动态修改：<br />
+ALTER SYSTEM SET DISPATCHERS=“（PRO=TCP）（DIS=2）”；<br />
+3、 调度器响应时间<br />
+可以通过查看V$QUEUE 和 V$DISPATCHER来获得连接等待调度器响应的时间：<br />
+SELECT decode(sum(totalq),0,’No Responses’,<br />
+Sum(wait)/sum(totalq)) “Average Wait time”<br />
+FROM V$QUEUE q, V$DISPATCHER d<br />
+WHERE q.type = ‘DISPATCHER’<br />
+AND q.paddr = d.paddr;<br />
+Average Wait Time<br />
+------------------<br />
+.0413<br />
+4、 连接等待shared server处理请求的时间<br />
+Select decode(totalq,0,’No Requests’) “Wait Time”,<br />
+Wait/totalq || ‘ hundredths of seconds’<br />
+“Average Wait time per request”<br />
+from V$QUEUE<br />
+where type = ‘COMMON’<br />
+Wait Time Average Wait time per request<br />
+-------- -----------------------------------<br />
+.023132 hundredths of a second</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/web&amp;rt/my-web-albums.html" data-toggle="tooltip" data-placement="top" title="我的网络相册">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/my-picture-messages.html" data-toggle="tooltip" data-placement="top" title="我的邮件图片">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/shared-server-info" data-title="Shared Server Info"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="
+
+If your system is being negatively impacted by the resource demands of the ... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/shared-server-info.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/shared-server-info" data-title="Shared Server Info" data-url="http://dbaeyes.github.io/oracle/shared-server-info.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+---
+layout: post
+title: mysql逻辑备份完成备库搭建
+date: 2012-09-13 00:30:52.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- backup
+- mysql
+- setup
+- slave
+meta:
+  _aioseop_keywords: mysql,slave,setup,backup
+  _aioseop_title: mysql slave setup
+  _edit_last: '1'
+  posturl_add_url: 'yes'
+  views: '1863'
+---
+<p>场景：<br />
+当前1主1备，MM结构<br />
+master A:192.168.0.1:3306<br />
+slave B:192.168.0.2:3306</p>
+<p>要搭建新的一主一备用于替换老的机器<br />
+master C:192.168.0.3:3306<br />
+slave D:192.168.0.4:3306</p>
+<p>1. 先搭建好C-&gt;D的复制，做成MS</p>
+<p>2. 做逻辑备份<br />
+@B:192.168.0.2:3306</p>
+<p>--记录主库position点<br />
+[cc lang='sql']stop slave;<br />
+show slave status\G</p>
+<p>root@localhost : (none) 12:03:50&gt; show slave status\G<br />
+*************************** 1. row ***************************<br />
+Slave_IO_State:<br />
+Master_Host: 192.168.0.1<br />
+Master_User: repl<br />
+Master_Port: 3306<br />
+Connect_Retry: 60<br />
+Master_Log_File: mysql-bin.001487<br />
+Read_Master_Log_Pos: 257348319<br />
+Relay_Log_File: mysql-relay-bin.004637<br />
+Relay_Log_Pos: 368556686<br />
+Relay_Master_Log_File: mysql-bin.001477<br />
+Slave_IO_Running: No<br />
+Slave_SQL_Running: No<br />
+Replicate_Do_DB:<br />
+Replicate_Ignore_DB:<br />
+Replicate_Do_Table:<br />
+Replicate_Ignore_Table:<br />
+Replicate_Wild_Do_Table:<br />
+Replicate_Wild_Ignore_Table:<br />
+Last_Errno: 0<br />
+Last_Error:<br />
+Skip_Counter: 0<br />
+Exec_Master_Log_Pos: 368556541<br />
+Relay_Log_Space: 5626137334<br />
+Until_Condition: None<br />
+......[/cc]</p>
+<p>记录下这两个值，用户新备库从老主库做恢复，而不是从老备库做恢复<br />
+[cc lang='sql']Relay_Master_Log_File: mysql-bin.001477<br />
+Exec_Master_Log_Pos: 368556541[/cc]</p>
+<p>show master stastus;<br />
+可以不用执行，因为备库的position值在dump的文件中存在</p>
+<p>开始备份<br />
+[cc lang='sql']mysqldump -uroot -pxxx --master-data=2 --single-transaction --all-database &gt; all.sql &amp;[/cc]</p>
+<p>--master-data=2 记录position值，如果是1，表示在恢复后直接应用该记录<br />
+--single-transaction 避免lock tables</p>
+<p>3. 在新主库做恢复<br />
+@C:192.168.0.3:3306</p>
+<p>mysql -uroot &lt; all.sql &gt; /tmp/import.log &amp;[/cc]</p>
+<p>指向主库做恢复</p>
+<p>[cc lang='sql']change master to<br />
+master_host='192.168.0.1',<br />
+master_port=3306,<br />
+master_user='slave',<br />
+master_password='slave',<br />
+master_log_file='mysql-bin.001477',<br />
+master_log_pos=368556541;[/cc]</p>
+<p>4. 升级下mysql版本，如需要<br />
+[cc lang='sql']/u01/mysql/bin/mysql_upgrade -uroot [/cc]</p>
+<p>5. 完成追赶后，做应用的切换，再把主机C指向D</p>
+<p>change master to ...</p>
+<p>做备份需要的权限：<br />
+[cc lang='sql']GRANT REPLICATION SLAVE ON *.* TO 'slave'@'%' IDENTIFIED BY '******';[/cc]<br />
+关于字符集：<br />
+Utf8表数据通过gbk转化导到文件中，部分数据损坏，重新入库数据损坏<br />
+Utf8表数据通过Utf8转化导到文件中，无数据损坏，重新入库数据正常<br />
+Utf8表数据通过latin1转化导到文件中，无数据损坏，重新入库数据正常<br />
+加参数 --default-character-set=utf8 可以加在mysqlduamp或者load中</p>

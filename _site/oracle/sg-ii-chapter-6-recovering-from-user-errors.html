@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>SG II: Chapter 6 | Recovering from User Errors - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/sg-ii-chapter-6-recovering-from-user-errors.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                    </div>
+                    <h1>SG II: Chapter 6 | Recovering from User Errors</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on April 25, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><strong><span style="color: #ff6600;">Objects:</span></strong></p>
+<div>
+<p><span style="color: #3366ff;">·Recover a dropped table using Flashback Technology.<br />
+·Perform Flashback Table operation.<br />
+·Manage the recycle bin.<br />
+·Recover from user errors using Flashback versions Query.<br />
+·Perform transaction level recovery using Flashback Transaction query.</span></p>
+<p>------------------------------------------------------<br />
+All of the Flashback Technologies are designed to recover from user error or logical corruption:</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Flashback Drop</span></strong></p>
+<p><span>SQL&gt;flashback table t1<br />
+2 to before drop;</span></p>
+<p>The name formatting<span style="color: #0000ff;"> BIN$globalUID$version</span>. 30 charactersin length. globalUID is a unique, 24-character long identifier<br />
+Exp: BIN$0ZVR8eDEQbK4s8G2Csf2kg==$0</p>
+<p><span style="color: #0000ff;">Get the recycleBin info:</span><br />
+SHOW RECYCLEBIN<br />
+USER_RECYCLEBIN<br />
+DBA_RECYCLEBIN</p>
+<p><span>SQL&gt; flashback table "BIN$0ZVR8eDEQbK4s8G2Csf2kg==$0" to before drop<br />
+2 rename to t2;   -- rename the table</span></p>
+<p>purges the tablespace USERS with the user TEST from the Recycle Bin:<br />
+<span>SQL&gt; purge tablespace users user test;</span></p>
+<p><span>SQL&gt; purge recyclebin;</span><br />
+-- removes all objects from your Recycle Bin and deallocates all space associated with those objects.</p>
+<p><span>SQL&gt; purge dba_recyclebin;</span> -- removes all objects from all users’ Recycle Bins.</p>
+<p>The command <span>DROP USER user <strong><em>CASCADE</em></strong></span> drops the user and the database objects without recording a backup in the Recycle Bin. Objects in the Recycle Bin owned by the user will be removed from the Recycle Bin.</p>
+<p>Only non-partitioned index-organized tables are protected by the Recycle Bin.<br />
+Non-system and locally managed tablespaces are stored in the Recycle Bin.<br />
+Referential constraints are not stored in the Recycle Bin.<br />
+DML or DDL cannot be performed against objects in the Recycle Bin.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Flashback Versions Query</span></strong></p>
+<p>Flashback Versions Query works by retrieving data from the UNDO tablespace.</p>
+<p><strong>VERSIONS BETWEEN</strong> <strong><span style="color: #0000ff;">SCN</span> MINVALUE and MAXVALUE</strong>.<br />
+<strong>VERSIONS BETWEEN <span style="color: #0000ff;">TIMESTAMP</span> TO_TIMESTAMP and TO_TIMESTAMP</strong>.</p>
+<p>SQL&gt; select <span style="color: #0000ff;">current_scn,scn_to_timestamp</span>(current_scn) from v$database;</p>
+<p><strong>VERSIONS_STARTTIME</strong> Starting SCN when the row was first created.<br />
+<strong>VERSIONS_STARTSCN</strong> Starting TIMESTAMP when the row version was first created.<br />
+<strong>VERSIONS_ENDTIME<br />
+</strong><strong>VERSIONS_ENDSCN<br />
+</strong><strong>VERSIONS_XID</strong>                Identifier of the transaction that created the row version.<br />
+<strong>VERSIONS_OPERATION</strong>   The values are I for insertion, D for deletion, or U for update.</p>
+<p>Exp:<br />
+<span>SQL&gt; select salary from t1<br />
+2 versions between<br />
+3 scn minvalue and maxvalue<br />
+4 where employee = 'JONES';</span></p>
+<p>----------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Flashback Transaction Query</span></strong></p>
+<p>The Flashback Transaction Query is designed to be a diagnostic tool to help identify changes made to the database at the transaction level.Flashback Versions Query is a method of querying all version changes on rows. The rows must exist from the time the query was executed to a point-in-time in the past.</p>
+<p><strong>FLASHBACK_TRANSACTION_QUERY</strong> view can help identify the table and operation that is performed against the table.</p>
+<p>There are many methods to query FLASHBACK_TRANSACTION_QUERY to see how and when data was changed.</p>
+<p>It can use the UNDO_SQL to undo the transaction.</p>
+<p>The privilege required to use the Flashback Transaction Query is the system privilege <strong>FLASHBACK ANY TABLE</strong>.</p>
+<p>---------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Using Flashback Table</span></strong></p>
+<p>Recover a table or set tables to a specific point-in-time without performing an incomplete recovery.</p>
+<p>Flashback Table is best used to recover a table that was updated with an incorrect WHERE clause.</p>
+<p>Flashback Table has some significant <strong>benefits</strong> over incomplete recovery:<br />
+1. It is much faster and easier to use than incomplete recovery.<br />
+2. Flashback Table does not impact the availability of the database.<br />
+3. The DBA is not required to perform Flashback Table, so users can quickly recover from logical corruptions.</p>
+<p>The <strong>privilege required</strong> to use Flashback Table is the system privilege FLASHBACK ANY TABLE or FLASHBACK TABLE. You must also grant SELECT, INSERT, DELETE, and ALTER object privileges to the user performing the Flashback Table.</p>
+<p>The Flashback Table must have <strong>ROW MOVEMENT enabled</strong> with the following command:<br />
+<span>ALTER TABLE tablename ENABLE ROW MOVEMENT</span>.</p>
+<p>EXP:<br />
+1. Enable ROW MOVEMENT on table T1:<br />
+<span>SQL&gt; alter table t1 enable row movement;</span></p>
+<p>2. Retrieve the current SCN before you modify the table:<br />
+<span>SQL&gt; select current_scn from v$database;</span></p>
+<p>3. Update a value in the table so you can verify the change was eliminated after you performed the Flashback Table operation to the SCN prior to the update:<br />
+<span>SQL&gt; update t1 set salary=50000 where employee = 'JONES';</span></p>
+<p>4. Perform the FLASHBACK TABLE command to recover the table to an SCN to a point-in-time before the update of JONES to a SALARY of 50000:<br />
+<span>SQL&gt; flashback table t1<br />
+2 to scn 771511;</span></p>
+<p><strong>Triggers are disabled</strong> by default during the Flashback Table process.<br />
+exp:<br />
+SQL&gt; flashback table table_name<br />
+2 to scn 771551<br />
+3 <strong>enable triggers;</strong></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>-- EOF --</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/sg-ii-chapter-5-understanding-the-flashback-database.html" data-toggle="tooltip" data-placement="top" title="SG II: Chapter 5 | Understanding the Flashback Database">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/sg-ii-chapter-7-handling-block-corruption.html" data-toggle="tooltip" data-placement="top" title="SG II: Chapter 7 | Handling Block Corruption">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/sg-ii-chapter-6-recovering-from-user-errors" data-title="SG II: Chapter 6 | Recovering from User Errors"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Objects:
+
+·Recover a dropped table using Flashback Technology.
+·Perform Flash... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-6-recovering-from-user-errors.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/sg-ii-chapter-6-recovering-from-user-errors" data-title="SG II: Chapter 6 | Recovering from User Errors" data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-6-recovering-from-user-errors.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+---
+layout: post
+title: QQ又被屏蔽了
+date: 2009-01-20 23:12:10.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- Web&amp;RT
+tags:
+- qq
+- software
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '896'
+---
+<h1></h1>
+<div>公司为了净化网络环境和减少带宽流量，又把qq和迅雷屏蔽掉了 这个主要是针对在公司电脑的，我的当然也是公司的电脑，但是笔记本，回家总是要上个qq、看看迅雷的高清电影啥的，被屏蔽了还真的是相当的不方便。</p>
+<p>尝试破解：<br />
+之前已经搞过一次了，开始是照着网上的常规方法去做的，发现根本不顶用，公司IT不会傻到就改下大家都可以看到的组策略就完事了。 是要手动去搞注册表的，具体在哪网上还是一搜一大把的</p>
+<p>不过这次改了这个不顶事，根据新搜索到的方法， 将registry.pol这个文件删除（你可以用搜索），是隐藏文件。具体位置是WINDOWS\SYSTEM32\GROUPPOLICY\MACHINE\registry.pol<br />
+这里推荐大家一个超级搜索工具 Everything ，是我见到的windows下最为强悍的文件搜索工具，直接通过ntfs的文件存储方式去获取的index，速度无与伦比！！！ 用过就知道了。。。</p>
+<p>结果干掉两个文件后，还是不顶用。。。 哎 网络啊，看来还是不靠谱。</p>
+<p>看来运行时的报错的提示，原来是让我去查看 系统日志。<br />
+日志警告： 您的管理员用策略规则 {7d207021-a1ba-442b-af74-445160144d43} 限制了您对 D:\Tools\Net\Tencent\QQ\QQ.exe 的访问。</p>
+<p>这个easy： 在注册表里搜索一番，找到相应的策略规则，全部删除好鸟！</p>
+<p>在重启一番后，终于看到了qq登陆的界面。。</p>
+<p>其实现在上qq也已经没有太多事情了，不太聊天。就用qq语音聊天和家里联系一下的</p>
+<p>注册表这里也被改了</p>
+<p>[HKEY_USERS\S-1-5-21-3540597850-3569110388-2802543290-8392\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\DisallowRun]<br />
+"1"="acdsee.exe"<br />
+"2"="MindManager.exe"<br />
+"3"="QQ.exe"<br />
+"4"="qq.exe"<br />
+"5"="Thunder.exe"<br />
+"6"="Thunder5.exe"<br />
+"7"="ThunderAgent.dll"<br />
+"8"="tm.exe"</p>
+<p>---<br />
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\DisallowRun]<br />
+"1"="acdsee.exe"<br />
+"2"="MindManager.exe"<br />
+"3"="QQ.exe"<br />
+"4"="qq.exe"<br />
+"5"="Thunder.exe"<br />
+"6"="Thunder5.exe"<br />
+"7"="ThunderAgent.dll"<br />
+"8"="tm.exe"</p>
+<p>[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Safer\CodeIdentifiers\0\Paths\]<br />
+这个下面的也删除掉</p>
+<p>-- EOF --</p></div>

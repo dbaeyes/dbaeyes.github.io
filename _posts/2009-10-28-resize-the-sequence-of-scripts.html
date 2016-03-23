@@ -1,0 +1,42 @@
+---
+layout: post
+title: 调整sequence大小之脚本
+date: 2009-10-28 17:37:19.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- sql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '1040'
+---
+<p>--调整序列到表中最大ID的脚本</p>
+<div>set linesize 2000</p>
+<p>set feedback off<br />
+set define off<br />
+set head off<br />
+set timing off</p>
+<p>--删除seq脚本<br />
+SELECT 'DROP SEQUENCE '||F.SEQUENCE_NAME ||';' FROM user_sequences f;</p>
+<p>--获取创建seq脚本<br />
+select 'select ''create sequence SEQ_'|| t.TABLE_NAME||'_ID start with ''||'||<br />
+'decode((select max('||t.COLUMN_NAME||') from '||t.TABLE_NAME||'),null,1,(select max('||t.COLUMN_NAME||') from '|| t.TABLE_NAME||')+1)||'';'' from dual;'<br />
+from cols t where t.COLUMN_ID = 1 and<br />
+t.TABLE_NAME in (<br />
+select REPLACE(replace(f.sequence_name,'SEQ_',''),'_ID','') from user_sequences f<br />
+);</p>
+<p>--执行上面跑出来的脚本<br />
+...............<br />
+...............</p>
+<p>--找出不符合 seq_table_name_id 方式创建的序列<br />
+SELECT 'DROP SEQUENCE '||F.SEQUENCE_NAME ||';' FROM user_sequences f<br />
+WHERE F.SEQUENCE_NAME NOT IN (SELECT 'SEQ_'||TNAME||'_ID' FROM TAB);</p>
+<p>--统计表数据量总数的脚本<br />
+select 'select '''||tname||''', count(*) from '||tname||';' from tab where tname not like 'TMP%'<br />
+AND TNAME NOT LIKE 'BIN%' ORDER BY tname;</p>
+<p>--保存以备用</p></div>

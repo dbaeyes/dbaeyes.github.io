@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>一些精简的tuning总结~ (zt) - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/streamlining-the-tuning-summary-zt.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#tuning" title="tuning">tuning</a>
+                        
+                    </div>
+                    <h1>一些精简的tuning总结~ (zt)</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on June 8, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <h1></h1>
+<div>1. 查询正在执行语句的执行计划(也就是实际语句执行计划)<br />
+select * from v$sql_plan where hash_value = (select sql_hash_value from v$session where sid = 1111);<br />
+其中id和parent_id表示了执行数的结构,数值最大的为最先执行比如</p>
+<p>ID PARENT_ID<br />
+-------------<br />
+0<br />
+1 0<br />
+2 1<br />
+3 2<br />
+4 3<br />
+5 4<br />
+6 3</p>
+<p>则执行计划树为<br />
+######0<br />
+######1<br />
+######2<br />
+######3<br />
+###6######4 -----第二步<br />
+############5----第一步</p>
+<p>2.如何设置自动跟踪<br />
+用system登录<br />
+执行$ORACLE_HOME/rdbms/admin/utlxplan.sql创建计划表<br />
+执行$ORACLE_HOME/sqlplus/admin/plustrce.sql创建plustrace角色<br />
+如果想计划表让每个用户都能使用，则<br />
+SQL&gt;create public synonym plan_table for plan_table;<br />
+SQL&gt; grant all on plan_table to public;</p>
+<p>如果想让自动跟踪的角色让每个用户都能使用，则<br />
+SQL&gt; grant plustrace to public;<br />
+通过如下语句开启/停止跟踪<br />
+SET AUTOTRACE ON |OFF | ON EXPLAIN | ON STATISTICS | TRACEONLY | TRACEONLY EXPLAIN</p>
+<p>3.如何跟踪自己的会话或者是别人的会话<br />
+跟踪自己的会话很简单<br />
+Alter session set sql_trace true|false<br />
+Or<br />
+Exec dbms_session.set_sql_trace(TRUE);</p>
+<p>如果跟踪别人的会话，需要调用一个包<br />
+exec dbms_system.set_sql_trace_in_session(sid,serial#,true|false)</p>
+<p>跟踪的信息在user_dump_dest 目录下可以找到或通过如下脚本获得文件名称（适用于Win环境，如果是unix需要做一定修改）<br />
+SELECT p1.value||''||p2.value||'_ora_'||p.spid||'.ora' filename<br />
+FROM<br />
+v$process p,<br />
+v$session s,<br />
+v$parameter p1,<br />
+v$parameter p2<br />
+WHERE p1.name = 'user_dump_dest'<br />
+AND p2.name = 'db_name'<br />
+AND p.addr = s.paddr<br />
+AND s.audsid = USERENV ('SESSIONID')<br />
+最后，可以通过Tkprof来解析跟踪文件，如<br />
+Tkprof 原文件 目标文件 sys=n</p>
+<p>4.怎么设置整个数据库系统跟踪<br />
+其实文档上的alter system set sql_trace=true是不成功的，但是可以通过设置事件来完成这个工作，作用相等<br />
+alter system set events<br />
+'10046 trace name context forever,level 1';</p>
+<p>如果关闭跟踪，可以用如下语句<br />
+alter system set events<br />
+'10046 trace name context off';</p>
+<p>其中的level 1与上面的8都是跟踪级别<br />
+level 1：跟踪SQL语句，等于sql_trace=true<br />
+level 4：包括变量的详细信息<br />
+level 8：包括等待事件<br />
+level 12：包括绑定变量与等待事件</p>
+<p>5.怎么样根据OS进程快速获得DB进程信息与正在执行的语句<br />
+有些时候，我们在OS上操作，象TOP之后我们得到的OS进程，怎么快速根据OS信息获得DB信息呢？<br />
+我们可以编写如下脚本：<br />
+$more whoit.sh<br />
+#!/bin/sh<br />
+sqlplus /nolog 100,cascade=&gt; TRUE);<br />
+dbms_stats.gather_table_stats(User,TableName,degree =&gt; 4,cascade =&gt; true);</p>
+<p>这是对命令与工具包的一些总结<br />
+&lt;1&gt;、对于分区表，建议使用DBMS_STATS，而不是使用Analyze语句。<br />
+a) 可以并行进行，对多个用户，多个Table<br />
+b) 可以得到整个分区表的数据和单个分区的数据。<br />
+c) 可以在不同级别上Compute Statistics：单个分区，子分区，全表，所有分区<br />
+d) 可以倒出统计信息<br />
+e) 可以用户自动收集统计信息<br />
+&lt;2&gt;、DBMS_STATS的缺点<br />
+a) 不能Validate Structure<br />
+b) 不能收集CHAINED ROWS, 不能收集CLUSTER TABLE的信息，这两个仍旧需要使用Analyze语句。<br />
+c) DBMS_STATS 默认不对索引进行Analyze，因为默认Cascade是False，需要手工指定为True<br />
+&lt;3&gt;、对于oracle 9里面的External Table，Analyze不能使用，只能使用DBMS_STATS来收集信息。</p>
+<p>6.怎么样快速重整索引<br />
+通过rebuild语句，可以快速重整或移动索引到别的表空间<br />
+rebuild有重建整个索引数的功能，可以在不删除原始索引的情况下改变索引的存储参数<br />
+语法为<br />
+alter index index_name rebuild tablespace ts_name<br />
+storage(......);</p>
+<p>如果要快速重建整个用户下的索引，可以用如下脚本，当然，需要根据你自己的情况做相应修改<br />
+SQL&gt; set heading off<br />
+SQL&gt; set feedback off<br />
+SQL&gt; spool d:index.sql<br />
+SQL&gt; SELECT 'alter index ' || index_name || ' rebuild '<br />
+||'tablespace INDEXES storage(initial 256K next 256K pctincrease 0);'<br />
+FROM all_indexes<br />
+WHERE ( tablespace_name != 'INDEXES'<br />
+OR next_extent != ( 256 * 1024 )<br />
+)<br />
+AND owner = USER<br />
+SQL&gt;spool off</p>
+<p>另外一个合并索引的语句是<br />
+alter index index_name coalesce</p>
+<p>这个语句仅仅是合并索引中同一级的leaf block，消耗不大，对于有些索引中存在大量空间浪费的情况下，有一些作用。</p>
+<p>7.如何使用Hint提示<br />
+在select/delete/update后写/*+ hint */<br />
+如 select /*+ index(TABLE_NAME INDEX_NAME) */ col1...</p>
+<p>注意/*和+之间不能有空格，如用hint指定使用某个索引<br />
+select /*+ index(cbotab) */ col1 from cbotab;<br />
+select /*+ index(cbotab cbotab1) */ col1 from cbotab;<br />
+select /*+ index(a cbotab1) */ col1 from cbotab a;</p>
+<p>其中<br />
+TABLE_NAME是必须要写的，且如果在查询中使用了表的别名，在hint也要用表的别名来代替表名;<br />
+INDEX_NAME可以不必写，Oracle会根据统计值选一个索引;<br />
+如果索引名或表名写错了，那这个hint就会被忽略;</p>
+<p>8.怎么样快速复制表或者是插入数据<br />
+快速复制表可以指定Nologging选项<br />
+如：Create table t1 nologging<br />
+as select * from t2;</p>
+<p>快速插入数据可以指定append提示，但是需要注意noarchivelog模式下，默认用了append就是nologging模式的。 在archivelog下，需要把表设置程Nologging模式。<br />
+如insert /*+ append */ into t1<br />
+select * from t2</p>
+<p>注意：如果在9i环境中并设置了FORCE LOGGING，则以上操作是无效的，并不会加快，当然，可以通过如下语句设置为NO FORCE LOGGING。<br />
+Alter database no force logging;<br />
+是否开启了FORCE LOGGING，可以用如下语句查看<br />
+SQL&gt; select force_logging from v$database;</p>
+<p>9.怎么避免使用特定索引<br />
+在很多时候，Oracle会错误的使用索引而导致效率的明显下降，我们可以使用一点点技巧而避免使用不该使用的索引，如：<br />
+表test,有字段a,b,c,d，在a,b,c上建立联合索引inx_a(a,b,c)，在b上单独建立了一个索引Inx_b(b)。</p>
+<p>在正常情况下，where a=? and b=? and c=?会用到索引inx_a，where b=?会用到索引inx_b，但是，where a=? and b=? and c=? group by b会用到哪个索引呢？在分析数据不正确（很长时间没有分析）或根本没有分析数据的情况下，oracle往往会使用索引inx_b。通过执行计划的分析，这个索引的使用，将大大耗费查询时间。</p>
+<p>当然，我们可以通过如下的技巧避免使用inx_b，而使用inx_a。</p>
+<p>where a=? and b=? and c=? group by b||'' --如果b是字符<br />
+where a=? and b=? and c=? group by b+0 --如果b是数字</p>
+<p>通过这样简单的改变，往往可以是查询时间提交很多倍<br />
+当然，我们也可以使用no_index提示，相信很多人没有用过，也是一个不错的方法：<br />
+select /*+ no_index(t,inx_b) */ * from test t<br />
+where a=? and b=? and c=? group by b</p>
+<p>举例：<br />
+本来在CM_USER上有索引IDX_CM_USER4(ACC_ID)和IDX_CM_USER8(BILL_ID),可是执行如下语句的时候很慢。<br />
+select * from CM_USER where acc_id =1200007175<br />
+and user_status&gt;0 and bill_id like '13%' order by acc_id,bill_id</p>
+<p>用explain分析，发现执行计划是用IDX_CM_USER8.如下查询<br />
+select * from user_indexes where table_name ='CM_USER' 发现IDX_CM_USER8没有分析过。</p>
+<p>用下面语句执行计划改变<br />
+select /*+INDEX(CM_USER IDX_CM_USER4)*/* from CM_USER where acc_id =1200007175 and user_status&gt;0 and bill_id like '13%' order by acc_id,bill_id</p>
+<p>或者分析索引<br />
+exec dbms_stats.gather_index_stats(ownname =&gt; 'QACS1',indname =&gt; 'IDX_CM_USER8',estimate_percent =&gt; 5 );<br />
+可以发现执行计划恢复正常。</p>
+<p>10.Oracle什么时候会使用跳跃式索引扫描<br />
+这是9i的一个新特性跳跃式索引扫描(Index Skip Scan).<br />
+例如表有索引index(a,b,c)，当查询条件为where b=?的时候，可能会使用到索引index(a,b,c)，如，执行计划中出现如下计划：<br />
+INDEX (SKIP SCAN) OF 'TEST_IDX' (NON-UNIQUE)</p>
+<p>Oracle的优化器(这里指的是CBO)能对查询应用Index Skip Scans至少要有几个条件:<br />
+&lt;1&gt; 优化器认为是合适的。<br />
+&lt;2&gt; 索引中的前导列的唯一值的数量能满足一定的条件（如重复值很多）。<br />
+&lt;3&gt; 优化器要知道前导列的值分布(通过分析/统计表得到)。<br />
+&lt;4&gt; 合适的SQL语句<br />
+等。</p>
+<p>11.怎么样创建使用虚拟索引<br />
+可以使用nosegment选项，如<br />
+create index virtual_index_name on table_name(col_name) nosegment;<br />
+如果在哪个session需要测试虚拟索引，可以利用隐含参数来处理<br />
+alter session set "_use_nosegment_indexes" = true;</p>
+<p>就可以利用explain plan for select ……来看虚拟索引的效果，利用@$ORACLE_HOME/rdbms/admin/utlxpls查看执行计划，最后，根据需要，我们可以删除虚拟索引，如普通索引一样<br />
+drop index virtual_index_name;</p>
+<p>注意：虚拟索引并不是物理存在的，所以虚拟索引并不等同于物理索引，不要用自动跟踪去测试虚拟索引，因为那是实际执行的效果，是用不到虚拟索引的。</p>
+<p>12.怎样监控无用的索引<br />
+Oracle 9i以上，可以监控索引的使用情况，如果一段时间内没有使用的索引，一般就是无用的索引<br />
+语法为：<br />
+开始监控：alter index index_name monitoring usage;<br />
+检查使用状态：select * from v$object_usage;<br />
+停止监控：alter index index_name nomonitoring usage;</p>
+<p>当然，如果想监控整个用户下的索引，可以采用如下的脚本：<br />
+set heading off<br />
+set echo off<br />
+set feedback off<br />
+set pages 10000<br />
+spool start_index_monitor.sql<br />
+SELECT 'alter index '||owner||'.'||index_name||' monitoring usage;'<br />
+FROM dba_indexes<br />
+WHERE owner = USER;<br />
+spool off<br />
+set heading on<br />
+set echo on<br />
+set feedback on<br />
+------------------------------------------------<br />
+set heading off<br />
+set echo off<br />
+set feedback off<br />
+set pages 10000<br />
+spool stop_index_monitor.sql<br />
+SELECT 'alter index '||owner||'.'||index_name||' nomonitoring usage;'<br />
+FROM dba_indexes<br />
+WHERE owner = USER;<br />
+spool off<br />
+set heading on<br />
+set echo on<br />
+set feedback on</p>
+<p>13.怎么样能固定我的执行计划<br />
+可以使用OUTLINE来固定SQL语句的执行计划，用如下语句可以创建一个OUTLINE<br />
+Create oe replace outline OutLn_Name on<br />
+Select Col1,Col2 from Table<br />
+where .......</p>
+<p>如果要删除Outline，可以采用<br />
+Drop Outline OutLn_Name;</p>
+<p>对于已经创建了的OutLine，存放在OUTLN用户的OL$HINTS表下面，对于有些语句，你可以使用update outln.ol$hints来更新outline，如</p>
+<p>update outln.ol$hints(ol_name,'TEST1','TEST2','TEST2','TEST1)<br />
+where ol_name in ('TEST1','TEST2');</p>
+<p>这样，你就把Test1 OUTLINE与Test2 OUTLINE互换了，如果想利用已经存在的OUTLINE，需要设置以下参数<br />
+Alter system/session set Query_rewrite_enabled = true<br />
+Alter system/session set use_stored_outlines = true</p>
+<p>14.v$sysstat中的class分别代表什么<br />
+统计类别<br />
+1 代表事例活动<br />
+2 代表Redo buffer活动<br />
+4 代表锁<br />
+8 代表数据缓冲活动<br />
+16 代表OS活动<br />
+32 代表并行活动<br />
+64 代表表访问<br />
+128 代表调试信息</p>
+<p>15.怎么杀掉特定的数据库会话<br />
+Alter system kill session 'sid,serial#';<br />
+或者<br />
+alter system disconnect session 'sid,serial#' immediate;</p>
+<p>在win上，还可以采用oracle提供的orakill杀掉一个线程（其实就是一个Oracle进程）<br />
+在Linux/Unix上，可以直接利用kill杀掉数据库进程对应的OS进程</p>
+<p>16.怎么快速查找锁与锁等待<br />
+数据库的锁是比较耗费资源的，特别是发生锁等待的时候，我们必须找到发生等待的锁，有可能的话，杀掉该进程。<br />
+这个语句将查找到数据库中所有的DML语句产生的锁，还可以发现，任何DML语句其实产生了两个锁，一个是表锁，一个是行锁。<br />
+可以通过alter system kill session ‘sid,serial#’来杀掉会话</p>
+<p>SELECT /*+ rule */ s.username,<br />
+decode(l.type,'TM','TABLE LOCK','TX','ROW LOCK',NULL) LOCK_LEVEL,<br />
+o.owner,o.object_name,o.object_type,<br />
+s.sid,s.serial#,s.terminal,s.machine,s.program,s.osuser<br />
+FROM v$session s,v$lock l,dba_objects o<br />
+WHERE l.sid = s.sid<br />
+AND l.id1 = o.object_id(+)<br />
+AND s.username is NOT NULL</p>
+<p>如果发生了锁等待，我们可能更想知道是谁锁了表而引起谁的等待，以下的语句可以查询到谁锁了表，而谁在等待。<br />
+SELECT /*+ rule */ lpad(' ',decode(l.xidusn ,0,3,0))||l.oracle_username User_name,<br />
+o.owner,o.object_name,o.object_type,s.sid,s.serial#<br />
+FROM v$locked_object l,dba_objects o,v$session s<br />
+WHERE l.object_id=o.object_id<br />
+AND l.session_id=s.sid<br />
+ORDER BY o.object_id,xidusn DESC</p>
+<p>以上查询结果是一个树状结构，如果有子节点，则表示有等待发生。如果想知道锁用了哪个回滚段，还可以关联到V$rollname，其中xidusn就是回滚段的USN</p>
+<p>[Q] 如何有效的删除一个大表(extent数很多的表)<br />
+[A] 一个有很多(100k)extent的表，如果只是简单地用drop table的话，会很大量消耗CPU（Oracle要对fet$、uet$数据字典进行操作），可能会用上几天的时间，较好的方法是分多次删除extent，以减轻这种消耗：<br />
+1. truncate table big-table reuse storage;<br />
+2. alter table big-table deallocate unused keep 2000m ( 原来大小的n-1/n);<br />
+3. alter table big-table deallocate unused keep 1500m ;<br />
+....<br />
+4. drop table big-table;</p>
+<p>17.如何收缩临时数据文件的大小<br />
+9i以下版本采用<br />
+ALTER DATABASE DATAFILE 'file name' RESIZE 100M类似的语句<br />
+9i以上版本采用<br />
+ALTER DATABASE TEMPFILE 'file name' RESIZE 100M<br />
+注意，临时数据文件在使用时，一般不能收缩，除非关闭数据库或断开所有会话，停止对临时数据文件的使用。</p>
+<p>18.怎么清理临时段<br />
+可以使用如下办法<br />
+&lt;1&gt;、 使用如下语句查看一下认谁在用临时段<br />
+SELECT username,sid,serial#,sql_address,machine,program,<br />
+tablespace,segtype, contents<br />
+FROM v$session se,v$sort_usage su<br />
+WHERE se.saddr=su.session_addr</p>
+<p>&lt;2&gt;、 那些正在使用临时段的进程<br />
+SQL&gt;Alter system kill session 'sid,serial#';</p>
+<p>&lt;3&gt;、把TEMP表空间回缩一下<br />
+SQL&gt;Alter tablespace TEMP coalesce;</p>
+<p>还可以使用诊断事件<br />
+&lt;1&gt;、 确定TEMP表空间的ts#<br />
+SQL&gt; select ts#, name FROM v$tablespace;<br />
+TS# NAME<br />
+-----------------------<br />
+0 SYSYEM<br />
+1 RBS<br />
+2 USERS<br />
+3* TEMP<br />
+...</p>
+<p>&lt;2&gt;、 执行清理操作<br />
+alter session set events 'immediate trace name DROP_SEGMENTS level TS#+1'<br />
+说明：<br />
+temp表空间的TS# 为 3*, So TS#+ 1= 4，如果想清除所有表空间的临时段，则，TS# = 2147483647</p>
+<p>19.怎么样dump数据库内部结构，如上面显示的控制文件的结构<br />
+常见的有<br />
+1、分析数据文件块，转储数据文件n的块m<br />
+alter system dump datafile n block m</p>
+<p>2、分析日志文件<br />
+alter system dump logfile logfilename;</p>
+<p>3、分析控制文件的内容<br />
+alter session set events 'immediate trace name CONTROLF level 10'</p>
+<p>4、分析所有数据文件头<br />
+alter session set events 'immediate trace name FILE_HDRS level 10'</p>
+<p>5、分析日志文件头<br />
+alter session set events 'immediate trace name REDOHDR level 10'</p>
+<p>6、分析系统状态，最好每10分钟一次，做三次对比<br />
+alter session set events 'immediate trace name SYSTEMSTATE level 10'</p>
+<p>7、分析进程状态<br />
+alter session set events 'immediate trace name PROCESSSTATE level 10'</p>
+<p>8、分析Library Cache的详细情况<br />
+alter session set events 'immediate trace name library_cache level 10'</p>
+<p>20.如何获得所有的事件代码<br />
+事件代码范围一般从10000 to 10999，以下列出了这个范围的事件代码与信息<br />
+SET SERVEROUTPUT ON<br />
+DECLARE<br />
+err_msg VARCHAR2(120);<br />
+BEGIN<br />
+dbms_output.enable (1000000);<br />
+FOR err_num IN 10000..10999<br />
+LOOP<br />
+err_msg := SQLERRM (-err_num);<br />
+IF err_msg NOT LIKE '%Message '||err_num||' not found%' THEN<br />
+dbms_output.put_line (err_msg);<br />
+END IF;<br />
+END LOOP;<br />
+END;<br />
+/</p>
+<p>在Unix系统上，事件信息放在一个文本文件里<br />
+$ORACLE_HOME/rdbms/mesg/oraus.msg<br />
+可以用如下脚本查看事件信息<br />
+event=10000<br />
+while [ $event -ne 10999 ]<br />
+do<br />
+event=`expr $event + 1`<br />
+oerr ora $event<br />
+done</p>
+<p>对于已经确保的/正在跟踪的事件，可以用如下脚本获得<br />
+SET SERVEROUTPUT ON<br />
+DECLARE<br />
+l_level NUMBER;<br />
+BEGIN<br />
+FOR l_event IN 10000..10999<br />
+LOOP<br />
+dbms_system.read_ev (l_event,l_level);<br />
+IF l_level &gt; 0 THEN<br />
+dbms_output.put_line ('Event '||TO_CHAR (l_event)||<br />
+' is set at level '||TO_CHAR (l_level));<br />
+END IF;<br />
+END LOOP;<br />
+END;<br />
+/</p>
+<p>21.什么是STATSPACK，我怎么使用它？<br />
+Statspack是Oracle 8i以上提供的一个非常好的性能监控与诊断工具，基本上全部包含了BSTAT/ESTAT的功能，更多的信息，可以参考附带文档$ORACLE_HOME/rdbms/admin/spdoc.txt。</p>
+<p>安装Statspack:<br />
+cd $ORACLE_HOME/rdbms/admin<br />
+sqlplus "/ as sysdba" @spdrop.sql -- 卸载，第一次可以不需要<br />
+sqlplus "/ as sysdba" @spcreate.sql -- 需要根据提示输入表空间名</p>
+<p>使用Statspack:<br />
+sqlplus perfstat/perfstat<br />
+exec statspack.snap; -- 进行信息收集统计，每次运行都将产生一个快照号<br />
+-- 获得快照号，必须要有两个以上的快照，才能生成报表<br />
+select SNAP_ID, SNAP_TIME from STATS$SNAPSHOT;<br />
+@spreport.sql -- 输入需要查看的开始快照号与结束快照号</p>
+<p>其他相关脚本s:<br />
+spauto.sql - 利用dbms_job提交一个作业，自动的进行STATPACK的信息收集统计<br />
+sppurge.sql - 清除一段范围内的统计信息，需要提供开始快照与结束快照号<br />
+sptrunc.sql - 清除(truncate)所有统计信息</p>
+<p>22. SQL语句的优化方法<br />
+&lt;1&gt; /*+ALL_ROWS*/<br />
+表明对语句块选择基于开销的优化方法,并获得最佳吞吐量,使资源消耗最小化.<br />
+例如:<br />
+SELECT /*+ALL+_ROWS*/ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO='CCBZZP';</p>
+<p>&lt;2&gt;. /*+FIRST_ROWS*/<br />
+表明对语句块选择基于开销的优化方法,并获得最佳响应时间,使资源消耗最小化.<br />
+例如:<br />
+SELECT /*+FIRST_ROWS*/ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO='CCBZZP';</p>
+<p>&lt;3&gt;. /*+CHOOSE*/<br />
+表明如果数据字典中有访问表的统计信息,将基于开销的优化方法,并获得最佳的吞吐量;<br />
+表明如果数据字典中没有访问表的统计信息,将基于规则开销的优化方法;<br />
+例如:<br />
+SELECT /*+CHOOSE*/ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO='CCBZZP';</p>
+<p>&lt;4&gt;. /*+RULE*/<br />
+表明对语句块选择基于规则的优化方法.<br />
+例如:<br />
+SELECT /*+ RULE */ EMP_NO,EMP_NAM,DAT_IN FROM BSEMPMS WHERE EMP_NO='CCBZZP';</p>
+<p>&lt;5&gt;. /*+FULL(TABLE)*/<br />
+表明对表选择全局扫描的方法.<br />
+例如:<br />
+SELECT /*+FULL(A)*/ EMP_NO,EMP_NAM FROM BSEMPMS A WHERE EMP_NO='CCBZZP';</p>
+<p>&lt;6&gt;. /*+ROWID(TABLE)*/<br />
+提示明确表明对指定表根据ROWID进行访问.<br />
+例如:<br />
+SELECT /*+ROWID(BSEMPMS)*/ * FROM BSEMPMS WHERE ROWID&gt;='AAAAAAAAAAAAAA'<br />
+AND EMP_NO='CCBZZP';</p>
+<p>&lt;7&gt;. /*+CLUSTER(TABLE)*/<br />
+提示明确表明对指定表选择簇扫描的访问方法,它只对簇对象有效.<br />
+例如:<br />
+SELECT /*+CLUSTER */ BSEMPMS.EMP_NO,DPT_NO FROM BSEMPMS,BSDPTMS<br />
+WHERE DPT_NO='TEC304' AND BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;</p>
+<p>&lt;8&gt;. /*+INDEX(TABLE INDEX_NAME)*/<br />
+表明对表选择索引的扫描方法.<br />
+例如:<br />
+SELECT /*+INDEX(BSEMPMS SEX_INDEX) USE SEX_INDEX BECAUSE THERE ARE FEWMALE BSEMPMS */ FROM BSEMPMS WHERE SEX='M';</p>
+<p>&lt;9&gt;. /*+INDEX_ASC(TABLE INDEX_NAME)*/<br />
+表明对表选择索引升序的扫描方法.<br />
+例如:<br />
+SELECT /*+INDEX_ASC(BSEMPMS PK_BSEMPMS) */ FROM BSEMPMS WHERE DPT_NO='CCBZZP';</p>
+<p>&lt;10&gt;. /*+INDEX_COMBINE*/<br />
+为指定表选择位图访问路经,如果INDEX_COMBINE中没有提供作为参数的索引,将选择出位图索引的<br />
+布尔组合方式.<br />
+例如:<br />
+SELECT /*+INDEX_COMBINE(BSEMPMS SAL_BMI HIREDATE_BMI)*/ * FROM BSEMPMS<br />
+WHERE SAL&lt;5000000 AND HIREDATE&lt;SYSDATE;</p>
+<p>&lt;11&gt;. /*+INDEX_JOIN(TABLE INDEX_NAME)*/<br />
+提示明确命令优化器使用索引作为访问路径.<br />
+例如:<br />
+SELECT /*+INDEX_JOIN(BSEMPMS SAL_HMI HIREDATE_BMI)*/ SAL,HIREDATE<br />
+FROM BSEMPMS WHERE SAL&lt;60000;</p>
+<p>&lt;12&gt;. /*+INDEX_DESC(TABLE INDEX_NAME)*/<br />
+表明对表选择索引降序的扫描方法.<br />
+例如:<br />
+SELECT /*+INDEX_DESC(BSEMPMS PK_BSEMPMS) */ FROM BSEMPMS WHERE DPT_NO='CCBZZP';</p>
+<p>&lt;13&gt;. /*+INDEX_FFS(TABLE INDEX_NAME)*/<br />
+对指定的表执行快速全索引扫描,而不是全表扫描的办法.<br />
+例如:<br />
+SELECT /*+INDEX_FFS(BSEMPMS IN_EMPNAM)*/ * FROM BSEMPMS WHERE DPT_NO='TEC305';</p>
+<p>&lt;14&gt;. /*+ADD_EQUAL TABLE INDEX_NAM1,INDEX_NAM2,...*/<br />
+提示明确进行执行规划的选择,将几个单列索引的扫描合起来.<br />
+例如:<br />
+SELECT /*+INDEX_FFS(BSEMPMS IN_DPTNO,IN_EMPNO,IN_SEX)*/ * FROM BSEMPMS WHERE EMP_NO='CCBZZP' AND DPT_NO='TDC306';</p>
+<p>&lt;15&gt;. /*+USE_CONCAT*/<br />
+对查询中的WHERE后面的OR条件进行转换为UNION ALL的组合查询.<br />
+例如:<br />
+SELECT /*+USE_CONCAT*/ * FROM BSEMPMS WHERE DPT_NO='TDC506' AND SEX='M';</p>
+<p>&lt;16&gt;. /*+NO_EXPAND*/<br />
+对于WHERE后面的OR 或者IN-LIST的查询语句,NO_EXPAND将阻止其基于优化器对其进行扩展.<br />
+例如:<br />
+SELECT /*+NO_EXPAND*/ * FROM BSEMPMS WHERE DPT_NO='TDC506' AND SEX='M';</p>
+<p>&lt;17&gt;. /*+NOWRITE*/<br />
+禁止对查询块的查询重写操作.</p>
+<p>&lt;18&gt;. /*+REWRITE*/<br />
+可以将视图作为参数.</p>
+<p>&lt;19&gt;. /*+MERGE(TABLE)*/<br />
+能够对视图的各个查询进行相应的合并.<br />
+例如:<br />
+SELECT /*+MERGE(V) */ A.EMP_NO,A.EMP_NAM,B.DPT_NO FROM BSEMPMS A (SELET DPT_NO,AVG(SAL) AS AVG_SAL FROM BSEMPMS B GROUP BY DPT_NO) V WHERE A.DPT_NO=V.DPT_NO　AND A.SAL&gt;V.AVG_SAL;</p>
+<p>&lt;20&gt;. /*+NO_MERGE(TABLE)*/<br />
+对于有可合并的视图不再合并.<br />
+例如:<br />
+SELECT /*+NO_MERGE(V) */ A.EMP_NO,A.EMP_NAM,B.DPT_NO FROM BSEMPMS A (SELET DPT_NO,AVG(SAL) AS AVG_SAL FROM BSEMPMS B GROUP BY DPT_NO) V WHERE A.DPT_NO=V.DPT_NO　AND A.SAL&gt;V.AVG_SAL;</p>
+<p>&lt;21&gt;. /*+ORDERED*/<br />
+根据表出现在FROM中的顺序,ORDERED使ORACLE依此顺序对其连接.<br />
+例如:<br />
+SELECT /*+ORDERED*/ A.COL1,B.COL2,C.COL3 FROM TABLE1 A,TABLE2 B,TABLE3 C<br />
+WHERE A.COL1=B.COL1 AND B.COL1=C.COL1;<br />
+&lt;22&gt;. /*+USE_NL(TABLE)*/<br />
+将指定表与嵌套的连接的行源进行连接,并把指定表作为内部表.<br />
+例如:<br />
+SELECT /*+ORDERED USE_NL(BSEMPMS)*/ BSDPTMS.DPT_NO,BSEMPMS.EMP_NO,BSEMPMS.EMP_NAM FROM BSEMPMS,BSDPTMS WHERE BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;</p>
+<p>&lt;23&gt;. /*+USE_MERGE(TABLE)*/<br />
+将指定的表与其他行源通过合并排序连接方式连接起来.<br />
+例如:<br />
+SELECT /*+USE_MERGE(BSEMPMS,BSDPTMS)*/ * FROM BSEMPMS,BSDPTMS WHERE<br />
+BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;</p>
+<p>&lt;24&gt;. /*+USE_HASH(TABLE)*/<br />
+将指定的表与其他行源通过哈希连接方式连接起来.<br />
+例如:<br />
+SELECT /*+USE_HASH(BSEMPMS,BSDPTMS)*/ * FROM BSEMPMS,BSDPTMS WHERE<br />
+BSEMPMS.DPT_NO=BSDPTMS.DPT_NO;</p>
+<p>&lt;25&gt;. /*+DRIVING_SITE(TABLE)*/<br />
+强制与ORACLE所选择的位置不同的表进行查询执行.<br />
+例如:<br />
+SELECT /*+DRIVING_SITE(DEPT)*/ * FROM BSEMPMS,DEPT@BSDPTMS WHERE BSEMPMS.DPT_NO=DEPT.DPT_NO;</p>
+<p>&lt;26&gt;. /*+LEADING(TABLE)*/<br />
+将指定的表作为连接次序中的首表.</p>
+<p>&lt;27&gt;. /*+CACHE(TABLE)*/<br />
+当进行全表扫描时,CACHE提示能够将表的检索块放置在缓冲区缓存中最近最少列表LRU的最近使用端<br />
+例如:<br />
+SELECT /*+FULL(BSEMPMS) CAHE(BSEMPMS) */ EMP_NAM FROM BSEMPMS;</p>
+<p>&lt;28&gt;. /*+NOCACHE(TABLE)*/<br />
+当进行全表扫描时,CACHE提示能够将表的检索块放置在缓冲区缓存中最近最少列表LRU的最近使用端<br />
+例如:<br />
+SELECT /*+FULL(BSEMPMS) NOCAHE(BSEMPMS) */ EMP_NAM FROM BSEMPMS;</p>
+<p>&lt;29&gt;. /*+APPEND*/<br />
+直接插入到表的最后,可以提高速度.<br />
+insert /*+append*/ into test1 select * from test4 ;</p>
+<p>insert /*+append */ into emp nologging</p>
+<p>&lt;30&gt;. /*+NOAPPEND*/<br />
+通过在插入语句生存期内停止并行模式来启动常规插入.</p>
+<p>insert /*+noappend*/ into test1 select * from test4 ;</p>
+<p>&lt;31&gt;.parallel direct-load insert<br />
+sql&gt; alter session enable parallel dml;<br />
+sql&gt; insert /*+parallel(emp,2) */ into emp nologging<br />
+sql&gt; select * from emp_old;</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/insert-append-vs-create-table-as.html" data-toggle="tooltip" data-placement="top" title="insert append vs. create table as">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/exchanging-partitions-quiz.html" data-toggle="tooltip" data-placement="top" title="Exchanging Partitions 小测">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/streamlining-the-tuning-summary-zt" data-title="一些精简的tuning总结~ (zt)"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="
+1. 查询正在执行语句的执行计划(也就是实际语句执行计划)
+select * from v$sql_plan where hash_value = (s... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/streamlining-the-tuning-summary-zt.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/streamlining-the-tuning-summary-zt" data-title="一些精简的tuning总结~ (zt)" data-url="http://dbaeyes.github.io/oracle/streamlining-the-tuning-summary-zt.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

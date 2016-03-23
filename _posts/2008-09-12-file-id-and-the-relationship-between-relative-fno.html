@@ -1,0 +1,25 @@
+---
+layout: post
+title: file_id 和 relative_fno二者的关系
+date: 2008-09-12 13:11:16.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '862'
+---
+<h1></h1>
+<div>
+<ul>
+<li>file_id被称为 绝对文件号，relative_fno被称为相当文件号</li>
+<li>二者在大部分的时候，都是相等的</li>
+<li>file_id在整个数据库中是唯一的；relative_fno在整个tablespace中是唯一的，在数据库中不唯一</li>
+<li>一个tablespace中的最大文件数量为1023，所以，一旦超过该极限，则relative_fno将重新计算</li>
+</ul>
+</div>

@@ -10,7 +10,7 @@
 
     <title>Microdust</title>
 
-    <link rel="canonical" href="http://azeril.me/page7/">
+    <link rel="canonical" href="http://dbaeyes.github.io/page7/">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -116,184 +116,140 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
-    <a href="/blog/the-year.html">
+    <a href="/mysql/mysql-gap-locking-small-measuring.html">
         <h2 class="post-title">            
-            轨迹2013
+            mysql 间隙锁小测
         </h2>
         
         <div class="post-content-preview">
-            ##句子
-赫尔曼·黑塞：
+            一个innod的表，如果根据没有索引的列去更新，那么很悲剧，会lock整个表。
 
-
-  最危險的事情和對心靈最大的戕害 莫過於一天到晚沉思自己的性格 處境 孤獨地承受自己的不滿和弱點。
-
-
-
-
-  我们之所以活着，并不是我们做过什么善事或有什么优点，而是因为死亡还没来带走我们，我们的生命因而都是死亡给予的。
-
-
-——詹宏志《绿光往事》
-
-
-  今...
+update tmp_xf set c =11 where a = 1;
+整个tmp_xf表都会被lock。
+所以我们必须在列a上建索引，但是innodb的索引是会有间隙锁（Next-Key)，主要是存在在upd...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on September 1, 2013</p>
+    <p class="post-meta">Posted by David on June 17, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Win-OS-Apps-List.html">
+    <a href="/oracle/the-formula-of-the-cost-based.html">
         <h2 class="post-title">            
-            Win Os Apps List
+            The formula of the Cost Based
         </h2>
         
         <div class="post-content-preview">
-            Win 优质软件：一个个人推荐列表V1.0
-
-对于系统及软件的选择，在一定程度上会影响个人效率，也决定着个人的风格。表象化的一个例子就是多样缤纷的系统主题装扮出的系统界面，赏心悦目和难看之间的分野是分明的。
-固然，系统及相关软件的性能得落实到运用中才瞧得出是否发挥出了能量，但一个好软件无疑会让...
+            Mark it!!!
+cost =
+    blevel +
+    ceiling(leaf_blocks * effective index selectivity) +
+    ceiling(clustering_factor * effective table selectivity...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on February 20, 2012</p>
+    <p class="post-meta">Posted by David on June 16, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Coming-Soon-Spring.html">
+    <a href="/oracle/copying-large-amounts-of-data-to-index-organized-tables.html">
         <h2 class="post-title">            
-            Coming Soon Spring
+            复制大数据量到索引组织表
         </h2>
         
         <div class="post-content-preview">
-            春天快点来
-
-温暖，也许来了，也许没有，太阳，昨天有，今天还有，那明天如何？
-
-在一周一直与自己的懒惰和手上的伤痛斗争，或者适应。很多事情都搁下了，实在对不起自己。
-
-下周调整好，新学期要开始了，加油。
-
-0213-星期一
-【迷路有时也不容易】
-
-去买票，冷天的确是不好受的。但在归途中还是决定...
+            当导入索引组织表的数据不能排序时，那么效率是很差的。如果用一个大事务来做，很可能失败，并且导致服务器压力很大。
+在oracle中还是推荐使用根据extent分块来实现大数据量的移动 http://hi.baidu.com/dbaeyes/blog/item/dcf741ada8edac004b...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on February 19, 2012</p>
+    <p class="post-meta">Posted by David on June 12, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Nothing-or-Something.html">
+    <a href="/oracle/index-organized-tables-iot-oracle.html">
         <h2 class="post-title">            
-            Nothing Or Something
+            索引组织表 IOT (ORACLE)
         </h2>
         
         <div class="post-content-preview">
-            不是空白
-
-又是一周，出行被自己耽擱，難受得自己受得。朋友們都各自返校，而我，還在寒冷中晾著，下周五回校，閱讀計畫繼續。最近狀況不佳，蠻受影響，好在細究下來，不是因為對於計畫執行的反感或者乏力導致的，因為好久沒發力了，現在其實都憋著，這個，算是寬慰吧……
-
-0206-星期一
-【窗外一場大雨】
-...
+             索引组织表其实就是存储在一个索引结构中的表
+一般我们在oracle数据库中，用到的都是堆组织表，而在mysql常用引擎innodb中的表就是索引组织表，今天因为业务需要，测试了下oracle的索引组织表
+  需求是这样的，将有几十亿数据的A表的新字段cc更新为一个新值（蛋疼的需求），这个值来...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on February 12, 2012</p>
+    <p class="post-meta">Posted by David on June 12, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Words-on-Weibo.html">
+    <a href="/os/recommend-evernotequickhighlighter.html">
         <h2 class="post-title">            
-            Words On Weibo
+            推荐 evernote & quickhighlighter
         </h2>
         
         <div class="post-content-preview">
-            0116-0211 微语
+            推荐一个软件和一个格式化工具
 
-即使是簡短的文字 一筆一劃 也算認真為之 企圖能刻出彼處時光 那依稀的模樣 。
-
-发Blogbus被敏感词 修改不知改何处 吐槽无力 先丢这边了……
-
-[2012-02-11]
-在冬天的寒夜裏難熬的時刻 不免對喝不夠涼水淌不完汗水的日子懷念 我從不曾說討厭冬天 只是...
+evernote 方便的记录，支持各种平台 android、iphone、ipad、mac、windows、blackberry、web，并且可以相互共享，也算是一朵小云
+使用http://quickhighlighter.com/ 可以把代码漂亮的色彩格式，真...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on February 11, 2012</p>
+    <p class="post-meta">Posted by David on June 9, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Colorful-Life.html">
+    <a href="/mysql/mysql-update-large-amounts-of-data-to-reduce-delays.html">
         <h2 class="post-title">            
-            Colorful Life
+            mysql 在更新大数据量情况下如何降低备库延迟
         </h2>
         
         <div class="post-content-preview">
-            倘若生活本就精彩，那又何須杜撰。
-
-遇到了蒼白，又無意識地用蒼白將每一個今天覆蓋。
-
-倘若生活本就精彩，那又何須杜撰。
-
-至於我的呢，我總擅長做一個反面教材，在自己的教科書里，得不到釋然。
-
-0130 星期一
-脫節。
-
-我所不理解的，也是生活。其實中學時代之後我與人的交互一直是脫節的，包括部分...
+            
+mysql备库处理binlog日志是单线程的，无论主库有多少个database或者主库的tps有多高，备库当前的恢复模式都是单进程恢复。这样解决了并发的问题，但是也是备库很容易在主库高tsp的情况下，造成延迟。
+一些情况下，备库的延迟可以通过预热来加快sql的执行速度。预热就是将需要更新的数...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on February 5, 2012</p>
+    <p class="post-meta">Posted by David on May 29, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Memo-On-The-Way.html">
+    <a href="/mysql/mysql-fetch-random-number-index.html">
         <h2 class="post-title">            
-            Memo On The Way
+            mysql取随机数之索引使用
         </h2>
         
         <div class="post-content-preview">
-            在每一个点路过 但愿都留下些什么
-
-寒假的这一周，无非是拜年、游走中度过，一回头，那些四处的移动倒也忽然让单色调的日子，涂抹上了种种色彩。真好。
-
-0123-家中，年味
-大年初一，忙碌的时候。那天来拜年的亲戚难得来不少，晚饭倒是热闹。虽然拼酒、闲谈都不是我所习惯享受的。大家开心就好。一年来去真...
+            之前写过关于mysql取随机数的记录，当时没有去分析表里数据量的分布情况，所以当执行计划不同时，实际的效果有非常大的差别。
+[cc lang='sql']dbaeyes 06:47:52>select count(*) ,status from act_info group by status...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on January 29, 2012</p>
+    <p class="post-meta">Posted by David on May 29, 2011</p>
 </div>
 
 <hr>
 
 <div class="post-preview">
-    <a href="/Themes-of-Everyday.html">
+    <a href="/mysql/mysql-fetch-maximum-minimum-optimized-away.html">
         <h2 class="post-title">            
-            Themes Of Everyday
+            mysql 取最大最小值之 optimized away
         </h2>
         
         <div class="post-content-preview">
-            每一天都可以有主题
-
-每一天都可以有一个主题，这多少也算是一点对于每一天附加的意义，不显得苍白无力，也许还有些许惊喜。
-## 0116-远处的一切，都在飞驰
-
-星期一和表弟在医院帮忙照看奶奶，其间我们都有些粗心大意的，有次还是经隔壁床的大妈提醒（其实也不清楚到底那时人家说了什么，但立马就折过去...
+            在取mysql主键最大最小值时，mysql会使用最优方式 SELECT tables optimized away
+官方解释
+ SELECT tables optimized away：当我们使用某些聚合函数来访问存在索引的某个字段时，MySQL Query Optimizer 会通过索引直接...
         </div>
     </a>
-    <p class="post-meta">Posted by Azeril on January 22, 2012</p>
+    <p class="post-meta">Posted by David on May 29, 2011</p>
 </div>
 
 <hr>
@@ -355,7 +311,7 @@
 
                     
                     <li>
-                        <a href="https://twitter.com/Azeril_Lapland">
+                        <a href="https://twitter.com/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
@@ -366,7 +322,7 @@
 
                     
                     <li>
-                        <a href="https://github.com/Azeril">
+                        <a href="https://github.com/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -378,7 +334,7 @@
                     <!--
                     
                     <li>
-                        <a href="http://www.douban.com/people/Azeril">
+                        <a href="http://www.douban.com/people/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
@@ -391,7 +347,7 @@
                     <!--
                     
                     <li>
-                        <a href="https://www.facebook.com/Azeril_Lapland">
+                        <a href="https://www.facebook.com/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
@@ -403,7 +359,7 @@
 
                     
                     <li>
-                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa  fa-stack-1x fa-inverse">知</i>
@@ -415,7 +371,7 @@
                     <!--
                     
                     <li>
-                        <a target="_blank" href="http://weibo.com/Azeril">
+                        <a target="_blank" href="http://weibo.com/poofly">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
@@ -427,7 +383,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2016 Azeril ♪ Powered by Jekyll.
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

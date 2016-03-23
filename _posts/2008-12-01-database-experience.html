@@ -1,0 +1,26 @@
+---
+layout: post
+title: 数据库一些经验
+date: 2008-12-01 14:25:33.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- rowid
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '1024'
+---
+<p>大的开发项目，应该把业务逻辑放在应用中实现，切忌把业务放到触发器和存储过程中。 存储过程和触发器要少用，而且不能涉及业务</p>
+<div>
+<p>#######################################</p>
+<p>大数据量update，可以考虑order by rowid</p>
+<p>按照ROWID的结构，ROWID的顺序即是数据块的顺序，而CURSOR返回的记录的顺序即是更新的顺序，所以更新就会按数据块的物理顺序依次处理，即更新完一个数据块里的所有行，再更新下一个数据块的数据。这样一来，对于每个数据块，就只有第一行会产生物理读，其他的行，因为数据块已经在内存里了，就只都是逻辑读了。</p>
+<p>按数据块的顺序更新可能还有另外一个好处，就是磁盘的顺序读写成本更小，因为磁头减少了磁头的寻道动作。对于单个磁盘肯定是这样，但对于做了条带的RAID是不是也有这个好处，就不清楚了。但有一点是肯定的，就是好的存储设备会根据顺序访问的规律做预读，即监测到顺序访问时，会提前把后续的数据块读入存储的缓存。</p>
+<p><a href="http://www.itpub.net/viewthread.php?tid=1052077&amp;extra=page%3D1%26amp%3Bfilter%3Ddigest&amp;page=1">http://www.itpub.net/viewthread.php?tid=1052077&amp;extra=page%3D1%26amp%3Bfilter%3Ddigest&amp;page=1</a></p>
+<p>$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$</p>
+</div>

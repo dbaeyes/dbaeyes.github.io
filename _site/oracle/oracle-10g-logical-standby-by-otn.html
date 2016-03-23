@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>oracle 10g logical standby (by otn) - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/oracle-10g-logical-standby-by-otn.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#standby" title="standby">standby</a>
+                        
+                    </div>
+                    <h1>oracle 10g logical standby (by otn)</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on June 23, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><a href="http://otn.oracle.com/oramag/oracle/04-jul/o44tech_avail.html" target="_blank">http://otn.oracle.com/oramag/oracle/04-jul/o44tech_avail.html</a></p>
+<div>
+Make Recovery Logical<br />
+By Darl Kuhn</p>
+<p>Use Data Guard's logical standby database for recovery and 24/7 availability.</p>
+<p>Many enterprises have conflicting requirements for transaction processing and business reporting. For example, decision reporting cannot be allowed to degrade the performance of online transaction processing. Additionally, mission-critical systems are required to be highly available, with minimal downtime and no data loss. Logical standby databases resolve these disparate requirements by providing fault-tolerant disaster recovery protection while also making available a 24/7 reporting replica of real-time production data.</p>
+<p>Data Guard is Oracle's integrated disaster recovery solution. Data Guard ships with two types of disaster recovery standby databases: physical and logical. Physical standby technology has been available since Oracle7 Release 7.3. Data Guard keeps the physical standby database in sync with production data by automatically copying and applying primary redo data to the standby database. This results in a standby database that is an exact block-for-block copy of your primary production database.</p>
+<p>Logical standby differs from physical standby in two significant ways: the manner in which redo is applied and uptime availability for reporting. The logical standby database uses LogMiner and SQL Apply technology to transform the primary database redo data into SQL that is then applied to the logical standby database. This allows your logical standby database to be available 24/7 for querying, while simultaneously applying data manipulation language (DML) and data definition language (DDL) statements from the primary database.</p>
+<p>This article describes key improvements to the logical standby database feature in Oracle Database 10g and how to implement a logical standby database.</p>
+<p>Logical Standby in Oracle 10g</p>
+<p>The logical standby feature was first released in Oracle9i Release 2 and was greatly enhanced in Oracle Database 10g. In addition to a greater ease of implementation, the following are significant improvements to Data Guard's logical standby feature in Oracle Database 10g:</p>
+<p>No downtime required to implement logical standby feature<br />
+Real-time application of DML/DDL (SQL Apply) to logical standby database<br />
+New support for more datatypes</p>
+<p>These enhancements reduce the cost of implementation and improve functionality while still providing you an integrated no-data-loss disaster recovery solution.</p>
+<p>Implementing Oracle Database 10g Logical Standby</p>
+<p>If you struggled with implementing logical standby in Oracle9i, you'll be pleased with the streamlined Oracle 10g install. Documented next are the steps for setting up a logical standby in the default maximum performance mode in a UNIX environment. This example assumes that you have identical mount points and directory structures on your primary and standby servers.</p>
+<p>Step 1. Enable logging. On your primary database, instruct Oracle Database to force all logging of changes to the redo, even if nologging or unrecoverable data loads are performed:</p>
+<p>SQL&gt; alter database force logging;</p>
+<p>Verify that forced logging has been enabled on your primary database, by issuing the following:</p>
+<p>SQL&gt; select force_logging<br />
+from v$database;</p>
+<p>Step 2. Create a password file for the primary database. Every database in a Data Guard environment must use a password file. Additionally, the password used by SYS must be the same for all primary and standby databases. On your primary database server, navigate to ORACLE_HOME/dbs and issue the following command:</p>
+<p>$ orapwd file=orapw&lt;sid_name&gt;<br />
+password=top_secret</p>
+<p>Also, instruct Oracle Database to use the newly created password file, by setting the init.ora/spfile remote_login_ passwordfile parameter to either EXCLUSIVE or SHARED.</p>
+<p>Step 3. Configure the primary database init.ora/spfile. If you are using an spfile, you may find it easier to switch to using an init.ora file while implementing your logical standby. After implementation, you can easily switch back to using an spfile. The examples in this article use an init.ora file.</p>
+<p>In this example, BRDSTN is the database name of both the primary and the standby. Primarydb is the Oracle Net service name of the primary database, and standbydb is the Oracle Net service name of the standby database. Include the contents of Listing 1 in the init.ora file on your primary database.</p>
+<p>Step 4. Enable archiving. Ensure that your primary database is in archive log mode:</p>
+<p>SQL&gt; archive log list;</p>
+<p>If archiving hasn't been enabled on your primary database, run the following:</p>
+<p>SQL&gt; shutdown immediate;<br />
+SQL&gt; startup mount;<br />
+SQL&gt; alter database archivelog;<br />
+SQL&gt; alter database open;</p>
+<p>Note that the LOG_ARCHIVE_START initialization parameter is obsolete in Oracle Database 10g. Archiving is automatically enabled when you put your database into archive log mode.</p>
+<p>Step 5. Put a primary key on every replicated table. The SQL Apply process must be able to match rows changing in the primary database to the corresponding rows changing in the standby database. SQL Apply can't use a rowid, because it can be different between the two databases. Therefore, each table being replicated to a logical standby database must have a primary or unique key defined.</p>
+<p>To identify tables that have rows that cannot be uniquely identified, query the DBA_LOGSTDBY_NOT_UNIQUE view.</p>
+<p>Step 6. Enable supplemental logging. Enabling supplemental logging will direct Oracle Database to add a small amount of extra information to the redo stream. The SQL Apply process uses this additional information to maintain tables being replicated. On your primary database, enable supplemental logging as follows:</p>
+<p>SQL&gt; alter database add supplemental log data (primary key, unique index) columns;<br />
+SQL&gt; alter system archive log current;</p>
+<p>You can verify that supplemental logging has been enabled, by issuing the following on your primary database:</p>
+<p>SQL&gt; select supplemental_log_data_pk, supplemental_log_data_ui<br />
+from v$database;</p>
+<p>Step 7. Take a backup of your primary database, and move it to the standby machine. Take an offline or online backup of your primary database and copy it to your standby server. You need to back up and copy only data files, not online redo files or controlfiles.</p>
+<p>Step 8. Create a logical standby controlfile. You must create a special logical standby database controlfile and then copy it to your standby machine. On your primary database, issue the following SQL:</p>
+<p>SQL&gt; alter database create logical standby controlfile<br />
+as '/ora01/oradata/BRDSTN/sb.ctl';</p>
+<p>Note the use of the keyword logical; it's critical to use the correct syntax.</p>
+<p>After creating the logical standby controlfile, copy it to your standby machine. In this example, the standby controlfile must be placed in the /ora01/ oradata/BRDSTN directory on the standby machine.</p>
+<p>Step 9. Create init.ora for logical standby. Copy the primary init.ora file to the standby machine, and then make the necessary modifications for your logical standby database, as shown in Listing 2.</p>
+<p>Step 10. Create a password file for the logical standby database. As noted in Step 2, every Oracle Data Guard-enabled database needs a password file using the same password. On your standby machine, go to ORACLE_HOME/dbs and issue the following command:</p>
+<p>$ orapwd file=orapw&lt;sid_name&gt;<br />
+password=top_secret</p>
+<p>Step 11. Configure Oracle Net for primary and standby databases. The primary and logical standby databases need to communicate with each other via Oracle Net. Ensure that both the primary and the logical standby databases have listeners and that the appropriate Oracle Net service information is in place. Here are examples of the entries in the tnsnames.ora file on both the primary and the standby servers:</p>
+<p>primarydb =<br />
+(DESCRIPTION=<br />
+(ADDRESS=(PROTOCOL=tcp) (PORT=1521) (HOST=primary_host))<br />
+(CONNECT_DATA=(SERVICE_NAME=BRDSTN)))</p>
+<p>standbydb=<br />
+(DESCRIPTION=<br />
+(ADDRESS=(PROTOCOL=tcp) (PORT=1521) (HOST=standby_host))<br />
+(CONNECT_DATA=(SERVICE_NAME=BRDSTN)))</p>
+<p>Also, Oracle recommends enabling dead connection detection by the setting of sqlnet.expire_time to one minute in your sqlnet.ora file, as shown:</p>
+<p>sqlnet.expire_time=1</p>
+<p>Step 12. Start up and activate the logical standby database. On your logical standby server, start up and activate your logical standby database, as follows:</p>
+<p>SQL&gt; startup mount;<br />
+SQL&gt; alter database<br />
+recover managed standby database;</p>
+<p>You may need to give the above ALTER command a few minutes to complete. When it is finished, you can activate your standby database as follows:</p>
+<p>SQL&gt; alter database activate standby database;</p>
+<p>Step 13. Rename your logical standby database. Renaming your logical standby database is not a required step. However, Oracle recommends renaming your logical standby database to ensure that the logical standby is never confused with the primary database.</p>
+<p>Use the nid utility to reset the name of your logical standby database. Before running nid, shut down and start up your database in mount mode.</p>
+<p>SQL&gt; shutdown immediate;<br />
+SQL&gt; startup mount;</p>
+<p>$ nid target=sys/top_secret dbname=BRDLS</p>
+<p>In this example, BRDLS is the new name of your logical standby database. You should now see the following line prompting you:</p>
+<p>Change database ID and database name BRDSTN to BRDLS? (Y/[N]) =&gt;</p>
+<p>Enter Y and a return. At this point, you should see at the bottom of the message text:</p>
+<p>DBNEWID - Completed successfully.</p>
+<p>Step 14. Change the logical standby db_name in the init.ora file. Now you need to change the db_name initialization parameter. For example, in your logical standby database init.ora file, make this change:</p>
+<p>db_name=BRDLS</p>
+<p>Step 15. Re-create the password file for the logical standby database. After running the nid utility, you need to re-create your logical standby password file. To do this, navigate to ORACLE_HOME/dbs, remove the old password file, and issue the following OS command:</p>
+<p>$ orapwd file=orapw&lt;sid_name&gt;<br />
+password=top_secret</p>
+<p>Step 16. Open the logical standby database with resetlogs. You can now make your logical standby database accessible. Start up your database, and open it with the RESETLOGS command, as follows:</p>
+<p>SQL&gt; startup mount;<br />
+SQL&gt; alter database open resetlogs;</p>
+<p>Step 17. Add temp files to the logical standby database. You'll need a temp tablespace in your logical database if you plan to do any reporting or if you ever transition the logical standby database to a primary database role. Add the temp file(s) to the logical standby as they existed on the primary database:</p>
+<p>SQL&gt; alter session disable guard;<br />
+SQL&gt; alter tablespace temp add tempfile '/ora01/oradata/BRDSTN/temp01.dbf'<br />
+size 500M reuse;<br />
+SQL&gt; alter session enable guard;</p>
+<p>Step 18. Restart the logical standby database SQL Apply process. All you need to do now is restart the SQL Apply process on your logical standby database:</p>
+<p>SQL&gt; alter database start logical standby apply;</p>
+<p>You now have a fully functioning logical standby database.</p>
+<p>Postimplementation Checks</p>
+<p>I recommend continuously viewing, during the previous setup process and postimplementation, what's being written to the alert.log file for both the primary and the logical databases. The information that Data Guard writes to the alert.log file is fairly informative and will help you quickly isolate and resolve problems. To monitor the installation progress in a UNIX environment, navigate to your background dump directory destination and issue this command:</p>
+<p>$ tail -f alert_&lt;sid&gt;.log</p>
+<p>There are also many Data Guard views that you can use to monitor the status. On the logical standby database, issue this query to view which archive redo logs have arrived and whether they've been applied or not:</p>
+<p>SQL&gt; select sequence#, applied<br />
+from dba_logstdby_log order by 1;</p>
+<p>To monitor the status of the SQL Apply process, run this statement:</p>
+<p>SQL&gt; select name, value<br />
+from v$logstdby_stats<br />
+where name = 'coordinator state';</p>
+<p>NAME                                  VALUE<br />
+------------------                ------------<br />
+coordinator state                    INITIALIZING</p>
+<p>When you first set up a logical standby database, the coordinator state will have the value of INITIALIZING. Depending on the number of objects replicated, it may be in this mode for several hours. This initialization delay occurs only when you first set up your logical standby.</p>
+<p>After initialization, the coordinator state value will change to APPLYING. When this occurs, redo is now being mined on the primary database and the resulting SQL statements are being applied to the logical standby database.</p>
+<p>Tuning Your Logical Standby</p>
+<p>This section discusses the following methods to enhance performance in your logical standby database:</p>
+<p>Adding indexes/materialized views<br />
+Analyzing objects<br />
+Tuning the shared pool<br />
+Setting PARALLEL_MAX_SERVERS</p>
+<p>If you need to add indexes or materialized views to your logical standby database to improve performance, you can do so independent of your primary database objects. When you make changes, however, you must first disable the guard mechanism that prevents changes to objects maintained by the SQL Apply process. For example, if you want to add an index to the CUSTOMER_NAME column of your CUSTOMERS table, issue the following:</p>
+<p>SQL&gt; alter session disable guard;<br />
+SQL&gt; create index customer_i1<br />
+on customer(customer_name);<br />
+SQL&gt; alter session enable guard;</p>
+<p>If you analyze your primary database objects, the statistics generated are not propagated to your logical standby database. Therefore, it's critical that you analyze your logical standby objects as required. For example, after a large percentage of the data has changed in your APPS schema, issue the following command on your logical standby database:</p>
+<p>SQL&gt; exec -<br />
+dbms_stats.gather_schema_stats(<br />
+ownname=&gt;'APPS',-<br />
+estimate_percent=&gt;<br />
+dbms_stats.auto_sample_size,-<br />
+cascade=&gt;true);</p>
+<p>The SQL Apply process makes heavy use of the shared pool, so as a general guideline, allocating more memory to the shared pool should improve the SQL Apply performance. By default, the SQL Apply process will use as much as 30MB of the memory in the shared pool. You can limit the amount of shared pool resources that the SQL Apply process uses by running the DBMS_LOGSTDBY.APPLY_SET procedure. For example, to limit the amount used in the shared pool to 20MB, issue the following SQL:</p>
+<p>SQL&gt; exec dbms_logstdby.apply_set('MAX_SGA',20);</p>
+<p>Next Steps</p>
+<p>READ more about Data Guard<br />
+Oracle Data Guard Concepts and Administration<br />
+"Oracle9i Data Guard: SQL Apply Best Practices"<br />
+Oracle Data Guard Overview<br />
+"Data Guard SQL Apply: Back to the Future"</p>
+<p>The SQL Apply mechanism was engineered to use parallel processes to transform and apply SQL. It will use the PARALLEL_MAX_SERVERS initialization parameter to determine the maximum number of parallel processes to spawn. Oracle recommends that you set this value to at least 5 on a logical standby database, and for best results set it to 9. You can limit the number of processes used, by calling the DBMS_LOGSTDBY.APPLY_SET procedure. The following example shows how to limit the number of processes to 8:</p>
+<p>SQL&gt; exec dbms_logstdby.apply_set('MAX_SERVERS',<br />
+8);</p>
+<p>Skipping Application of SQL</p>
+<p>It's fairly easy to configure your logical standby database not to apply unwanted SQL statements. You must first disable the logical standby apply process, specify changes, and then reenable the apply process. This example shows how to stop DML and DDL for the APPS schema's INVOICES table:</p>
+<p>SQL&gt; alter database stop logical standby apply;<br />
+SQL&gt; execute dbms_logstdby.skip('SCHEMA_DDL', 'APPS', 'INVOICES');<br />
+SQL&gt; execute dbms_logstdby.skip('DML', 'APPS', 'INVOICES');<br />
+SQL&gt; alter database start logical standby apply;</p>
+<p>To revert back to applying SQL on objects, use the dbms_logstbdy.unskip procedure. This example demonstrates how to resume application of SQL to the INVOICES table:</p>
+<p>SQL&gt; alter database stop logical standby apply;<br />
+SQL&gt; execute dbms_logstdby.unskip('SCHEMA_DDL', 'APPS', 'INVOICES');<br />
+SQL&gt; execute dbms_logstdby.unskip('DML', 'APPS', 'INVOICES');<br />
+SQL&gt; alter database start logical standby apply;</p>
+<p>The Logical Conclusion</p>
+<p>Oracle Data Guard logical standby databases are configurable for guaranteed no-data-loss protection, with the benefit of being continuously available for reporting on a real-time copy of production data. This allows you to use one disaster recovery tool as a solution for many different business requirements. The Oracle Database 10g edition of the logical standby database is fairly easy to implement, with minimal impact on the primary production database.</p>
+<p>--------------------------------------------------------------------------------<br />
+Darl Kuhn (<a href="mailto:darl.kuhn@sun.com">darl.kuhn@sun.com</a>), an Oracle DBA and software developer with 16 years of experience, is currently a senior DBA with Sun Microsystems. Kuhn is the coauthor of Oracle RMAN Pocket Reference (O'Reilly &amp; Associates, 2002).</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/difference-between-dbms-stats-gather-table-stats-and-analyze-table.html" data-toggle="tooltip" data-placement="top" title="dbms_stats.gather_table_stats与analyze table 的区别">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/standby-db-rac.html" data-toggle="tooltip" data-placement="top" title="Standby DB & RAC">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/oracle-10g-logical-standby-by-otn" data-title="oracle 10g logical standby (by otn)"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="http://otn.oracle.com/oramag/oracle/04-jul/o44tech_avail.html
+
+Make Recovery ... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/oracle-10g-logical-standby-by-otn.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/oracle-10g-logical-standby-by-otn" data-title="oracle 10g logical standby (by otn)" data-url="http://dbaeyes.github.io/oracle/oracle-10g-logical-standby-by-otn.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

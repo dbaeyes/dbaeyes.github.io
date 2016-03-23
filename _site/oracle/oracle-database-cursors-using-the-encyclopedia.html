@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>Oracle数据库游标使用大全 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/oracle-database-cursors-using-the-encyclopedia.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#游标" title="游标">游标</a>
+                        
+                    </div>
+                    <h1>Oracle数据库游标使用大全</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on July 18, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>SQL是用于访问ORACLE数据库的语言，PL/SQL扩展和加强了SQL的功能，它同时引入了更</p>
+<div>强的程序逻辑。 PL/SQL支持DML命令和SQL的事务控制语句。DDL在PL/SQL中不被支持，这就<br />
+意味作在PL/SQL程序块中不能创建表或其他任何对象。较好的PL/SQL程序设计是在PL/SQL块中<br />
+使用象DBMS_SQL这样的内建包或执行EXECUTE IMMEDIATE命令建立动态SQL来执行DDL命令，<br />
+下面我们将讨论各种用于访问ORACLE数据库的DDL和TCL语句。<br />
+查询<br />
+SELECT语句用于从数据库中查询数据，当在PL/SQL中使用SELECT语句时，要与INTO子<br />
+句一起使用，查询的返回值被赋予INTO子句中的变量，变量的声明是在DELCARE中。SELECT<br />
+SELECT [DISTICT|ALL]{*|column[,column,...]}</p>
+<p>INTO (variable[,variable,...] |record)<br />
+FROM {table|(sub-query)}[alias]<br />
+WHERE............<br />
+PL/SQL中SELECT语句只返回一行数据。如果超过一行数据，那么就要使用显式游标（<br />
+对游标的讨论我们将在后面进行），INTO子句中要有与SELECT子句中相同列数量的变量。INTO<br />
+%TYPE属性<br />
+在PL/SQL中可以将变量和常量声明为内建或用户定义的数据类型，以引用一个列名，<br />
+同时继承他的数据类型和大小。这种动态赋值方法是非常有用的，比如变量引用的列的数据类<br />
+型和大小改变了，如果使用了%TYPE,那么用户就不必修改代码，否则就必须修改代码。<br />
+例：<br />
+v_empno SCOTT.EMP.EMPNO%TYPE;<br />
+v_salary EMP.SALARY%TYPE;<br />
+不但列名可以使用%TYPE,而且变量、游标、记录，或声明的常量都可以使用%TYPE。<br />
+DECLARE<br />
+V_A NUMBER(5):=10;<br />
+V_B V_A%TYPE:=15;<br />
+V_C V_A%TYPE;<br />
+BEGIN<br />
+DBMS_OUTPUT.PUT_LINE<br />
+('V_A='||V_A||'V_B='||V_B||'V_C='||V_C);<br />
+END<br />
+SQL&gt;/<br />
+V_A=10 V_B=15 V_C=<br />
+PL/SQL procedure successfully completed.</p>
+<p>其他DML语句<br />
+其它操作数据的DML语句是:INSERT、UPDATE、DELETE和LOCK TABLE,这些语句在<br />
+PL/SQL中的语法与在SQL中的语法相同。我们在前面已经讨论过DML语句的使用这里就不再重<br />
+复了。在DML语句中可以使用任何在DECLARE部分声明的变量，如果是嵌套块，那么要注意变<br />
+例：<br />
+CREATE OR REPLACE PROCEDURE FIRE_EMPLOYEE (pempno in number)<br />
+AS<br />
+v_ename EMP.ENAME%TYPE;<br />
+BEGIN<br />
+SELECT ename INTO v_ename<br />
+FROM emp<br />
+WHERE empno=p_empno;<br />
+INSERT INTO FORMER_EMP(EMPNO,ENAME)<br />
+VALUES (p_empno,v_ename);<br />
+DELETE FROM emp<br />
+WHERE empno=p_empno;<br />
+UPDATE former_emp<br />
+SET date_deleted=SYSDATE<br />
+WHERE empno=p_empno;<br />
+EXCEPTION<br />
+WHEN NO_DATA_FOUND THEN<br />
+DBMS_OUTPUT.PUT_LINE('Employee Number Not Found!');<br />
+END<br />
+DML语句的结果<br />
+当执行一条DML语句后，DML语句的结果保存在四个游标属性中，这些属性用于控制程<br />
+序流程或者了解程序的状态。当运行DML语句时，PL/SQL打开一个内建游标并处理结果，游标<br />
+是维护查询结果的内存中的一个区域，游标在运行DML语句时打开，完成后关闭。隐式游标只<br />
+使用SQL%FOUND,SQL%NOTFOUND,SQL%ROWCOUNT三个属性.SQL%FOUND,SQL%NOTFOUND是布尔值，<br />
+SQL%FOUND和SQL%NOTFOUND<br />
+在执行任何DML语句前SQL%FOUND和SQL%NOTFOUND的值都是NULL,在执行DML语句后，<br />
+. TRUE :INSERT<br />
+. TRUE :DELETE和UPDATE，至少有一行被DELETE或UPDATE.<br />
+. TRUE :SELECT INTO至少返回一行<br />
+当SQL%FOUND为TRUE时,SQL%NOTFOUND为FALSE。<br />
+SQL%ROWCOUNT<br />
+在执行任何DML语句之前，SQL%ROWCOUNT的值都是NULL,对于SELECT INTO语句，如果<br />
+执行成功，SQL%ROWCOUNT的值为1,如果没有成功，SQL%ROWCOUNT的值为0，同时产生一个异常<br />
+SQL%ISOPEN<br />
+SQL%ISOPEN是一个布尔值，如果游标打开，则为TRUE, 如果游标关闭，则为FALSE.对<br />
+于隐式游标而言SQL%ISOPEN总是FALSE，这是因为隐式游标在DML语句执行时打开，结束时就<br />
+事务控制语句<br />
+事务是一个工作的逻辑单元可以包括一个或多个DML语句，事物控制帮助用户保证数<br />
+据的一致性。如果事务控制逻辑单元中的任何一个DML语句失败，那么整个事务都将回滚，在<br />
+PL/SQL中用户可以明确地使用COMMIT、ROLLBACK、SAVEPOINT以及SET TRANSACTION语句。<br />
+COMMIT语句终止事务，永久保存数据库的变化，同时释放所有LOCK,ROLLBACK终止现<br />
+行事务释放所有LOCK，但不保存数据库的任何变化,SAVEPOINT用于设置中间点，当事务调用过<br />
+多的数据库操作时，中间点是非常有用的，SET TRANSACTION用于设置事务属性，比如<br />
+显式游标<br />
+当查询返回结果超过一行时，就需要一个显式游标，此时用户不能使用select into<br />
+语句。PL/SQL管理隐式游标，当查询开始时隐式游标打开，查询结束时隐式游标自动关闭。显<br />
+式游标在PL/SQL块的声明部分声明，在执行部分或异常处理部分打开，取数据,关闭。下表显<br />
+表1 隐式游标和显式游标<br />
+[[The No.1 Picture.]]<br />
+使用游标<br />
+这里要做一个声明，我们所说的游标通常是指显式游标，因此从现在起没有特别指明<br />
+的情况，我们所说的游标都是指显式游标。要在程序中使用游标，必须首先声明游标。<br />
+声明游标<br />
+语法：<br />
+CURSOR cursor_name IS select_statement;</p>
+<p>在PL/SQL中游标名是一个未声明变量，不能给游标名赋值或用于表达式中。<br />
+例：<br />
+DELCARE<br />
+CURSOR C_EMP IS SELECT empno,ename,salary</p>
+<p>FROM emp 　　WHERE salary&gt;2000<br />
+ORDER BY ename;<br />
+........<br />
+BEGIN<br />
+在游标定义中SELECT语句中不一定非要表可以是视图，也可以从多个表或视图中选择<br />
+打开游标<br />
+使用游标中的值之前应该首先打开游标，打开游标初始化查询处理。打开游标的语法<br />
+OPEN cursor_name<br />
+cursor_name是在声明部分定义的游标名。<br />
+例：<br />
+OPEN C_EMP;<br />
+关闭游标<br />
+语法：<br />
+CLOSE cursor_name<br />
+例：<br />
+CLOSE C_EMP;<br />
+从游标提取数据<br />
+从游标得到一行数据使用FETCH命令。每一次提取数据后，游标都指向结果集的下一<br />
+FETCH cursor_name INTO variable[,variable,...]<br />
+对于SELECT定义的游标的每一列，FETCH变量列表都应该有一个变量与之相对应，变<br />
+例：<br />
+SET SERVERIUTPUT ON<br />
+DECLARE<br />
+v_ename EMP.ENAME%TYPE;<br />
+v_salary EMP.SALARY%TYPE;<br />
+CURSOR c_emp IS SELECT ename,salary FROM emp;</p>
+<p>BEGIN<br />
+OPEN c_emp;<br />
+FETCH c_emp INTO v_ename,v_salary;<br />
+DBMS_OUTPUT.PUT_LINE('Salary of Employee'|| v_ename<br />
+||'is'|| v_salary);<br />
+FETCH c_emp INTO v_ename,v_salary;<br />
+DBMS_OUTPUT.PUT_LINE('Salary of Employee'|| v_ename<br />
+||'is'|| v_salary);<br />
+FETCH c_emp INTO v_ename,v_salary;<br />
+DBMS_OUTPUT.PUT_LINE('Salary of Employee'|| v_ename<br />
+||'is'|| v_salary);<br />
+CLOSE c_emp;<br />
+END<br />
+这段代码无疑是非常麻烦的，如果有多行返回结果，可以使用循环并用游标属性为结<br />
+束循环的条件，以这种方式提取数据，程序的可读性和简洁性都大为提高，下面我们使用循环<br />
+SET SERVERIUTPUT ON<br />
+DECLARE<br />
+v_ename EMP.ENAME%TYPE;<br />
+v_salary EMP.SALARY%TYPE;<br />
+CURSOR c_emp IS SELECT ename,salary FROM emp;</p>
+<p>BEGIN<br />
+OPEN c_emp;<br />
+LOOP<br />
+FETCH c_emp INTO v_ename,v_salary;<br />
+EXIT WHEN c_emp%NOTFOUND;<br />
+DBMS_OUTPUT.PUT_LINE('Salary of Employee'|| v_ename<br />
+||'is'|| v_salary);<br />
+END<br />
+记录变量<br />
+定义一个记录变量使用TYPE命令和%ROWTYPE，关于%ROWsTYPE的更多信息请参阅相关<br />
+记录变量用于从游标中提取数据行，当游标选择很多列的时候，那么使用记录比为每<br />
+当在表上使用%ROWTYPE并将从游标中取出的值放入记录中时，如果要选择表中所有列<br />
+，那么在SELECT子句中使用*比将所有列名列出来要安全得多。<br />
+例：<br />
+SET SERVERIUTPUT ON<br />
+DECLARE<br />
+R_emp EMP%ROWTYPE;<br />
+CURSOR c_emp IS SELECT * FROM emp;<br />
+BEGIN<br />
+OPEN c_emp;<br />
+LOOP<br />
+FETCH c_emp INTO r_emp;<br />
+EXIT WHEN c_emp%NOTFOUND;<br />
+DBMS_OUT.PUT.PUT_LINE('Salary of Employee'||r_emp.ename||'is'|| r_emp.salary);<br />
+END LOOP;<br />
+CLOSE c_emp;<br />
+END;<br />
+%ROWTYPE也可以用游标名来定义，这样的话就必须要首先声明游标：<br />
+SET SERVERIUTPUT ON<br />
+DECLARE<br />
+CURSOR c_emp IS SELECT ename,salary FROM emp;<br />
+R_emp c_emp%ROWTYPE;<br />
+BEGIN<br />
+OPEN c_emp;<br />
+LOOP<br />
+FETCH c_emp INTO r_emp;<br />
+EXIT WHEN c_emp%NOTFOUND;<br />
+DBMS_OUT.PUT.PUT_LINE('Salary of Employee'||r_emp.ename||'is'|| r_emp.salary);<br />
+END LOOP;<br />
+CLOSE c_emp;<br />
+END;<br />
+带参数的游标<br />
+与存储过程和函数相似，可以将参数传递给游标并在查询中使用。这对于处理在某种<br />
+条件下打开游标的情况非常有用。它的语法如下：<br />
+CURSOR cursor_name[(parameter[,parameter],...)] IS select_statement;<br />
+定义参数的语法如下：<br />
+Parameter_name [IN] data_type[{:=|DEFAULT} value]<br />
+与存储过程不同的是，游标只能接受传递的值，而不能返回值。参数只定义数据类型<br />
+另外可以给参数设定一个缺省值，当没有参数值传递给游标时，就使用缺省值。游标<br />
+中定义的参数只是一个占位符，在别处引用该参数不一定可靠。<br />
+在打开游标时给参数赋值，语法如下：<br />
+OPEN cursor_name[value[,value]....];<br />
+参数值可以是文字或变量。<br />
+例：<br />
+DECALRE<br />
+CURSOR c_dept IS SELECT * FROM dept ORDER BY deptno;<br />
+CURSOR c_emp (p_dept VARACHAR2) IS<br />
+SELECT ename,salary<br />
+FROM emp<br />
+WHERE deptno=p_dept<br />
+ORDER BY ename<br />
+r_dept DEPT%ROWTYPE;<br />
+v_ename EMP.ENAME%TYPE;<br />
+v_salary EMP.SALARY%TYPE;<br />
+v_tot_salary EMP.SALARY%TYPE;<br />
+BEGIN<br />
+OPEN c_dept;<br />
+LOOP<br />
+FETCH c_dept INTO r_dept;<br />
+EXIT WHEN c_dept%NOTFOUND;<br />
+DBMS_OUTPUT.PUT_LINE('Department:'|| r_dept.deptno||'-'||r_dept.dname);<br />
+v_tot_salary:=0;<br />
+OPEN c_emp(r_dept.deptno);<br />
+LOOP<br />
+FETCH c_emp INTO v_ename,v_salary;<br />
+EXIT WHEN c_emp%NOTFOUND;<br />
+DBMS_OUTPUT.PUT_LINE('Name:'|| v_ename||' salary:'||v_salary);<br />
+v_tot_salary:=v_tot_salary+v_salary;<br />
+END LOOP;<br />
+CLOSE c_emp;<br />
+DBMS_OUTPUT.PUT_LINE('Toltal Salary for dept:'|| v_tot_salary);<br />
+END LOOP;<br />
+CLOSE c_dept;<br />
+END;<br />
+游标FOR循环<br />
+在大多数时候我们在设计程序的时候都遵循下面的步骤：<br />
+1、打开游标<br />
+2、开始循环<br />
+3、从游标中取值<br />
+4、检查那一行被返回<br />
+5、处理<br />
+6、关闭循环<br />
+7、关闭游标<br />
+可以简单的把这一类代码称为游标用于循环。但还有一种循环与这种类型不相同，这<br />
+就是FOR循环，用于FOR循环的游标按照正常的声明方式声明，它的优点在于不需要显式的打开<br />
+、关闭、取数据，测试数据的存在、定义存放数据的变量等等。游标FOR 循环的语法如下：<br />
+FOR record_name IN<br />
+(corsor_name[(parameter[,parameter]...)]<br />
+| (query_difinition)<br />
+LOOP<br />
+statements<br />
+END LOOP;<br />
+下面我们用for循环重写上面的例子：<br />
+DECALRE<br />
+CURSOR c_dept IS SELECT deptno,dname FROM dept ORDER BY deptno;<br />
+CURSOR c_emp (p_dept VARACHAR2) IS<br />
+SELECT ename,salary<br />
+FROM emp<br />
+WHERE deptno=p_dept<br />
+ORDER BY ename<br />
+v_tot_salary EMP.SALARY%TYPE;<br />
+BEGIN<br />
+FOR r_dept IN c_dept LOOP<br />
+DBMS_OUTPUT.PUT_LINE('Department:'|| r_dept.deptno||'-'||r_dept.dname);<br />
+v_tot_salary:=0;<br />
+FOR r_emp IN c_emp(r_dept.deptno) LOOP<br />
+DBMS_OUTPUT.PUT_LINE('Name:'|| v_ename||' salary:'||v_salary);<br />
+v_tot_salary:=v_tot_salary+v_salary;<br />
+END LOOP;<br />
+DBMS_OUTPUT.PUT_LINE('Toltal Salary for dept:'|| v_tot_salary);<br />
+END LOOP;<br />
+END;<br />
+在游标FOR循环中使用查询<br />
+在游标FOR循环中可以定义查询，由于没有显式声明所以游标没有名字，记录名通过<br />
+DECALRE<br />
+v_tot_salary EMP.SALARY%TYPE;<br />
+BEGIN<br />
+FOR r_dept IN (SELECT deptno,dname FROM dept ORDER BY deptno) LOOP<br />
+DBMS_OUTPUT.PUT_LINE('Department:'|| r_dept.deptno||'-'||r_dept.dname);<br />
+v_tot_salary:=0;<br />
+FOR r_emp IN (SELECT ename,salary<br />
+FROM emp<br />
+WHERE deptno=p_dept<br />
+ORDER BY ename) LOOP<br />
+DBMS_OUTPUT.PUT_LINE('Name:'|| v_ename||' salary:'||v_salary);<br />
+v_tot_salary:=v_tot_salary+v_salary;<br />
+END LOOP;<br />
+DBMS_OUTPUT.PUT_LINE('Toltal Salary for dept:'|| v_tot_salary);<br />
+END LOOP;<br />
+END;<br />
+游标中的子查询<br />
+语法如下：<br />
+CURSOR C1 IS SELECT * FROM emp<br />
+WHERE deptno NOT IN (SELECT deptno<br />
+FROM dept<br />
+WHERE dname!='ACCOUNTING');<br />
+可以看出与SQL中的子查询没有什么区别。<br />
+游标中的更新和删除<br />
+在PL/SQL中依然可以使用UPDATE和DELETE语句更新或删除数据行。显式游标只有在需<br />
+要获得多行数据的情况下使用。PL/SQL提供了仅仅使用游标就可以执行删除或更新记录的方法<br />
+UPDATE或DELETE语句中的WHERE CURRENT OF子串专门处理要执行UPDATE或DELETE操作<br />
+的表中取出的最近的数据。要使用这个方法，在声明游标时必须使用FOR UPDATE子串，当对话<br />
+使用FOR UPDATE子串打开一个游标时，所有返回集中的数据行都将处于行级（ROW-LEVEL)独占<br />
+式锁定，其他对象只能查询这些数据行，不能进行UPDATE、DELETE或SELECT...FOR UPDATE操<br />
+语法：<br />
+FOR UPDATE [OF [schema.]table.column[,[schema.]table.column]..<br />
+[nowait]<br />
+在多表查询中，使用OF子句来锁定特定的表,如果忽略了OF子句，那么所有表中选择<br />
+的数据行都将被锁定。如果这些数据行已经被其他会话锁定，那么正常情况下ORACLE将等待，<br />
+在UPDATE和DELETE中使用WHERE CURRENT OF子串的语法如下：<br />
+WHERE{CURRENT OF cursor_name|search_condition}<br />
+例：<br />
+DELCARE<br />
+CURSOR c1 IS SELECT empno,salary<br />
+FROM emp<br />
+WHERE comm IS NULL<br />
+FOR UPDATE OF comm;<br />
+v_comm NUMBER(10,2);<br />
+BEGIN<br />
+FOR r1 IN c1 LOOP<br />
+IF r1.salary&lt;500 THEN<br />
+v_comm:=r1.salary*0.25; 　　ELSEIF r1.salary&lt;1000 THEN<br />
+v_comm:=r1.salary*0.20; 　　ELSEIF r1.salary&lt;3000 THEN<br />
+v_comm:=r1.salary*0.15;<br />
+ELSE<br />
+v_comm:=r1.salary*0.12;<br />
+END IF;<br />
+UPDATE emp;<br />
+SET comm=v_comm<br />
+WHERE CURRENT OF c1l;<br />
+END LOOP;<br />
+END</p>
+<p>From : 网络</p>
+<p>-- EOF --</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/summary-of-oracle-explain-plan.html" data-toggle="tooltip" data-placement="top" title="ORACLE EXPLAIN PLAN的总结">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/oracle/opportunity-cbo-oracle-tuning-rules.html" data-toggle="tooltip" data-placement="top" title="机遇CBO的oracle优化法则">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/oracle-database-cursors-using-the-encyclopedia" data-title="Oracle数据库游标使用大全"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="SQL是用于访问ORACLE数据库的语言，PL/SQL扩展和加强了SQL的功能，它同时引入了更
+强的程序逻辑。 PL/SQL支持DML命令和SQL的事务控... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/oracle-database-cursors-using-the-encyclopedia.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/oracle-database-cursors-using-the-encyclopedia" data-title="Oracle数据库游标使用大全" data-url="http://dbaeyes.github.io/oracle/oracle-database-cursors-using-the-encyclopedia.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

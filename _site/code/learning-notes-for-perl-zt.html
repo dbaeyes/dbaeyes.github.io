@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>perl学习笔记 --zt - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/code/learning-notes-for-perl-zt.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#perl" title="perl">perl</a>
+                        
+                    </div>
+                    <h1>perl学习笔记 --zt</h1>
+                    
+                    <span class="meta">Posted by David on February 11, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>1. 变量<br />
+2. 列表和数组<br />
+3. 操作符<br />
+4. 流程控制</p>
+<div>5. 函数<br />
+6. 文件<br />
+7. 格式化输出<br />
+8. 特殊变量<br />
+9. 命令行<br />
+10 模块<br />
+------------------------------</p>
+<p>一. 直接量---常量<br />
+perl中常量和其他语言例如C语言没什么太大区别。所以在下面指出一些与其他语言不相同的地方。<br />
+1.1 数字常量<br />
+在perl中可以表示八进制和十六进制。八进制以0打头，十六进制以0x打头。<br />
+例如 ＄a=010 ---八进制<br />
+＄b=0x10---十六进制<br />
+为了不跟八进制的数字混淆，数字直接量均不以0打头。对于大数字，通常会加逗号或下划线加以区分perl可以直接删除这些附加信息。</p>
+<p>1.2 字符常量<br />
+首先perl中的字串结尾没有默认的结束符这与C语言相区别。perl中的结束符可以出现在字串的任何位置。在perl中有两种表现字串的方式一种是双引号，另一种是单引号。<br />
+例如 ＄string1="abcde"<br />
+＄string2="fghijk"<br />
+为了使字串中包含引号，必须用\来把引号正常话。否则会造成字串不完整。<br />
+例如 ＄string3="cut the "string""====cut the<br />
+改变成<br />
+＄string3="cut the \"string\""====cut the string<br />
+此规则同样适用于单引号字串。<br />
+另外perl还引入了qq和q机制来去除引号的影响。qq针对双引号，q则针对单引号。<br />
+例如 ＄string4=qq(the cut "strint")====the cut string<br />
+＄string5=q(the cut `string`)====the cut string<br />
+类似于C语言中\n，perl字串中有一些转义字符。如下表：<br />
+\a  Bell (beep)<br />
+\b  Backspace<br />
+\cn  The Ctrl+n character<br />
+\e  Escape<br />
+\E  Ends the effect of \L, \U or \Q<br />
+\f  Form feed<br />
+\l  Forces the next letter into lowercase<br />
+\L  All following letters are lowercase<br />
+\n  Newline<br />
+\r  Carriage return<br />
+\Q  Do not look for special pattern characters<br />
+\t  Tab<br />
+\u  Force next letter into uppercase<br />
+\U All following letters are uppercase<br />
+\v  Vertical tab<br />
+例如 ＄string6="abc\LWO\Etian\t\udi\E"===="abcwotian   UDI"单引号区别双引号在于以下两点：<br />
+1。单引号支持多行<br />
+例如 ＄string7='i<br />
+am brother'<br />
+2. 单引号只支持单引号本身转义符，不支持其他转义符。<br />
+3。单引号不支持变量直接替换。<br />
+例如 ＄number=12;<br />
+＄string8="the number is ＄number";<br />
+最后的string8是 the number is 12而单引号不可以。</p>
+<p>二。标量变量---变量<br />
+perl中变量不像C语言中那样死板，随定随用。以美元起始＄，遵循以下三个规则：<br />
+1。变量名可以包含字母（a至z , A至Z）字符、数字或类型标识符后面的一个下划线字符（_）。不过，变量名的第一个字符不能是数字。<br />
+2. 变量名是区分大小写字母的。<br />
+3. 单字符变量是一些系统特殊变量。＄ _、＄”、＄ /、＄ 2和＄ ＄<br />
+最后数字变量的初始值是0，字符串初始值是空“ ”。</p>
+<p>----------------------<br />
+<strong><span style="font-size: large;">列表和数组<br />
+</span></strong>数组跟C语言中有相同之处,但是处理起来更加灵活.而列表<br />
+C语言中是没有这个概念的.<br />
+一. 列表<br />
+首先我们来看一个列表的例子.<br />
+例如 {"abc",48,＄a,3.14}<br />
+perl提供一个机制可以简便列表的写法----qw,上面的例子可以写成如下的形式:<br />
+qw(abc 48 ＄a 3.14)<br />
+每个元素用空格分开,显然这样的写法就不适用于有空格的元素的列表.针对列表的元素在某一个范围时,perl提供了一种更加简便的写法,如下:<br />
+例如 (1..10)<br />
+(1..10,20..40)<br />
+(aa..zz)<br />
+(2.1..5.3)----(2.1,3.1,4.1,5.3)<br />
+(4.5..1.1)----()<br />
+(3..3)----(3)<br />
+(..)也被称之为范围操作符.</p>
+<p>二 数组<br />
+2.1 数组定义与初始化<br />
+数组的定义则不是以＄打头,取而代之的是@.列表是数组的存储基础，下面是一个数组的例子。<br />
+@array1=qw(abc def gh)<br />
+如同变量我们也只讨论与C语言不相同的部分。<br />
+数组变量赋值的方式有如下几种。<br />
+@array2=qw(boy girl);<br />
+@array3=(@array3,(man,woman),male,female);<br />
+列表和数组互相复制也有如下几种形式<br />
+(＄a,＄b,＄c)=(boy,girl,man);----＄a=boy,＄b=girl,＄c=man<br />
+(＄a,＄b,＄c)=(boy,girl);----＄a=boy,＄b=girl,＄c 没有赋值 undef<br />
+(＄a,＄b)=(boy,girl,man);----＄a=boy,＄b=girl,man空闲<br />
+(＄a,@b,＄c)=(boy,girl,man woman);----＄a=boy<br />
+@b=qw(girl man woman)<br />
+＄c没有赋值undef<br />
+最后一种说明一旦遇到数组将剩余所有的元素分配给数组。<br />
+除了上述方式还有数组与数组间:<br />
+@array4=(man,woman,girl,boy,male,female);<br />
+@array4[0..2]=(man,girl,male);<br />
+@array4[0,1]=(man,girl);<br />
+@subarray2 = @array4[1..3];</p>
+<p>2.2 数组的打印<br />
+下面两种格式打印结果完全不同<br />
+print @array1----abcdefgh<br />
+print "@array1"---abc def gh</p>
+<p>2.3 获取数组的某个单元<br />
+除了与C语言相同方式还有如下一种方式<br />
+@array1[1..2]----(def gh)</p>
+<p>2.4 获取数组大小<br />
+有两种方式与C语言完全不相同.<br />
+1. ＄#array1----2下标从0开始<br />
+2. ＄size=@array1----3总共有3个元素</p>
+<p>2.5 与数组相关的库函数<br />
+(1)sort--按字符顺序排序<br />
+@array = ("this", "is", "a","test");<br />
+@array2 = sort(@array); # @array2 = ("a","is", "test", "this")<br />
+@array = (70, 100, 8);<br />
+@array = sort(@array); # @array = (100, 70, 8) now<br />
+(2)reverse--反转数组<br />
+@array2 = reverse(@array);<br />
+@array2 = reverse sort (@array);<br />
+(3)chop--数组去尾<br />
+chop的意义是去掉STDIN（键盘）输入字符串时最后一个字符--换行符。<br />
+而如果它作用到数组上，则将数组中每一个元素都做如此处理。<br />
+@list = ("rabbit", "12345","quartz");<br />
+chop (@list); # @list = ("rabbi", "1234","quart") now<br />
+( 4)join/split--连接/拆分<br />
+join的第一个参数是连接所用的中间字符，其余则为待连接的字符数组。<br />
+＄string = join(" ", "this", "is","a", "string"); # 结果为"this is a string"<br />
+@list = ("words","and");<br />
+＄string = join("::", @list, "colons"); #结果为"words::and::colons"<br />
+@array = split(/::/,＄string); # @array = ("words","and", "colons") now</p>
+<p>三 关联数组<br />
+为了解决普通数组的局限性----当数组很大的时候遍历起来就会很困难。perl<br />
+提供了一种新的数组关联数组。他的定义区别于普通数组以%打头,区别于普通数组的是<br />
+他的下标可以是任何值这样以来他的下标就可以没有任何顺序。<br />
+例如 %array1=(key1,value1,key2,value2,key3,value3);<br />
+其结果是 ＄array1{key1}=value1，其中key1可以为任何值数字，字串变量等。可以看出关联数组的个数为偶数。<br />
+perl为了能更好把下标和值区分开来采用=〉方式，array1就可以改变成如下形式<br />
+%array1=(key1=&gt;value1,key2=&gt;value2,key3=&gt;value3);<br />
+关联数组的赋值与普通数组和列表相似。<br />
+为了更好的理解关联数组引入下面这一段话：</p>
+<p>你可以把它们想象为一组卡片。每张卡片上半部分是索引而下半部分是数值。</p>
+<p>关联数组的操作函数<br />
+1。keys(%array)操作符可生成由关联数组%array中的所有当前关键字组成的列表。即<br />
+返回奇数个元素(第1,3,5,7...个)的列表。<br />
+2。values(%array)操作符返回由关联数组%array中所有当前值组成的列表，即返回偶<br />
+数个列表。<br />
+3。echo(%array)操作符返回由一个关键字和一个值对构成的两个元素的表。对同一数组再操作时返回下一对值直至结束。若没有更多的对时，echo()返回空表。<br />
+4。delete ＄ARRAY{key};delete 是 Perl 所提供的函数，作用是删除关联数组中的一个key以及这个 key 所对应的 value。使用方法是 在 delete 函数之后，指定关联数组中要删除的key名称。<br />
+5。 exists (element)在Perl5中定义，判断关联数组中是否存在某元素，若存在，返回非零值(真)，否则返回零值(假)。</p>
+<p>------<br />
+<strong><span style="font-size: large;">操作符</span></strong><br />
+perl的操作符大部分跟C语言相同，所以下面还是介绍一些不相同<br />
+的地方。<br />
+一。 操作符<br />
+1。乘幂 **<br />
+例如 2**3 ----8<br />
+乘幂不可以超过系统的表示范围否则报错。<br />
+2。数字比较&lt;=&gt;<br />
+例如 a&lt;=&gt;b<br />
+若 a&gt;b  返回值 1<br />
+若 a=b 返回值 0<br />
+若 a&lt;b 返回值 -1<br />
+3。逻辑运算符 &amp;<br />
+之所以把它提出来讲是这个运算符不能应用于负整数，否则会把负数转换为<br />
+无符号数。<br />
+4。字串比较符号。<br />
+lt   小于<br />
+gt   大于<br />
+eq   等于<br />
+le   小于等于<br />
+ge   大于等于<br />
+ne   不等于<br />
+cmp   比较，返回 1, 0, or -1<br />
+cmp相当于数字比较符&lt;=&gt;<br />
+5. 字串合并符 .<br />
+例如 ＄string1="this is";<br />
+＄string2="combine str"<br />
+＄string3=＄string1.＄string2---string3="this is combine str"<br />
+从而引出另一个操作符 .=<br />
+6.字串复制操作符x<br />
+例如 ＄string4 = "t"x5;----string4="tttttt"<br />
+7.自加自减符号 ++ --<br />
+这个操作符大部分跟C语言中相同，只是字串同样可以++.字串的最后一个字母或者<br />
+数字加意<br />
+例如 ＄string5=“abc”;<br />
+＄string5++;----string5="abd"<br />
+＄string6="ab2";<br />
+＄string6++;----string6="ab1"<br />
+不过需要注意以下几点：<br />
+1。如果最后一位是"z""Z""9"进位<br />
+2。不可以做--运算，因为perl将先将字符串转换为数字零再进行自减<br />
+例如 ＄string7="abc";<br />
+＄string7--;----string7=-1<br />
+3。如果字符串中含有非字母且非数字的字符，或数字位于字母中，则经<br />
+过++运算前值转换为数字零，因此结果为1<br />
+例如 ＄string8="ab(d";<br />
+＄string8++;----string8=1<br />
+8.尖括号&lt;&gt;<br />
+这个字符串主要用于读写文件，到那时，你将能够用它的最简单的形式，即&lt;STDIN&gt;<br />
+来使用尖括号运算符。这种形式告诉P e r l，应该从标准输入设备（通常是键盘）<br />
+读取一行输入信息。<br />
+例如 ＄a=&lt;STDIN&gt;;<br />
+在键盘输入b则a=b<br />
+在输入的时候需要输入回车，用函数chmop ＄a则可以自动去除回车符。<br />
+9.一些单目的运算符<br />
+int  int(5.6234)  返回它的参数的整数部分5。<br />
+length  length("nose")  返回它的字符串参数的长度4。<br />
+lc  lc("ME TOO")  返回它的转换成小写字母的参数"me too"<br />
+uc  uc（"hal 9000"）  返回与l c相反的参数值"HAL 9000"<br />
+cos  cos（5 0）  返回弧度5 0的余弦值964966<br />
+rand  rand（5）  返回从0到小于该参数值之间的一个随机数<br />
+字。如果该参数被省略，则返回0至1之间的<br />
+一个数字<br />
+二 数字与字符的相互转换<br />
+遵循以下几个原则：<br />
+1。如果某个元素看上去是个数字，那么perl在需要数字时可以将它用作数字<br />
+例如 ＄string9="20";<br />
+＄b=＄string9-2;----b=18<br />
+2. 如果某个元素看上去是个数字，那么当perl需要一个字符串时，它可以使<br />
+用数字的字符串表示法<br />
+例如 ＄a=20;<br />
+＄string10=＄a."abc";----string10="20abc"<br />
+3. 如果某个元素看上去不像一个数字，但是你将它用在需要数字的地方，那<br />
+么perl在它的位置上使用0这个值.<br />
+例如 ＄string11="abc";<br />
+＄a=＄string11+5;----a=5</p>
+<p>----<br />
+<strong><span style="font-size: large;">流程控制程序<br />
+</span></strong>perl中也有C语言中if，while等流程控制程序，但是细节上还是<br />
+有所不同，另外perl中还存在unless和until一些语句。还有就是perl中<br />
+是没有switch语句的.<br />
+一 if语句<br />
+与C语言中不同的有如下几点：<br />
+1。 perl中采用elsif而不是C中的else if<br />
+2。 perl中的真假情况如下<br />
+数字0为假。<br />
+空的字符串（“”）和字符串“0”为假。<br />
+未定义值undef为假。<br />
+其他东西均为真。<br />
+3。 特殊的if表达式。。如果在i f语句块中只有一个表达式，那么该表达<br />
+式实际上可以放在i f语句的前面。<br />
+例如 if() {＄a=1};与＄a=1 if();是相同的。</p>
+<p>二 unless语句<br />
+unless语句是与if语句起着相反的作用。<br />
+例如 if(＄a&gt;5)与 unless(!＄a&gt;5)是相同的意思.</p>
+<p>三 until语句<br />
+首先看一个例子<br />
+for(＄a=0;＄a&lt;0;＄a++)<br />
+{<br />
+until(＄a==3)<br />
+{ print "＄a\n" unless(＄a&gt;5);<br />
+＄a++;<br />
+}<br />
+}<br />
+until的意思就是直到a=3才执行后面的语句.</p>
+<p>四 循环中的控制语句<br />
+last----break语句能够使当前正在运行的最里面的循环块退出<br />
+while(＄i&lt;15)<br />
+{<br />
+last if(＄i==5);<br />
+＄i++;<br />
+}<br />
+或者<br />
+for(＄i=0;＄i&lt;50;＄i++)<br />
+{<br />
+if(＄i=18)<br />
+{<br />
+last;<br />
+}</p>
+<p>}</p>
+<p>next----continue语句使得控制权被重新传递给循环的顶部，同时下一个<br />
+循环的重复运行则开始进行<br />
+for(＄i=0;＄&lt;100;＄i++)<br />
+{<br />
+next if(not ＄i%2)<br />
+print "even number"</p>
+<p>}</p>
+<p>redo其含义是重复此次循环，即循环变量不变，回到循环起始点，但要注意，<br />
+redo命令在do循环中不起作用。</p>
+<p>五 针对列表(数组)每个元素的循环：foreach<br />
+其语法如下:<br />
+foreach localvar (listexpr) {<br />
+statement_block;<br />
+}<br />
+例：<br />
+foreach ＄word (@words) {<br />
+if (＄word eq "the") {<br />
+print ("found the word 'the'\n");<br />
+}<br />
+}<br />
+注：<br />
+(1)此处的循环变量localvar是个局部变量，如果在此之前它已有值，则循环后仍<br />
+恢复该值。<br />
+(2)在循环中改变局部变量，相应的数组变量也会改变，如：<br />
+@list = (1, 2, 3, 4, 5);<br />
+foreach ＄temp (@list) {<br />
+if (＄temp == 2) {<br />
+＄temp = 20;<br />
+}<br />
+}<br />
+此时@list已变成了(1, 20, 3, 4, 5)。</p>
+<p>----------<br />
+<strong><span style="font-size: large;">函数<br />
+</span></strong>perl中的函数基本上跟C语言中相同，只是在声明和调用方式有些差别.<br />
+没有C语言那么严格.</p>
+<p>一 声明和调用<br />
+声明 sub function_name{}<br />
+调用 do function_name<br />
+&amp;function_name如果先声明则不用&amp;</p>
+<p>二 局部变量<br />
+my ＄a<br />
+my(＄a,＄b)<br />
+local(＄a)<br />
+其区别是：my定义的变量只在该子程序中存在；而local定义的变量不存在于<br />
+子程序中，但存在于该子程序和该子程序调用的子程序中</p>
+<p>三 预定义的子程序<br />
+PERL5预定义了三个子程序，分别在特定的时间执行，它们是：BEGIN子程序在程<br />
+序启动时被调用；END子程序在程序结束时被调用；AUTOLOAD子程序在找不到某个子<br />
+程序时被调用。你可以自己定义它们，以在特定时间执行所需要的动作。如：<br />
+BEGIN {<br />
+print("Hi! Welcome to Perl!\n");<br />
+}<br />
+AUTOLOAD{<br />
+print("subroutine ＄AUTOLOAD not found\n"); # 变量＄AUTOLOAD即未找到的子程序名<br />
+print("arguments passed: @_\n");<br />
+}<br />
+若同一个预定义子程序定义了多个，则BEGIN顺序执行，END逆序执行</p>
+<p>------<br />
+<strong><span style="font-size: large;">文件和文件夹<br />
+</span></strong>一 打开/关闭文件<br />
+open(file_handle,"file_path")<br />
+close(file_handle)</p>
+<p>二 读文件<br />
+语句＄line = &lt;MYFILE&gt;;从文件中读取一行数据存储到简单变<br />
+量＄line中并把文件指针向后移动一行。<br />
+语句@array = &lt;MYFILE&gt;;把文件的全部内容读入数组@array，<br />
+文件的每一行(含回车符)为@array的一个元素。</p>
+<p>三 写文件<br />
+open(file_handle,"&gt;file_patch")写入的数据覆盖原先的数据<br />
+open(file_handle,"&gt;&gt;file_patch")写入的数据追加原先的数据后<br />
+写入<br />
+print file_handle data</p>
+<p>四 文件测试<br />
+语法 if（-para file）<br />
+para有如下几种：<br />
+-b 是否为块设备<br />
+-c  是否为字符设备<br />
+-d  是否为目录<br />
+-e  是否存在<br />
+-f  是否为普通文件<br />
+-g  是否设置了setgid位<br />
+-k  是否设置了sticky位<br />
+-l  是否为符号链接<br />
+-o  是否拥有该文件<br />
+-p  是否为管道<br />
+-r  是否可读<br />
+-s  是否非空<br />
+-t  是否表示终端<br />
+-u  是否设置了setuid位<br />
+-w  是否可写<br />
+-x  是否可执行<br />
+-z  是否为空文件<br />
+-A  距上次访问多长时间<br />
+-B  是否为二进制文件<br />
+-C  距上次访问文件的inode多长时间<br />
+-M  距上次修改多长时间<br />
+-O  是否只为“真正的用户”所拥有<br />
+-R  是否只有“真正的用户”可读<br />
+-S  是否为socket<br />
+-T  是否为文本文件<br />
+-W  是否只有"真正的用户"可写<br />
+-X  是否只有"真正的用户"可执行</p>
+<p>五 打开/关闭目录<br />
+opendir(dir_handle,"patch")<br />
+close(dir_handle)</p>
+<p>六 读取目录<br />
+@file=readir(dir_handle)</p>
+<p>-----------------<br />
+<strong><span style="font-size: large;">格式化输出</span></strong><br />
+在一个perl中可以有多个format。<br />
+一 打印的基本步骤<br />
+1、将系统变量＄~设成所要使用的格式<br />
+2、调用函数write<br />
+函数write将结果输出到标准输出文件STDOUT，我们也可以使它将结果<br />
+输出到任意其它的文件中。最简单的方法就是把文件变量作为参数传递给write<br />
+例如 write (MYFILE);<br />
+也可以通过如下方式<br />
+例如 select(MYFILE)<br />
+＄~ = "MYFORMAT";<br />
+write;</p>
+<p>二 输出变量<br />
+如果在子程序中调用需要注意局部变量的作用域。另外输出的格式有<br />
+如下几种：<br />
+@&lt;&lt;&lt;  左对齐输出<br />
+@&gt;&gt;&gt;  右对齐输出<br />
+@|||  中对齐输出<br />
+@##.##     固定精度数字<br />
+@*  多行文本<br />
+每行的长度就是&lt; &gt; |的个数。<br />
+针对转义字符@&lt;&gt;作为平常字符输出的时候采用“”方式。</p>
+<p>格式的声明如下：<br />
+format WRITELETTER =<br />
+**********************************<br />
+@: @&lt;&lt;&lt;&lt;&lt;&lt;<br />
+＄a,＄b<br />
+**********************************<br />
+.</p>
+<p>三 带附加讯息的格式化输出<br />
+3.1 分页输出<br />
+设置页眉<br />
+format STDOUT_TOP =<br />
+Consolidated Widgets Inc. 1994 Annual Report<br />
+.<br />
+设置页的行数，默认是60<br />
+＄= = 66<br />
+此赋值语句必须出现在第一个write语句前。</p>
+<p>3.2 格式化字串的长度<br />
+在Perl中对长字符串（包含换行）进行格式化的值域定义很简单，只需把<br />
+打头的@字符换成^就行了，这种文本格式化中，Perl解释器在一行中放置尽可能多<br />
+的单词。每当输出一行文本，被输出的子串就从变量中删除，再次在域值中使用该<br />
+变量就把剩下的字符串继续按格式输出。当内容已输出完毕，该变量就成了空串，<br />
+再输出就会输出空行，为避免输出空行，可以在值域格式行首加一个~字符。<br />
+很明显，当字符串长度不明确时，这种用法很不方便，原因就在于它指明<br />
+了输出的行数上限，超过这一上限的字符就不会被输出，解决方法很简单，就是在<br />
+域值格式行首加两个~字符，这样就会持续按格式输出文本直到输出完毕。<br />
+例如 format MYFORMAT =<br />
+===================================<br />
+Here is the text I want to display.<br />
+~~ ^&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br />
+＄quotation</p>
+<p>--------------<br />
+<span style="font-size: large;"><strong>特殊变量<br />
+</strong></span>一 缺省变量和参数<br />
+变量名  英文名称  说明<br />
+＄_  ＄ARG  全局标量充当函数参数以及模式寻找空<br />
+间的缺省变量<br />
+默认的输入/输出和格式匹配空间<br />
+@_  n/a  存储数组参数，访问方式: ＄_[num]<br />
+传给子程序的参数列表<br />
+@ARGV  n/a  脚本的命令行参数<br />
+＄ARGV  n/a  当从空文件头&lt;&gt;读取时，它包含了当前文件的文件名<br />
+从默认的文件句柄中读取时的当前文件名</p>
+<p>二 正规表达式变量<br />
+＄(num)  n/a  n/a<br />
+＄&amp;  ＄MATCH  最近一次成功的匹配中相匹配的字符串<br />
+＄'  ＄POSTMATCH  最近一次成功的匹配子串之后的字符串<br />
+＄`  ＄PREMATCH  最近一次成功的匹配子串之前的字符串<br />
+＄+  ＄LAST_PAREN_MATCH  最近一次成功的匹配同一组子模式相匹配的最后<br />
+一个子串<br />
+与上个正则表达式搜索格式匹配的最后一个括号</p>
+<p>三 输入/输出变量<br />
+＄.  ＄INPUT_LINE_NUMBER 上次阅读的文件的当前输入行号<br />
+＄/  ＄INPUT_RECORD_SEPARATOR<br />
+＄\   ＄OUTPUT_RECORD_SEPARATOR 当前输入记录分隔符,默认情况是新行<br />
+＄|   ＄OUTPUT_AUTOFLUSH 控制对当前选择的输出文件句柄的缓冲<br />
+＄,  ＄OUTPUT_FIELD_SEPARATOR 当前输出字段分隔符<br />
+＄"  ＄LIST_SEPARATOR 列表分隔符<br />
+＄*  设置1表示处理多行格式.现在多以/s和/m修饰符取代之.<br />
+＄-[0] 代表当前匹配的正则表达式在被匹配的字符串中的起始的位置<br />
+＄+[0]  代表当前匹配的正则表达式在被匹配的字符串中的终止的位置</p>
+<p>四 文件句柄/格式变量<br />
+＄#  ＄OFMT 打印数字时默认的数字输出格式<br />
+＄  ＄OUTPUT_AUTOFLUSH 当前输出记录的分隔符<br />
+＄%  ＄FORMAT_PAGE_NUMBER 当前输出通道的当前页号<br />
+＄=  ＄FORMAT_LINES_PER_PAGE 当前页面可打印行的数目<br />
+＄-  ＄FORMAT_LINES_LEFT 当前页可打印的行数,属于Perl格式系统的一部分<br />
+＄~  ＄FORMAT_NAME 当前报告格式的名字<br />
+＄^  ＄FORMAT_TOP_NAME 当前通道最上面的页面输出格式名字<br />
+＄:  ＄FORMAT_LINE_BREAK_CHARACTERS 字符设置,此后的字符串将被分开,以填充连续的字段<br />
+＄^L  ＄FORMAT_FORMFEED 发送到输出通道的走纸换页符<br />
+＄^A  ＄ACCUMULATOR 打印前用于保存格式化数据的变量<br />
+＄;  在仿真多维数组时使用的分隔符</p>
+<p>五 错误变量<br />
+＄?  ＄CHILD_ERROR 返回上一个外部命令的状态<br />
+＄@  ＄EVAL_ERROR Perl解释器从eval语句返回的错误消息<br />
+＄!  ＄ERRNO  #根据上下文内容返回错误号或者错误串<br />
+＄^E  ＄EXTENDED_OS_ERROR 在非UNIX环境中的操作系统扩展错误信息</p>
+<p>六 系统变量<br />
+＄＄  ＄PROCESS_ID Perl解释器的进程ID<br />
+＄&lt;  ＄REAL_USER_ID 当前执行解释器的用户的真实ID<br />
+＄&gt;  ＄EFFECTIVE_USER_ID 当前进程的有效用户ID<br />
+＄(  ＄REAL_GROUP_ID 当前进程的组ID<br />
+＄)  ＄EFFECTIVE_GROUP_ID 当前进程的有效组ID<br />
+＄0  ＄PROGRAM_NAME 包含正在执行的脚本的文件名<br />
+＄^X  ＄EXECUTABLE_NAME Perl二进制可执行代码的名字<br />
+＄]  n/a 数组中第一个元素的索引号<br />
+＄[  n/a Perl解释器的子版本号<br />
+＄^O  ＄OSNAME 操作系统名<br />
+＄^T  ＄BASETIME 从新世纪开始算起,脚步本以秒计算的开始运行的时间<br />
+＄^W  ＄WARNING 警告开关的当前值<br />
+%ENV  n/a 环境变量列表<br />
+%SIG  n/a 信号列表及其处理方式<br />
+＄^C  ＄COMPILING<br />
+＄^D  ＄DEBUGGING 调试标志的值<br />
+＄^F  ＄SYSTEM_FD_MAX 最大的文件捆述符数值<br />
+＄^I  ＄INPLACE_EDIT 内置控制编辑器的值<br />
+＄^M  n/a 备用内存池的大小<br />
+＄^P  ＄PERLDB 指定当前调试值的内部变量<br />
+＄^R  ＄LAST_REGEXP_CODE_RESULT 正则表达式块的上次求值结果<br />
+＄^S  ＄EXCEPTIONS_BEING_CAUGHT 当前解释器状态<br />
+＄^V  ＄PERL_VERSION<br />
+＄^H  由编译器激活的语法检查状态</p>
+<p>七 其余<br />
+@INC  n/a 在导入模块时需要搜索的目录列表<br />
+%INC  去n/a 通过do或require包含的文件列表</p>
+<p>--------------<br />
+<strong><span style="font-size: large;">命令行工具<br />
+</span></strong>debug可以帮助我们很好的review我们的代码。类似于VC中的<br />
+debug可以step by step的调试程序，同样可以设置断点。可以在debug<br />
+过程中改变某个变量的值。例如<br />
+DB&lt;1&gt; ＄a=5<br />
+另外如果想查看某个变量的值可以用print命令<br />
+DB&lt;1&gt;print ＄a</p>
+<p>一 开始debug及相关的指令<br />
+perl -d script_name<br />
+如果你的脚本的语法或函数拼写没有错误的话就直接显示<br />
+Loading DB routines from perl5db.pl version 1.0401#(你的版本号可能不一样)<br />
+Emacs support available.<br />
+Enter h or `h h` for help.<br />
+main::(文件名:1):  ...............    #显示该脚本的第一行可执行代码</p>
+<p>DB&lt;1&gt;_   #表示在等待他的第一个命令</p>
+<p>其中1表示第一个debug指令，如果你再输入一个指令n数目就会自动加一。<br />
+DB&lt;1&gt; n<br />
+n表示next，表示程序运行下一步。<br />
+DB&lt;2&gt; l<br />
+l表示运行当前10行，再输入l则运行下一个10行。如果想从某特定行开始运<br />
+行输入如下命令<br />
+DB&lt;3&gt;l line_number 例如 DB&lt;3&gt;l 11<br />
+同样可以设置起始行和结束行，命令如下<br />
+DB&lt;4&gt;l start_no-end_no 例如 DB&lt;4&gt;l 10-15<br />
+程序运行的当前行由==&gt;来表示</p>
+<p>二 设置断点<br />
+设置断点的命令如下<br />
+DB&lt;5&gt;b line_no例如 DB&lt;5&gt;b 22<br />
+与其对应的另一个命令，就是继续执行程序到下一个断点或者程序的结束<br />
+DB&lt;6&gt;c<br />
+取消断点命令如下<br />
+DB&lt;7&gt;d line_no例如 DB&lt;7&gt;d 22<br />
+查看所有的断点<br />
+DB&lt;8&gt;L</p>
+<p>三 其他指令<br />
+DB&lt;9&gt;R  重新启动程序</p>
+<p>DB&lt;10&gt;q 退出debug程序</p>
+<p>DB&lt;11&gt;s 单步执行你的程序,它可以执行函数，<br />
+然后在函数的第1个指令处停止运行</p>
+<p>四 其他perl命令行<br />
+perl -c 由此检查所有语法错误。每次修改 perl 程序之后我都<br />
+会立刻使用它来找到任何语法错误。<br />
+-W 与#!user/bin/perl -w作用相同，后者应用比前者要好<br />
+-T 它让 perl 出于了 taint 模式中。在这个模式里，Perl<br />
+会质疑任何程序外传来的数据。<br />
+-e 可以让 Perl 代码在命令行上被编译器直接执行.例如：<br />
+perl -e print "execute perl diretly";<br />
+-v 若要了解更加详细的信息，比如该解释程序是如何创建的，<br />
+何时创建的.<br />
+-n 可用于将任何- e语句封装在该小程序中<br />
+while(&lt;&gt;)<br />
+{<br />
+}<br />
+例如：perl -n -c 's/^\s+//g; print ＄_' file1<br />
+名字为file1的文件被打开，并被赋予while循环中的＄ _，<br />
+while(&lt;&gt;)<br />
+{<br />
+s/^\s+//g;<br />
+print ＄_<br />
+}</p>
+<p>-p 与-n作用相同，只是自动写入另一个文件<br />
+例如：perl -p -c 's/^\s+//g; print ＄_' file1&gt;file2</p>
+<p>-------------<br />
+<strong><span style="font-size: large;">  模块<br />
+</span></strong> 这里的模块感觉上相当于一个类库。我们可以调用这个<br />
+类库里的函数。我们也称之为package即包。<br />
+一 如何使用模块<br />
+使用如下的命令： use MODULE_NAME<br />
+例如  use Cwd<br />
+位置随便放,不过就像C语言中一样最好是放在程序的最开始.<br />
+对模块中某个函数的引用<br />
+$MODULE_NAME::FUNCTION_NAME<br />
+例如 $file::copy<br />
+这个有点类似于C plusplus的语法.</p>
+<div>
+二 使用模块的步骤<br />
+1) Perl解释程序打开你的程序并读入所有代码，直到use Cwd语句被找到。<br />
+2) 当你的perl解释程序安装时，它将得到关于它的安装录的通知。该目录被搜索，以便找出称为Cwd的模块，该模块是包含perl代码的一个文件。<br />
+3) Perl读取该模块，该模块运行时需要的所有函数和变量均被初始化。<br />
+4) Perl解释程序从上次终止的位置开始，继续读取和编译你的程序当有关模块出错的时候可能有以下两种情况:<br />
+1. 模块名拼写错误.<br />
+2. 当前版本的perl或者perl标准包不包含这个模块.</p>
+<p>---转贴 http://blog.csdn.net/yc0188/category/307198.aspx</p>
+<p>--此乃转贴，有些总结的不错，但是不过完善，自己还在学习，稍后把自己学习到的整理起来！</p></div>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/by-bulk-collect-reduce-loop-overhead.html" data-toggle="tooltip" data-placement="top" title="通过bulk collect减少loop处理的开销">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/little-stroll-mzd-4s-shop.html" data-toggle="tooltip" data-placement="top" title="小逛MZD 4S店">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/code/learning-notes-for-perl-zt" data-title="perl学习笔记 --zt"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="1. 变量
+2. 列表和数组
+3. 操作符
+4. 流程控制
+5. 函数
+6. 文件
+7. 格式化输出
+8. 特殊变量
+9. 命令行
+10 模块
+-----... | Microdust:David's blog"
+                    data-url="http://dbaeyes.github.io/code/learning-notes-for-perl-zt.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">Share to：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        <li><a class="ds-facebook" href="javascript:void(0);" data-service="facebook">Facebook</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/code/learning-notes-for-perl-zt" data-title="perl学习笔记 --zt" data-url="http://dbaeyes.github.io/code/learning-notes-for-perl-zt.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dbaeyes"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

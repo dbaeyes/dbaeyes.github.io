@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>Windows XP局域网无法访问网上邻居 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/os/windows-xp-lan-cant-access-my-network-places.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#net" title="net">net</a>
+                        
+                        <a class="tag" href="/Tags/#windows" title="windows">windows</a>
+                        
+                    </div>
+                    <h1>Windows XP局域网无法访问网上邻居</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on January 28, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <h1></h1>
+<div>
+<p>在局域网内安装了Windows XP的电脑不能与安装了Windows 98的电脑互相访问，安装了Windows XP的电脑与安装了Windows XP的电脑也不能互相通信。在工作站访问服务器时，工作站的“网上邻居”中可以看到服务器的名称，但是点击后却无法看到任何共享内容,或者提示找不到网络径、无权访问等问题。</p>
+<p>现将解决办法列出！</p>
+<p>1、检查计算机之间的物理连接。</p>
+<p>2、确保所有计算机上都安装了TCP/IP，并且工作正常。</p>
+<p>3、使用ping命令测试网络中两台计算机之间的连接。</p>
+<p>4、使用ping命令测试网络中名称解析是否正常。</p>
+<p>5、正确安装网络组件。<br />
+首先右击网上邻居-属性，选择要共享的网卡。把IP设置在局域网的同一个网段上。比如192.168.1.X网段。然后看一下TCP/IP的高级属性中，是否开启NETBIOS。<br />
+在利用WINNT4.0构建的网络系统中，对每一台主机的唯一标识信息是它的NetBIOS名，系统是利用WINS服务、信息广播方式及Lmhost文件等多种模式将NetBIOS名解析为相应IP地址，从而实现信息通讯。<br />
+在内部网络系统中(也就是通常我们所说的局域网中)，利用NetBIOS名实现信息通讯是非常方便、快捷的。但是在Internet上对一台主机的唯一标识信息是它的FQDN格式的域名(163.com)，在Internet是利用DNS标准来实现将域名解析为相应IP地址，WIN2K支持动态DNS，运行活动目录服务的机器可动态地更新DNS表。<br />
+WIN2K网络中可以不再需要WINS服务，但是WIN2K仍然支持WINS，这是由于向后兼容的原因。目前，大多数网络是混合网，既有Win98等系统，又有WINXP/WIN2K等系统，因此需要在TCP/IP协议上捆绑NETBIOS解析计算机名。<br />
+查看是否选定“文件和打印服务”组件，如果已将其取消选中，“浏览服务”将不绑定到NetBIOS接口。成为备份浏览器并且没有启用“文件和打印共享”的基于Windows的计算机无法将浏览列表与客户机共享。任何将要包括在浏览列表中的计算机也都必须启用“文件和打印共享”。</p>
+<p>6、启用打印与文件共享。</p>
+<p>7、启动"计算机浏览器"服务。</p>
+<p>8、起用Guest(来宾)帐户。<br />
+打开控制面板－&gt;用户帐户或者在管理工具－&gt;计算机管理－&gt;本地用户和组中打开Guest帐户</p>
+<p>9、允许Guest(来宾)帐号从网络上访问。<br />
+在运行里输入gpedit.msc，弹出组策略管理器，在‘计算机配置-Windows设置-本地策略-用户权利指派’中，有“拒绝从网络访问这台计算机”策略阻止从网络访问这台计算机，如果其中有GUEST帐号,解决办法是删除拒绝访问中的GUEST帐号。</p>
+<p>10、防火墙：<br />
+确保WINXP自带的防火墙没有开启，打开本地连接属性－&gt;高级，关掉Internet连接防火墙。如果使用了第三方的防火墙产品，参考其使用手册，确保防火墙没有禁止以下端口的通讯：UDP－137、UDP－138、TCP－139、TCP－445（仅WIN2K及以后的操作系统）。<br />
+Windows XP最新的SP2补丁对ICF做了很大的改进，功能更强大了，ICF有了自己的设置项，安装SP2后，默认情况下，启用ICF防火墙，不允许任何外部主动连接，即使是本地的应用程序要访问网络也需要在许可列表中做设置。<br />
+但是防火墙阻断正常的网络浏览服务通讯，结果是别人在网上邻居中看不到你的计算机，有没有两全其美的办法在开启防火墙的前提下允许浏览服务。<br />
+办法是，如果开启了ICF，打开属性，在服务这栏，选择添加，添加服务的对话框共有四个编辑框，最上边是描述服务名称，以便于记忆，从上到下第二个是应用服务的IP地址或名称，输入127.0.0.1表示本机。<br />
+下面连个是内外端口号，旁边的tcp/udp标示这个端口是udp连接还是tcp连接。<br />
+按照下面的表格输入3个服务<br />
+名称　　　　　　　　　　　　　协议　　　　　端口<br />
+NetBIOS Name Service　　　　　UDP　　　　　137<br />
+NetBIOS Datagram Service　　　UDP　　　　　138<br />
+NetBIOS Session Service　　　　TCP　　　　　139<br />
+137/UDP -- NetBIOS名称服务器,网络基本输入/输出系统(NetBIOS)名称服务器(NBNS)协议是TCP/IP上的NetBIOS (NetBT)协议族的一部分，它在基于NetBIOS名称访问的网络上提供主机名和地址映射方法。<br />
+138/UDP -- NetBIOS数据报,NetBIOS数据报是TCP/IP上的NetBIOS (NetBT)协议族的一部分，它用于网络登录和浏览。<br />
+139/TCP -- NetBIOS会话服务,NetBIOS会话服务是TCP/IP上的NetBIOS (NetBT)协议族的一部分，它用于服务器消息块(SMB)、文件共享和打印。</p>
+<p>11、检查RPC、Plug and Play服务是否已启动，检查相应的系统文件夹的权限，尝试重新注册以下的动态链接库：<br />
+regsvr32 netshell.dll<br />
+regsvr32 netcfgx.dll<br />
+regsvr32 netman.dll</p>
+<p>12、设置帐号和密码 。<br />
+由于WinNT内核的操作系统，在访问远程计算机的时候，好像总是首先尝试用本地的当前用户名和密码来尝试，可能造成无法访问，在这里把用户密码添加进去就可以了。</p>
+<p>13、多种方法访问“网络计算机” 。<br />
+例如要打开网络中名为“Killer”的计算机，其IP地址为192.168.1.8，如果你不清楚其它机器的IP地址，你可以使用“PING计算机名”来获得它的IP地址。<br />
+用计算机名访问，NETBIOS提供的服务。点击“开始”菜单，单击“运行”，在地址栏输入“\\Killer”，单击“确定”。<br />
+用IP地址访问，在地址输入栏中输入“\\192.168.1.8”，单击“确定”。<br />
+用搜索计算机的方法访问，计算机更新列表需要时间，搜索计算机可以加快更新列表。点击“网上邻居”右键中的“搜索计算机”，输入计算机名，点击“立即搜索”，就可以看到你要访问的计算机。直接双击右边计算机名就可以打开它了。<br />
+用映射驱动器的方法访问，进入DOS方式，输入“NET VIEW <a href="file://killer/">\\killer</a>”，回车 这是查看计算机Killer上有哪些共享文件夹，如D。再输入NET USE Z:\\Killer\\D 将计算机IBM-ZB共享的文件夹D映射为H：盘，在命令提示符下键入“Z:”。你会发现你已经连到Killer计算机上了</p>
+<p>共享访问报"无权限"解决方法</p>
+<p>访问报无权限解决方法:<br />
+1.设置本地的administrator账户的密码.<br />
+2.设置网络访问模式为经典模式.<br />
+3.设置允许从网络访问计算机的用户账户(加入Guest组).<br />
+4.设置禁止从网络访问计算机的用户账户(删除Guest组).</p>
+<p>设置方法:<br />
+开始--&gt;<br />
+运行gpedit.msc--&gt;<br />
+计算机配置--&gt;<br />
+windows设置--&gt;<br />
+安全设置(Security Settings)--&gt;<br />
+本地策略(Local Policies)--&gt;</p>
+<p>1.:用户权利指派(User Rights Assignment)--&gt;从网络访问此计算机(Access this computer from the network)--&gt;添加Guest组.<br />
+2.:用户权利指派(User Rights Assignment)--&gt;拒绝从网络访问这台计算机(Deny access to this computer from the network)--&gt;删除Guest组.<br />
+3.:安全选项(Security Options)--&gt;网络访问:本地账户的共享和安全模式(Network access:Sharing and security model for local accounts)--&gt;更改为经典模式.<br />
+如果你完全依了上面的方法都不行，请运行REGEDIT，到：<br />
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa 上将此子健中的值 restrictanonymous设为0就行了。<br />
+把：restrictanonymoussam的值也改成0吧。<br />
+以下是说明：<br />
+1、 RestrictAnonymous 中登记了控制任何用户获取本机信息的级别的设置，如果 RestrictAnonymous 被设置为0（默认值）的话，任何用户都可以通过网络获取本机的信息，包含用户名，详细的帐号策略和共享名。这些信息可以被攻击者在攻击计算机的时候所利用。通过这些信息，攻击者就有可能了解到当前计算机的系统管理员帐号，网络共享的路径以及不健壮的密码。修改此安全级别的方法如下：运行 Regedit.exe 编辑注册表，定位到子健 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa 上将此子健中的值 restrictanonymous 由不安全的 0值 修改为安全级别高一些值 1 或 2。注意：此安全级别如果提高的话有可能造成本计算机在局域网内无法被访问到。<br />
+2、当禁用了TIP/IP高级选项中的Wins中的NetBios设置，局域网无法被访问到。<br />
+3、如果中了震荡波病毒将不能访问到局域网。<br />
+4、如果没有将IP设置成固定IP，局域网功能将受限。</p>
+<p>网上邻居常见问题及答案</p>
+<p>我有时在网上邻居可以看到，有时却一台机都看不到？<br />
+答：Microsoft网络客户必须登录才能看到网上邻居，如果开机时你没有登录而是选取消，那么在网上邻居就一台机都看不到。你可以点开始-&gt;注销，重新登录，然后一切就正常了。</p>
+<p>我在网上邻居里只能看到我自己一台机？<br />
+答：一般而言，你的网卡未设置好，或者网线有问题。</p>
+<p>我的网上邻居只能看到一部分机器,而且不能访问OA或上网？<br />
+答：你的机器网卡可能被禁止了。如果你自己乱设了IP地址的话，那就是你应得的报应。你只能写封道歉信给网管了。</p>
+<p>我已经按要求安装了网络组件，但访问网上邻居还是不行？<br />
+答：可以考虑一下NetBui协议，有时NetBui会出现假安装的现象。删除NetBui协议，确定退出，然后再重新安装NetBUI协议一次。</p>
+<p>我可以访问别人的机器，但我在网上邻居看不到自己？<br />
+答：你可能没有安装Microsoft文件及打印机共享。Microsoft网络客户使你可以访问别人，Microsoft文件及打印机共享使别人可以访问你。</p>
+<p>网上邻居还是不行？<br />
+答：协议是相互的，就象一种语言。如果还是不行，考虑一下对方，只有双方的协议都设置正确的话，才会一切正常的。</p>
+<p>F：为什么在网上邻居访问对方提示没有权限<br />
+Q：两台机器都要打开Guest帐户（WIN2K/XP）。</p>
+<p>F：为什么点击对方机器显示无法连接？<br />
+Q：确保ping对方IP和机器名都能够正常返回信息。</p>
+<p>F：为什么在网上邻居看不到对方的机器或者能看到却访问不了？<br />
+Q：按照微软的解释，这种现象有时是正常的，这需要了解网上邻居及其使用的协议NetBIOS的工作原理，参见后面的原理部分。</p>
+<p>F：有的机器开机或关机，别的机器就用不了网上邻居了？<br />
+Q：同上.。</p>
+<p>F：如果不使用网上邻居，还有其它办法方便的访问其它机器？<br />
+Q：可以不打开网上邻居，直接在搜索中搜索对方的IP或者机器名，也可以在运行中输入<a>\\\\\\\\x.x.x.x</a>（对方 IP） or XXXX（对方机器名）。（同样会用到NetBIOS协议）</p>
+<p>F：两台机器不在一个工作组中是否可以使用网上邻居？<br />
+Q：可以。</p>
+<p>F：两台机器经过路由器连接，是否可以在网上邻居看到，又是否可以访问呢？<br />
+Q：不能看到，因为路由器不会转发广播（经过设置UDP透传可以），可以使用FAQ2.6.的方法互相访问，但仅限于WIN2K/XP。</p>
+<p>F：为什么Win9X/Me访问不了或者看不到Win2K/XP，而反过来却没有问题呢？<br />
+Q：确认WIN2K/XP打开了Guest帐户，启用了“浏览服务”；Win9X/Me安装了“打印机和文件共享”，NetBIOS解析没有问题，并且双方没有防火墙的阻挡。</p>
+<p>F：为什么访问需要密码？<br />
+Q：确认对方打开了Guest帐户，或者对方没有登陆到域模式。Win9x/Me如果需要登陆到域，不要按Esc取消进入系统。</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/50-sql-statements-involved-a-subject-zt.html" data-toggle="tooltip" data-placement="top" title="一个题目涉及到的50个Sql语句 (zt)">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/game-old.html" data-toggle="tooltip" data-placement="top" title="游戏？ 老了？">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/os/windows-xp-lan-cant-access-my-network-places" data-title="Windows XP局域网无法访问网上邻居"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="
+
+在局域网内安装了Windows XP的电脑不能与安装了Windows 98的电脑互相访问，安装了Windows XP的电脑与安装了Windows XP... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/os/windows-xp-lan-cant-access-my-network-places.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/os/windows-xp-lan-cant-access-my-network-places" data-title="Windows XP局域网无法访问网上邻居" data-url="http://dbaeyes.github.io/os/windows-xp-lan-cant-access-my-network-places.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

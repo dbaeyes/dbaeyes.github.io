@@ -1,0 +1,25 @@
+---
+layout: post
+title: hit ratio for the buffer cache
+date: 2008-09-04 10:57:49.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags: []
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '2276'
+---
+<p>Calculate the hit ratio for the buffer cache with this formula:</p>
+<div>
+<p>Hit Ratio = 1 - (physical reads / (db block gets + consistent gets))</p>
+<p>[cc lang="sql"] SELECT 1 - ((p.value - l.value - d.value) / s.value) "Buffer Cache Hit Ratio"<br />
+FROM v$sysstat s, v$sysstat l, v$sysstat d, v$sysstat p<br />
+WHERE s.name = 'session logical reads'<br />
+AND d.name = 'physical reads direct'<br />
+AND l.name = 'physical reads direct (lob)'<br />
+AND p.name = 'physical reads'[/cc]</p>
+</div>

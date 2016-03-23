@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>java -- static - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/code/java-static.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                    </div>
+                    <h1>java -- static</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on February 14, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>一、<span style="font-family: 'Times New Roman';">Static</span></p>
+<div>请先看下面这段程序：<br />
+<span style="font-family: 'Times New Roman';">public class Hello</span><span style="font-family: 'Times New Roman';">{<br />
+public static void main(String[] args)<br />
+{<br />
+System.out.println("Hello,world!");<br />
+}<br />
+}</span>看过这段程序，对于大多数学过<span style="font-family: 'Times New Roman';">Java</span>的从来说，都不陌生。即使没有学过<span style="font-family: 'Times New Roman';">Java</span>，而学过其它的高级语言，例如<span style="font-family: 'Times New Roman';">C</span>，那你也应该能看懂这段代码的意思。它只是简单的输出<span style="font-family: 'Times New Roman';">“Hello,world”</span>，一点别的用处都没有，然而，它却展示了<span style="font-family: 'Times New Roman';">static</span>关键字的主要用法。</p>
+<p>在<span style="font-family: 'Times New Roman';">1</span>处，我们定义了一个静态的方法名为<span style="font-family: 'Times New Roman';">main</span>，这就意味着告诉<span style="font-family: 'Times New Roman';">Java</span>编译器，我这个方法不需要创建一个此类的对象即可使用。你还得你是怎么运行这个程序吗？一般，我们都是在命令行下，打入如下的命令<span style="font-family: 'Times New Roman';">(</span>加下划线为手动输入<span style="font-family: 'Times New Roman';">)</span>：</p>
+<p><span style="font-family: 'Times New Roman';">javac Hello.java</span></p>
+<p><span style="font-family: 'Times New Roman';">java Hello</span></p>
+<p><span style="font-family: 'Times New Roman';">Hello,world!</span></p>
+<p>这就是你运行的过程，第一行用来编译<span style="font-family: 'Times New Roman';">Hello.java</span>这个文件，执行完后，如果你查看当前，会发现多了一个<span style="font-family: 'Times New Roman';">Hello.class</span>文件，那就是第一行产生的<span style="font-family: 'Times New Roman';">Java</span>二进制字节码。第二行就是执行一个<span style="font-family: 'Times New Roman';">Java</span>程序的最普遍做法。</p>
+<p>执行结果如你所料。在<span style="font-family: 'Times New Roman';">2</span>中，你可能会想，为什么要这样才能输出。好，我们来分解一下<span style="font-family: 'Times New Roman';"> </span>这条语句。（如果没有安装<span style="font-family: 'Times New Roman';">Java</span>文档，请到<span style="font-family: 'Times New Roman';">Sun</span>的官方网站浏览<span style="font-family: 'Times New Roman';">J2SE API</span>）首先，<span style="font-family: 'Times New Roman';">System</span>是位于<span style="font-family: 'Times New Roman';">java.lang</span>包中的一个核心类，如果你查看它的定义，你会发现有这样一行：</p>
+<p><span style="font-family: 'Times New Roman';">public static final PrintStream out;</span></p>
+<p>接着在进一步，点击<span style="font-family: 'Times New Roman';">PrintStream</span>这个超链接，在<span style="font-family: 'Times New Roman';">METHOD</span>页面，你会看到大量定义的方法，查找<span style="font-family: 'Times New Roman';">println</span>，会有这样一行：</p>
+<p><span style="font-family: 'Times New Roman';">public void println(String x)</span></p>
+<p>好了，现在你应该明白为什么我们要那样调用了，<span style="font-family: 'Times New Roman';">out</span>是<span style="font-family: 'Times New Roman';">System</span>的一个静态变量，所以可以直接使用，而<span style="font-family: 'Times New Roman';">out</span>所属的类有一个<span style="font-family: 'Times New Roman';">println</span>方法。</p>
+<p>静态方法</p>
+<p>通常，在一个类中定义一个方法为<span style="font-family: 'Times New Roman';">static</span>，那就是说，无需本类的对象即可调用此方法。如下所示：</p>
+<p><span style="font-family: 'Times New Roman';">class Simple</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">   static void go()</span></p>
+<p><span style="font-family: 'Times New Roman';">   {</span></p>
+<p><span style="font-family: 'Times New Roman';">     System.out.println("Go...");</span></p>
+<p><span style="font-family: 'Times New Roman';">   }</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">public class Cal</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">public static void main(String[] args)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    Simple.go();</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p>调用一个静态方法就是<span style="font-family: 'Times New Roman';">“</span>类名<span style="font-family: 'Times New Roman';">.</span>方法名<span style="font-family: 'Times New Roman';">”,</span>静态方法的使用很简单如上所示。一般来说，静态方法常常为应用程序中的其它类提供一些实用工具所用，在<span style="font-family: 'Times New Roman';">Java</span>的类库中大量的静态方法正是出于此目的而定义的。</p>
+<p>静态变量</p>
+<p>静态变量与静态方法类似。所有此类实例共享此静态变量，也就是说在类装载时，只分配一块存储空间，所有此类的对象都可以操控此块存储空间，当然对于<span style="font-family: 'Times New Roman';">final</span>则另当别论了。看下面这段代码：</p>
+<p><span style="font-family: 'Times New Roman';">class Value</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">static int c=0;</span></p>
+<p><span style="font-family: 'Times New Roman';">static void inc()</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    c++;</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">class Count</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">public static void prt(String s)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    System.out.println(s);</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">public static void main(String[] args)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    Value v1,v2;</span></p>
+<p><span style="font-family: 'Times New Roman';">    v1=new Value();</span></p>
+<p><span style="font-family: 'Times New Roman';">    v2=new Value();</span></p>
+<p><span style="font-family: 'Times New Roman';">    prt("v1.c="+v1.c+" v2.c="+v2.c);</span></p>
+<p><span style="font-family: 'Times New Roman';">    v1.inc();</span></p>
+<p><span style="font-family: 'Times New Roman';">    prt("v1.c="+v1.c+" v2.c="+v2.c);</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p>结果如下：</p>
+<p><span style="font-family: 'Times New Roman';">v1.c=0 v2.c=0</span></p>
+<p><span style="font-family: 'Times New Roman';">v1.c=1 v2.c=1</span></p>
+<p>由此可以证明它们共享一块存储区。<span style="font-family: 'Times New Roman';">static</span>变量有点类似于<span style="font-family: 'Times New Roman';">C</span>中的全局变量的概念。值得探讨的是静态变量的初始化问题。我们修改上面的程序：</p>
+<p><span style="font-family: 'Times New Roman';">class Value{</span></p>
+<p><span style="font-family: 'Times New Roman';">static int c=0;</span></p>
+<p><span style="font-family: 'Times New Roman';">Value(){</span></p>
+<p><span style="font-family: 'Times New Roman';">    c=15;</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">Value(int i){</span></p>
+<p><span style="font-family: 'Times New Roman';">    c=i;</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">static void inc(){</span></p>
+<p><span style="font-family: 'Times New Roman';">    c++;</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">class Count{</span></p>
+<p><span style="font-family: 'Times New Roman';">public static void prt(String s){</span></p>
+<p><span style="font-family: 'Times New Roman';">    System.out.println(s);</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">    Value v=new Value(10);</span></p>
+<p><span style="font-family: 'Times New Roman';">    static Value v1,v2;</span></p>
+<p><span style="font-family: 'Times New Roman';">    static{</span></p>
+<p><span style="font-family: 'Times New Roman';">      prt("v1.c="+v1.c+"</span></p>
+<p><span style="font-family: 'Times New Roman';">       v2.c="+v2.c);</span></p>
+<p><span style="font-family: 'Times New Roman';">      v1=new Value(27);</span></p>
+<p><span style="font-family: 'Times New Roman';">      prt("v1.c="+v1.c+"</span></p>
+<p><span style="font-family: 'Times New Roman';">       v2.c="+v2.c);</span></p>
+<p><span style="font-family: 'Times New Roman';">      v2=new Value(15);</span></p>
+<p><span style="font-family: 'Times New Roman';">      prt("v1.c="+v1.c+"</span></p>
+<p><span style="font-family: 'Times New Roman';">       v2.c="+v2.c);</span></p>
+<p><span style="font-family: 'Times New Roman';">    }</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Times New Roman';">public static void main</span></p>
+<p><span style="font-family: 'Times New Roman';">(String[] args)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    Count ct=new Count();</span></p>
+<p><span style="font-family: 'Times New Roman';">    prt("ct.c="+ct.v.c);</span></p>
+<p><span style="font-family: 'Times New Roman';">    prt("v1.c="+v1.c+" v2.c="+v2.c);</span></p>
+<p><span style="font-family: 'Times New Roman';">    v1.inc();</span></p>
+<p><span style="font-family: 'Times New Roman';">    prt("v1.c="+v1.c+" v2.c="+v2.c);</span></p>
+<p><span style="font-family: 'Times New Roman';">    prt("ct.c="+ct.v.c);</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p>运行结果如下：</p>
+<p><span style="font-family: 'Times New Roman';">v1.c=0 v2.c=0</span></p>
+<p><span style="font-family: 'Times New Roman';">v1.c=27 v2.c=27</span></p>
+<p><span style="font-family: 'Times New Roman';">v1.c=15 v2.c=15</span></p>
+<p><span style="font-family: 'Times New Roman';">ct.c=10</span></p>
+<p><span style="font-family: 'Times New Roman';">v1.c=10 v2.c=10</span></p>
+<p><span style="font-family: 'Times New Roman';">v1.c=11 v2.c=11</span></p>
+<p><span style="font-family: 'Times New Roman';">ct.c=11</span></p>
+<p>这个程序展示了静态初始化的各种特性。如果你初次接触<span style="font-family: 'Times New Roman';">Java</span>，结果可能令你吃惊。可能会对<span style="font-family: 'Times New Roman';">static</span>后加大括号感到困惑。首先要告诉你的是，<span style="font-family: 'Times New Roman';">static</span>定义的变量会优先于任何其它非<span style="font-family: 'Times New Roman';">static</span>变量，不论其出现的顺序如何。</p>
+<p>正如在程序中所表现的，虽然<span style="font-family: 'Times New Roman';">v</span>出现在<span style="font-family: 'Times New Roman';">v1</span>和<span style="font-family: 'Times New Roman';">v2</span>的前面，但是结果却是<span style="font-family: 'Times New Roman';">v1</span>和<span style="font-family: 'Times New Roman';">v2</span>的初始化在<span style="font-family: 'Times New Roman';">v</span>的前面。在<span style="font-family: 'Times New Roman';">static{</span>后面跟着一段代码，这是用来进行显式的静态变量初始化，这段代码只会初始化一次，且在类被第一次装载时。</p>
+<p>如果你能读懂并理解这段代码，会帮助你对<span style="font-family: 'Times New Roman';">static</span>关键字的认识。在涉及到继承的时候，会先初始化父类的<span style="font-family: 'Times New Roman';">static</span>变量，然后是子类的，依次类推。非静态变量不是本文的主题，在此不做详细讨论，请参考<span style="font-family: 'Times New Roman';">Think in Java</span>中的讲解。</p>
+<p>静态类</p>
+<p>通常一个普通类不允许声明为静态的，只有一个内部类才可以。这时这个声明为静态的内部类可以直接作为一个普通类来使用，而不需实例一个外部类。如下代码所示：</p>
+<p><span style="font-family: 'Times New Roman';">public class StaticCls</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">public static void </span><span style="font-family: 'Times New Roman';">main(String[] args)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    OuterCls.InnerCls</span></p>
+<p><span style="font-family: 'Times New Roman';">       oi=new OuterCls.InnerCls();</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">class OuterCls{</span></p>
+<p><span style="font-family: 'Times New Roman';">public static class InnerCls{</span></p>
+<p><span style="font-family: 'Times New Roman';">    InnerCls(){</span></p>
+<p><span style="font-family: 'Times New Roman';">      System.out.println("InnerCls");</span></p>
+<p><span style="font-family: 'Times New Roman';">    }</span></p>
+<p><span style="font-family: 'Times New Roman';">   }</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p>输出结果会如你所料：</p>
+<p><span style="font-family: 'Times New Roman';">InnerCls</span></p>
+<p>和普通类一样。</p>
+<p>&nbsp;</p>
+<p>－－网转</p>
+<p>&nbsp;</p>
+<h1>java this, static, supert, final --2</h1>
+<div>
+<p>二、<span style="font-family: 'Times New Roman';">this &amp; super</span></p>
+<p>在上一篇拙作中，我们讨论了<span style="font-family: 'Times New Roman';">static</span>的种种用法，通过用<span style="font-family: 'Times New Roman';">static</span>来定义方法<span style="font-family: 'Times New Roman';"> </span>或成员，为我们编程提供了某种便利，从某种程度上可以说它类似于<span style="font-family: 'Times New Roman';">C</span>语言中的全局函数和全局变量。但是，并不是说有了这种便利，你便可以随处使用，如果那样<span style="font-family: 'Times New Roman';"> </span>的话，你便需要认真考虑一下自己是否在用面向对象的思想编程，自己的程序是否是面向对象的。好了，现在开始讨论<span style="font-family: 'Times New Roman';">this&amp;super</span>这两个关键字<span style="font-family: 'Times New Roman';"> </span>的意义和用法。</p>
+<p>在<span style="font-family: 'Times New Roman';">Java</span>中，<span style="font-family: 'Times New Roman';">this</span>通常指当前对象，<span style="font-family: 'Times New Roman';">super</span>则指父类的。当你想要引用当前对象的某种东西，比如当前对象的某个方法，或当前对象的某个成员，你便可以利用<span style="font-family: 'Times New Roman';">this</span>来实现这个目的，当然，<span style="font-family: 'Times New Roman';">this</span>的另一个用途是调用当前对象的另一个构造函数，这些马上就要讨论。</p>
+<p>如果你想引用父类的某种东西，则非<span style="font-family: 'Times New Roman';">super</span>莫属。由于<span style="font-family: 'Times New Roman';">this</span>与<span style="font-family: 'Times New Roman';">super</span>有如此相似的一些特性和与生俱来的某种关系，所以我们在这一块儿来讨论，希望能帮助你区分和掌握它们两个。</p>
+<p>在一般方法中</p>
+<p>最普遍的情况就是，在你的方法中的某个形参名与当前对象的某个成员有相同的名字，这时为了不至于混淆，你便需要明确使用<span style="font-family: 'Times New Roman';">this</span>关键字来指明你要使用某个成员，使用方法是<span style="font-family: 'Times New Roman';">“this.</span>成员名<span style="font-family: 'Times New Roman';">”</span>，而不带<span style="font-family: 'Times New Roman';">this</span>的那个便是形参。</p>
+<p>另外，还可以用<span style="font-family: 'Times New Roman';">“this.</span>方法名<span style="font-family: 'Times New Roman';">”</span>来引用当前对象的某个方法，但这时<span style="font-family: 'Times New Roman';">this</span>就不是必须的了，你可以直接用方法名来访问那个方法，编译器会知道你要调用的是那一个。下面的代码演示了上面的用法：</p>
+<p><span style="font-family: 'Times New Roman';">public class DemoThis</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">private String name;</span></p>
+<p><span style="font-family: 'Times New Roman';">private int age;</span></p>
+<p><span style="font-family: 'Times New Roman';">DemoThis(String name,int age)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    setName(name);</span></p>
+<p><span style="font-family: 'Times New Roman';">       //</span>你可以加上<span style="font-family: 'Times New Roman';">this</span>来调用方法，</p>
+<p><span style="font-family: 'Times New Roman';">       </span>像这样：<span style="font-family: 'Times New Roman';">this.setName(name);</span></p>
+<p><span style="font-family: 'Times New Roman';">       </span>但这并不是必须的</p>
+<p><span style="font-family: 'Times New Roman';">    setAge(age);</span></p>
+<p><span style="font-family: 'Times New Roman';">    this.print();</span></p>
+<p><span style="font-family: 'Times New Roman';">}  </span></p>
+<p><span style="font-family: 'Times New Roman';">public void setName(String name)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    this.name=name;</span></p>
+<p><span style="font-family: 'Times New Roman';">       //</span>此处必须指明你要引用成员变量</p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">public void setAge(int age)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    this.age=age;</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">public void print()</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    System.out.println</span></p>
+<p><span style="font-family: 'Times New Roman';">       ("Name="+name+" Age="+age);</span></p>
+<p><span style="font-family: 'Times New Roman';">       //</span>在此行中并不需要用<span style="font-family: 'Times New Roman';">this</span>，</p>
+<p><span style="font-family: 'Times New Roman';">       </span>因为没有会导致混淆的东西</p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">public static void main(String[] args)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    DemoThis dt=new DemoThis("Kevin","22");</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p>这段代码很简单，不用解释你也应该能看明白。在构造函数中你看到用<span style="font-family: 'Times New Roman';">this.print(),</span>你完全可以用<span style="font-family: 'Times New Roman';">print()</span>来代替它，两者效果一样。下面我们修改这个程序，来演示<span style="font-family: 'Times New Roman';">super</span>的用法。</p>
+<p><span style="font-family: 'Times New Roman';">class Person</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">public int c;</span></p>
+<p><span style="font-family: 'Times New Roman';">private String name;</span></p>
+<p><span style="font-family: 'Times New Roman';">private int age;</span></p>
+<p><span style="font-family: 'Times New Roman';">protected void setName</span></p>
+<p><span style="font-family: 'Times New Roman';">(String name)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    this.name=name;</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">protected void setAge(int age)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    this.age=age;</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">protected void print()</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    System.out.println</span></p>
+<p><span style="font-family: 'Times New Roman';">       ("Name="+name+" Age="+age);</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">public class DemoSuper</span></p>
+<p><span style="font-family: 'Times New Roman';">extends Person</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">public void print()</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    System.out.println("DemoSuper:");</span></p>
+<p><span style="font-family: 'Times New Roman';">    super.print();</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">public static void main(String[] args)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    DemoSuper ds=new DemoSuper();</span></p>
+<p><span style="font-family: 'Times New Roman';">    ds.setName("kevin");</span></p>
+<p><span style="font-family: 'Times New Roman';">    ds.setAge(22);</span></p>
+<p><span style="font-family: 'Times New Roman';">    ds.print();</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p>在<span style="font-family: 'Times New Roman';">DemoSuper</span>中，重新定义的<span style="font-family: 'Times New Roman';">print</span>方法覆写了父类的<span style="font-family: 'Times New Roman';">print</span>方法，它首先做一些自己的事情，然后调用父类的那个被覆写了的方法。输出结果说明了这一点：</p>
+<p><span style="font-family: 'Times New Roman';">DemoSuper:</span></p>
+<p><span style="font-family: 'Times New Roman';">Name=kevin Age=22</span></p>
+<p>这样的使用方法是比较常用的。另外如果父类的成员可以被子类访问，那你可以像使用<span style="font-family: 'Times New Roman';">this</span>一样使用它，用<span style="font-family: 'Times New Roman';">“super.</span>父类中的成员名<span style="font-family: 'Times New Roman';">”</span>的方式，但常常你并不是这样来访问父类中的成员名的。</p>
+<p>在构造函数中</p>
+<p>构造函数是一种特殊的方法，在对象初始化的时候自动调用。在构造函数中，<span style="font-family: 'Times New Roman';">this</span>和<span style="font-family: 'Times New Roman';">super</span>也有上面说的种种使用方式，并且它还有特殊的地方，请看下面的例子：</p>
+<p><span style="font-family: 'Times New Roman';">class Person</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">public static void prt(String s)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    System.out.println(s);</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">Person(){</span></p>
+<p><span style="font-family: 'Times New Roman';">    prt("A Person.");</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">Person(String name)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    prt("A person name is:"+name);</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">public class Chinese extends Person{</span></p>
+<p><span style="font-family: 'Times New Roman';">Chinese(){</span></p>
+<p><span style="font-family: 'Times New Roman';">    super();</span></p>
+<p><span style="font-family: 'Times New Roman';">       //</span>调用父类构造函数（<span style="font-family: 'Times New Roman';">1</span>）</p>
+<p><span style="font-family: 'Times New Roman';">    prt("A chinese.");</span></p>
+<p><span style="font-family: 'Times New Roman';">       //(4)</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">Chinese(String name)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    super(name);</span></p>
+<p><span style="font-family: 'Times New Roman';">       //</span>调用父类具有相同形参的构造函数（<span style="font-family: 'Times New Roman';">2</span>）</p>
+<p><span style="font-family: 'Times New Roman';">    prt("his name is:"+name);</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">Chinese(String name,int age){</span></p>
+<p><span style="font-family: 'Times New Roman';">    this(name);</span></p>
+<p><span style="font-family: 'Times New Roman';">       //</span>调用当前具有相同形参的构造函数（<span style="font-family: 'Times New Roman';">3</span>）</p>
+<p><span style="font-family: 'Times New Roman';">    prt("his age is:"+age);</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">public static void main</span></p>
+<p><span style="font-family: 'Times New Roman';">(String[] args)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    Chinese cn=new Chinese();</span></p>
+<p><span style="font-family: 'Times New Roman';">    cn=new Chinese("kevin");</span></p>
+<p><span style="font-family: 'Times New Roman';">    cn=new Chinese("kevin",22);</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p>在这段程序中，<span style="font-family: 'Times New Roman';">this</span>和<span style="font-family: 'Times New Roman';">super</span>不再是像以前那样用<span style="font-family: 'Times New Roman';">“.”</span>连接一个方法或成员，而是直接<span style="font-family: 'Times New Roman';"> </span>在其后跟上适当的参数，因此它的意义也就有了变化。<span style="font-family: 'Times New Roman';">super</span>后加参数的是用来调用父类中具有相同形式的构造函数，如<span style="font-family: 'Times New Roman';">1</span>和<span style="font-family: 'Times New Roman';">2</span>处。<span style="font-family: 'Times New Roman';">this</span>后加参数则调用的<span style="font-family: 'Times New Roman';"> </span>是当前具有相同参数的构造函数，如<span style="font-family: 'Times New Roman';">3</span>处。</p>
+<p>当然，在<span style="font-family: 'Times New Roman';">Chinese</span>的各个重载构造函数中，<span style="font-family: 'Times New Roman';">this</span>和<span style="font-family: 'Times New Roman';">super</span>在一般方法中<span style="font-family: 'Times New Roman';"> </span>的各种用法也仍可使用，比如<span style="font-family: 'Times New Roman';">4</span>处，你可以将它替换为<span style="font-family: 'Times New Roman';">“this.prt”(</span>因为它继承了父类中的那个方法）或者是<span style="font-family: 'Times New Roman';">“super.prt”</span>（因为它是父类中<span style="font-family: 'Times New Roman';"> </span>的方法且可被子类访问），它照样可以正确运行。但这样似乎就有点画蛇添足的味道了。</p>
+<p>最后，写了这么多，如果你能对<span style="font-family: 'Times New Roman';">“this</span>通常指代当前对象，<span style="font-family: 'Times New Roman';">super</span>通常指代父类<span style="font-family: 'Times New Roman';">”</span>这句话牢记在心，那么本篇便达到了目的，其它的你自会在以后的编程实践当中慢慢体会、掌握。另外关于本篇中提到的继承，请参阅相关<span style="font-family: 'Times New Roman';">Java</span>教程。</p>
+<p>－－网转</p>
+<p>&nbsp;</p>
+<h1>java this, static, supert, final --3</h1>
+<div>
+<p>三、<span style="font-family: 'Times New Roman';">final</p>
+<p>final</span>在<span style="font-family: 'Times New Roman';">Java</span>中并不常用，然而它却为我们提供了诸如在<span style="font-family: 'Times New Roman';">C</span>语言中定义常量的功能，不仅如此，<span style="font-family: 'Times New Roman';">final</span>还可以让你控制你的成员、方法或者是一个类是<span style="font-family: 'Times New Roman';"> </span>否可被覆写或继承等功能，这些特点使<span style="font-family: 'Times New Roman';">final</span>在<span style="font-family: 'Times New Roman';">Java</span>中拥有了一个不可或缺的地位，也是学习<span style="font-family: 'Times New Roman';">Java</span>时必须要知道和掌握的关键字之一。</p>
+<p><span style="font-family: 'Times New Roman';">final</span>成员</p>
+<p>当你在类中定义变量时，在其前面加上<span style="font-family: 'Times New Roman';">final</span>关键字，那便是说，这个变量一旦被初始化便不可改变，这里不可改变的意思对基本类型来说是其值不可变，而对于对象变量来说其引用不可再变。</p>
+<p>其初始化可以在两个地方，一是其定义处，也就是说在<span style="font-family: 'Times New Roman';">final</span>变量定义时直接给其赋值，二是在构造函数中。这两个地方只能选其一，要么在定义时给值，要么在构造函数中给值，不能同时既在定义时给了值，又在构造函数中给另外的值。下面这段代码演示了这一点：</p>
+<p><span style="font-family: 'Times New Roman';">import java.util.List;</span></p>
+<p><span style="font-family: 'Times New Roman';">import java.util.ArrayList;</span></p>
+<p><span style="font-family: 'Times New Roman';">import java.util.LinkedList;</span></p>
+<p><span style="font-family: 'Times New Roman';">public class Bat</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    final PI=3.14;</span></p>
+<p><span style="font-family: 'Times New Roman';">       //</span>在定义时便给址值</p>
+<p><span style="font-family: 'Times New Roman';">    final int i;</span></p>
+<p><span style="font-family: 'Times New Roman';">       //</span>因为要在构造函数中进行初始化，</p>
+<p><span style="font-family: 'Times New Roman';">       </span>所以此处便不可再给值</p>
+<p><span style="font-family: 'Times New Roman';">    final List list;</span></p>
+<p><span style="font-family: 'Times New Roman';">       //</span>此变量也与上面的一样</p>
+<p><span style="font-family: 'Times New Roman';">    Bat(){</span></p>
+<p><span style="font-family: 'Times New Roman';">        i=100;</span></p>
+<p><span style="font-family: 'Times New Roman';">        list=new LinkedList();</span></p>
+<p><span style="font-family: 'Times New Roman';">    }</span></p>
+<p><span style="font-family: 'Times New Roman';">    Bat(int ii,List l){</span></p>
+<p><span style="font-family: 'Times New Roman';">        i=ii;</span></p>
+<p><span style="font-family: 'Times New Roman';">        list=l;</span></p>
+<p><span style="font-family: 'Times New Roman';">    }</span></p>
+<p><span style="font-family: 'Times New Roman';">   public static void</span></p>
+<p><span style="font-family: 'Times New Roman';">       main(String[] args)</span></p>
+<p><span style="font-family: 'Times New Roman';">       {</span></p>
+<p><span style="font-family: 'Times New Roman';">        Bat b=new Bat();</span></p>
+<p><span style="font-family: 'Times New Roman';">        b.list.add(new Bat());</span></p>
+<p><span style="font-family: 'Times New Roman';">        //b.i=25;</span></p>
+<p><span style="font-family: 'Times New Roman';">        //b.list=new ArrayList();</span></p>
+<p><span style="font-family: 'Times New Roman';">        System.out.println("I="+b.i+"</span></p>
+<p><span style="font-family: 'Times New Roman';">              List Type:"+b.list.getClass());</span></p>
+<p><span style="font-family: 'Times New Roman';">        b=new Bat(23,new ArrayList());</span></p>
+<p><span style="font-family: 'Times New Roman';">        b.list.add(new Bat());</span></p>
+<p><span style="font-family: 'Times New Roman';">        System.out.println("I="+b.i+"</span></p>
+<p><span style="font-family: 'Times New Roman';">              List Type:"+b.list.getClass());</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p>此程序很简单的演示了<span style="font-family: 'Times New Roman';">final</span>的常规用法。在这里使用在构造函数中进行初始化的方法，这使你有了一点灵活性。如<span style="font-family: 'Times New Roman';">Bat</span>的两个重载构造函数所示，第一个缺省构造函数会为你提供默认的值，重载的那个构造函数会根据你所提供的值或类型为<span style="font-family: 'Times New Roman';">final</span>变量初始化。</p>
+<p>然而有时你并不需要这种灵活性，你只需要在定义时便给定其值并永不变化，这时就不要再用这种方法。</p>
+<p>在<span style="font-family: 'Times New Roman';">main</span>方法中有两行语句注释掉了，如果你去掉注释，程序便无法通过编译，这便是说，不论是<span style="font-family: 'Times New Roman';">i</span>的值或是<span style="font-family: 'Times New Roman';">list</span>的类型，一旦初始化，确实无法再更改。然而<span style="font-family: 'Times New Roman';">b</span>可以通过重新初始化来指定<span style="font-family: 'Times New Roman';">i</span>的值或<span style="font-family: 'Times New Roman';">list</span>的类型，输出结果中显示了这一点：</p>
+<p><span style="font-family: 'Times New Roman';">I=100 List Type:class</span></p>
+<p><span style="font-family: 'Times New Roman';">java.util.LinkedList</span></p>
+<p><span style="font-family: 'Times New Roman';">I=23 List Type:class</span></p>
+<p><span style="font-family: 'Times New Roman';">java.util.ArrayList</span></p>
+<p>还有一种用法是定义方法中的参数为<span style="font-family: 'Times New Roman';">final</span>，对于基本类型的变量，这样做并没有什么实际意义，因为基本类型的变量在调用方法时是传值的，也就是说你可以在方法中更改这个参数变量而不会影响到调用语句。</p>
+<p>然而对于对象变量，却显得很实用，因为对象变量在传递时是传递其引用，这样你在方法中对对象变量的修改也会影响到调用语句中的对象变量，当你在方法中不需要改变作为参数的对象变量时，明确使用<span style="font-family: 'Times New Roman';">final</span>进行声明，会防止你无意的修改而影响到调用方法。</p>
+<p>另外方法中的内部类在用到方法中的参变量时，此参变也必须声明为<span style="font-family: 'Times New Roman';">final</span>才可使用，如下代码所示：</p>
+<p><span style="font-family: 'Times New Roman';">public class INClass</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">   void innerClass</span></p>
+<p><span style="font-family: 'Times New Roman';">   (final String str)</span></p>
+<p><span style="font-family: 'Times New Roman';">   {</span></p>
+<p><span style="font-family: 'Times New Roman';">        class IClass</span></p>
+<p><span style="font-family: 'Times New Roman';">              {</span></p>
+<p><span style="font-family: 'Times New Roman';">            IClass()</span></p>
+<p><span style="font-family: 'Times New Roman';">                     {</span></p>
+<p><span style="font-family: 'Times New Roman';">                System.out.println(str);</span></p>
+<p><span style="font-family: 'Times New Roman';">            }</span></p>
+<p><span style="font-family: 'Times New Roman';">        }</span></p>
+<p><span style="font-family: 'Times New Roman';">        IClass ic=new IClass();</span></p>
+<p><span style="font-family: 'Times New Roman';">    }</span></p>
+<p><span style="font-family: 'Times New Roman';">public static void main</span></p>
+<p><span style="font-family: 'Times New Roman';">(String[] args)</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">      INClass inc=new INClass();</span></p>
+<p><span style="font-family: 'Times New Roman';">      inc.innerClass("Hello");</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">final</span>方法</p>
+<p>将方法声明为<span style="font-family: 'Times New Roman';">final</span>，那就说明你已经知道这个方法提供的功能已经满足你要求，不需要进行扩展，并且也不允许任何从此类继承的类来覆写这个方法，但是继承仍然可以继承这个方法，也就是说可以直接使用。</p>
+<p>另外有一种被称为<span style="font-family: 'Times New Roman';">inline</span>的机制，它会使你在调用<span style="font-family: 'Times New Roman';">final</span>方法时，直接将方法<span style="font-family: 'Times New Roman';"> </span>主体插入到调用处，而不是进行例行的方法调用，例如保存断点，压栈等，这样可能会使你的程序效率有所提高，然而当你的方法主体非常庞大时，或你在多处调用<span style="font-family: 'Times New Roman';"> </span>此方法，那么你的调用主体代码便会迅速膨胀，可能反而会影响效率，所以你要慎用<span style="font-family: 'Times New Roman';">final</span>进行方法定义。</p>
+<p><span style="font-family: 'Times New Roman';">final</span>类</p>
+<p>当你将<span style="font-family: 'Times New Roman';">final</span>用于类身上时，你就需要仔细考虑，因为一个<span style="font-family: 'Times New Roman';">final</span>类是无法被任何人继承的，那也就意味着此类在一个继承树中是一个叶子类，并且此类的设计已被认为很完美而不需要进行修改或扩展。</p>
+<p>对于<span style="font-family: 'Times New Roman';">final</span>类中的成员，你可以定义其为<span style="font-family: 'Times New Roman';">final</span>，也可以不是<span style="font-family: 'Times New Roman';">final</span>。而对于方法，由于所属类为<span style="font-family: 'Times New Roman';">final</span>的关系，自然也就成了<span style="font-family: 'Times New Roman';">final</span>型的。你也可以明确的给<span style="font-family: 'Times New Roman';">final</span>类中的方法加上一个<span style="font-family: 'Times New Roman';">final</span>，但这显然没有意义。</p>
+<p>下面的程序演示了<span style="font-family: 'Times New Roman';">final</span>方法和<span style="font-family: 'Times New Roman';">final</span>类的用法：</p>
+<p><span style="font-family: 'Times New Roman';">final class final</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">    final String str="final Data";</span></p>
+<p><span style="font-family: 'Times New Roman';">    public String str1="non final data";</span></p>
+<p><span style="font-family: 'Times New Roman';">    final public void print()</span></p>
+<p><span style="font-family: 'Times New Roman';">       {</span></p>
+<p><span style="font-family: 'Times New Roman';">        System.out.println</span></p>
+<p><span style="font-family: 'Times New Roman';">              ("final method.");</span></p>
+<p><span style="font-family: 'Times New Roman';">   }</span></p>
+<p><span style="font-family: 'Times New Roman';">    public void what()</span></p>
+<p><span style="font-family: 'Times New Roman';">       {</span></p>
+<p><span style="font-family: 'Times New Roman';">        System.out.println(str+"\n"+str1);</span></p>
+<p><span style="font-family: 'Times New Roman';">    }</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">public class FinalDemo</span></p>
+<p><span style="font-family: 'Times New Roman';">{</span></p>
+<p><span style="font-family: 'Times New Roman';">//extends final </span>无法继承</p>
+<p><span style="font-family: 'Times New Roman';">    public static void</span></p>
+<p><span style="font-family: 'Times New Roman';">       main(String[] args)</span></p>
+<p><span style="font-family: 'Times New Roman';">       {</span></p>
+<p><span style="font-family: 'Times New Roman';">        final f=new final();</span></p>
+<p><span style="font-family: 'Times New Roman';">        f.what();</span></p>
+<p><span style="font-family: 'Times New Roman';">        f.print();</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p><span style="font-family: 'Times New Roman';">}</span></p>
+<p>从程序中可以看出，<span style="font-family: 'Times New Roman';">final</span>类与普通类的使用几乎没有差别，只是它失去了被继承的特性。<span style="font-family: 'Times New Roman';">final</span>方法与非<span style="font-family: 'Times New Roman';">final</span>方法的区别也很难从程序行看出，只是记住慎用。</p>
+<p><span style="font-family: 'Times New Roman';">final</span>在设计模式中的应用</p>
+<p>在设计模式中有一种模式叫做不变模式，在<span style="font-family: 'Times New Roman';">Java</span>中通过<span style="font-family: 'Times New Roman';">final</span>关键字可以很容易的实现这个模式，在讲解<span style="font-family: 'Times New Roman';">final</span>成员时用到的程序<span style="font-family: 'Times New Roman';">Bat.java</span>就是一个不变模式的例子。</p>
+<p>到此为止，<span style="font-family: 'Times New Roman';">this,static,supert</span>和<span style="font-family: 'Times New Roman';">final</span>的使用已经说完了，如果你对这四个关键字已经能够大致说出它们的区别与用法，那便说明你基本已经掌握。</p>
+<p>然而，世界上的任何东西都不是完美无缺的，<span style="font-family: 'Times New Roman';">Java</span>提供这四个关键字，给程序员的编程带来了很大的便利，但并不是说要让你到处使用，一旦达到滥用的程序，便适得其反，所以在使用时请一定要认真考虑。</p>
+<p>－－网转</p>
+</div>
+</div>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/web&amp;rt/backlight-photo.html" data-toggle="tooltip" data-placement="top" title="逆光摄影">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/sg-i-chapter-6-user-administration-and-security.html" data-toggle="tooltip" data-placement="top" title="SG I: Chapter 6 | User Administration and Security">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/code/java-static" data-title="java -- static"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="一、Static
+请先看下面这段程序：
+public class Hello{
+public static void main(String[] args... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/code/java-static.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/code/java-static" data-title="java -- static" data-url="http://dbaeyes.github.io/code/java-static.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

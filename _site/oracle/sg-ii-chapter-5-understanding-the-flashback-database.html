@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>SG II: Chapter 5 | Understanding the Flashback Database - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/sg-ii-chapter-5-understanding-the-flashback-database.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#flashback" title="flashback">flashback</a>
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                    </div>
+                    <h1>SG II: Chapter 5 | Understanding the Flashback Database</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on April 24, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><strong><span style="color: #ff6600;">Objects:</span></strong></p>
+<div>
+<p><span style="color: #0000ff;">Determine which flashback technology to use for each recovery situation.<br />
+Configure and use Flashback Database.<br />
+Monitor the Flashback Database.<br />
+Use the Enterprise Manager to manage the Flashback Database.<br />
+Manage or (maintain) the Flash Recovery Area.</span></p>
+<p>--------------------------------------------------------</p>
+<p><strong><span style="color: #ff6600;">An Overview of Flashback Technologies</span></strong></p>
+<p>Flashback Database<br />
+Flashback Drop<br />
+Flashback Versions Query<br />
+Flashback Transaction Query<br />
+Flashback Table</p>
+<p>All the flashback technologies, with the exception of the Flashback Database, are based on undo data.<br />
+The Flashback Database is not based on undo data but on flashback logs.<br />
+The Flashback Database is best suited to recover from errors such as truncating a large table, an incomplete batch job, or a dropped user.</p>
+<p>------------------------------------------------</p>
+<p><strong><span style="color: #ff6600; font-size: medium;">Flashback Database</span></strong></p>
+<p>The Flashback Database relies on “before” images in the flashback logs, but traditional flashback technology relies on the undo data.</p>
+<p>The Flashback Database is <strong>a nice substitute for incomplete recovery</strong> for logical corruption and user errors.</p>
+<p><strong>some limitations</strong>:<br />
+1. <strong>Media failure</strong> cannot be resolved with the Flashback Database. You will still need to restore datafiles and recover archived redo logs to recover from media failure.<br />
+2. <strong>Resizing datafiles</strong> to a smaller size, also called shrinking datafiles, cannot be undone with the Flashback Database.<br />
+3. You cannot use the Flashback Database if the <strong>control file has been restored or recreated</strong>.<br />
+4. <strong>Dropping a tablespace</strong> and recovery through <strong>RESETLOGS </strong>cannot be performed.<br />
+5. You cannot flash back the database to an SCN prior to the earliest available SCN in the flashback logs.</p>
+<p><strong><span style="color: #ff6600;">Managing the Flash Recovery Area with Recovery Manager</span></strong></p>
+<p>Flash recovery provides <strong>a couple of key benefits</strong> to the recovery process:<br />
+1. All recovery files are stored in centralized location.<br />
+2. It provides a much faster method of backing up and restoring because the information is written to disk as opposed to tape.</p>
+<p>The <strong>retention period of the files</strong> in the flash recovery area are determined by the Recovery Manager (RMAN) retention policy, which is defined by the RMAN CONFIGURE RETENTION POLICY command.</p>
+<p><strong><span style="color: #0000ff;">Configuring the Flash Recovery Area</span></strong></p>
+<p>1. Add the following database parameter for the size of the flash recovery area to the init.ora and/or SPFILE:<br />
+<span>SQL&gt; alter system set db_recovery_file_dest_size=10M scope=both;</span></p>
+<p>2. Add the following database parameter for the location of the flash recovery area:<br />
+SQL&gt; alter system set db_recovery_file_dest='C:\oracle\flash_recovery_area\ora101t';</p>
+<p>To disable the flash recovery area, use this command:<br />
+<span>SQL&gt; alter system set db_recovery_file_dest='';</span></p>
+<p><strong><span style="color: #0000ff;">Using the Flash Recovery Area</span></strong></p>
+<p>Dynamic view<strong> V$RECOVERY_FILE_DEST</strong> displays all the information about the usage of the flash recovery area.</p>
+<p>The flashback recovery area can <strong>contain</strong> datafiles, control files, online redo logs, miscellaneous<br />
+RMAN files, and flashback logs.</p>
+<p>Initialization parameters for the <strong>online redo log files location</strong>:<br />
+DB_CREATE_ONLINE_LOG_DEST_n<br />
+DB_RECOVERY_FILE_DEST<br />
+DB_CREATE_FILE_DEST</p>
+<p>Initialization parameters for the <strong>control files location</strong>:<br />
+CONTROL_FILES<br />
+DB_CREATE_ONLINE_LOG_DEST_n<br />
+DB_RECOVERY_FILE_DEST<br />
+DB_CREATE_FILE_DEST</p>
+<p>Initialization parameters for the<strong> archived log files</strong>:<br />
+LOG_ARCHIVE_DEST_n<br />
+LOG_ARCHIVE_DEST<br />
+LOG_ARCHIVE_DUPLEX_DEST</p>
+<p><strong><span style="color: #0000ff;">Backing Up the Flash Recovery Area</span></strong></p>
+<p>There are two commands that are used in backing up the flash recovery area(RMAN, only to tape):<br />
+· BACKUP RECOVERY AREA backs up the whole recovery area.<br />
+· BACKUP RECOVERY FILES just backs up the files in the recovery area.</p>
+<p><strong><span style="color: #0000ff;">Configuring the Flashback Database</span></strong></p>
+<p>The database must have ARCHIVE LOG enabled.<br />
+The flash recovery area must be configured to store the Flashback Database logs.</p>
+<p>1. Start the database in MOUNT mode:<br />
+<span>SQL&gt; startup mount</span></p>
+<p>2. Set the DB_FLASHBACK_RETENTION_TARGET parameter to the desired value.<br />
+<span>SQL&gt; alter db_flashback_retention_target=4320;</span> -- by minutes, here is 3 days</p>
+<p>3. Enable the flashback capability:<br />
+SQL&gt; alter database flashback on;</p>
+<p>4. Now the database can be opened for normal use:<br />
+<span>SQL&gt; alter database open;</span><br />
+<strong><span style="color: #0000ff;">Using the Flashback Database with RMAN</span></strong></p>
+<p>1. First, query the V$FLASHBACK_DATABASE_LOG view to retrieve the <strong>OLDEST_FLASHBACK_SCN</strong>:<br />
+<span>SQL&gt; select oldest_flashback_scn, oldest_flashback_time<br />
+2 from v$flashback_database_log;<br />
+OLDEST_FLASHBACK_SCN OLDEST_FLASHBACK_TIME<br />
+-------------------- ---------------------<br />
+689316 29-SEP-04</span></p>
+<p>2. Next, shut down and start the database in MOUNT mode:</p>
+<p>3. Next, issue the Flashback Database recovery from RMAN:<br />
+<span>RMAN&gt; flashback database to scn=689316;</span></p>
+<p>4. Finally, open the database with the RESETLOGS option:<br />
+<span>SQL&gt; alter database open resetlogs;</p>
+<p></span></p>
+<p><strong><span style="color: #0000ff;">Monitoring the Flashback Database</span></strong></p>
+<p><strong>V$DATABASE</strong> : view displays if the Flashback Database is on or off.</p>
+<p><strong>V$FLASHBACK_DATABASE_LOG</strong> : determine the amount of space required in the recovery area to support the flashback activity generated by changes in the database. <strong>OLDEST_FLASHBACK_SCN</strong> and <strong>OLDEST_FLASHBACK_TIME</strong> columns give you information regarding how far back you can use the Flashback Database.<strong>ESTIMATED_FLASHBACK_SIZE</strong> estimated size of flashback data</p>
+<p><strong>V$FLASHBACK_DATABASE_STAT</strong> : used to monitor the overhead of maintaining the data in the Flashback Database logs.</p>
+<p>----------------------------------------</p>
+<p>Using the Flashback Database with Enterprise Manager<br />
+----------------</p>
+<p>The Flashback Database is a new Oracle 10g solution that is best used to recover from logical <strong>corruption</strong> and <strong>user error</strong>. This is a new alternative to<strong>incomplete</strong> <strong>recovery </strong>or<strong> the Log Miner utility</strong>.</p>
+<p>The flash recovery area will not back up redo log files, control files, or flashback logs with the BACKUP RECOVERY AREA and BACKUP RECOVERY FILES commands.<br />
+Permanent files are considered to be current online redo logs and control files.</p>
+<p>--- EOF ---</p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/sg-ii-chapter-4-database-recovery.html" data-toggle="tooltip" data-placement="top" title="SG II: Chapter 4 | Database Recovery">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/sg-ii-chapter-6-recovering-from-user-errors.html" data-toggle="tooltip" data-placement="top" title="SG II: Chapter 6 | Recovering from User Errors">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/sg-ii-chapter-5-understanding-the-flashback-database" data-title="SG II: Chapter 5 | Understanding the Flashback Database"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Objects:
+
+Determine which flashback technology to use for each recovery situa... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-5-understanding-the-flashback-database.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/sg-ii-chapter-5-understanding-the-flashback-database" data-title="SG II: Chapter 5 | Understanding the Flashback Database" data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-5-understanding-the-flashback-database.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

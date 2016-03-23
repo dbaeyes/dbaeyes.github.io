@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>SG II: Chapter 9 | Understanding Automatic Storage Management - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/sg-ii-chapter-9-understanding-automatic-storage-management.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#study" title="study">study</a>
+                        
+                    </div>
+                    <h1>SG II: Chapter 9 | Understanding Automatic Storage Management</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on April 29, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><strong><span style="color: #ff6600;">Objects:</span></strong></p>
+<div>
+<p><span style="color: #0000ff;"><span style="color: #000000;">·</span>Set up initialization parameter files for ASM and database instances.<br />
+<span style="color: #000000;">·</span>Execute SQL commands with ASM filenames.<br />
+<span style="color: #000000;">·</span>Start up and shut down ASM instances.<br />
+<span style="color: #000000;">·</span>Administer ASM disk groups.<br />
+<span style="color: #000000;">·</span>Use RMAN to migrate your database to ASM.</span></p>
+<p><strong><span style="color: #ff6600;">Introducing the ASM Architecture</span></strong><br />
+1. ASM increases availability by allowing new disk devices to be added to the database without shutting down the database; ASM automatically rebalances the distribution of files with minimal intervention.<br />
+2. ASM also eases the administrative burden of managing potentially thousands of database files by creating disk groups, which are comprised of disk devices and the files that reside on the disk devices managed as a logical unit.<br />
+3. Automatic rebalancing is another key feature of ASM.</p>
+<p>Two new background processes support ASM instances: <strong><em>RBAL</em></strong> and <em><strong>ORBn</strong></em>.<br />
+RBAL coordinates the disk activity for disk groups on an ASM instance<br />
+ORBn, where n can be from 0 to 9, performs the actual extent movement between disks in the disk groups.</p>
+<p>For database instances that use ASM disks, two new background processes also exist: <strong><em>OSMB</em></strong> and <strong><em>RBAL</em></strong>.<br />
+OSMB performs the communication between the database and the ASM instance,<br />
+RBAL performs the open and close of the disks in the disk group on behalf of the database instance.</p>
+<p><strong><span style="color: #ff6600;">Understanding an ASM Instance</span></strong><br />
+ASM requires a dedicated instance to manage the disk groups. An ASM instance generally has a smaller memory footprint in the range of 60MB to 100MB and is automatically configured when ASM is specified as the database’s file storage option when installing the Oracle software and an existing ASM instance does not already exist.</p>
+<p>All connections to an ASM instance are <strong><em>via SYS and SYSTEM</em></strong> using operating system authentication only.</p>
+<p>An ASM instance is in either a MOUNT state or a NOMOUNT state; it can never be in an OPEN state.</p>
+<p><strong><span style="color: #0000ff;">Connecting to an ASM Instance</span></strong><br />
+connecting as SYSDBA or SYSOPER by an operating system user that is in the dba group.</p>
+<p><strong><span style="color: #0000ff;">Starting Up and Shutting Down an ASM Instance</span></strong><br />
+An ASM instance is started much like a database instance, except that the STARTUP command defaults to STARTUP MOUNT. Because there is no control file, database, or data dictionary to mount, the ASM disk groups are mounted instead of a database.</p>
+<p>The ASM instance finishes a shutdown, it waits for all dependent databases to shut down.<br />
+if you use the SHUTDOWN ABORT command on the ASM instance, all dependent databases immediately perform a SHUTDOWN ABORT because there is no longer an ASM instance available to manage the database’s storage.</p>
+<p><strong><span style="color: #0000ff;">Defining ASM Initialization Parameter</span></strong><br />
+An SPFILE is highly recommended over an initialization parameter file for an ASM instance.</p>
+<p><strong><span style="color: #0000ff;">Categorizing ASM Dynamic Performance Views<br />
+</span></strong>V$ASM_DISK<br />
+V$ASM_DISKGROUP<br />
+V$ASM_FILE<br />
+V$ASM_OPERATION<br />
+V$ASM_TEMPLATE<br />
+V$ASM_CLIENT<br />
+V$ASM_ALIAS</p>
+<p><strong><span style="color: #0000ff;">Using ASM Filenames</span></strong><br />
+All ASM files are <strong><em>OMF</em></strong>, so the details of the actual filename within the disk group are not needed for most administrative functions.</p>
+<p><strong><span style="color: #0000ff;">Fully Qualified Names</span></strong><br />
++group/dbname/file type/tag.file.incarnation<br />
+where<br />
+<em>group</em> is the disk group name.<br />
+<em>dbname</em> is the database to which the file belongs.<br />
+<em>file type</em> is the Oracle file type.<br />
+<em>tag</em> is the type-specific information about the specific file type.<br />
+The file.incarnation pair ensures uniqueness.<br />
+example: +DATA2/rac0/datafile/users3.256.1</p>
+<p><strong><span style="color: #0000ff;">Understanding ASM File Types and Templates</span></strong></p>
+<p><strong><span style="color: #ff6600;">Administering ASM Disk Groups<br />
+</span></strong>Using ASM disk groups <strong><em>benefits</em></strong>:<br />
+I/O performance is improved.<br />
+Availability is increased.<br />
+The ease with which you can add a disk to a disk group or add an entirely new disk group enables you to manage many more databases in the same amount of time.</p>
+<p><strong><span style="color: #0000ff;">Understanding Disk Group Architecture</span></strong><br />
+Disk group is a collection of physical disks managed as a unit.<br />
+Every ASM disk, as part of a disk group, has an ASM disk name that is either assigned by the DBA or automatically assigned when it is assigned to the disk group.</p>
+<p><strong><span style="color: #0000ff;">Understanding Failure Groups and Disk Group Mirroring</span></strong><br />
+A failure group is one or more disks within a disk group that share a common resource, such as a disk controller, whose failure would cause the entire set of disks to be unavailable to the group.</p>
+<p>The number of failure groups available within a disk group can restrict the type of <strong><em>mirroring</em></strong> available for the disk group.<br />
+<strong><em>External redundancy</em></strong> External redundancy requires only one failure group and assumes that the disk is not critical to the ongoing operation of the database or that the disk is managed externally with high-availability hardware such as a RAID controller.<br />
+<strong><em>Normal redundancy</em></strong> Normal redundancy provides two-way mirroring and requires at least two failure groups within a disk group. The failure of one of the disks in a failure group does not cause any downtime for the disk group or any data loss other than a slight performance hit for queries against objects in the disk group.<br />
+<strong><em>High redundancy</em></strong> High redundancy provides three-way mirroring and requires at least three failure groups within a disk group. The failure of disks in two out of the three failure groups is for the most part transparent to the database users as in normal redundancy mirroring.</p>
+<p><strong><span style="color: #0000ff;">Understanding Disk Group Dynamic Rebalancing</span></strong><br />
+This rebalance occurs while the database is online and available to users; any impact to ongoing database I/O can be controlled by adjusting the value of the initialization parameter ASM_POWER_LIMIT to a lower value.</p>
+<p>Creating and Deleting Disk Groups<br />
+Get info:<br />
+<span>SQL&gt; select group_number, disk_number, name,<br />
+2       failgroup, create_date, path from<strong><em> v$asm_disk</em></strong>;</span></p>
+<p>obtain the disk group name from the view <strong><em>V$ASM_DISKGROUP</em></strong><br />
+<span>SQL&gt; select group_number, name, type, total_mb, free_mb<br />
+2      from v$asm_diskgroup;</span></p>
+<p><em>Create the disk group:</em><br />
+<span>SQL&gt; create diskgroup data2 high redundancy<br />
+2 failgroup fg1 disk '/dev/raw/raw3' name d2a<br />
+3 failgroup fg2 disk '/dev/raw/raw4' name d2b<br />
+4 failgroup fg3 disk '/dev/raw/raw5' name d2c<br />
+5 failgroup fg4 disk '/dev/raw/raw6' name d2d;<br />
+Diskgroup created.</span></p>
+<p>When you create a disk group and add a disk, you must specify <strong><em>FORCE</em></strong> if the disk has been previously used as part of a disk group.<br />
+In the following example, the disk /dev/raw/raw4 was previously used as part of a disk group, so you must specify FORCE:<br />
+<span>SQL&gt; create diskgroup data2 high redundancy<br />
+2 failgroup fg1 disk '/dev/raw/raw3' name d2a<br />
+3 failgroup fg2 disk '/dev/raw/raw4' name d2b force<br />
+4 failgroup fg3 disk '/dev/raw/raw5' name d2c<br />
+5 failgroup fg4 disk '/dev/raw/raw6' name d2d;<br />
+Diskgroup created</span></p>
+<p>The disk group is dropped and recreated with only three members.<br />
+<span>SQL&gt; drop diskgroup data2;<br />
+Diskgroup dropped.</p>
+<p>SQL&gt; create diskgroup data2 high redundancy<br />
+2 failgroup fg1 disk '/dev/raw/raw3' name d2a<br />
+3 failgroup fg2 disk '/dev/raw/raw4' name d2b<br />
+4 failgroup fg3 disk '/dev/raw/raw5' name d2c;<br />
+Diskgroup created.</p>
+<p>SQL&gt; create tablespace users3 datafile '+DATA2';<br />
+Tablespace created.</span></p>
+<p>Because ASM files are OMF, no other datafile characteristics need to be specified when creating the tablespace.</p>
+<p><strong><span style="color: #ff6600;">Altering Disk Groups</span></strong><br />
+<strong><span style="color: #0000ff;">Using ALTER DISKGROUP … ADD DISK</span></strong><br />
+The initialization parameter <strong><em>ASM_POWER_LIMIT</em></strong> controls the speed of the rebalance.</p>
+<p align="left"><strong><span style="font-family: 'Times New Roman';"><span style="color: #ff6600;">Altering Disk Groups</span></span></strong></p>
+<p><strong><span style="font-family: 'Times New Roman';"><span style="color: #0000ff;">Using <em>ALTER DISKGROUP … ADD DISK</em></span></span></strong></p>
+<p><span style="font-family: 'Times New Roman';">The initialization parameter ASM_POWER_LIMIT controls the speed of the rebalance.</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Times New Roman';"><span>SQL&gt; alter diskgroup data1</span></span></p>
+<p><span style="font-family: 'Times New Roman';">2 add failgroup d1fg3 disk '/dev/raw/raw6' name d1c;</p>
+<p></span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Times New Roman';">You then check the status of the rebalance operation by checking V$ASM_OPERATION:</span></p>
+<p><span style="font-family: 'Times New Roman';"><span>SQL&gt; select group_number, operation, state, power, actual,</span></span></p>
+<p><span style="font-family: 'Times New Roman';"><span>2 sofar, est_work, est_rate, est_minutes</span></span></p>
+<p><span style="font-family: 'Times New Roman';">3 from v$asm_operation;</p>
+<p></span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Times New Roman';">You can to allocate more resources to the rebalance operation and change the</span> <span style="font-family: 'Times New Roman';">power limit for this particular rebalance operation:</span></p>
+<p><span style="font-family: 'Times New Roman';">SQL&gt; alter diskgroup data1 rebalance power 8;</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Times New Roman';">The ALTER DISKGROUP command will ignore all disks that match the discovery string if they are already a part of this or any other disk group.<br />
+</span></p>
+<p>&nbsp;</p>
+<p><strong><span style="font-family: 'Times New Roman';"><span style="color: #0000ff;">Using <em>ALTER DISKGROUP … DROP DISK</em></span></span></strong></p>
+<p><span style="font-family: 'Times New Roman';">The DROP DISK clause removes a disk from a failure group within a disk group and performs an automatic rebalance.</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Times New Roman';"><span>SQL&gt; alter diskgroup data2 drop disk d2d;</span></span></p>
+<p><span style="font-family: 'Times New Roman';"><span>Diskgroup altered.</p>
+<p></span></span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-family: 'Times New Roman';"><span style="color: #0000ff;">Using <em>ALTER DISKGROUP … UNDROP DISKS</em></span></span></strong></p>
+<p><span style="font-family: 'Times New Roman';">The UNDROP DISKS clause cancels any pending drops of a disk from a disk group.<br />
+</span></p>
+<p>&nbsp;</p>
+<p><strong><span style="color: #0000ff; font-family: 'Times New Roman';">Using <em>ALTER DISKGROUP … REBALANCE POWER </em>n</span></strong></p>
+<p align="left"><span style="font-family: 'Times New Roman';">This command is normally not necessary, because rebalance operations occur automatically when a disk is added, dropped, or modified.<br />
+</span></p>
+<p align="left">
+<p align="left"><strong><span style="font-family: 'Times New Roman';"><span style="color: #0000ff;">Using <em>ALTER DISKGROUP … DROP … ADD</em></span></span></strong></p>
+<p align="left"><span style="font-family: 'Times New Roman';">The DROP and ADD combination removes a disk from a failure group and adds another disk in the same command.</span></p>
+<p align="left">
+<p align="left"><span style="font-family: 'Times New Roman';">Swap the disk /dev/ raw/raw5 with /dev/raw/raw6:</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><span>SQL&gt; select adg.name DG_NAME,</span></span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><span>2 ad.name FG_NAME, path from v$asm_disk ad</span></span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><span>3 right outer join v$asm_diskgroup adg</span></span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><span>4 on ad.group_number = adg.group_number</span></span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">5 where adg.name = 'DATA2';</p>
+<p></span></p>
+<p align="left">
+<p align="left"><strong><span style="font-family: 'Times New Roman';"><span style="color: #0000ff;">Using <em>ALTER DISKGROUP … DISMOUNT</em></span></span></strong></p>
+<p align="left"><span style="font-family: 'Times New Roman';">The DISMOUNT keyword makes a disk group unavailable to all instances,</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">SQL&gt; alter diskgroup data2 dismount;</span></p>
+<p align="left">
+<p align="left"><span style="font-family: 'Times New Roman';">You cannot dismount a disk group unless there are no open files on the disk group and all tablespaces in the disk group are offline.<br />
+</span></p>
+<p align="left">
+<p align="left">
+<p align="left"><strong><span style="font-family: 'Times New Roman';"><span style="color: #0000ff;">Using <em>ALTER DISKGROUP … MOUNT</em></span></span></strong></p>
+<p align="left"><span style="font-family: 'Times New Roman';">The MOUNT keyword makes a disk group available to all instances. In the following example, you remount the disk group dismounted previously:</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">SQL&gt; alter diskgroup data2 mount;<br />
+</span></p>
+<p align="left">
+<p align="left"><span style="font-family: 'Times New Roman';"><strong><span style="color: #0000ff;">Using <em>ALTER DISKGROUP … CHECK ALL</em></span></strong></span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">The CHECK ALL option verifies the internal consistency of the disk group.</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">SQL&gt; alter diskgroup data2 check all;</span></p>
+<p align="left">
+<p align="left"><span style="font-family: 'Times New Roman';">If any errors are found, they are automatically repaired unless you specify the NOREPAIR option.<br />
+</span></p>
+<p align="left">
+<p align="left"><strong><span style="color: #0000ff; font-family: 'Times New Roman';">Using EM Database Control with ASM Disk Groups<br />
+</span></strong></p>
+<p align="left">
+<p align="left"><strong><span style="font-family: 'Times New Roman';"><span style="color: #0000ff;">Using RMAN to Perform Database Migration to ASM</span></span></strong></p>
+<p align="left"><span style="font-family: 'Times New Roman';">Because ASM files cannot be accessed via the operating system, you must use the Recovery Manager (RMAN) to move database objects from a non-ASM disk location to an ASM disk group. Follow these steps to move these database objects:</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><strong>1. </strong>Note the filenames of the control files and the online redo log files.</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><strong>2. </strong>Shut down the database using the NORMAL, IMMEDIATE, or TRANSACTIONAL keywords.</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><strong>3. </strong>Back up the database.</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><strong>4. </strong>Edit the SPFILE to use OMF for all file destinations.</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><strong>5. </strong>Edit the SPFILE to remove the CONTROL_FILES parameter.</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><strong>6. </strong>Run the following RMAN script, substituting your specific filenames as needed:</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">STARTUP NOMOUNT;</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">RESTORE CONTROLFILE FROM '<em>&lt;controlfile location&gt;</em>';</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">ALTER DATABASE MOUNT;</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">BACKUP AS COPY DATABASE FORMAT '+<em>&lt;disk group destination&gt;</em>';</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">SWITCH DATABASE TO COPY;</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">SQL "ALTER DATABASE RENAME <em>&lt;logfile1&gt; </em>TO '+<em>&lt;disk group destination&gt;</em>' ";</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"># repeat for all log file members</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">ALTER DATABASE OPEN RESETLOGS;</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><strong>7. </strong>Delete or archive the old database files.<br />
+</span></p>
+<p align="left">
+<p><span style="font-family: 'Times New Roman';">-----------------------------------------------</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';">ASM supports datafiles, log files, control files, archive logs, RMAN backup sets, SPFILEs, and other Oracle database file types, but not password files or init.ora files.</span></p>
+<p align="left"><span style="font-family: 'Times New Roman';"><br />
+-- EOF --</span></p>
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/stay-up-late.html" data-toggle="tooltip" data-placement="top" title="熬夜了">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/sg-ii-chapter-10-understandingglobalization-support.html" data-toggle="tooltip" data-placement="top" title="SG II: Chapter 10 | UnderstandingGlobalization Support">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/sg-ii-chapter-9-understanding-automatic-storage-management" data-title="SG II: Chapter 9 | Understanding Automatic Storage Management"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Objects:
+
+·Set up initialization parameter files for ASM and database instanc... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-9-understanding-automatic-storage-management.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/sg-ii-chapter-9-understanding-automatic-storage-management" data-title="SG II: Chapter 9 | Understanding Automatic Storage Management" data-url="http://dbaeyes.github.io/oracle/sg-ii-chapter-9-understanding-automatic-storage-management.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>关于oracle中sql*loader的总结 zt - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/summary-of-the-oracle-sqlloader-zt.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                    </div>
+                    <h1>关于oracle中sql*loader的总结 zt</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on October 22, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>Oracle 的SQL*LOADER可以将外部数据加载到数据库表中。下面是SQL*LOADER的基本特点：</p>
+<div>
+<p>1）能装入不同数据类型文件及多个数据文件的数据<br />
+2）可装入固定格式，自由定界以及可度长格式的数据<br />
+3）可以装入二进制，压缩十进制数据<br />
+4）一次可对多个表装入数据<br />
+5）连接多个物理记录装到一个记录中<br />
+6）对一单记录分解再装入到表中<br />
+7）可以用 数对制定列生成唯一的KEY<br />
+8）可对磁盘或 磁带数据文件装入制表中<br />
+9）提供装入错误报告<br />
+10）可以将文件中的整型字符串，自动转成压缩十进制并装入列表中。<br />
+1.2   控制文件<br />
+控制文件是用一种语言写的文本文件，这个文本文件能被SQL*LOADER识别。SQL*LOADER根据控制文件可以找到需要加载的数据。并且分析和解释这些数据。控制文件由三个部分组成：</p>
+<p>l         全局选件，行，跳过的记录数等；<br />
+l         INFILE子句指定的输入数据；<br />
+l         数据特性说明。</p>
+<p>1.3   输入文件<br />
+对于 SQL*Loader, 除控制文件外就是输入数据。SQL*Loader可从一个或多个指定的文件中读出数据。如果 数据是在控制文件中指定，就要在控制文件中写成 INFILE * 格式。当数据固定的格式（长度一样）时且是在文件中得到时，要用INFILE &lt;datafile_name&gt; "fix n"</p>
+<p>load data<br />
+infile 'example.dat' "fix 11"<br />
+into table example<br />
+fields terminated by ',' optionally enclosed by '"'<br />
+(col1 char(5),<br />
+col2 char(7))<br />
+example.dat:<br />
+001, cd, 0002,fghi,<br />
+00003,lmn,<br />
+1, "pqrs",<br />
+0005,uvwx,</p>
+<p>当数据是可变格式（长度不一样）时且是在文件中得到时，要用INFILE &lt;datafile_name&gt; "var n"。如：</p>
+<p>load data<br />
+infile 'example.dat' "var 3"<br />
+into table example<br />
+fields terminated by ',' optionally enclosed by '"'<br />
+(col1 char(5),<br />
+col2 char(7))<br />
+example.dat:<br />
+009hello,cd,010world,im,<br />
+012my,name is,</p>
+<p>1.4   坏文件<br />
+坏文件包含那些被SQL*Loader拒绝的记录。被拒绝的记录可能是不符合要求的记录。<br />
+坏文件的名字由 SQL*Loader命令的BADFILE 参数来给定。</p>
+<p>1.5   日志文件及日志信息<br />
+当SQL*Loader 开始执行后，它就自动建立 日志文件。日志文件包含有加载的总结，加载中的错误信息等。</p>
+<p>控制文件语法<br />
+控制文件的格式如下：</p>
+<p>OPTIONS （ { [SKIP=integer] [ LOAD = integer ]<br />
+[ERRORS = integer] [ROWS=integer]<br />
+[BINDSIZE=integer] [SILENT=(ALL|FEEDBACK|ERROR|DISCARD) ] )<br />
+LOAD[DATA]<br />
+[ { INFILE | INDDN } {file | * }<br />
+[STREAM | RECORD | FIXED length [BLOCKSIZE size]|<br />
+VARIABLE [length] ]<br />
+[ { BADFILE | BADDN } file ]<br />
+{DISCARDS | DISCARDMAX} integr ]<br />
+[ {INDDN | INFILE} . . . ]<br />
+[ APPEND | REPLACE | INSERT ]<br />
+[RECLENT integer]<br />
+[ { CONCATENATE integer |<br />
+CONTINUEIF { [THIS | NEXT] (start[: end])LAST }<br />
+Operator { 'string' | X 'hex' } } ]<br />
+INTO TABLE [user.]table<br />
+[APPEND | REPLACE|INSERT]<br />
+[WHEN condition [AND condition]...]<br />
+[FIELDS [delimiter] ]<br />
+(<br />
+column {<br />
+RECNUM | CONSTANT value |<br />
+SEQUENCE ( { integer | MAX |COUNT} [, increment] ) |<br />
+[POSITION ( { start [end] | * [ + integer] }<br />
+) ]<br />
+datatype<br />
+[TERMINATED [ BY ] {WHITESPACE| [X] 'character' } ]<br />
+[ [OPTIONALLY] ENCLOSE   [BY] [X]'charcter']<br />
+[NULLIF condition ]<br />
+[DEFAULTIF condotion]<br />
+}<br />
+[ ,...]<br />
+)<br />
+[INTO TABLE...]<br />
+[BEGINDATA]</p>
+<p>1）要加载的数据文件：</p>
+<p>1．INFILE 和INDDN是同义词，它们后面都是要加载的数据文件。如果用 * 则表示数据就在控制文件内。在INFILE 后可以跟几个文件。<br />
+2．STRAM 表示一次读一个字节的数据。新行代表新物理记录（逻辑记录可由几个物理记录组成）。<br />
+3．RECORD 使用宿主操作系统文件及记录管理系统。如果数据在控制文件中则使用这种方法。<br />
+3． FIXED length 要读的记录长度为length字节，<br />
+4． VARIABLE 被读的记录中前两个字节包含的长度，length 记录可能的长度。缺伤为8k字节。<br />
+5． BADFILE和BADDN同义。Oracle 不能加载数据到数据库的那些记录。<br />
+6． DISCARDFILE和DISCARDDN是同义词。记录没有通过的数据。<br />
+7． DISCARDS和DISCARDMAX是同义词。Integer 为最大放弃的文件个数。</p>
+<p>2）加载的方法：</p>
+<p>1．APPEND 给表添加行。<br />
+2．INSERT 给空表增加行（如果表中有记录则退出）。<br />
+3．REPLACE 先清空表在加载数据。<br />
+4． RECLEN 用于两种情况，1）SQLLDR不能自动计算记录长度，2）或用户想看坏文件的完整记录时。对于后一种，Oracle只能按常规把坏记录部分写到错误的地方。如果看整条记录，则可以将整条记录写到坏文件中。</p>
+<p>3）指定最大的记录长度：</p>
+<p>1． CONCATENATE 允许用户设定一个整数，表示要组合逻辑记录的数目。</p>
+<p>4）建立逻辑记录：</p>
+<p>1．THIS 检查当前记录条件，如果为真则连接下一个记录。<br />
+2．NEXT 检查下一个记录条件。如果为真，则连接下一个记录到当前记录来。<br />
+2． Start: end 表示要检查在THIS或NEXT字串是否存在继续串的列，以确定是否进行连接。如：continueif next(1-3)='WAG' 或continueif next(1-3)=X'0d03if'</p>
+<p>5）指定要加载的表：</p>
+<p>1．INTO TABLE 要加的表名。<br />
+2．WHEN 和select WHERE类似。用来检查记录的情况，如：when(3-5)='SSM' and (22)='*"</p>
+<p>6）介绍并括起记录中的字段：</p>
+<p>1． FIELDS   给出记录中字段的分隔符，FIELDS格式为：</p>
+<p>FIELDS [TERMIALED [BY] {WHITESPACE | [X] 'charcter'} ]<br />
+[ [ OPTIONALLY] ENCLOSE [BY] [X]'charcter' ]</p>
+<p>TERMINATED 读完前一个字段即开始读下一个字段直到介绍。<br />
+WHITESPACE 是指结束符是空格的意思。包括空格、Tab、换行符、换页符及回车符。如果是要判断但字符，可以用单引号括起，如X'1B'等。<br />
+OPTIONALLY ENCLOSED 表示数据应由特殊字符括起来。也可以括在TERMINATED字符内。使用OPTIONALLY要同时用TERMINLATED。<br />
+ENCLOSED 指两个分界符内的数据。如果同时用 ENCLOSED和TERMINAED ，则它们的顺序决定计算的顺序。</p>
+<p>7）定义列：</p>
+<p>column 是表列名。列的取值可以是：<br />
+BECHUM 表示逻辑记录数。第一个记录为1,第2个记录为2。<br />
+CONSTANT 表示赋予常数。<br />
+SEQUENCE          表示序列可以从任意序号开始，格式为：<br />
+SEQUENCE          （ { integer | MAX |COUNT} [,increment]<br />
+POSITION 给出列在逻辑记录中的位置。可以是绝对的，或相对前一列的值。格式为：<br />
+POSITION ( {start[end] | * [+integer] } )<br />
+Start 开始位置<br />
+* 表示前字段之后立刻开始。<br />
++ 从前列开始向后条的位置数。</p>
+<p>8）定义数据类型：<br />
+可以定义14种数据类型：<br />
+CHAR<br />
+DATE<br />
+DECIMAL EXTERNAL<br />
+DECIMAL<br />
+DOUBLE<br />
+FLOAT<br />
+FLOAT EXTERNAL<br />
+GRAPHIC EXTERNAL<br />
+INTEGER<br />
+INTEGER EXTERNAL<br />
+SMALLINT<br />
+VARCHAR<br />
+VARGRAPHIC</p>
+<p>1．字符类型数据<br />
+CHAR   [ (length)] [delimiter]<br />
+length缺省为 1.<br />
+2.日期类型数据<br />
+DATE [ ( length)]['date_format' [delimiter]<br />
+使用to_date函数来限制。</p>
+<p>3．字符格式中的十进制<br />
+DECIMAL EXTERNAL [(length)] [delimiter]<br />
+用于常规格式的十进制数（不是二进制=&gt; 一个位等于一个bit）。</p>
+<p>4．压缩十进制格式数据<br />
+DECIMAL （digtial [,precision]）</p>
+<p>5．双精度符点二进制<br />
+DOUBLE</p>
+<p>6．普通符点二进制<br />
+FLOAT</p>
+<p>7．字符格式符点数<br />
+FLOAT EXTERNAL [ (length) ] [delimiter]</p>
+<p>8．双字节字符串数据<br />
+GRAPHIC [ (legth)]</p>
+<p>9．双字节字符串数据<br />
+GRAPHIC EXTERNAL[ (legth)]</p>
+<p>10．常规全字二进制整数<br />
+INTEGER</p>
+<p>11．字符格式整数<br />
+INTEGER EXTERNAL</p>
+<p>12．常规全字二进制数据<br />
+SMALLINT</p>
+<p>13．可变长度字符串<br />
+VARCHAR</p>
+<p>14．可变双字节字符串数据<br />
+VARGRAPHIC</p>
+<p>2.2   写控制文件CTL</p>
+<p>1． 各数据文件的文件名;<br />
+2．各数据文件格式;<br />
+3．各数据文件里各数据记录字段的属性；<br />
+4．接受数据的ORACLE表列的属性；<br />
+5．数据定义；<br />
+6．其它</p>
+<p>数据文件的要求：</p>
+<p>数据类型的指定<br />
+CHAR     字符型<br />
+INTEGER   EXTERNAL    整型<br />
+DECIMAL   EXTERNAL    浮点型</p>
+<p>3.1   数据文件的内容</p>
+<p>可以在OS下的一个文件；或跟在控制文件下的具体数据。数据文件可以是：<br />
+1、 二进制与字符格式：LOADER可以把二进制文件读（当成字符读）列表中<br />
+2、 固定格式：记录中的数据、数据类型、 数据长度固定。<br />
+3、 可变格式：每个记录至少有一个可变长数据字段，一个记录可以是一个连续的字符串。<br />
+数据段的分界（如姓名、年龄）如用“，”作字段的 分 ；用，"’作数据<br />
+括号等<br />
+4、 LOADER可以使用多个连续字段的物理记录组成一个逻辑记录，记录文件运行情况文件：包括以下内容：<br />
+1、 运行日期：软件版本号<br />
+2、 全部输入，输出文件名；对命令行的展示信息，补充信息，<br />
+3、 对每个装入信息报告：如表名，装入情况；对初始装入， 加截入或更新装<br />
+入的选择情况，栏信息<br />
+4、 数据错误报告：错误码；放弃记录报告<br />
+5、 每个装X报告：装入行；装入行数，可能跳过行数；可能拒绝行数；可能放<br />
+弃行数等<br />
+6、 统计概要：使用空间（包大小，长度）；读入记录数，装入记录数，跳过记<br />
+录数；拒绝记录数，放弃记录数；运行时间等。<br />
+<strong>实际使用</strong></p>
+<p><strong>如何使用 SQL*Loader 工具<br />
+</strong><br />
+我们可以用Oracle的sqlldr工具来导入数据。例如:<br />
+sqlldr scott/tiger control=loader.ctl</p>
+<p>控制文件(loader.ctl) 将加载一个外部数据文件（含分隔符). loader.ctl如下:<br />
+load data<br />
+infile 'c:\data\mydata.csv'<br />
+into table emp<br />
+fields terminated by "," optionally enclosed by '"'<br />
+( empno, empname, sal, deptno )</p>
+<p>mydata.csv 如下:<br />
+10001,"Scott Tiger", 1000, 40<br />
+10002,"Frank Naude", 500, 20</p>
+<p>下面是一个指定记录长度的示例控制文件。"*" 代表数据文件与此文件同名，即在后面使用BEGINDATA段来标识数据。<br />
+load data<br />
+infile *<br />
+replace<br />
+into table departments<br />
+( dept position (02:05) char(4),<br />
+deptname position (08:27) char(20)<br />
+)<br />
+begindata<br />
+COSC COMPUTER SCIENCE<br />
+ENGL ENGLISH LITERATURE<br />
+MATH MATHEMATICS<br />
+POLY POLITICAL SCIENCE<br />
+Unloader这样的工具<br />
+Oracle 没有提供将数据导出到一个文件的工具。但是，我们可以用SQL*Plus的select 及 format 数据来输出到一个文件：<br />
+set echo off newpage 0 space 0 pagesize 0 feed off head off trimspool on<br />
+spool oradata.txt<br />
+select col1 || ',' || col2 || ',' || col3<br />
+from tab1<br />
+where col2 = 'XYZ';<br />
+spool off</p>
+<p>另外，也可以使用使用 UTL_FILE PL/SQL 包处理:<br />
+rem Remember to update initSID.ora, utl_file_dir='c:\oradata' parameter<br />
+declare<br />
+fp utl_file.file_type;<br />
+begin<br />
+fp := utl_file.fopen('c:\oradata','tab1.txt','w');<br />
+utl_file.putf(fp, '%s, %s\n', 'TextField', 55);<br />
+utl_file.fclose(fp);<br />
+end;<br />
+/</p>
+<p>当然你也可以使用第三方工具，如SQLWays ,TOAD for Quest等。</p>
+<p><strong>加载可变长度或指定长度的记录</strong></p>
+<p>如：<br />
+LOAD DATA<br />
+INFILE *<br />
+INTO TABLE load_delimited_data<br />
+FIELDS TERMINATED BY "," OPTIONALLY ENCLOSED BY '"'<br />
+TRAILING NULLCOLS<br />
+( data1,<br />
+data2<br />
+)<br />
+BEGINDATA<br />
+11111,AAAAAAAAAA<br />
+22222,"A,B,C,D,"</p>
+<p>下面是导入固定位置（固定长度）数据示例：<br />
+LOAD DATA<br />
+INFILE *<br />
+INTO TABLE load_positional_data<br />
+( data1 POSITION(1:5),<br />
+data2 POSITION(6:15)<br />
+)<br />
+BEGINDATA<br />
+11111AAAAAAAAAA<br />
+22222BBBBBBBBBB</p>
+<p>跳过数据行：</p>
+<p>可以用 "SKIP n" 关键字来指定导入时可以跳过多少行数据。如：<br />
+LOAD DATA<br />
+INFILE *<br />
+INTO TABLE load_positional_data<br />
+SKIP 5<br />
+( data1 POSITION(1:5),<br />
+data2 POSITION(6:15)<br />
+)<br />
+BEGINDATA<br />
+11111AAAAAAAAAA<br />
+22222BBBBBBBBBB</p>
+<p>导入数据时修改数据：</p>
+<p>在导入数据到数据库时，可以修改数据。注意，这仅适合于常规导入，并不适合 direct导入方式.如：<br />
+LOAD DATA<br />
+INFILE *<br />
+INTO TABLE modified_data<br />
+( rec_no "my_db_sequence.nextval",<br />
+region CONSTANT '31',<br />
+time_loaded "to_char(SYSDATE, 'HH24:MI')",<br />
+data1 POSITION(1:5) ":data1/100",<br />
+data2 POSITION(6:15) "upper(:data2)",<br />
+data3 POSITION(16:22)"to_date(:data3, 'YYMMDD')"<br />
+)<br />
+BEGINDATA<br />
+11111AAAAAAAAAA991201<br />
+22222BBBBBBBBBB990112</p>
+<p>LOAD DATA<br />
+INFILE 'mail_orders.txt'<br />
+BADFILE 'bad_orders.txt'<br />
+APPEND<br />
+INTO TABLE mailing_list<br />
+FIELDS TERMINATED BY ","<br />
+( addr,<br />
+city,<br />
+state,<br />
+zipcode,<br />
+mailing_addr "decode(:mailing_addr, null, :addr, :mailing_addr)",<br />
+mailing_city "decode(:mailing_city, null, :city, :mailing_city)",<br />
+mailing_state<br />
+)</p>
+<p>将数据导入多个表：</p>
+<p>如:<br />
+LOAD DATA<br />
+INFILE *<br />
+REPLACE<br />
+INTO TABLE emp<br />
+WHEN empno != ' '<br />
+( empno POSITION(1:4) INTEGER EXTERNAL,<br />
+ename POSITION(6:15) CHAR,<br />
+deptno POSITION(17:18) CHAR,<br />
+mgr POSITION(20:23) INTEGER EXTERNAL<br />
+)<br />
+INTO TABLE proj<br />
+WHEN projno != ' '<br />
+( projno POSITION(25:27) INTEGER EXTERNAL,<br />
+empno POSITION(1:4) INTEGER EXTERNAL<br />
+)</p>
+<p>导入选定的记录：</p>
+<p>如下例： (01) 代表第一个字符, (30:37) 代表30到37之间的字符:<br />
+LOAD DATA<br />
+INFILE 'mydata.dat' BADFILE 'mydata.bad' DISCARDFILE 'mydata.dis'<br />
+APPEND<br />
+INTO TABLE my_selective_table<br />
+WHEN (01) &lt;&gt; 'H' and (01) &lt;&gt; 'T' and (30:37) = '19991217'<br />
+(<br />
+region CONSTANT '31',<br />
+service_key POSITION(01:11) INTEGER EXTERNAL,<br />
+call_b_no POSITION(12:29) CHAR<br />
+)</p>
+<p>导入时跳过某些字段：</p>
+<p>可用 POSTION(x:y) 来分隔数据. 在Oracle8i中可以通过指定 FILLER　字段实现。FILLER 字段用来跳过、忽略导入数据文件中的字段.如：<br />
+LOAD DATA<br />
+TRUNCATE INTO TABLE T1<br />
+FIELDS TERMINATED BY ','<br />
+( field1,<br />
+field2 FILLER,<br />
+field3<br />
+)</p>
+<p>导入多行记录：</p>
+<p>可以使用下面两个选项之一来实现将多行数据导入为一个记录:</p>
+<p>CONCATENATE: - use when SQL*Loader should combine the same number of physical records together to form one logical record.</p>
+<p>CONTINUEIF - use if a condition indicates that multiple records should be treated as one. Eg. by having a '#' character in column 1.</p>
+<p>SQL*Loader 数据的提交：</p>
+<p>一般情况下是在导入数据文件数据后提交的。</p>
+<p>也可以通过指定 ROWS= 参数来指定每次提交记录数。</p>
+<p>提高 SQL*Loader　的性能：</p>
+<p>1) 一个简单而容易忽略的问题是，没有对导入的表使用任何索引和/或约束(主键)。如果这样做，甚至在使用ROWS=参数时，会很明显降低数据库导入性能。</p>
+<p>2) 可以添加 DIRECT=TRUE来提高导入数据的性能。当然，在很多情况下，不能使用此参数。</p>
+<p>3) 通过指定　UNRECOVERABLE选项，可以关闭数据库的日志。这个选项只能和 direct 一起使用。</p>
+<p>4) 可以同时运行多个导入任务.</p>
+<p>常规导入与direct导入方式的区别：</p>
+<p>常规导入可以通过使用 INSERT语句来导入数据。Direct导入可以跳过数据库的相关逻辑(DIRECT=TRUE)，而直接将数据导入到数据文件中。</p>
+<p align="left"><span style="font-size: medium;"><strong>sqlldr 使用例子说明</strong></span></p>
+<p align="left">
+<table>
+<tbody>
+<tr>
+<td>
+<div>先把Excel另存为.csv格式文件，如test.csv，再编写一个insert.ctl<br />
+用sqlldr进行导入!<br />
+insert.ctl内容如下：<br />
+load data　　　　　　　　　　           --1、控制文件标识<br />
+infile 'test.csv'　　　　　　           --2、要输入的数据文件名为test.csv<br />
+append into table table_name　　　　    --3、向表table_name中追加记录<br />
+fields terminated by ','　　            --4、字段终止于','，是一个逗号<br />
+(field1,<br />
+field2,<br />
+field3,<br />
+...<br />
+fieldn)-----定义列对应顺序<br />
+注意括号中field排列顺序要与csv文件中相对应<br />
+然后就可以执行如下命令：<br />
+sqlldr user/password control=insert.ctl</p>
+<p><span style="font-size: medium;"><strong><br />
+</strong>如果有时间字段，如下操作</p>
+<p>load data<br />
+infile 'test_ldr.csv'<br />
+insert<br />
+into table tmp_ldr<br />
+fields terminated by ','optionally enclosed by '"'<br />
+(rid,<br />
+object_id,<br />
+object_name,<br />
+object_type,<br />
+<span style="color: #ff0000;">gmt_created Date "yyyy-mm-dd hh24:mi:ss",</span><br />
+timestamp)<br />
+</span>&nbsp;</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p align="left">
+</div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/os/ibm-aix-maintenance-commands.html" data-toggle="tooltip" data-placement="top" title="IBM AIX日常维护命令">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/importance-of-oracle-hint.html" data-toggle="tooltip" data-placement="top" title="Oracle Hint 的重要性">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/summary-of-the-oracle-sqlloader-zt" data-title="关于oracle中sql*loader的总结 zt"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="Oracle 的SQL*LOADER可以将外部数据加载到数据库表中。下面是SQL*LOADER的基本特点：
+
+1）能装入不同数据类型文件及多个数据文件的数... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/summary-of-the-oracle-sqlloader-zt.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/summary-of-the-oracle-sqlloader-zt" data-title="关于oracle中sql*loader的总结 zt" data-url="http://dbaeyes.github.io/oracle/summary-of-the-oracle-sqlloader-zt.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

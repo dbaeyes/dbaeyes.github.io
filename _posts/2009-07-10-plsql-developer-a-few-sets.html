@@ -1,0 +1,40 @@
+---
+layout: post
+title: PL/SQL developer几个设置
+date: 2009-07-10 14:52:48.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- plsql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '739'
+---
+<p>1、PL/SQL Developer记住登陆密码</p>
+<div>
+<p>   在使用PL/SQL Developer时，为了工作方便希望PL/SQL Developer记住登录Oracle的用户名和<br />
+密码；</p>
+<p>设置方法：PL/SQL Developer 7.1.2 -&gt;tools-&gt;Preferences-&gt;Oracle-&gt;Logon History ， “Sto<br />
+re history”是默认勾选的，勾上“Store with password” 即可，重新登录在输入一次密码则记<br />
+住了。</p>
+<p>--开发库使用</p>
+<p>2、执行单条SQL语句</p>
+<p>在使用PL/SQL Developer的SQL Window时，按F8键，PL/SQL Developer默认是执行该窗口的所<br />
+有SQL语句，需要设置为鼠标所在的那条SQL语句，即执行当前SQL语句；</p>
+<p>设置方法：PL/SQL Developer 7.1.2 --&gt;tools-&gt;Preferences--&gt;Window types ，勾上“AutoSel<br />
+ect Statement” 即可。</p>
+<p>&nbsp;</p>
+<p>3、调试存储过程</p>
+<p>在使用PL/SQL Developer操作Oracle时，有时候调用某些存储过程，或者调试存储过程；</p>
+<p>调用存储过程的方法：首先，在PL/SQL Developer左边的Browser中选择Procedures，查找需要调<br />
+用的存储过程；然后，选中调试的存储过程，点击右键，选择Test，在弹出来的Test scrīpt窗口<br />
+中，对于定义为in类型的参数，需要给该参数的Value输入值；最后点击上面的条数按钮：Start<br />
+debugger 或者按F9；最后点击：RUN 或者Ctrl+R 。</p>
+<p>4、关键字自动大写:    了解一点编程的常识的人都知道，编码风格很重要。在阅读代码方面，保持一致的编码风格，阅读起来比较容易；在执行效率方面，保持一致的编码风格，更有可能被放到共享SQL区中，这样就提供了 执行的效率。<br />
+设置也很简单：Tools-&gt;Preferences-&gt;Editor，将Keyword case选择Uppercase。</p>
+</div>

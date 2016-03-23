@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="在遙遠的地方 一切虔誠終必相遇">
+
+    <title>ORACLE数据库对象统计分析技术应用 -- 转载 - Microdust</title>
+
+    <link rel="canonical" href="http://dbaeyes.github.io/oracle/statistical-analysis-of-oracle-database-object-technology-application-reprint.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Microdust</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/Lists.html">Reading</a>
+                </li>
+                
+                <li>
+                    <a href="/Tools.html">Tools</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/Instagram/">Photos: Instagram</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                    </div>
+                    <h1>ORACLE数据库对象统计分析技术应用 -- 转载</h1>
+                    
+                    <span class="meta">Posted by {"login"=>"Toby", "email"=>"renwei.chu@gmail.com", "display_name"=>"David", "first_name"=>"", "last_name"=>""} on August 13, 2007</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>ORACLE在执行SQL时如果使用成本方式分析则所有的成本分析信息来源依靠于系统的统计分析表（DBA_TABLES、DBA_INDEXES、DBA_TAB_COLUMNS）数据.</p>
+<div>
+ORACLE在执行SQL时如果使用成本方式分析则所有的成本分析信息来源依靠于系统的统计分析表（DBA_TABLES、DBA_INDEXES、 DBA_TAB_COLUMNS）数据，如果说统计分析的数据是不准确的，那可能会使ORACLE分析出来的路径执行性能极差，所以统计分析数据是影响 ORACLE性能极重要的信息。</p>
+<p>统计分析主要包括产生表及索引的统计信息</p>
+<p>表的统计信息主要包括表的行数，每行的平均长度（字节），空闲块，统计时间等信息</p>
+<p>索引的统计信息主要包括行数、层数、叶块数、统计时间等信息。</p>
+<p>另外ORACLE还可以统计列及数据不对称信息，9i还可以统计系统信息（CPU，I/O）</p>
+<p>ORACLE执行成本分析时首先取出所应用表及索引的统计数据进行分析，其中数据行数是一个重要的参数，因为ORACLE在分析表大小时行数为主要参数，如果进行两个表联合时，ORACLE会通过分析表的大小，决定应用小表进行全表查询，而大表执行联合查询，这种性能明显高于先大表进行全表扫描。索引的统计信息对分析也产生比较大的影响，如ORACLE通过统计可以分析产生多个索引的优先级及索引的实用性来确定最优的索引策略。ORACLE还可以统计列及数据对称信息以产生更精确的分析。如一个表有A字段的索引，其中A共有两种值1和0，共10000条记录，为0的记录有10条，为1的记录有9990条，这时如果没有进行列数据不对称的统计信息，那么ORACLE对A=0及A=1条件查询都会进行索引，但实际应用对A=0的索引性能得到了很大的提高，而A =1的索引反而使性能下降。所以说索引特征值分析信息对应用索引产生重大影响，精确的信息使ORACLE不会使用不应该用的索引。</p>
+<p>实际分析</p>
+<p>zl_cbqc和zl_yhjbqk都没有建立统计信息，执行如下两个SQL ORACLE将产生不同的执行计划。</p>
+<p>1    select * from dlyx.zl_cbqc b, dlyx.zl_yhjbqk a where a.qc_bh=b.qc_bh</p>
+<p>执行计划：</p>
+<p>SELECT STATEMENT, GOAL = CHOOSE<br />
+NESTED LOOPS<br />
+TABLE ACCESS FULL     DLYX      ZL_YHJBQK<br />
+TABLE ACCESS BY INDEX ROWID       DLYX      ZL_CBQC<br />
+INDEX UNIQUE SCAN   DLYX      抄表区册主键</p>
+<p>2   select * from dlyx.zl_yhjbqk a,dlyx.zl_cbqc b where a.qc_bh=b.qc_bh</p>
+<p>执行计划：</p>
+<p>SELECT STATEMENT, GOAL = CHOOSE<br />
+NESTED LOOPS<br />
+TABLE ACCESS FULL     DLYX      ZL_CBQC<br />
+TABLE ACCESS BY INDEX ROWID       DLYX      ZL_YHJBQK<br />
+INDEX RANGE SCAN     DLYX      区册索引</p>
+<p>在对两个表进行了统计分析后</p>
+<p>3          select * from dlyx.zl_yhjbqk a,dlyx.zl_cbqc b where a.qc_bh=b.qc_bh</p>
+<p>执行计划：</p>
+<p>SELECT STATEMENT, GOAL = CHOOSE                 159   72853      9689449<br />
+HASH JOIN                 159   72853      9689449<br />
+TABLE ACCESS FULL       DLYX      ZL_CBQC       1      426   19596<br />
+TABLE ACCESS FULL       DLYX      ZL_YHJBQK    157   72853      6338211</p>
+<p>4   select * from dlyx.zl_cbqc b,dlyx.zl_yhjbqk a where a.qc_bh=b.qc_bh</p>
+<p>执行计划：</p>
+<p>SELECT STATEMENT, GOAL = CHOOSE                 159   72853      9689449<br />
+HASH JOIN                 159   72853      9689449<br />
+TABLE ACCESS FULL       DLYX      ZL_CBQC       1      426   19596<br />
+TABLE ACCESS FULL       DLYX      ZL_YHJBQK    157   72853      6338211</p>
+<p>从以上测试可以明显看出ORACLE的分析结果</p>
+<p>第1条SQL与第2条SQL在没有统计分析的信息下进行，ORACLE无法进行判断，只能以规则方法进行分析，根据表的出现先后顺序有明显关系。</p>
+<p>第3条SQL与第4条SQL在有统计分析的信息下进行，ORACLE分析与表的出现先后顺序无关，因为它已经知道了表的数据量并且已经确定返回的数据量基本上是两个表所有的数据，所以对表两个表进行了HASH JOIN （同时取出两个表的数据然后在内存中进行联合产生返回结果）。</p>
+<p>相关技术</p>
+<p>用analyze语句产生分析数据</p>
+<p>分析表：analyze table zl_yhjbqk estimate statistics sample 20 percent</p>
+<p>分析索引：analyze index用户资料表主键compute statistics</p>
+<p>分析列：analyze table zl_yhjbqk compute statistics for columns hbs_bh</p>
+<p>分析索引列：analyze table zl_yhjbqk compute statistics for all indexed columns</p>
+<p>用sys.dbms_utility包分析数据</p>
+<p>分析数据库（包括所有的用户对象和系统对象）：analyze_database</p>
+<p>分析用户所有的对象（包括用户方案内的表、索引、簇）：analyze_schema</p>
+<p>用sys.dbms_stats包处理分析数据</p>
+<p>分析数据库（包括所有的用户对象和系统对象）：gather_database_stats</p>
+<p>分析用户所有的对象（包括表、索引、簇）：gather_schema_stats</p>
+<p>分析表：gather_table_stats</p>
+<p>分析索引：gather_index_stats</p>
+<p>删除数据库统计信息：delete_database_stats</p>
+<p>删除用户方案统计信息：delete_schema_stats</p>
+<p>删除表统计信息：delete_table_stats</p>
+<p>删除索引统计信息：delete_index_stats</p>
+<p>删除列统计信息：delete_column_stats</p>
+<p>设置表统计信息：set_table_stats</p>
+<p>设置索引统计信息：set_index_stats</p>
+<p>设置列统计信息：set_column_stats</p>
+<p>ORACLE推荐用户采用sys.dbms_stats包体进行分析，因为在ORACLE9i及其以上的版本全面扩充的此包体的功能。 sys.dbms_utility包体进行分析时会对所有的信息全部分析一遍，时间比较长，而在9i中sys.dbms_stats可以利用表修改监控技术来判断需统计分析的表进行，节省了用户的分析资源。</p>
+<p>备注：</p>
+<p>ORACLE在得到了表的统计分析数据后才会进行成本分析，否则采用规则分析。</p>
+<p>并不是所有的统计数据都会对ORACLE分析产生影响，有些统计数据ORACLE并不处理，只是提供给用户一个参考信息，也可能在ORACLE以后的版本中利用这些信息进行分析。</p></div>
+
+
+                <hr>
+
+
+                <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/oracle10g-errors-that-may-occur-using-flashback.html" data-toggle="tooltip" data-placement="top" title="oracle10g 使用闪回可能出现的错误">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/ora-00257-archive-log-problem-solving-process.html" data-toggle="tooltip" data-placement="top" title="ORA-00257 archive log 故障解决过程">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/statistical-analysis-of-oracle-database-object-technology-application-reprint" data-title="ORACLE数据库对象统计分析技术应用 -- 转载"
+                    data-images="http://dbaeyes.github.io/img/fantasy.jpg"
+                    data-content="ORACLE在执行SQL时如果使用成本方式分析则所有的成本分析信息来源依靠于系统的统计分析表（DBA_TABLES、DBA_INDEXES、DBA_TAB... | Microdust:Azeril's blog"
+                    data-url="http://dbaeyes.github.io/oracle/statistical-analysis-of-oracle-database-object-technology-application-reprint.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/statistical-analysis-of-oracle-database-object-technology-application-reprint" data-title="ORACLE数据库对象统计分析技术应用 -- 转载" data-url="http://dbaeyes.github.io/oracle/statistical-analysis-of-oracle-database-object-technology-application-reprint.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    <!--
+                    
+                    <li>
+                        <a href="https://www.facebook.com/Azeril_Lapland">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/Azeril">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>
