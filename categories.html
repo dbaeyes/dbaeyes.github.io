@@ -1,0 +1,27 @@
+---
+layout: page
+title: Categories
+header: Posts By Category
+group: navigation
+description: "归类而分"
+header-img: "img/autumn.jpg"
+---
+<div id='tag_cloud'>
+    {% for category in site.categories %}<a href="#{{ category | first }}">{{ category | first }}<sup>{{ category | last | size }}</sup></a>
+    {% endfor %}
+</div>
+{% for category in site.categories %}
+<h2 name="{{category | first }}"  id="{{category | first }}" class="category-group">
+<i class="fa fa-folder-open-o"></i>
+{{ category | first }}<span class="category-number"> * {{ category | last | size }}</span>
+</h2>
+<ul class="post-list">
+    {% for post in category.last %}
+    <li>
+        <time class="category-date">{{ post.date | date:"%Y-%m-%d"}}</time>
+        <a href="{{ post.url }}">{{ post.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endfor %}
+
