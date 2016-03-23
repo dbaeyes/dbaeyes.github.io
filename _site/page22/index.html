@@ -112,6 +112,27 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/monitor-dml-operations-table.html">
+        <h2 class="post-title">            
+            监控表的DML操作
+        </h2>
+        
+        <div class="post-content-preview">
+            晕，这年头数据老是被篡改，开发环境都这样。。。。 应开发人员要求，简单记录一下操作
+
+create table TMP_MONITOR
+(
+USERNAME   VARCHAR2(100),
+OSUSER     VARCHAR2(100),
+MACHINE    VARCHAR2(100),...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on March 6, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/thinking/roaring-sound.html">
         <h2 class="post-title">            
             吼一声
@@ -241,25 +262,6 @@ gmt_...
 ID        NUMBER,
 ROWID_MIN VARCHAR2(100),
 ROWID_MAX...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on February 2, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/according-to-the-id-initialization-data.html">
-        <h2 class="post-title">            
-            根据ID初始化数据
-        </h2>
-        
-        <div class="post-content-preview">
-            根据序列ID初始化数据，可以很好的完成并行和增量。 但如果中断需要重新跑那些中断了的进程。
-速度一般，没有extend来的快。 适合需要增量来做的情况
-[cc lang="sql"]
-create or replace procedure SP_FB_INT_COL
-(id_start num...
         </div>
     </a>
     <p class="post-meta">Posted by David on February 2, 2009</p>

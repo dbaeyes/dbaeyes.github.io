@@ -112,6 +112,26 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/track-optimizing-sql.html">
+        <h2 class="post-title">            
+            跟踪 优化 SQL
+        </h2>
+        
+        <div class="post-content-preview">
+            1.获取用户连接
+
+select s.sid sid, s.SERIAL# "serial#", s.username, s.machine, s.program,
+p.spid ServPID, s.server
+from v$session s, v$process p
+where p.a...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on August 5, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/oracle/index-cost.html">
         <h2 class="post-title">            
             索引成本计算
@@ -231,30 +251,6 @@ select * from v$nls_parameter...
 Oracle8i，优化器只是简单地计算期望对IO子系统所做的请求的数目。
 Oracle9i，引入一个新的功能，CPU成本计算 (CPU costing)
 Oracle10g，引入一个新的功能，脱机优化器 (...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on July 23, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/query-top-sql.html">
-        <h2 class="post-title">            
-            查询Top sql
-        </h2>
-        
-        <div class="post-content-preview">
-            From: network
-
-
-&nbsp;
-Top 10 by Buffer Gets:
-set linesize 100
-set pagesize 100
-col sql format a40
-SELECT * FROM
-(SELECT substr(sql_text,1,40) sql,...
         </div>
     </a>
     <p class="post-meta">Posted by David on July 23, 2008</p>

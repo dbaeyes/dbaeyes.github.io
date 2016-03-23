@@ -112,6 +112,24 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/rownum-after-max-who-is-first-and-who.html">
+        <h2 class="post-title">            
+            rownum max 谁先谁后
+        </h2>
+        
+        <div class="post-content-preview">
+            select max(gmt_create) from t_tname where author_id=:1 and rownum=1;
+这个sql是否满足author_id下取最大的时间。
+答案是肯定的，不满足
+这个sql会先取满足条件的 where author_id=:1 一条记录，再取...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on December 8, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/swimming.html">
         <h2 class="post-title">            
             游泳
@@ -253,38 +271,6 @@ R8的屁股
         </div>
     </a>
     <p class="post-meta">Posted by David on October 18, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/the-escape-character-for-mysql.html">
-        <h2 class="post-title">            
-            MySQL的转义字符“\”
-        </h2>
-        
-        <div class="post-content-preview">
-            MySQL识别下列转义字符：
-
-\0
-一个ASCII 0 (NUL)字符。
-\n
-一个新行符。
-\t
-一个定位符。
-\r中国网管联盟www.bitscn.com
-一个回车符。
-\b
-一个退格符。
-\'
-一个单引号(“'”)符。
-\ "
-一个双引号(“ "”)符。
-\\
-一个反斜线(“\”)符。...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on September 28, 2009</p>
 </div>
 
 <hr>

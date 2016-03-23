@@ -112,6 +112,27 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/vsql-bind-capture-gets-the-bound-variables.html">
+        <h2 class="post-title">            
+            v$sql_bind_capture 获取绑定变量
+        </h2>
+        
+        <div class="post-content-preview">
+            --查看绑定变量的值可以通过视图v$sql_bind_capture 来获取
+
+小测一下，记录之：
+var v_id number;
+var v_date varchar2(50);
+exec :v_id := 509105861;
+exec :v_date := '2009-12-26 12...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on December 29, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/os/linux-tar.html">
         <h2 class="post-title">            
             LINUX TAR
@@ -239,24 +260,6 @@ SET charac...
         </div>
     </a>
     <p class="post-meta">Posted by David on December 10, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/rownum-after-max-who-is-first-and-who.html">
-        <h2 class="post-title">            
-            rownum max 谁先谁后
-        </h2>
-        
-        <div class="post-content-preview">
-            select max(gmt_create) from t_tname where author_id=:1 and rownum=1;
-这个sql是否满足author_id下取最大的时间。
-答案是肯定的，不满足
-这个sql会先取满足条件的 where author_id=:1 一条记录，再取...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on December 8, 2009</p>
 </div>
 
 <hr>
