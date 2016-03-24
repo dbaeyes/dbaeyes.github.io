@@ -112,26 +112,6 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
-    <a href="/oracle/track-optimizing-sql.html">
-        <h2 class="post-title">            
-            跟踪 优化 SQL
-        </h2>
-        
-        <div class="post-content-preview">
-            1.获取用户连接
-
-select s.sid sid, s.SERIAL# "serial#", s.username, s.machine, s.program,
-p.spid ServPID, s.server
-from v$session s, v$process p
-where p.a...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on August 5, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
     <a href="/oracle/index-cost.html">
         <h2 class="post-title">            
             索引成本计算
@@ -173,7 +153,7 @@ bleve...
 <hr>
 
 <div class="post-preview">
-    <a href="/life/dba-career-go.html">
+    <a href="/my%20life/dba-career-go.html">
         <h2 class="post-title">            
             成就DBA职业生涯 -- 转
         </h2>
@@ -183,21 +163,6 @@ bleve...
         </div>
     </a>
     <p class="post-meta">Posted by David on July 28, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/quest-spotlight-on-oracle-is-pretty-impressive-monitoring-software.html">
-        <h2 class="post-title">            
-            Quest Spotlight On Oracle 很牛的监控软件
-        </h2>
-        
-        <div class="post-content-preview">
-            on Oracle 能让你迅速发现任何性能瓶颈，无论是实时还是历史查询。Spotlight 能鉴别和诊断几千种性能问题，无论是特定用户问题、集中资源SQL事务、 I/O瓶颈、锁定等待或者其它源码问题。Spotlight for Oracle 能自动为每个实例建立正常活动的底线，当检测到性能瓶颈...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on July 25, 2008</p>
 </div>
 
 <hr>
@@ -240,20 +205,62 @@ select * from v$nls_parameter...
 <hr>
 
 <div class="post-preview">
-    <a href="/oracle/cost-base-notes-on-oracle-fundamentals.html">
+    <a href="/oracle/query-top-sql.html">
         <h2 class="post-title">            
-            Cost-Base Oracle Fundamentals 散记
+            查询Top sql
         </h2>
         
         <div class="post-content-preview">
-            Oracle10g最终不在支持RBO -- 时代变了，老的旧的东西确实需要彻底放弃！
+            From: network
 
-Oracle8i，优化器只是简单地计算期望对IO子系统所做的请求的数目。
-Oracle9i，引入一个新的功能，CPU成本计算 (CPU costing)
-Oracle10g，引入一个新的功能，脱机优化器 (...
+
+&nbsp;
+Top 10 by Buffer Gets:
+set linesize 100
+set pagesize 100
+col sql format a40
+SELECT * FROM
+(SELECT substr(sql_text,1,40) sql,...
         </div>
     </a>
     <p class="post-meta">Posted by David on July 23, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/sqlplus-operation-greatly-entire.html">
+        <h2 class="post-title">            
+            SQLPLUS 操作大全 -zt
+        </h2>
+        
+        <div class="post-content-preview">
+            B SQL*PLUS
+Sql*plus 中使用绑定变量：
+sql&gt; variable x number;
+sql&gt; exec :x := 7788;
+sql&gt; SELECT empno,ename from scott.emp where empno=:x;
+SQL*PLUS...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on July 23, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/my%20life/oracle/opportunity-cbo-oracle-tuning-rules.html">
+        <h2 class="post-title">            
+            基于CBO的oracle优化法则
+        </h2>
+        
+        <div class="post-content-preview">
+            调优是个大学问，从oralce10g开始全面转向了CBO，虽然《Cost-Based Oracle Fundamentals》是作者在9i上面完成，相应的也介绍了10g，但思想还是相同的，希望能结合更多的实际研读之。
+
+同时在把《oracle编程艺术》再来一遍，应该说现在的水平比之前看的时候高...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on July 22, 2008</p>
 </div>
 
 <hr>

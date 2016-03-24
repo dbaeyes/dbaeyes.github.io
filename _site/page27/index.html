@@ -172,24 +172,6 @@ file_id在整个数据库中是唯一的；relative_fno在整个tablespace中是
 <hr>
 
 <div class="post-preview">
-    <a href="/oracle/hit-ratio-for-the-buffer-cache.html">
-        <h2 class="post-title">            
-            hit ratio for the buffer cache
-        </h2>
-        
-        <div class="post-content-preview">
-            Calculate the hit ratio for the buffer cache with this formula:
-
-Hit Ratio = 1 - (physical reads / (db block gets + consistent gets))
-[cc lang="sql...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on September 4, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
     <a href="/my%20life/wangzai-milk.html">
         <h2 class="post-title">            
             旺仔牛奶
@@ -252,6 +234,26 @@ With small values of n, the CBO tends to generate plans that cons...
         </div>
     </a>
     <p class="post-meta">Posted by David on August 20, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/track-optimizing-sql.html">
+        <h2 class="post-title">            
+            跟踪 优化 SQL
+        </h2>
+        
+        <div class="post-content-preview">
+            1.获取用户连接
+
+select s.sid sid, s.SERIAL# "serial#", s.username, s.machine, s.program,
+p.spid ServPID, s.server
+from v$session s, v$process p
+where p.a...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on August 5, 2008</p>
 </div>
 
 <hr>

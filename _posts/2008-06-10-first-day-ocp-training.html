@@ -1,0 +1,54 @@
+---
+layout: post
+title: OCP 培训第一天
+date: 2008-06-10 19:51:28.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- shanghai
+- training
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '928'
+---
+<p>经过了非常恐怖的挤人地铁之旅，顺利的从人民广场地铁站出来，到了昨天就物色好的KFC店吃了早餐。</p>
+<div>
+<p>到了港陆广场楼下，嘿嘿，其实我昨天来看的时候没有找到到32楼的门，惭愧啊，其实也不能怪我，因为昨天门根本就没开（全部放假！！！） 电梯门在32楼打开，正对面就是Oracle公司的培训中心，已经有蛮多学员在教室了，貌似相互之间还是认识的 &gt;_&lt;！！</p>
+<p>讲师上场，应该算是蛮年轻的，他还是OCM的考官来着（厉害的！！！） 叫讲师不顺口，还是老师听了舒服 hoho 应该说老师的讲课非常不错，思路非常清楚（不亏是原厂的，而且估计讲的课程不计其数了吧），而且人非常好，属于我喜欢的那类老师！</p>
+<p>今天的课程主要是RMAN，老实说这个课程在我自己学习的过程中总的感觉还是不错的一个了，所以听课过程比较轻松，一些实验上手也比较容易。当然有些知识点是在之前的自我学习过程中没有了解过的，课程还是很有帮助的，但和那个价格相比，还是有点。。。。 呵呵 等下为了那些价格，还是需要再review一下一些掌握的不牢固的地方，不能让钱浪费喽！</p>
+<p>坐我旁边的老兄是湖南来的，是公务员，培训费当然是公家的，而且一培训还是两门，已经在 上海10多天了，前不久就是10G DBA I的课程，真是辛苦公务员哦，而且貌似一下子培训两门的一共有5人。 顿时faint！ 公款就是好啊，不过我也没有好失望的，比较自己喜欢这个东西，就当爱好吧。 （哎，心里总还是有点那个不是那个。。。 滋味）</p>
+<p>虽然是为了证书来培训的，但是培训的过程也是一个非常好的学习过程，尽量能把吸收的全部掌握。 这样才不枉费我的钱啊！ 呵呵，也不能老说钱了！</p>
+<p>知识小记：</p>
+<p><strong><em>RMAN</em></strong><br />
+1. RMAN can backup: data files, control files archived redo logs, spfile. NOT the redo log files</p>
+<p>2. ORACLE 自身并不支持tape，需要第三方的软件。 oracle自己有SECURE BACKUP软件</p>
+<p>3. RMAN中的RETENTION POLICY 设置要小于等于 控制文件的 CONTROL FILE RECORD KEEP TIME</p>
+<p>4. BACKUP RECOVER AREA 只能备份到tape上</p>
+<p>5. RMAN&gt; BACKUP DATABASE PLUS ARCHIVELOG;<br />
+如果备份是是 archived redo log files不能包含其他类型的文件</p>
+<p>6. list backup;<br />
+list backup of database;<br />
+list copy;<br />
+list copy of database archivelog from time = 'sysdate -7';</p>
+<p>7. report need backup recovery window of 7 days;<br />
+report need backup redundancy 2;</p>
+<p>report obsolete;<br />
+report obsolete redundancy 2;</p>
+<p>delete obsolete redundancy 2;<br />
+delete backup;</p>
+<p>8. V$PROCESS, V$SESSION, V$SESSION_LONGOPS</p>
+<p>做过rman备份后，如果丢失了控制文件，数据库只能启动到nomount模式，那么可以使用rman恢复备份的控制文件</p>
+<p>RMAN&gt;restore controlfile from autobackup;</p>
+<p>SQL&gt; alter database mount;</p>
+<p>RMAN&gt; recover database; -- 如果是创建了新的控制文件，需要 USING BACKUP CONTROFILE;</p>
+<p>SQL&gt; alter database open resetlogs;</p>
+<p>--<br />
+9, orapwd file=$ORACLE_HOME/dbs/orapwORCL password = oracle entries=5; 其中的5不是可以连接SYS的最大个数，而是字段加密算法的复杂程度。<br />
+新建了passwd文件后，需要重新将sys的权限分配。</p>
+<p>-- EOF--</p>
+</div>

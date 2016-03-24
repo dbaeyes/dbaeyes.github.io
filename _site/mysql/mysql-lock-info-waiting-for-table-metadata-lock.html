@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Meet at the Southern Cross constellation(Crux)">
+
+    <title>MySQL lock info  --  Waiting for table metadata lock - DBAeyes</title>
+
+    <link rel="canonical" href="http://dbaeyes.me/mysql/mysql-lock-info-waiting-for-table-metadata-lock.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">DBAeyes</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/archive.html">Archive</a>
+                </li>
+                
+                <li>
+                    <a href="/categories.html">Categories</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#lock" title="lock">lock</a>
+                        
+                        <a class="tag" href="/Tags/#troubleshooting" title="troubleshooting">troubleshooting</a>
+                        
+                        <a class="tag" href="/Tags/#mysql" title="mysql">mysql</a>
+                        
+                    </div>
+                    <h1>MySQL lock info  --  Waiting for table metadata lock</h1>
+                    
+                    <span class="meta">Posted by David on February 27, 2013</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>现象：<br />
+1. 数据库发现一条根据主键更新的sql特别慢，持续70秒后显示更新超时。<br />
+[cc lang='sql']update user_quotation set GMT_MODIFIED = now() where ID = 230967517;[/cc]</p>
+<p>2. 任何DDL操作都显示<br />
+[cc lang='sql']10060303 root localhost icbu_rfq Query 164 Waiting for table metadata lock<br />
+=================================================================================<br />
+alter table isr_quotation_price \nmodify item_image varchar(1024) comment '商品图片' [/cc]</p>
+<p>可以通过下面视图查询被lock的信息</p>
+<p>[cc lang='sql']root@information_schema 06:54:35:::select * from INNODB_LOCKS;<br />
++-------------------------+-------------+-----------+-----------+----------------------------+------------+------------+-----<br />
+| lock_id | lock_trx_id | lock_mode | lock_type | lock_table | lock_index | lock_space | lock_page | lock_rec | lock_data |</p>
+<p>+-------------------------+-------------+-----------+-----------+----------------------------+------------+------------+-----<br />
+| 13C937945:2238:218183:6 | 13C937945 | X | RECORD | `db_1`.`user_quotation` | `PRIMARY` | 2238 | 218183 | 6 | 230967517 |<br />
+| 139F30A92:2238:218183:6 | 139F30A92 | X | RECORD | `db_1`.`user_quotation` | `PRIMARY` | 2238 | 218183 | 6 | 230967517 |</p>
+<p>+-------------------------+-------------+-----------+-----------+----------------------------+------------+------------+-----</p>
+<p>root@information_schema 06:53:23:::select * from INNODB_LOCK_WAITS;<br />
++-------------------+-------------------------+-----------------+-------------------------+<br />
+| requesting_trx_id | requested_lock_id | blocking_trx_id | blocking_lock_id |<br />
++-------------------+-------------------------+-----------------+-------------------------+<br />
+| 13C937945 | 13C937945:2238:218183:6 | 139F30A92 | 139F30A92:2238:218183:6 |<br />
+[/cc]<br />
+被这个事务139F30A92 阻塞了。</p>
+<p>[cc lang='sql']root@information_schema 06:55:10:::<br />
+select * from innodb_trx where trx_id = '139F30A92'\G<br />
+*************************** 1. row ***************************<br />
+trx_id: 139F30A92<br />
+trx_state: RUNNING<br />
+trx_started: 2013-02-25 06:27:43<br />
+trx_requested_lock_id: NULL<br />
+trx_wait_started: NULL<br />
+trx_weight: 976<br />
+trx_mysql_thread_id: 10059235<br />
+trx_query: NULL<br />
+trx_operation_state: NULL<br />
+trx_tables_in_use: 0<br />
+trx_tables_locked: 0<br />
+trx_lock_structs: 391<br />
+trx_lock_memory_bytes: 47544<br />
+trx_rows_locked: 427<br />
+trx_rows_modified: 585<br />
+trx_concurrency_tickets: 0<br />
+trx_isolation_level: READ COMMITTED<br />
+trx_unique_checks: 1<br />
+trx_foreign_key_checks: 1<br />
+trx_last_foreign_key_error: NULL<br />
+trx_adaptive_hash_latched: 0<br />
+trx_adaptive_hash_timeout: 10000<br />
+1 row in set (0.00 sec) [/cc]</p>
+<p>可以看到这个的事的开始时间： trx_started: 2013-02-25 06:27:43，已经持续了12个小时。</p>
+<p>也可以通过 show engine innodb status\G 查看被lock的信息</p>
+<p>MySQL thread id 6251366, OS thread handle 0x5b8c0940, query id 28842999247 Slave has read all relay log; waiting for the slave I/O thread to update it<br />
+---<span style="color: #ff0000;">TRANSACTION 139F30A92, ACTIVE 44531 sec</span><br />
+391 lock struct(s), heap size 47544, 427 row lock(s), undo log entries 585<br />
+MySQL thread id 10059235, OS thread handle 0x59172940, query id 28839628267 172.20.134.37 db_1<br />
+TABLE LOCK table `db_1`.`user_quotation` trx id 139F30A92 lock mode IX<br />
+RECORD LOCKS space id 2238 page no 269143 n bits 120 index `PRIMARY` of table `db_1`.`user_quotation` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+RECORD LOCKS space id 2238 page no 211551 n bits 112 index `PRIMARY` of table `db_1`.`user_quotation` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+RECORD LOCKS space id 2238 page no 269142 n bits 120 index `PRIMARY` of table `db_1`.`user_quotation` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+TABLE LOCK table `db_1`.`buyer_profile_remind` trx id 139F30A92 lock mode IX<br />
+RECORD LOCKS space id 2238 page no 216392 n bits 112 index `PRIMARY` of table `db_1`.`user_quotation` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+TABLE LOCK table `db_1`.`buyer_profile` trx id 139F30A92 lock mode IX<br />
+RECORD LOCKS space id 2179 page no 6590 n bits 824 index `idx_prof_compid` of table `db_1`.`buyer_profile` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+RECORD LOCKS space id 2179 page no 39120 n bits 120 index `PRIMARY` of table `db_1`.`buyer_profile` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+TABLE LOCK table `db_1`.`buyer_card_theme` trx id 139F30A92 lock mode IX<br />
+TOO MANY LOCKS PRINTED FOR THIS TRX: SUPPRESSING FURTHER PRINTS<br />
+----------------------------</p>
+<p>Do action:</p>
+<p>[cc lang='sql']root@information_schema 08:01:37>SELECT trx_id,trx_state,trx_started,trx_mysql_thread_id<br />
+ FROM innodb_trx WHERE trx_id in(SELECT lock_trx_id FROM INNODB_LOCKS);<br />
++-----------+-----------+---------------------+---------------------+<br />
+| trx_id    | trx_state | trx_started         | trx_mysql_thread_id |<br />
++-----------+-----------+---------------------+---------------------+<br />
+| 2D0F7A9DB | LOCK WAIT | 2013-04-18 08:00:57 |            17926426 |<br />
+| 2D0F65C55 | LOCK WAIT | 2013-04-18 08:00:25 |            17923010 |<br />
+| 2D0C80153 | RUNNING   | 2013-04-18 07:37:59 |            17911138 |<br />
+| 2D09B8B62 | RUNNING   | 2013-04-18 07:15:43 |            17916547 |<br />
++-----------+-----------+---------------------+---------------------+<br />
+4 rows in set (0.01 sec)</p>
+<p>root@information_schema 08:01:38>kill 17911138;<br />
+Query OK, 0 rows affected (0.00 sec)</p>
+<p>root@information_schema 08:01:47>kill 17916547;<br />
+Query OK, 0 rows affected (0.00 sec)</p>
+<p>root@information_schema 08:01:53>SELECT trx_id,trx_state,trx_started,trx_mysql_thread_id FROM innodb_trx WHERE trx_id in(SELECT lock_trx_id FROM INNODB_LOCKS);<br />
+Empty set (0.00 sec)[/cc]</p>
+<p>select trx_id,trx_state,trx_started,trx_mysql_thread_id from innodb_trx ;</p>
+
+
+                <hr>
+
+
+                 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/mysql/mysql-error-1535-table-definition-on-master-and-slave-does-not-match.html" data-toggle="tooltip" data-placement="top" title="MySQL error 1535 --table definition on master and slave does not match">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/thinking/picked-up-a-couple-books.html" data-toggle="tooltip" data-placement="top" title="买了点书">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/mysql/mysql-lock-info-waiting-for-table-metadata-lock" data-title="MySQL lock info  --  Waiting for table metadata lock"
+                    data-images="http://dbaeyes.me/img/fantasy.jpg"
+                    data-content="现象：
+1. 数据库发现一条根据主键更新的sql特别慢，持续70秒后显示更新超时。
+[cc lang='sql']update user_quotatio... | Microdust:David's blog"
+                    data-url="http://dbaeyes.me/mysql/mysql-lock-info-waiting-for-table-metadata-lock.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">Share to：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        <li><a class="ds-facebook" href="javascript:void(0);" data-service="facebook">Facebook</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/mysql/mysql-lock-info-waiting-for-table-metadata-lock" data-title="MySQL lock info  --  Waiting for table metadata lock" data-url="http://dbaeyes.me/mysql/mysql-lock-info-waiting-for-table-metadata-lock.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dbaeyes"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

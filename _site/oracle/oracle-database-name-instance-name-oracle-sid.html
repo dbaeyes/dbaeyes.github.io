@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Meet at the Southern Cross constellation(Crux)">
+
+    <title>ORACLE 数据库名、实例名、ORACLE_SID - DBAeyes</title>
+
+    <link rel="canonical" href="http://dbaeyes.me/oracle/oracle-database-name-instance-name-oracle-sid.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">DBAeyes</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/archive.html">Archive</a>
+                </li>
+                
+                <li>
+                    <a href="/categories.html">Categories</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#database" title="database">database</a>
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                    </div>
+                    <h1>ORACLE 数据库名、实例名、ORACLE_SID</h1>
+                    
+                    <span class="meta">Posted by David on August 12, 2007</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>库名(DB_NAME)、实例名(Instance_name)、以及操作系统环境变量(ORACLE_SID)</p>
+<div>
+<p>　 　在ORACLE7、8数据库中只有数据库名(db_name)和数据库实例名(instance_name)。在ORACLE8i、9i中出现了新的参 数，即数据库域名(db_domain)、服务名(service_name)、以及操作系统环境变量(ORACLE_SID)。这些都存在于同一个数据 库中的标识，用于区分不同数据库的参数。</p>
+<p><strong>　　一、什么是数据库名(db_name)?</strong></p>
+<p>数据库名是用于区分数据的内部标识，是以二进制方式存储于数据库控制文件中的参数，在数据安装或创建之后将不得修改。数据库安装完成后，该参数被写入数据库参数文件pfile中，格式如下：</p>
+<p>.........<br />
+db_name="orcl" #(不允许修改)<br />
+db_domain=dbcenter.toys.com<br />
+instance_name=orcl<br />
+service_names=orcl.dbcenter.toys.com<br />
+control_file=(...............<br />
+.........</p>
+<p>在每一个运行的ORACLE8i数据库中都有一个数据库名(db_name),如果一个服务器程序中创建了两个数据库，则有两个数据库名。其控制参数据分属在不同的pfile中控制着相关的数据库。</p>
+<p><strong>二、什么是数据库实例名(instance_name)</strong></p>
+<p>数据库实例名则用于和操作系统之间的联系，用于对外部连接时使用。在操作系统中要取得与数据库之间的交互，必须使用数据库实例名。例如，要和某一个数据 库server连接，就必须知道其数据库实例名，只知道数据库名是没有用的，与数据库名不同，在数据安装或创建数据库之后，实例名可以被修改。数据库安装 完成后，该实例名被写入数据库参数文件pfile中，格式如下：</p>
+<p>db_name="orcl" #(不允许修改)<br />
+db_domain=dbcenter.toys.com<br />
+instance_name=orcl #(可以修改,可以与db_name相同也可不同)<br />
+service_names=orcl.dbcenter.toys.com<br />
+control_file=(...............<br />
+.........</p>
+<p>数据库名与实例名之间的关系。</p>
+<p>数据库名与实例名之间的关系一般是一一对应关系，有一个数据库名就有一个实例名，如果在一个服务器中创建两个数据库，则有两个数据库名，两个数据库实例名，用两个标识确定一个数据库，用户和实例相连接。</p>
+<p>但在8i、9i的并行服务器结构中，数据库与实例之间不存在一一对应关系，而是一对多关系，(一个数据库对应多个实例，同一时间内用户只一个实例相联系，当某一实例出现故障，其它实例自动服务，以保证数据库安全运行。)</p>
+<p><strong>三、操作系统环境变量(ORACLE_SID)</strong></p>
+<p>在实际中，对于数据库实例名的描述有时使用实例名(instance_name)参数，有时使用ORACLE_SID参数。这两个都是数据库实例名，它们有什么区别呢？(经常弄混)</p>
+<p>(ORACLE_SID)<br />
+OS&lt;----------------&gt; ORACLE 数据库 &lt;--------(Instance_name(实例名))</p>
+<p>上图表示实例名instance_name、ORACLE_SID与数据库及操作系统之间的关系，虽然这里列出的两个参数都是数据库实例名，但 instance_name参数是ORACLE数据库的参数，此参数可以在参数文件中查询到，而ORACLE_SID参数则是操作系统环境变量。<br />
+操作系统环境变量ORACLE_SID用于和操作系统交互。也就是说，在操作系统中要想得到实例名，就必须使用ORACLE_SID。此参数与 ORACLE_BASE、ORACLE_HOME等用法相同。在数据库安装之后，ORACLE_SID被用于定义数据库参数文件的名称。 如：$ORACLE_BASE/admin/DB_NAME/pfile/init$ORACLE_SID.ora。</p>
+<p>定义方法:</p>
+<p>export ORACLE_SID=orcl</p>
+<p>如果在同一服务器中创建了多个数据库，则必然同时存在多个数据库实例,这时可以重复上述定义过程，以选择不同实例。</p>
+<p>还可以用</p>
+<p>[oracle@Datacent]$ . oraenv</p>
+<p>来切换不同的ORACLE_SID来通过操作系统来启动不同的实例(instance)</p>
+</div>
+
+
+                <hr>
+
+
+                 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/my%20life/fish-drive.html" data-toggle="tooltip" data-placement="top" title="鱼儿开车">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/oracle/sqlplus-env-setting-environment-variable-settings.html" data-toggle="tooltip" data-placement="top" title="sqlplus env setting 环境变量设置">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/oracle-database-name-instance-name-oracle-sid" data-title="ORACLE 数据库名、实例名、ORACLE_SID"
+                    data-images="http://dbaeyes.me/img/fantasy.jpg"
+                    data-content="库名(DB_NAME)、实例名(Instance_name)、以及操作系统环境变量(ORACLE_SID)
+
+　 　在ORACLE7、8数据库中只有数据库... | Microdust:David's blog"
+                    data-url="http://dbaeyes.me/oracle/oracle-database-name-instance-name-oracle-sid.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">Share to：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        <li><a class="ds-facebook" href="javascript:void(0);" data-service="facebook">Facebook</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/oracle-database-name-instance-name-oracle-sid" data-title="ORACLE 数据库名、实例名、ORACLE_SID" data-url="http://dbaeyes.me/oracle/oracle-database-name-instance-name-oracle-sid.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dbaeyes"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>

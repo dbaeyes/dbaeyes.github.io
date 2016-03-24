@@ -1,0 +1,114 @@
+---
+layout: post
+title: 手工建库 EM启动问题
+date: 2007-08-13 23:04:00.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '790'
+---
+<h1></h1>
+<div>
+<p>对于从其他server上复制过来的数据库无法启动em,或者别的原因无法启动em<br />
+错误信息:<br />
+C:\Documents and Settings\orphen&gt;emctl start dbconsole<br />
+OC4J Configuration issue. d:\oracle\product\10.2.0\db_1/oc4j/j2ee/OC4J_DBConsole<br />
+_mfgbelx050.fcs.hzmot.com_orl not found.</p>
+<p>解决办法：<br />
+C:\Documents and Settings\orphen&gt;emca -config dbcontrol db</p>
+<p>EMCA 开始于 2007-2-7 12:38:22<br />
+EM Configuration Assistant 10.2.0.1.0 正式版<br />
+版权所有 (c) 2003, 2005, Oracle。保留所有权利。</p>
+<p>输入以下信息:<br />
+数据库 SID: ORL<br />
+已为数据库 ORL 配置了 Database Control<br />
+您已选择配置 Database Control, 以便管理数据库 ORL<br />
+此操作将移去现有配置和默认设置, 并重新执行配置<br />
+是否继续? [yes(Y)/no(N)]: Y<br />
+监听程序端口号: 1521<br />
+SYS 用户的口令:<br />
+DBSNMP 用户的口令:<br />
+SYSMAN 用户的口令:<br />
+SYSMAN 用户的口令: 通知的电子邮件地址 (可选):<br />
+通知的发件 (SMTP) 服务器 (可选):<br />
+-----------------------------------------------------------------</p>
+<p>已指定以下设置</p>
+<p>数据库 ORACLE_HOME ................ d:\oracle\product\10.2.0\db_1</p>
+<p>数据库主机名 ................ mfgbelx050.fcs.hzmot.com<br />
+监听程序端口号 ................ 1521<br />
+数据库 SID ................ ORL<br />
+通知的电子邮件地址 ...............<br />
+通知的发件 (SMTP) 服务器 ...............</p>
+<p>-----------------------------------------------------------------<br />
+是否继续? [yes(Y)/no(N)]: y<br />
+2007-2-7 12:39:24 oracle.sysman.emcp.EMConfig perform<br />
+信息: 正在将此操作记录到 d:\oracle\product\10.2.0\db_1\cfgtoollogs\emca\orl\emca<br />
+_2007-02-07_12-38-22-下午.log。<br />
+2007-2-7 12:39:26 oracle.sysman.emcp.DatabaseChecks performReposChecks<br />
+警告: 'shared_pool_size' 必须大于等于 80 MB。<br />
+2007-2-7 12:39:29 oracle.sysman.emcp.util.DBControlUtil stopOMS<br />
+信息: 正在停止 Database Control (此操作可能需要一段时间)...<br />
+2007-2-7 12:39:39 oracle.sysman.emcp.util.DBControlUtil startOMS<br />
+信息: 正在启动 Database Control (此操作可能需要一段时间)...<br />
+2007-2-7 12:40:39 oracle.sysman.emcp.EMDBPostConfig performConfiguration<br />
+信息: 已成功启动 Database Control<br />
+2007-2-7 12:40:39 oracle.sysman.emcp.EMDBPostConfig performConfiguration<br />
+信息: &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Database Control URL 为 <a href="http://mfgbelx050.fcs.hzmot.com:1158/e">http://mfgbelx050.fcs.hzmot.com:1158/e</a><br />
+m &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br />
+已成功完成 Enterprise Manager 的配置<br />
+EMCA 结束于 2007-2-7 12:40:39</p>
+<p>C:\Documents and Settings\orphen&gt;</p>
+<p>&nbsp;</p>
+<p>----------------------------------</p>
+<p>附上EMCA的常用命令：<br />
+创建一个EM资料库<br />
+emca -repos create<br />
+重建一个EM资料库<br />
+emca -repos recreate<br />
+删除一个EM资料库<br />
+emca -repos drop<br />
+配置数据库的 Database Control<br />
+emca -config dbcontrol db<br />
+删除数据库的 Database Control配置<br />
+emca -deconfig dbcontrol db<br />
+重新配置db control的端口，默认端口在1158<br />
+emca -reconfig ports<br />
+emca -reconfig ports -dbcontrol_http_port 1160<br />
+emca -reconfig ports -agent_port 3940<br />
+先设置ORACLE_SID环境变量后,启动EM console服务<br />
+emctl start dbconsole<br />
+先设置ORACLE_SID环境变量后,停止EM console服务<br />
+emctl stop dbconsole<br />
+先设置ORACLE_SID环境变量后,查看EM console服务的状态<br />
+emctl status dbconsole</p>
+<p>配置dbconsole的步骤<br />
+emca -repos create<br />
+emca -config dbcontrol db<br />
+emctl start dbconsole<br />
+重新配置dbconsole的步骤<br />
+emca -repos drop<br />
+emca -repos create<br />
+emca -config dbcontrol db<br />
+emctl start dbconsole</p>
+<p>&nbsp;</p>
+<p>-----</p>
+<p>重建：（比较彻底的）</p>
+<p>Logon SQLPLUS as user SYS or SYSTEM, and drop the sysman account and management objects:<br />
+SQL&gt; drop user sysman cascade;<br />
+SQL&gt; drop role MGMT_USER;<br />
+SQL&gt; drop user MGMT_VIEW cascade;<br />
+SQL&gt; drop public synonym MGMT_TARGET_BLACKOUTS;<br />
+SQL&gt; drop public synonym SETEMVIEWUSERCONTEXT;</p>
+<p>-----------------------</p>
+<p>&nbsp;</p>
+<p>window主机名更改之后，需要使用重建删除重建步骤。而且windows比较变态，如果在某一部下不去了，建议还是重启系统吧。</p>
+<p>&nbsp;</p>
+<p>-- EOF --</p>
+</div>

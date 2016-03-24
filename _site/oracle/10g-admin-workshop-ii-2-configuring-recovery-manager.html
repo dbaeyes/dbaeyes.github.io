@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Meet at the Southern Cross constellation(Crux)">
+
+    <title>10g Admin Workshop II - 2 - Configuring Recovery Manager - DBAeyes</title>
+
+    <link rel="canonical" href="http://dbaeyes.me/oracle/10g-admin-workshop-ii-2-configuring-recovery-manager.html">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">DBAeyes</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/archive.html">Archive</a>
+                </li>
+                
+                <li>
+                    <a href="/categories.html">Categories</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/fantasy.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="/Tags/#oracle" title="oracle">oracle</a>
+                        
+                        <a class="tag" href="/Tags/#study" title="study">study</a>
+                        
+                    </div>
+                    <h1>10g Admin Workshop II - 2 - Configuring Recovery Manager</h1>
+                    
+                    <span class="meta">Posted by David on March 26, 2007</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p><strong><span style="color: #ff6600;">Objectives</span></strong></p>
+<div>
+<p>After completing this lesson, you should be able to do the following:<br />
+• Describe the RMAN repository and recovery catalog<br />
+• Describe the Media Management Library interface<br />
+• Configure database parameters that affect RMAN operations<br />
+• Connect to the three different types of databases by using RMAN<br />
+• Configure two types of retention policies<br />
+• Change RMAN default settings with CONFIGURE</p>
+<p><strong><span style="color: #ff6600;">Steps for Configuring RMAN</span></strong><br />
+1. Determine the repository location: control file or recovery catalog.<br />
+2. Define database and environment variables.<br />
+3. Start RMAN and connect to the target and, optionally, the recovery catalog databases.<br />
+4. Configure persistent settings.</p>
+<p><strong><span style="color: #0000ff;">RMAN Repository Data Storage: Comparison of Options</span></strong><br />
+RMAN repository data is always stored in the control file of the target database. But it can also be stored in a separate database, called a recovery catalog.</p>
+<p><strong><span style="color: #0000ff;">How to Set Up a Recovery Catalog</span></strong><br />
+1. Create the database to be used as the recovery catalog. Alternatively, identify an already existing database and use that. Because a single recovery catalog can serve more than one database, you may choose to create a single recovery catalog that services all your databases that are being backed up.</p>
+<p>2. In the recovery catalog database, create the user that will own the recovery catalog data.<br />
+For example, assume that catdb is the name of the catalog database, and rcat_ts is the name of a tablespace you have created where the catalog data is to be stored.<br />
+$ sqlplus <a href="mailto:sys/password@catdb">sys/password@catdb</a> as sysdba<br />
+<span>SQL&gt; CREATE USER rman IDENTIFIED BY cat<br />
+2 TEMPORARY TABLESPACE temp<br />
+3 DEFAULT TABLESPACE rcat_ts<br />
+4 QUOTA UNLIMITED ON rcat_ts;<br />
+SQL&gt; GRANT UNLIMITED ON rcat_ts TO rman;</span></p>
+<p>3. Grant the RECOVERY_CATALOG_OWNER role to the catalog owner. This role provides<br />
+the user with all privileges required to maintain and query the recovery catalog.<br />
+<span>GRANT RECOVERY_CATALOG_OWNER TO rman;</span></p>
+<p>4. Start RMAN and log in as the catalog owner.<br />
+<span>$ rman catalog </span><a href="mailto:rman/cat@catdb"><span>rman/cat@catdb</span></a><br />
+<span>RMAN&gt; CREATE CATALOG TABLESPACE rcat_ts;</span></p>
+<p>5. Connect to the target database by using RMAN, and register it in the newly created recovery catalog.<br />
+<span>$ rman target </span><a href="mailto:sys/oracle@orcl"><span>sys/oracle@orcl</span></a><span> catalog </span><a href="mailto:rman/cat@catdb"><span>rman/cat@catdb</span></a><br />
+<span>RMAN&gt; register database;</span></p>
+<p><strong><span style="color: #ff6600;">Backup Destinations</span></strong><br />
+Backups can be written to:<br />
+<strong>• Disk directory<br />
+</strong>•<strong> Media Management Library (tape device)</strong><br />
+– Typically used for disaster recovery, when disk<br />
+backups are lost<br />
+<strong>• Flash recovery area</strong><br />
+– This is a disk area set aside for backup and<br />
+recovery and flashback database purposes.<br />
+– You define the location and the size.<br />
+– Files are automatically named by using Oracle<br />
+Managed Files.<br />
+– Files are automatically retained and deleted as<br />
+necessary.</p>
+<p><strong><span style="color: #0000ff;">Media Management</span></strong></p>
+<p>First Step:<br />
+1. Install and configure the media management software on the target host or production network. No RMAN integration is required at this stage.</p>
+<p>2. Ensure that you can make non-RMAN backups of operating system files on the target database host. This step makes it easier to troubleshoot problems at a later time. Refer to your media management documentation to learn how to back up files to the media manager.</p>
+<p>3. Obtain and install the third-party media management module for integration with the Oracle database. This module must contain the library loaded by the Oracle database when accessing the media manager.</p>
+<p><span style="color: #0000ff;">When you restore a file, the following steps occur:</span><br />
+1. The Oracle database requests the restoration of a particular file.<br />
+2. The media manager identifies the tape containing the file and reads the tape.<br />
+3. The media manager passes the information back to the Oracle database session.<br />
+4. The Oracle database writes the file to disk.</p>
+<p><strong><span style="color: #ff6600;">Using a Flash Recovery Area with RMAN</span></strong><br />
+Each time RMAN creates a file in the flash recovery area, the Oracle database updates the list of files that are no longer required on disk. When a file needs to be written into the flash recovery area and space is not available for that file, the Oracle database deletes a file that is on the obsolete files list and writes a notification to the alert log.<br />
+A warning is issued when the flash recovery area experiences space pressure or is low on free space because there are no files that can be deleted from the flash recovery area. To resolve the problem, <span style="color: #0000ff;">you can add disk space, back up your files to a tertiary device, delete the files from the flash recovery area using RMAN, or change the RMAN retention policy</span>.</p>
+<p><span style="color: #0000ff;"><strong>Flash Recovery Area Space Usage</strong></span><br />
+To avoid running out of space in the flash recovery area, you should never store usermanaged files in this area. You should also perform the following steps as needed or appropriate:<br />
+• Delete unnecessary files from the recovery area by using RMAN.<br />
+• Take frequent backups of the recovery area by using RMAN.<br />
+• Change the RMAN retention policy to retain backups for a smaller period of time.<br />
+• Change the RMAN archived log deletion policy.<br />
+• Add disk space and increase the value of the DB_RECOVERY_FILE_DEST_SIZE database initialization parameter if you are frequently running out of space.</p>
+<p>For example, to back up the archived log files in the recovery area and then delete the files after they have been successfully backed up, you would use the RMAN command:<br />
+<span>BACKUP ARCHIVELOG ALL DELETE ALL INPUT;</span></p>
+<p>If you use a backup solution other than RMAN, you still have to use RMAN to remove the files from the flash recovery area. After the archived log files have been backed up and removed from disk, use the <span style="color: #3366ff;">RMAN CROSSCHECK</span> and <span style="color: #3366ff;">DELETE</span> commands to reclaim the archived log space from the flash recovery area. You should do this on a regular basis, or after every backup.</p>
+<p>crosscheck archivelog all;<br />
+DELETE NOPROMPT EXPIRED BACKUP;<br />
+DELETE NOPROMPT EXPIRED COPY;</p>
+<p>You can query <strong><span style="color: #3366ff;">V$FLASH_RECOVERY_AREA_USAGE</span></strong> to view the flash recovery area disk space usage.</p>
+<p>Backing Up the Flash Recovery Area<br />
+<span>• RMAN&gt; BACKUP RECOVERY AREA;</span><br />
+This command backs up all flash recovery files created in the current flash recovery area destinations that have not previously been backed up. Files that fall into this category are full and incremental backup sets, control file autobackups, archive logs, and data file copies. Other files such as flashback logs, incremental bitmaps, current control file, and online redo log files are not backed up.<br />
+<span>• RMAN&gt; BACKUP RECOVERY FILES;</span><br />
+This command backs up all recovery files on disk that have not previously been backed up. The files that fall into this category are full and incremental backup sets, control file autobackups, archive logs, and data file copies.</p>
+<p><strong><span style="color: #0000ff;">Benefits of Using a Flash Recovery Area</span></strong><br />
+• Simplifies the location of database backups<br />
+• Automatically manages the disk space allocated for recovery files<br />
+• Does not require changes to existing scripts<br />
+• Puts database backups, archive logs, and control file backups in the flash recovery area</p>
+<p><strong><span style="color: #ff6600; font-size: small;">Setting Parameters That Affect RMAN</span></strong><br />
+• Database initialization parameters<br />
+– CONTROL_FILE_RECORD_KEEP_TIME<br />
+– DB_RECOVERY_FILE_DEST and DB_RECOVERY_FILE_DEST_SIZE, if using the flash recovery area<br />
+• Environment variables<br />
+– NLS_DATE_FORMAT<br />
+– NLS_LANG</p>
+<p><strong><span style="color: #ff6600;">RMAN Usage Considerations</span></strong><br />
+• Resources: Shared memory, more processes<br />
+• Privileges given to users:<br />
+– Database: SYSDBA<br />
+– Operating system: Access to devices<br />
+• Remote operations:<br />
+– Set up the password file<br />
+– Ensure that the password file is backed up</p>
+<p><strong><span style="color: #ff6600;">Connection Types with RMAN</span></strong><br />
+You can use Recovery Manager to connect to the following types of databases:<br />
+<strong>• Target database</strong>: RMAN connects you to the target database with the SYSDBA privilege. You must have this privilege for the connection to succeed. The target database is the instance where you want to perform typical RMAN operations.<br />
+<strong>• Recovery catalog database:</strong> This is an optional database that is configured for the RMAN repository. You connect to the recovery catalog database when you want to retrieve information stored within it, such as backup information or stored scripts.<br />
+<strong>• Auxiliary database:</strong> An auxiliary database can be a database that is:<br />
+- Created using the RMAN DUPLICATE command<br />
+- A temporary database that is used during tablespace point-in-time recovery (TSPITR)<br />
+- A standby database, or a copy of your production database that can be used for disaster recovery</p>
+<p><span style="color: #ff6600; font-size: small;"><strong>Starting RMAN</strong></span><br />
+<span style="color: #0000ff;">Local Connection</span><br />
+For a local RMAN connection, at an operating system prompt, enter the following:<br />
+UNIX: $ ORACLE_SID=DB01; export ORACLE_SID<br />
+$ rman target /<br />
+Windows: C:\&gt; SET ORACLE_SID=DB01<br />
+C:\&gt; rman target /</p>
+<p><span style="color: #0000ff;">Remote Connection</span><br />
+To connect from another server, use the Oracle Net service name for the target database:<br />
+$ rman target <a href="mailto:sys/target_pwd@DB01">sys/target_pwd@DB01</a></p>
+<p><strong><span style="color: #0000ff;">Configuring Persistent Settings for RMAN</span></strong><br />
+• RMAN is preset with default configuration settings<br />
+• Use the CONFIGURE command to:<br />
+– Configure automatic channels<br />
+– Specify the backup retention policy<br />
+– Specify the number of backup copies to be created<br />
+– Set the default backup type to BACKUPSET or COPY<br />
+– Limit the size of backup sets<br />
+– Exempt a tablespace from backup<br />
+– Enable and disable backup optimization<br />
+– Configure automatic backups of control files</p>
+<p><span style="color: #0000ff;">Control File Autobackups</span><br />
+RMAN&gt; CONFIGURE CONTROLFILE AUTOBACKUP ON;</p>
+<p><strong><span style="color: #0000ff;">Retention Policies</span></strong><br />
+• A retention policy describes which backups will be kept and for how long.<br />
+• There are two types of retention policies:<br />
+– <strong>Recovery window:</strong> Establishes a period of time within which point-in-time recovery must be possible<br />
+<strong>– Redundancy:</strong> Establishes a fixed number of backups that must be kept<br />
+• These policies are mutually exclusive and can be<br />
+set with the CONFIGURE command.</p>
+<p><strong><span style="color: #ff6600;">Managing Persistent Settings</span></strong><br />
+• Use the <strong>SHOW</strong> command to list current settings:<br />
+<span>RMAN&gt; SHOW CONTROLFILE AUTOBACKUP FORMAT;<br />
+RMAN&gt; SHOW EXCLUDE;<br />
+RMAN&gt; SHOW ALL;</span><br />
+• Use the <strong>CLEAR</strong> command to reset any persistent setting to its default value:<br />
+<span>RMAN&gt; CONFIGURE BACKUP OPTIMIZATION CLEAR;<br />
+RMAN&gt; CONFIGURE MAXSETSIZE CLEAR;<br />
+RMAN&gt; CONFIGURE DEFAULT DEVICE TYPE CLEAR;</span></p>
+<p><strong><span style="color: #ff6600;">Channel Allocation</span></strong><br />
+A channel represents one stream of data to a device type. A channel must be allocated before you execute backup and recovery commands.<br />
+You can query the V$BACKUP_DEVICE view to determine supported device types.</p>
+<p><strong><span style="color: #ff6600;">Automatic and Manual Channel Allocation</span></strong><br />
+• An automatic channel is one that is preconfigured and used for subsequent commands. To change the<br />
+default device type for automatic channel allocation, use:<br />
+<span style="color: #c0c0c0;"><span style="color: #000000;">RMAN&gt; CONFIGURE DEFAULT DEVICE TYPE TO sbt;</span></span></p>
+<p>• A manually allocated channel is one that overrides the automatic channel setting. This channel overrides the automatic channel for this run block:<br />
+<span>RMAN&gt; RUN {<br />
+2&gt; ALLOCATE CHANNEL c1 DEVICE TYPE disk;<br />
+3&gt; BACKUP DATAFILE '/u01/oradata/user01.dbf';<br />
+4&gt; }</span></p>
+<p><strong><span style="color: #ff6600;">Channel Control Options</span></strong><br />
+You can specify control options for the allocated channel to change its default behavior. The configurable control options for manually and automatically allocated channels are:<br />
+• <strong>CONNECT</strong>: The connect string for the target instance<br />
+• <strong>FORMAT</strong>: The format to use for backup piece names created on this channel<br />
+• <strong>MAXOPENFILES</strong>: The maximum number of input files that a BACKUP command can have open at any given time (the default is 8)<br />
+• <strong>MAXPIECESIZE</strong>: The maximum size of each backup piece created on this channel, specified in bytes (default), kilobytes (K), megabytes (M), or gigabytes (G)<br />
+• <strong>DURATION</strong>: The amount of time to run the backup job, defined in hours and minutes.<br />
+The duration can be further specified as:<br />
+- <strong>PARTIAL</strong>: No error is signaled if the backup is not complete at the end of the<br />
+specified duration.<br />
+- <strong>MINIMIZE TIME:</strong> The backup runs at full speed, possibly completing within the<br />
+allotted time.<br />
+- <strong>MINIMIZE LOAD:</strong> RMAN monitors the backup speed and automatically reduces the processing speed if it detects that the backup will complete in less than the allotted time. This option is not allowed when writing to tape because it is desirable to drive the tapes as fast as possible.<br />
+If the channel device type is <strong>SBT</strong> or <strong>SBT_TAPE</strong>, you can also specify:<br />
+• <strong>PARMS="ENV(…)":</strong> Set environment variables for the server session corresponding to this RMAN client.<br />
+• <strong>PARMS="SBT_LIBRARY</strong>=…": Specify the location of the MML to be used by the channel.<br />
+For automatic channels, you can also configure the default parallelism level and the default backup type for disk or tape backups to BACKUPSET, COMPRESSED BACKUPSET, or COPY.</p>
+<p>&nbsp;</p>
+<p>-- EOF --</p>
+</div>
+
+
+                <hr>
+
+
+                 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/oracle/10g-admin-workshop-ii-5-database-recovery.html" data-toggle="tooltip" data-placement="top" title="10g Admin Workshop II - 5 - Database Recovery">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/my%20life/overclocked-g31mintel-e2180.html" data-toggle="tooltip" data-placement="top" title="超频 G31M + Intel E2180">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share"
+                    data-thread-key="/oracle/10g-admin-workshop-ii-2-configuring-recovery-manager" data-title="10g Admin Workshop II - 2 - Configuring Recovery Manager"
+                    data-images="http://dbaeyes.me/img/fantasy.jpg"
+                    data-content="Objectives
+
+After completing this lesson, you should be able to do the follow... | Microdust:David's blog"
+                    data-url="http://dbaeyes.me/oracle/10g-admin-workshop-ii-2-configuring-recovery-manager.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">Share to：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        <li><a class="ds-facebook" href="javascript:void(0);" data-service="facebook">Facebook</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/oracle/10g-admin-workshop-ii-2-configuring-recovery-manager" data-title="10g Admin Workshop II - 2 - Configuring Recovery Manager" data-url="http://dbaeyes.me/oracle/10g-admin-workshop-ii-2-configuring-recovery-manager.html"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dbaeyes"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+</script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://twitter.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    <li>
+                        <a href="https://github.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/dbaeyes">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    <!--
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/poofly">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>
