@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Meet at the Southern Cross constellation(Crux)">
 
-    <title>crontab - DBAeyes</title>
+    <title>一次午 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/crontab.html">
+    <link rel="canonical" href="http://dbaeyes.me/blog/blog-move.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -104,12 +104,12 @@
                 <div class="post-heading">
                     <div class="Tags">
                         
-                        <a class="tag" href="/Tags/#OS" title="OS">OS</a>
+                        <a class="tag" href="/Tags/#Write" title="Write">Write</a>
                         
                     </div>
-                    <h1>crontab</h1>
+                    <h1>一次午</h1>
                     
-                    <span class="meta">Posted by David on October 11, 2008</span>
+                    <span class="meta">Posted by David on March 24, 2016</span>
                 </div>
             </div>
         </div>
@@ -122,42 +122,19 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p><strong>名称</strong> : crontab</p>
-<div><strong>使用权限</strong> : root用户和crontab文件的所有者<br />
-<strong>语法</strong> :<br />
-crontab [-e [UserName]|-l [UserName]|-r [UserName]|-v [UserName]|File ]<br />
-<strong>说明</strong> :<br />
-crontab 是用来让使用者在固定时间或固定间隔执行程式之用，换句话说，也就是类似使用者的时程表。-u user 是指设定指定 user 的时程表，这个前提是你必须要有其权限(比如说是 root)才能够指定他人的时程表。如果不使用 -u user 的话，就是表示设定自己的时程表。<br />
-<strong>参数</strong> :<br />
--e [UserName]: 执行文字编辑器来设定时程表，内定的文字编辑器是 VI，如果你想用别的文字编辑器，则请先设定 VISUAL 环境变数来指定使用那个文字编辑器(比如说 setenv VISUAL joe)<br />
--r [UserName]: 删除目前的时程表<br />
--l [UserName]: 列出目前的时程表<br />
--v [UserName]:列出用户cron作业的状态<br />
-<strong>时程表的格式如下</strong> :<br />
-f1 f2 f3 f4 f5 program<br />
-其中 f1 是表示分钟，f2 表示小时，f3 表示一个月份中的第几日，f4 表示月份，f5 表示一个星期中的第几天。program 表示要执行的程式。<br />
-当 f1 为 * 时表示每分钟都要执行 program，f2 为 * 时表示每小时都要执行程式，其余类推<br />
-当 f1 为 a-b 时表示从第 a 分钟到第 b 分钟这段时间内要执行，f2 为 a-b 时表示从第 a 到第 b 小时都要执行，其余类推<br />
-当 f1 为 */n 时表示每 n 分钟个时间间隔执行一次，f2 为 */n 表示每 n 小时个时间间隔执行一次，其余类推<br />
-当 f1 为 a, b, c,... 时表示第 a, b, c,... 分钟要执行，f2 为 a, b, c,... 时表示第 a, b, c...个小时要执行，其余类推<br />
-使用者也可以将所有的设定先存放在档案 file 中，用 crontab file 的方式来设定时程表。<br />
-<strong>使用方法</strong>:<br />
-用VI编辑一个文件 cronfile，然后在这个文件中输入格式良好的时程表。编辑完成后，保存并退出。<br />
-在命令行输入<br />
-$: crontab cronfile<br />
-这样就将cronfile文件提交给c r o n进程，同时，新创建cronfile的一个副本已经被放在/ v a r / s p o o l / c r o n目录中，文件名就是用户名。<br />
-<strong>例子</strong> :<br />
-每月每天每小时的第 0 分钟执行一次 /bin/ls :<br />
-0 * * * * /bin/ls<br />
-在 12 月内, 每天的早上 6 点到 12 点中，每隔 20 分钟执行一次 /usr/bin/backup :<br />
-*/20 6-12 * 12 * /usr/bin/backup<br />
-周一到周五每天下午 5:00 寄一封信给 alex@domain.name :<br />
-0 17 * * 1-5 mail -s "hi" alex@domain.name &lt; /tmp/maildata<br />
-每月每天的午夜 0 点 20 分, 2 点 20 分, 4 点 20 分....执行 echo "haha"<br />
-20 0-23/2 * * * echo "haha"<br />
-<strong>注意</strong> :<br />
-当程式在你所指定的时间执行后，系统会寄一封信给你，显示该程式执行的内容，若是你不希望收到这样的信，请在每一行空一格之后加上 &gt; /dev/null 2&gt;&amp;1 即可。</p>
-<p>参考鸟哥的私房菜 http://linux.vbird.org/linux_basic/0430cron.php</p></div>
+                <h2 id="section">书</h2>
+
+<p>Blog空间搬了一次又一次，已经记不清最初的blog在哪边了，MSN sapce or QQ Zone. 有记录在的是 新浪博客，那个时候好多名人都在写新浪博客^_^ 后来挪到了百度空间，那个时候写的是最多的，因为那段时间全力的学习Oracle，而且百度把百度空间的内容搜索靠前了，很容易被搜索到，写的可乐呵了。 然而到了2012年百度空间改版了，改的简洁的连自己都不认识（号称轻博客，反正对于需要敲几行代码进去的是没法用了），而且百度自己提供个人空间的全量导出功能让用户迁移出来自个玩去。  想到空间放在别人的地方，别人家想关就关了，真是一个杯具，所以寻觅一个自己管理维护的空间。 一个DBA同事用wordpress写的很好，那就用呗。 那个时候一个开发告诉我也可以用GitHub+Jekyll。 经过对比，还是选择了wordpress，买空间买域名，然后倒腾倒腾把整个百度空间的内容都搞上去了， <a href="http://www.dbathink.com">www.dbathink.com</a> (dbaeyes的域名被别人注册去了），用的感觉确实很爽，自己弄了很多插件, 还能备份网站，后台还用了MySQL，但自从迁移到wordpress后，写的非常少了。 但每年要交域名和空间的费用，有点浪费。</p>
+
+<p>最近申请了Amazon的AWS,前12个月免费，用户体验还不错，考虑着把blog迁移到AWS的EC2虚拟主机上面，应该会有一种不错的感觉吧，查看了价格，免费一年到期后如果直接买三年，那一个月6刀多，跟现在也差不多价格，而且有个虚拟主机可以玩各种东西。 然后，最近在一些东西的时候，发现有太多的开源代码都在GitHub上面，而且GitHub支持静态的网页，关键还免费，不限流量。 那GitHub也就成了一个放blog的好地方了，静态网站工具的选择上看中了Jekyll和Hugo，做了下对比，Hugo是go语言写的，编译很快，非常快，而且很多人说简单；Jekyll是用ruby写的，是Github的作者写的，用的人最多，而且Github原生对它的支持是最好的，但Jekyll需要一些编程基础为好。 Hugo呗，谁让它快还简单呢，但是事实证明这个玩意儿并不好玩，因为用的人少，文档也少，主题也不多，而且对我来说使用不那么直观，折腾了一天不太愉快。那就测试下Jekyll，发现异常好用，而且非常方便识别，对Hubgit的配合也非常完美，还有非常多的主题可以选，我这个主题感谢azeril的制作，很好用。 然后用Jekyll的工具将wordpress导出的xml文件简析出来，就可以用了。</p>
+
+<p>很喜欢这个主题和操作方式，至于AWS上的虚拟机，继续倒腾，但wordpress应该是不用部署上去了，做下测试是OK的。</p>
+
+<p>在安装Jekyll和Hugo的过程中，还是蛮多知识点学习到的，而且发现Mac天生的好用。</p>
+
+<p>接下来把markdown语法熟悉下，非常好用的编辑方式，把Git用用熟，就可以愉快的writing了。</p>
+
+<p>Cheers~~</p>
 
 
                 <hr>
@@ -170,13 +147,9 @@ $: crontab cronfile<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/night-work.html" data-toggle="tooltip" data-placement="top" title="晚上工作下">&larr; Previous Post</a>
+                        <a href="/blog/Just-Some-Words-A-Moment.html" data-toggle="tooltip" data-placement="top" title="一次午后习作的碎片">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/my%20life/night-time-is-a-bit-long.html" data-toggle="tooltip" data-placement="top" title="晚上工作的时间有点长">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -194,13 +167,12 @@ $: crontab cronfile<br />
                 </style>
 
                 <div class="ds-share"
-                    data-thread-key="/oracle/crontab" data-title="crontab"
+                    data-thread-key="/blog/blog-move" data-title="一次午"
                     data-images="http://dbaeyes.me/img/fantasy.jpg"
-                    data-content="名称 : crontab
-使用权限 : root用户和crontab文件的所有者
-语法 :
-crontab [-e [UserName]|-l [User... | Microdust:David's blog"
-                    data-url="http://dbaeyes.me/oracle/crontab.html">
+                    data-content="书
+
+Blog空间搬了一次又一次，已经记不清最初的blog在哪边了，MSN sapce or QQ Zone. 有记录在的是 新浪博客，那个时候好多名人都... | Microdust:David's blog"
+                    data-url="http://dbaeyes.me/blog/blog-move.html">
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
 
@@ -222,7 +194,7 @@ crontab [-e [UserName]|-l [User... | Microdust:David's blog"
 
                 <!-- 多说评论框 start -->
                 <div class="comment">
-                    <div class="ds-thread" data-thread-key="/oracle/crontab" data-title="crontab" data-url="http://dbaeyes.me/oracle/crontab.html"></div>
+                    <div class="ds-thread" data-thread-key="/blog/blog-move" data-title="一次午" data-url="http://dbaeyes.me/blog/blog-move.html"></div>
                 </div>
                 <!-- 多说评论框 end -->
             </div>
