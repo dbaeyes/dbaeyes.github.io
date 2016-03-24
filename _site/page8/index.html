@@ -112,22 +112,6 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
-    <a href="/mysql/mysql-fetch-random-number-index.html">
-        <h2 class="post-title">            
-            mysql取随机数之索引使用
-        </h2>
-        
-        <div class="post-content-preview">
-            之前写过关于mysql取随机数的记录，当时没有去分析表里数据量的分布情况，所以当执行计划不同时，实际的效果有非常大的差别。
-[cc lang='sql']dbaeyes 06:47:52>select count(*) ,status from act_info group by status...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on May 29, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
     <a href="/mysql/mysql-fetch-maximum-minimum-optimized-away.html">
         <h2 class="post-title">            
             mysql 取最大最小值之 optimized away
@@ -267,6 +251,25 @@ create index ind_qid on crm_detail(queue_id,gmt_create) parallel 6 tablespace tb
 &nbsp;
 
 
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on March 14, 2011</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/mysql/mysql-date-and-time-functions.html">
+        <h2 class="post-title">            
+            Mysql日期和时间函数
+        </h2>
+        
+        <div class="post-content-preview">
+            
+mysql&gt; SELECT something FROM table
+WHERE TO_DAYS(NOW()) - TO_DAYS(date_col) &lt;= 30;
+DAYOFWEEK(date)
+返回日期date的星期索引(1=星期天，2=星期一, ……7=星期六)。这些索引值...
         </div>
     </a>
     <p class="post-meta">Posted by David on March 14, 2011</p>

@@ -112,27 +112,6 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
-    <a href="/oracle/general-library-import-steps.html">
-        <h2 class="post-title">            
-            全库导入的一般步骤
-        </h2>
-        
-        <div class="post-content-preview">
-            IMP全库导入的一般步骤
-
-1.先全库加rows=n把结构导进去
-imp system/manager file=exp.dmp log=imp.log full=y rows=n indexes=n
-2.使业务用户的触发器失效/删除主键和唯一索引
-spool drop_pk_u.sql
-se...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on July 12, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
     <a href="/oracle/rman-copy-database.html">
         <h2 class="post-title">            
             RMAN 复制数据库
@@ -264,6 +243,27 @@ se...
         </div>
     </a>
     <p class="post-meta">Posted by David on July 1, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/oracle10g-physical-standby-database-notes.html">
+        <h2 class="post-title">            
+            Oracle10G Physical Standby Database笔记
+        </h2>
+        
+        <div class="post-content-preview">
+            来源： http://www.cnblogs.com/herolf/archive/2006/03/17/351885.html
+
+试验环境
+primary server:
+windows2000 server + oracle 10.0.1.0.2
+ORACLE_SID:dgtest
+ORA...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on June 24, 2008</p>
 </div>
 
 <hr>

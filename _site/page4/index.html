@@ -112,25 +112,6 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
-    <a href="/mysql/mysql-lock-info-waiting-for-table-metadata-lock.html">
-        <h2 class="post-title">            
-            MySQL lock info  --  Waiting for table metadata lock
-        </h2>
-        
-        <div class="post-content-preview">
-            现象：
-1. 数据库发现一条根据主键更新的sql特别慢，持续70秒后显示更新超时。
-[cc lang='sql']update user_quotation set GMT_MODIFIED = now() where ID = 230967517;[/cc]
-2. 任何DDL操作都显示
-[c...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on February 27, 2013</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
     <a href="/mysql/mysql-error-1535-table-definition-on-master-and-slave-does-not-match.html">
         <h2 class="post-title">            
             MySQL error 1535 --table definition on master and slave does not match
@@ -246,6 +227,24 @@ A lot of queries( more then 500) were blocked, the applat...
         <div class="post-content-preview">
             MySQL服务器sys cpu过高的解决
 One MySQL database server's load was very high, especially the SYS CPU, then the applications could not get enough connections...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on October 21, 2012</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/mysql/replace-the-or-with-union-all-in-mysql-subquery.html">
+        <h2 class="post-title">            
+            replace the "or" with "union all" in MySQL subquery
+        </h2>
+        
+        <div class="post-content-preview">
+            MySQL tuning advise: replace the "or" with "union all" in MySQL subquery
+MySQL version: 5.5.18
+Table info:
+[cc lang='sql']root@xf_test 02:33:06>sho...
         </div>
     </a>
     <p class="post-meta">Posted by David on October 21, 2012</p>

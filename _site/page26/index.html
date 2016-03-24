@@ -112,26 +112,6 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
-    <a href="/os/crontab.html">
-        <h2 class="post-title">            
-            crontab
-        </h2>
-        
-        <div class="post-content-preview">
-            名称 : crontab
-使用权限 : root用户和crontab文件的所有者
-语法 :
-crontab [-e [UserName]|-l [UserName]|-r [UserName]|-v [UserName]|File ]
-说明 :
-crontab 是用来让使用者在固定时间或固定间...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on October 11, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
     <a href="/oracle/night-work.html">
         <h2 class="post-title">            
             晚上工作下
@@ -258,6 +238,24 @@ alter table T add constra...
 
 declare
 cursor c1 is select * fro...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on September 12, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/the-rowid-for-parallel-execution.html">
+        <h2 class="post-title">            
+            根据rowid 并行执行
+        </h2>
+        
+        <div class="post-content-preview">
+            使用rowid模拟并行执行，用户大数据量的迁移
+获取创建rowid需要的信息（data_object_id, relative_fno, block_id)
+[cc lang="sql"]select o.data_object_id,
+               e.RELATIVE_FN...
         </div>
     </a>
     <p class="post-meta">Posted by David on September 12, 2008</p>
