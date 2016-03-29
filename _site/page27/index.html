@@ -112,6 +112,24 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/the-rowid-for-parallel-execution.html">
+        <h2 class="post-title">            
+            根据rowid 并行执行
+        </h2>
+        
+        <div class="post-content-preview">
+            使用rowid模拟并行执行，用户大数据量的迁移
+获取创建rowid需要的信息（data_object_id, relative_fno, block_id)
+[cc lang="sql"]select o.data_object_id,
+               e.RELATIVE_FN...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on September 12, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/oracle/file-id-and-the-relationship-between-relative-fno.html">
         <h2 class="post-title">            
             file_id 和 relative_fno二者的关系
@@ -234,26 +252,6 @@ With small values of n, the CBO tends to generate plans that cons...
         </div>
     </a>
     <p class="post-meta">Posted by David on August 20, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/track-optimizing-sql.html">
-        <h2 class="post-title">            
-            跟踪 优化 SQL
-        </h2>
-        
-        <div class="post-content-preview">
-            1.获取用户连接
-
-select s.sid sid, s.SERIAL# "serial#", s.username, s.machine, s.program,
-p.spid ServPID, s.server
-from v$session s, v$process p
-where p.a...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on August 5, 2008</p>
 </div>
 
 <hr>

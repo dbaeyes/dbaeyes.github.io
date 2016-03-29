@@ -112,6 +112,25 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/mysql/mk-query-digest-a-mysql-log-analysis-tool.html">
+        <h2 class="post-title">            
+            mk-query-digest - a mysql log analysis tool
+        </h2>
+        
+        <div class="post-content-preview">
+            ./mk-query-digest slow.log
+
+--如此简单就可以分析mysql的慢日志，当然如果slow log很大时，这么做会消耗很大的性能。
+主要参数：
+--limit: default: 95%:20  Limit output to the given percentage ...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on August 21, 2011</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/little-june-june-grow-logs.html">
         <h2 class="post-title">            
             小隽隽的成长日志
@@ -227,22 +246,6 @@ evernote 方便的记录，支持各种平台 android、iphone、ipad、mac、
             
 mysql备库处理binlog日志是单线程的，无论主库有多少个database或者主库的tps有多高，备库当前的恢复模式都是单进程恢复。这样解决了并发的问题，但是也是备库很容易在主库高tsp的情况下，造成延迟。
 一些情况下，备库的延迟可以通过预热来加快sql的执行速度。预热就是将需要更新的数...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on May 29, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/mysql-fetch-random-number-index.html">
-        <h2 class="post-title">            
-            mysql取随机数之索引使用
-        </h2>
-        
-        <div class="post-content-preview">
-            之前写过关于mysql取随机数的记录，当时没有去分析表里数据量的分布情况，所以当执行计划不同时，实际的效果有非常大的差别。
-[cc lang='sql']dbaeyes 06:47:52>select count(*) ,status from act_info group by status...
         </div>
     </a>
     <p class="post-meta">Posted by David on May 29, 2011</p>

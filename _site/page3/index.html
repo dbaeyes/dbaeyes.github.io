@@ -112,6 +112,28 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/mysql/mysql-recover-the-database-from-a-compressed-file.html">
+        <h2 class="post-title">            
+            MySQL从压缩文件恢复数据库
+        </h2>
+        
+        <div class="post-content-preview">
+            MySQL备份的过程使用了bzip2压缩以节省存储空间，正常的恢复过程是
+[cc lang='sql']
+解压
+nohup pbzip2 -d -k -p10 dump_dbcc_20131103.sql.bz2 &
+恢复
+nohup mysql -uroot  
+[/cc]
+关于pbzip2...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on November 8, 2013</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/running.html">
         <h2 class="post-title">            
             Running
@@ -245,25 +267,6 @@ begin
         </div>
     </a>
     <p class="post-meta">Posted by David on April 27, 2013</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/mysql-lock-info-waiting-for-table-metadata-lock.html">
-        <h2 class="post-title">            
-            MySQL lock info  --  Waiting for table metadata lock
-        </h2>
-        
-        <div class="post-content-preview">
-            现象：
-1. 数据库发现一条根据主键更新的sql特别慢，持续70秒后显示更新超时。
-[cc lang='sql']update user_quotation set GMT_MODIFIED = now() where ID = 230967517;[/cc]
-2. 任何DDL操作都显示
-[c...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on February 27, 2013</p>
 </div>
 
 <hr>
