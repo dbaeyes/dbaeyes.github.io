@@ -19,9 +19,10 @@ You may find me on Facebook, Twitter, Weibo, Instagram, ha, it's easy.
 ——David
 
 
-> Live long and prosper
+> 人生就像一场旅行，不必在乎目的地，在乎的，是沿途的风景，以及看风景的心情。  
+> Life is like a journey, don't care about the destination, but the scenery and the mood at the view, let the heart to travel.
 
 <center>
-    <p><img src="http://dreamofbook.qiniudn.com/hacker.png" align="center"></p>
+    <p><img src="https://farm2.staticflickr.com/1618/26137121402_2b5a15289f_h.jpg" align="center"></p>
 </center>
 
