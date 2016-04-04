@@ -9,10 +9,11 @@ header-img: "img/plane.jpg"
     <p><img src="https://farm2.staticflickr.com/1575/25370319574_68e8f748d8_m.jpg" align="center"></p>
 </center>
 
-Hi there!
-I'm David. Dbaeyes is my network ID. I’m a dba for oracle and mysql and worked at Alibaba before.
+Hi there!  
 
-I like data, football, travel, photograph.
+I'm David. DBAeyes is my network ID. I’m a dba for Oracle, MySQL, SQL Server and worked at Alibaba before.
+
+I like data, football, travel, photograph, cooking ...
 
 You may find me on Facebook, Twitter, Weibo, Instagram, ha, it's easy. 
 
