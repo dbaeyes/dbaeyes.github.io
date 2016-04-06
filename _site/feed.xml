@@ -14,7 +14,7 @@
 
 &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/yDb_WsAt_Z0&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 
-&lt;p&gt;How to put the YouTube vedio in the jekyll pate, just use this scripts&lt;/p&gt;
+&lt;p&gt;How to put the YouTube vedio in the jekyll page, just use this scripts&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/yDb_WsAt_Z0&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;

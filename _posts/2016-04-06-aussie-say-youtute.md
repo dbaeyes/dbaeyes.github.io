@@ -13,7 +13,7 @@ It's interesting and useful ^_^
 <iframe width="560" height="315" src="https://www.youtube.com/embed/yDb_WsAt_Z0" frameborder="0" allowfullscreen></iframe>
 
 
-How to put the YouTube vedio in the jekyll pate, just use this scripts
+How to put the YouTube vedio in the jekyll page, just use this scripts
 
 	<iframe width="560" height="315" src="https://www.youtube.com/embed/yDb_WsAt_Z0" frameborder="0" allowfullscreen></iframe>
 
