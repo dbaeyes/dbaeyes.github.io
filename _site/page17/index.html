@@ -112,6 +112,24 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/see-if-using-characteristics-of-indexes-or-sql.html">
+        <h2 class="post-title">            
+            查看是否还在使用特定的索引或者sql
+        </h2>
+        
+        <div class="post-content-preview">
+            监控索引是否还在使用
+alter index IDX_AUCFEED_RATED monitoring usage;
+select index_name,monitoring,used,start_monitoring,end_monitoring from v$object_usage;
+a...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on September 1, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/another-sleepless-night.html">
         <h2 class="post-title">            
             又是一个不眠夜
@@ -234,22 +252,6 @@ select  /*+ paral...
         </div>
     </a>
     <p class="post-meta">Posted by David on July 9, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/my%20life/riverside-new-life.html">
-        <h2 class="post-title">            
-            滨江新生活
-        </h2>
-        
-        <div class="post-content-preview">
-            就在我家对面的街上要开KFC，必胜客，星巴克等等，想想开这种店的地方肯定会繁华起来的，这些店都是会挑地方的主，一挑一个准的，哈哈。不过这个街还是蛮有名的，怎么说也是星光大道，上面还有几个名人的手掌的。 我看到的有葛优、毕福剑。。。
-滨江的生活越来越丰富多彩了，一个超市真的能带动一个商业圈，上面...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on July 8, 2009</p>
 </div>
 
 <hr>

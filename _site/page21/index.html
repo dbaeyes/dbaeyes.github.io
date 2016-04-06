@@ -112,6 +112,23 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/system-automatically-creates-a-temporary.html">
+        <h2 class="post-title">            
+            系统自动产生的临时段
+        </h2>
+        
+        <div class="post-content-preview">
+            在通过DBLINK建一个比较大的表（大概90G）时，花了一个小时建完了。然后默认就是建索引，突然发现对应的索引表空间少了30多G，这样我建索引空间就不够了。奇怪啊，这段时间不应该消耗那么多的索引表空间的。
+查看段空间使用情况，突然发现了一个以数字打头的临时段在索引表空间上
+OWNER     ...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on April 16, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/oracle/cbo-architecture.html">
         <h2 class="post-title">            
             CBO体系结构
@@ -229,28 +246,6 @@
         </div>
     </a>
     <p class="post-meta">Posted by David on March 26, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/according-to-the-rowid-built-a-temporary-table-to-update-table-data.html">
-        <h2 class="post-title">            
-            根据rowid建临时表更新大表数据
-        </h2>
-        
-        <div class="post-content-preview">
-            [cc lang="sql"]create table tmp_xf_rowid as
-select rowid rid from xf_detail
-where isdo_bss is not null
-order by 1;
-declare
-i number := 0;
-begin
-for...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on March 24, 2009</p>
 </div>
 
 <hr>

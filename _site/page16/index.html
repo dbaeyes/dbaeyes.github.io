@@ -112,6 +112,28 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/resize-the-sequence-of-scripts.html">
+        <h2 class="post-title">            
+            调整sequence大小之脚本
+        </h2>
+        
+        <div class="post-content-preview">
+            --调整序列到表中最大ID的脚本
+set linesize 2000
+set feedback off
+set define off
+set head off
+set timing off
+--删除seq脚本
+SELECT 'DROP SEQUENCE '||F.SEQUENCE_NAME |...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on October 28, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/2009-west-lamma-show.html">
         <h2 class="post-title">            
             2009 西博车展
@@ -260,24 +282,6 @@ INSERT INTO t VALU...
         </div>
     </a>
     <p class="post-meta">Posted by David on September 2, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/see-if-using-characteristics-of-indexes-or-sql.html">
-        <h2 class="post-title">            
-            查看是否还在使用特定的索引或者sql
-        </h2>
-        
-        <div class="post-content-preview">
-            监控索引是否还在使用
-alter index IDX_AUCFEED_RATED monitoring usage;
-select index_name,monitoring,used,start_monitoring,end_monitoring from v$object_usage;
-a...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on September 1, 2009</p>
 </div>
 
 <hr>
