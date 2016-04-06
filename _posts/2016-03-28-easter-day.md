@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 复活节
-categories: [My life ]
+categories: [My Life ]
 tags: [Life, Holiday ]
 description: 这些年的复活节
 ---

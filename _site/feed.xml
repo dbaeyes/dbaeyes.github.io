@@ -10,11 +10,19 @@
 				<title>what the aussie say</title>
 				<description>&lt;h2 id=&quot;how-to-speak-australian--abbreviate-everything&quot;&gt;How to speak Australian : Abbreviate Everything&lt;/h2&gt;
 
-&lt;p&gt;It’s very useful ^_^&lt;/p&gt;
+&lt;p&gt;It’s interesting and useful ^_^&lt;/p&gt;
 
 &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/yDb_WsAt_Z0&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 
-&lt;p&gt;Cheers~~&lt;/p&gt;
+&lt;p&gt;How to put the YouTube vedio in the jekyll pate, just use this scripts&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/yDb_WsAt_Z0&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Easy, right!&lt;/p&gt;
+
+&lt;p&gt;Enjoy~~&lt;/p&gt;
 </description>
 				<pubDate>Wed, 06 Apr 2016 00:00:00 +0930</pubDate>
 				<link>/digital/aussie-say-youtute.html</link>
