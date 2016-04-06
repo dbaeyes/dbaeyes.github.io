@@ -92,7 +92,7 @@
 
 
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/harbor.jpg')">
+<header class="intro-header" style="background-image: url('/img/autumn2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,6 +111,28 @@
 	<div class="row">
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
+<div class="post-preview">
+    <a href="/oracle/oracle-start-with-connect-by-prior-clause-usage-zt.html">
+        <h2 class="post-title">            
+            Oracle start with...connect by prior 子句用法 (zt)
+        </h2>
+        
+        <div class="post-content-preview">
+            connect by 是结构化查询中用到的，其基本语法是：
+
+select ... from tablename start with 条件1
+connect by 条件2
+where 条件3;
+例：
+select * from table
+start with org_id = 'HBHqf...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on June 12, 2009</p>
+</div>
+
+<hr>
+
 <div class="post-preview">
     <a href="/oracle/exchanging-partitions-quiz.html">
         <h2 class="post-title">            
@@ -239,25 +261,6 @@ Specifies whether Import should commit...
         </div>
     </a>
     <p class="post-meta">Posted by David on May 13, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/performed-using-sql-comparison.html">
-        <h2 class="post-title">            
-            用SQL完成对比
-        </h2>
-        
-        <div class="post-content-preview">
-            可以更简单，有的时候自己比较笨，用笨的方法还不亦乐乎
-
-我需要对比初始化后的数字ID是否和原表中的吻合（其实脚本肯定是没问题了，但万一起见还是要验证的，而且程序那边也有可能有问题的）
-select b.auction_id,b.auc_num_id aa,a.auction_id ba
-fro...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on May 7, 2009</p>
 </div>
 
 <hr>

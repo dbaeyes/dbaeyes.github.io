@@ -92,7 +92,7 @@
 
 
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/harbor.jpg')">
+<header class="intro-header" style="background-image: url('/img/autumn2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,6 +111,26 @@
 	<div class="row">
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
+<div class="post-preview">
+    <a href="/oracle/sqlplus-operation-greatly-entire.html">
+        <h2 class="post-title">            
+            SQLPLUS 操作大全 -zt
+        </h2>
+        
+        <div class="post-content-preview">
+            B SQL*PLUS
+Sql*plus 中使用绑定变量：
+sql&gt; variable x number;
+sql&gt; exec :x := 7788;
+sql&gt; SELECT empno,ename from scott.emp where empno=:x;
+SQL*PLUS...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on July 23, 2008</p>
+</div>
+
+<hr>
+
 <div class="post-preview">
     <a href="/my%20life/oracle/opportunity-cbo-oracle-tuning-rules.html">
         <h2 class="post-title">            
@@ -234,27 +254,6 @@ The SWITCH LOGFILE clause lets you explicitly force Oracle to begin writing t
 以后要多挣扎，越多挣扎，进步越快！
 痛并快乐着！
 
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on July 13, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/management-and-maintenance-of-standby.html">
-        <h2 class="post-title">            
-            standby 管理和维护
-        </h2>
-        
-        <div class="post-content-preview">
-            管理：
-
-查询库状态：
-SQL&gt; select name,SWITCHOVER_STATUS,open_mode,PROTECTION_MODE,DATABASE_ROLE
-from v$database;
-验证archive log是否接收和 applied.
-SQL&gt; alte...
         </div>
     </a>
     <p class="post-meta">Posted by David on July 13, 2008</p>

@@ -92,7 +92,7 @@
 
 
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/harbor.jpg')">
+<header class="intro-header" style="background-image: url('/img/autumn2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,6 +111,28 @@
 	<div class="row">
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
+<div class="post-preview">
+    <a href="/mysql/mysql-fetch-random-number-random.html">
+        <h2 class="post-title">            
+            MYSQL 取随机数 random
+        </h2>
+        
+        <div class="post-content-preview">
+            
+mysql 取随机数
+--对一个表取任意随机数
+SELECT *
+FROM TMP_XF_TEST
+WHERE ID &gt;= (SELECT FLOOR(RAND() * (SELECT MAX(ID) FROM TMP_XF_TEST)))
+order by id LIMIT 1;
+-...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on April 26, 2010</p>
+</div>
+
+<hr>
+
 <div class="post-preview">
     <a href="/my%20life/cute-little-thing.html">
         <h2 class="post-title">            
@@ -245,25 +267,6 @@ watch ls -l ...
         </div>
     </a>
     <p class="post-meta">Posted by David on March 7, 2010</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/oraccle-temporary-tables.html">
-        <h2 class="post-title">            
-            ORACCLE 临时表
-        </h2>
-        
-        <div class="post-content-preview">
-            Oracle临时表可以说是提高数据库处理性能的好方法，在没有必要存储时，只存储在Oracle临时表空间中。希望本文能对大家有所帮助。
-
-1 、前言
-目前所有使用 Oracle 作为数据库支撑平台的应用，大部分数据量比较庞大的系统，即表的数据量一般情况下都是在百万级以上的数据量。
-当然在 Ora...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on February 24, 2010</p>
 </div>
 
 <hr>

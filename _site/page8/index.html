@@ -92,7 +92,7 @@
 
 
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/harbor.jpg')">
+<header class="intro-header" style="background-image: url('/img/autumn2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,6 +111,23 @@
 	<div class="row">
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
+<div class="post-preview">
+    <a href="/mysql/mysql-update-large-amounts-of-data-to-reduce-delays.html">
+        <h2 class="post-title">            
+            mysql 在更新大数据量情况下如何降低备库延迟
+        </h2>
+        
+        <div class="post-content-preview">
+            
+mysql备库处理binlog日志是单线程的，无论主库有多少个database或者主库的tps有多高，备库当前的恢复模式都是单进程恢复。这样解决了并发的问题，但是也是备库很容易在主库高tsp的情况下，造成延迟。
+一些情况下，备库的延迟可以通过预热来加快sql的执行速度。预热就是将需要更新的数...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on May 29, 2011</p>
+</div>
+
+<hr>
+
 <div class="post-preview">
     <a href="/mysql/mysql-fetch-random-number-index.html">
         <h2 class="post-title">            
@@ -246,30 +263,6 @@ create index ind_qid on crm_detail(queue_id,gmt_create) parallel 6 tablespace tb
         </div>
     </a>
     <p class="post-meta">Posted by David on March 16, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/my%20life/exercise.html">
-        <h2 class="post-title">            
-            锻炼身体
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-上上周六踢球了，结果全身疼了3天
-上周六踢球了，第二天有一点点酸痛
-这周有时间的话再去活动活动。
-明天开始去游泳吧，办的健身卡有5个月没去，浪费了。
-&nbsp;
-&nbsp;
-
-
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on March 14, 2011</p>
 </div>
 
 <hr>

@@ -92,7 +92,7 @@
 
 
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/harbor.jpg')">
+<header class="intro-header" style="background-image: url('/img/autumn2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,6 +111,27 @@
 	<div class="row">
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
+<div class="post-preview">
+    <a href="/mysql/mysql-lock-tables-and-unlock-tables.html">
+        <h2 class="post-title">            
+            mysql LOCK TABLES and UNLOCK TABLES
+        </h2>
+        
+        <div class="post-content-preview">
+            参考文档： http://dev.mysql.com/doc/refman/5.1/en/lock-tables.html
+
+文档很详细，一些需要注意的地方：
+lock table有两种模式
+lock tables table_name  read  [or write];
+test1:
+se...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on August 23, 2011</p>
+</div>
+
+<hr>
+
 <div class="post-preview">
     <a href="/mysql/mk-query-digest-a-mysql-log-analysis-tool.html">
         <h2 class="post-title">            
@@ -232,23 +253,6 @@ evernote 方便的记录，支持各种平台 android、iphone、ipad、mac、
         </div>
     </a>
     <p class="post-meta">Posted by David on June 9, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/mysql-update-large-amounts-of-data-to-reduce-delays.html">
-        <h2 class="post-title">            
-            mysql 在更新大数据量情况下如何降低备库延迟
-        </h2>
-        
-        <div class="post-content-preview">
-            
-mysql备库处理binlog日志是单线程的，无论主库有多少个database或者主库的tps有多高，备库当前的恢复模式都是单进程恢复。这样解决了并发的问题，但是也是备库很容易在主库高tsp的情况下，造成延迟。
-一些情况下，备库的延迟可以通过预热来加快sql的执行速度。预热就是将需要更新的数...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on May 29, 2011</p>
 </div>
 
 <hr>

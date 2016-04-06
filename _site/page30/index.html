@@ -92,7 +92,7 @@
 
 
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/harbor.jpg')">
+<header class="intro-header" style="background-image: url('/img/autumn2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,6 +111,27 @@
 	<div class="row">
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
+<div class="post-preview">
+    <a href="/oracle/management-and-maintenance-of-standby.html">
+        <h2 class="post-title">            
+            standby 管理和维护
+        </h2>
+        
+        <div class="post-content-preview">
+            管理：
+
+查询库状态：
+SQL&gt; select name,SWITCHOVER_STATUS,open_mode,PROTECTION_MODE,DATABASE_ROLE
+from v$database;
+验证archive log是否接收和 applied.
+SQL&gt; alte...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on July 13, 2008</p>
+</div>
+
+<hr>
+
 <div class="post-preview">
     <a href="/oracle/general-library-import-steps.html">
         <h2 class="post-title">            
@@ -244,26 +265,6 @@ se...
         </div>
     </a>
     <p class="post-meta">Posted by David on July 4, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/thinking/another-month-begins.html">
-        <h2 class="post-title">            
-            又是一个月的开始
-        </h2>
-        
-        <div class="post-content-preview">
-            有一个词叫 时间如梭！
-
-一个月又这么过去了，接下来天气会更热，人会更忙，这应该就是成长的道路，必须去承担更多的东西！
-这些天自己看了些之前的文档和看了些相应的资料。
-还有一个就是不忘看看英语，呵呵 自己的英语是有蛮大的提升空间的（因为比较差么 o(∩_∩)o...）
-前天还去看了《功夫熊猫》...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on July 1, 2008</p>
 </div>
 
 <hr>
