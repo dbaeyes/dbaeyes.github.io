@@ -112,6 +112,45 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/database-experience.html">
+        <h2 class="post-title">            
+            数据库一些经验
+        </h2>
+        
+        <div class="post-content-preview">
+            大的开发项目，应该把业务逻辑放在应用中实现，切忌把业务放到触发器和存储过程中。 存储过程和触发器要少用，而且不能涉及业务
+
+#######################################
+大数据量update，可以考虑order by rowid
+按照ROWID的结构，ROWI...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on December 1, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/oracle-index-and-logical-reading-quiz.html">
+        <h2 class="post-title">            
+            oracle 索引和逻辑读小测
+        </h2>
+        
+        <div class="post-content-preview">
+            create table T1(
+ID   NUMBER not null,
+NAME VARCHAR2(30) not null
+);
+create index D on T1 (name);
+alter table T1 add constraint PK_T1_ID primary ke...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on November 25, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/a-century-of-taobao.html">
         <h2 class="post-title">            
             百年淘宝
@@ -222,39 +261,6 @@ hosts文件是Linux系统中一个负责IP地址与域名快速解析的文件�
         </div>
     </a>
     <p class="post-meta">Posted by David on November 7, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/importance-of-oracle-hint.html">
-        <h2 class="post-title">            
-            Oracle Hint 的重要性
-        </h2>
-        
-        <div class="post-content-preview">
-            昨天凌晨的操作太失败了，花了3个小时，居然只完成了3个子表的数据订正（一共16个），其中有中间有个步骤需要花1个小时左右的时间。 其实仔细想想也应该是不对的，我使用了hash jion，数据量t1 1600w, t2 100w的样子，应该是不需要那么久。 不过深更半夜的脑袋肯定没有那么好使，没...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on October 23, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/my%20life/fish-is-really-good.html">
-        <h2 class="post-title">            
-            小鱼真好
-        </h2>
-        
-        <div class="post-content-preview">
-            这些个天，有些数据需要订正，晚上加班蛮多。而且主要上班有点远，每天花4个小时在路上 &gt;_&lt;
-今天起来的时候，看到桌子上有一包 好吃点 饼干，还有个小纸条“饿了就吃”    小鱼 真好 ！
-这些日子装修，她花的精力比我多，很多东西都是她处理的，小鱼辛苦了
-
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on October 22, 2008</p>
 </div>
 
 <hr>

@@ -2,7 +2,7 @@
 layout: post
 title: Australian English Glossary - Study
 categories: [Digital]
-tags: [Blog,English,Study]
+tags: [blog,english,study]
 description: youtube
 ---
 

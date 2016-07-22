@@ -7,6 +7,32 @@
 		<atom:link href="/" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>最近</title>
+				<description>&lt;h2 id=&quot;section&quot;&gt;一段时间&lt;/h2&gt;
+
+&lt;p&gt;一段时间不写，之前熟悉下来的markDown  Jekyll+GitHub会忘记的。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;最近在忙什么&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;参加了一个找培训感觉还是蛮有帮助的,一个local自己办的有政府的补助，单独面对面的聊了四次，其中一次是模拟面试。 挺感谢他的
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;小盆友开学了，这个学期的课外活动还是挺多的，加油！&lt;/p&gt;
+
+&lt;p&gt;自己继续努力找工作，有工作才有活力！&lt;/p&gt;
+
+&lt;p&gt;今天是母亲节，老妈，母亲节快乐！&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;eof&lt;/code&gt;&lt;/p&gt;
+
+</description>
+				<pubDate>Sun, 08 May 2016 00:00:00 +0930</pubDate>
+				<link>/my%20life/recently.html</link>
+				<guid isPermaLink="true">/my%20life/recently.html</guid>
+			</item>
+		
+			<item>
 				<title>Australian English Glossary - Study</title>
 				<description>&lt;h2 id=&quot;how-to-speak-australian--abbreviate-everything&quot;&gt;How to speak Australian : Abbreviate Everything&lt;/h2&gt;
 
@@ -558,7 +584,7 @@ Z&lt;/p&gt;
 
 &lt;p&gt;Zack : sixpence (5 cents) - “it isn’t worth a zack”, “he hasn’t got a zack”&lt;/p&gt;
 
-&lt;p&gt;```&lt;/p&gt;
+&lt;hr /&gt;
 
 &lt;p&gt;Enjoy~~&lt;/p&gt;
 </description>
@@ -794,17 +820,6 @@ MySQL converts TIMESTAMP values from the current time zone to UTC for storage, a
 				<pubDate>Tue, 15 Jul 2014 08:42:09 +0930</pubDate>
 				<link>/my%20life/world-cup-2014.html</link>
 				<guid isPermaLink="true">/my%20life/world-cup-2014.html</guid>
-			</item>
-		
-			<item>
-				<title>身体健康</title>
-				<description>&lt;p&gt;周五晚上10点多从美国回到家，接到电话说她妈妈晕倒了，而且站起来就摔倒了，已经3天了，住院不过医院又查不出问题，两周前有从电动车上摔下来，摔破了头和腿，所以担心是不是脑部有问题。 然后就决定周六开车去温州了，来会10个多小时的车程，关键开车不能犯困。  医院看了CT找不出问题，还是接到杭州来看吧。 找了大学室友老婆的同事的关系，挂了市一神经内科主任的号。今天检查了下，脑部没有问题，是耳石症（良性阵发性位置性眩晕），可以治好。 真的太好好了！&lt;/p&gt;
-&lt;p&gt;父母健康是儿女最大的心愿！早日康复&lt;/p&gt;
-&lt;p&gt;以后要多陪陪父母，有什么时候要尽快赶回到父母的身边，这是对父母最好的会报。&lt;/p&gt;
-</description>
-				<pubDate>Tue, 24 Jun 2014 22:45:14 +0930</pubDate>
-				<link>/my%20life/physical-health.html</link>
-				<guid isPermaLink="true">/my%20life/physical-health.html</guid>
 			</item>
 		
 	</channel>

@@ -2,7 +2,7 @@
 layout: post
 title: 复活节
 categories: [My Life ]
-tags: [Life, Holiday ]
+tags: [life, holiday ]
 description: 这些年的复活节
 ---
 
