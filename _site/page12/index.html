@@ -112,6 +112,45 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/mysql/mysql-limit-number-of-scan-lines-and-order-by-index.html">
+        <h2 class="post-title">            
+            mysql limit 扫描行数 & order by 与索引关系
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+小测一下 mysql的limit 的扫描行数 和order by和索引的关系
+--查询条件字段都在索引里，数据都已经在数据库cache中
+索引如下
+KEY `IDX_USER_ID` USING BTREE (`user_id`,`do_date`,`SUS`,`r_type`,`rat`...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on May 19, 2010</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/mysql/mysql-index-lock.html">
+        <h2 class="post-title">            
+            MYSQL index 锁的一点情况
+        </h2>
+        
+        <div class="post-content-preview">
+            
+CREATE TABLE `actor` (
+`actor_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`name` varchar(16) NOT NULL DEFAULT '',
+`password` varchar(16) NOT NUL...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on May 12, 2010</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/oracle/sql-page.html">
         <h2 class="post-title">            
             sql 分页
@@ -228,46 +267,6 @@ http://t.sina.com.cn/dbaey
         </div>
     </a>
     <p class="post-meta">Posted by David on March 27, 2010</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/watch-list.html">
-        <h2 class="post-title">            
-            watch list
-        </h2>
-        
-        <div class="post-content-preview">
-            
-用watch命令可以实时查看输入命令的变化，比如观察mysql当前在跑的sql
-watch -n 1 -d mysql -uroot --execute=\"show full processlist\"其中的
--n 1 表示每秒变化一次
--d 表示有变化的地方高亮
-watch ls -l ...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on March 25, 2010</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/thinking/mood.html">
-        <h2 class="post-title">            
-            心境
-        </h2>
-        
-        <div class="post-content-preview">
-            
-近来的心情有点浮躁，其实这个对各方面都是不利的。
-把心情平复起来，平静的去看事情，让自己更加平和。 需要自己去理顺自己，不要浪费无谓的精力和时间在无所谓的事情上。
-去做自己认为正确的事，时间总是在那么分分秒秒的流逝。
-----
-
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on March 8, 2010</p>
 </div>
 
 <hr>

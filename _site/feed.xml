@@ -7,6 +7,38 @@
 		<atom:link href="/" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Keep Writing</title>
+				<description>&lt;h2 id=&quot;forget&quot;&gt;Forget&lt;/h2&gt;
+&lt;p&gt;It’s very easy to forget something when you do not use it for a long time. I have not written the blog on the jekyll for several weeks, I even forget how to start the jekyll server on local. &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt; in the blog folder&lt;br /&gt;
+And this time I met a error,&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;[2016-09-03 10:31:16] WARN  TCPServer Error: Address already in use - bind(2)&lt;/code&gt;&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt; jekyll 3.1.2 | Error:  Address already in use - bind(2)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Yes, the port is used by other app, try another &lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve --watch --port 4444&lt;/code&gt;&lt;br /&gt;
+I think it’s good.&lt;/p&gt;
+
+&lt;h2 id=&quot;recently&quot;&gt;Recently&lt;/h2&gt;
+&lt;p&gt;I met some big problem, I hope it was finished. &lt;br /&gt;
+Everything will be better!&lt;/p&gt;
+</description>
+				<pubDate>Sat, 03 Sep 2016 00:00:00 +0930</pubDate>
+				<link>/my%20life/Keep-Writing.html</link>
+				<guid isPermaLink="true">/my%20life/Keep-Writing.html</guid>
+			</item>
+		
+			<item>
+				<title>new in Melbourne</title>
+				<description>&lt;h2 id=&quot;now-we-are-in-melbourne&quot;&gt;Now we are in Melbourne&lt;/h2&gt;
+&lt;p&gt;It’s a short time when we decided to move to Melbourne, now we are in Melbourne.&lt;/p&gt;
+</description>
+				<pubDate>Mon, 22 Aug 2016 00:00:00 +0930</pubDate>
+				<link>/my%20life/now-in-Melbourne.html</link>
+				<guid isPermaLink="true">/my%20life/now-in-Melbourne.html</guid>
+			</item>
+		
+			<item>
 				<title>最近</title>
 				<description>&lt;h2 id=&quot;section&quot;&gt;一段时间&lt;/h2&gt;
 
@@ -735,91 +767,6 @@ Z&lt;/p&gt;
 				<pubDate>Thu, 30 Oct 2014 21:43:33 +1030</pubDate>
 				<link>/thinking/time-change.html</link>
 				<guid isPermaLink="true">/thinking/time-change.html</guid>
-			</item>
-		
-			<item>
-				<title>time_zone timestamp datetime in MySQL</title>
-				<description>&lt;p&gt;MySQL上的time_zone时区设置对timestamp和datetime有什么样的影响，是否一样。&lt;/p&gt;
-&lt;p&gt;先将系统时间改成美国洛杉矶时间&lt;br /&gt;
-[cc lang=&#39;sql&#39;]&lt;br /&gt;
-cp /usr/share/zoneinfo/America/Los_Angeles /etc/localtime&lt;/p&gt;
-&lt;p&gt;$date&lt;br /&gt;
-Mon Jul 14 23:47:30 PDT 2014&lt;/p&gt;
-&lt;p&gt;root@(none) 11:49:44&gt;show variables like &#39;%time_zone%&#39;;&lt;br /&gt;
-+------------------+--------+&lt;br /&gt;
-| Variable_name    | Value  |&lt;br /&gt;
-+------------------+--------+&lt;br /&gt;
-| system_time_zone | PDT    |&lt;br /&gt;
-| time_zone        | SYSTEM |&lt;br /&gt;
-+------------------+--------+&lt;br /&gt;
-[/cc]&lt;/p&gt;
-&lt;p&gt;创建一个有datetime和timestamp字段的表&lt;br /&gt;
-[cc lang=&#39;sql&#39;] CREATE TABLE `xf_time` (&lt;br /&gt;
-  `id` int(11) NOT NULL DEFAULT &#39;0&#39;,&lt;br /&gt;
-  `gmt_c` datetime DEFAULT NULL,&lt;br /&gt;
-  `gmt_m` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,&lt;br /&gt;
-  PRIMARY KEY (`id`)&lt;br /&gt;
-) ENGINE=InnoDB DEFAULT CHARSET=utf8&lt;/p&gt;
-&lt;p&gt;root@test 11:52:54&gt;insert into xf_time values(1,now(),now());&lt;br /&gt;
-Query OK, 1 row affected (0.00 sec)&lt;/p&gt;
-&lt;p&gt;root@test 11:54:30&gt;select * from xf_time;&lt;br /&gt;
-+----+---------------------+---------------------+&lt;br /&gt;
-| id | gmt_c               | gmt_m               |&lt;br /&gt;
-+----+---------------------+---------------------+&lt;br /&gt;
-|  1 | 2014-07-14 23:54:30 | 2014-07-14 23:54:30 |&lt;br /&gt;
-+----+---------------------+---------------------+&lt;br /&gt;
-1 row in set (0.00 sec)[/cc]&lt;/p&gt;
-&lt;p&gt;更改MySQL的time_zone到北京时间所在东八区&lt;br /&gt;
-[cc lang=&#39;sql&#39;]root@test 11:54:35&gt;set time_zone = &#39;+8:00&#39;;&lt;br /&gt;
-Query OK, 0 rows affected (0.00 sec)&lt;br /&gt;
-root@(none) 12:03:04&gt;show variables like &#39;%time_zone%&#39;;&lt;br /&gt;
-+------------------+--------+&lt;br /&gt;
-| Variable_name    | Value  |&lt;br /&gt;
-+------------------+--------+&lt;br /&gt;
-| system_time_zone | PDT    |&lt;br /&gt;
-| time_zone        | +08:00 |&lt;br /&gt;
-+------------------+--------+&lt;br /&gt;
-2 rows in set (0.00 sec)[/cc]&lt;/p&gt;
-&lt;p&gt;可以看到MySQL的time_zone已经改变，而且当前时间都已经发生变化。&lt;/p&gt;
-&lt;p&gt;[cc lang=&#39;sql&#39;]root@test 12:00:58&gt;select now();&lt;br /&gt;
-+---------------------+&lt;br /&gt;
-| now()               |&lt;br /&gt;
-+---------------------+&lt;br /&gt;
-| 2014-07-15 15:01:01 |&lt;br /&gt;
-+---------------------+&lt;br /&gt;
-1 row in set (0.00 sec)&lt;/p&gt;
-&lt;p&gt;root@test 12:01:01&gt;select * from xf_time;&lt;br /&gt;
-+----+---------------------+---------------------+&lt;br /&gt;
-| id | gmt_c               | gmt_m               |&lt;br /&gt;
-+----+---------------------+---------------------+&lt;br /&gt;
-|  1 | 2014-07-14 23:54:30 | 2014-07-15 14:54:30 |&lt;br /&gt;
-+----+---------------------+---------------------+&lt;br /&gt;
-1 row in set (0.00 sec)[/cc]&lt;/p&gt;
-&lt;p&gt;datetime类型字段在time_zone发生变化后，没有变化。但timestamp类型是跟随时区发生了变化。故dateime类型跟时区无关，timestamp类型跟时区密切相关&lt;br /&gt;
-所以说：&lt;br /&gt;
-MySQL converts TIMESTAMP values from the current time zone to UTC for storage, and back from UTC to the current time zone for retrieval. (This does not occur for other types such as DATETIME.)&lt;/p&gt;
-&lt;p&gt;小结：更改MySQL时区的方式有&lt;br /&gt;
-1. 调整系统OS时区 cp /usr/share/zoneinfo/America/Los_Angeles /etc/localtime 将相应的时区文件覆盖&lt;br /&gt;
-2. 调整MySQL的启动参数文件： 在[mysqld]下面加上  default-time-zone=timezone 比如 default-time-zone=&#39;+8:00&#39; 。 通过登录后的set time-zone 是session级别的，不能做为全局使用，但也有其使用的场景&lt;/p&gt;
-&lt;p&gt;--eof&lt;/p&gt;
-</description>
-				<pubDate>Tue, 15 Jul 2014 15:17:08 +0930</pubDate>
-				<link>/mysql/time-zone-timestamp-datetime-in-mysql.html</link>
-				<guid isPermaLink="true">/mysql/time-zone-timestamp-datetime-in-mysql.html</guid>
-			</item>
-		
-			<item>
-				<title>世界杯 2014</title>
-				<description>&lt;p&gt;历经一个月的世界杯结束了，从6月13号到7月14号。一个月的时间痛并快乐着，坑爹的转播时间，下次中国主办，让欧美痛苦去 O(∩_∩)O~&lt;br /&gt;
-阿根廷队这次走到了决赛，虽然一个球输给了德国队，但这表现和成绩已经非常让人满意。阿根廷的防守真的是出乎意料的好，非常凶悍的铲抢，命中率高，而且犯规率低，想起来曾经玩实况2000时候的阿根廷队。&lt;br /&gt;
-虽然喜欢阿根廷队，但怎么说呢，中国队如果会有好的表现，会让人更加开心。但现实总是这么残酷，中国队现在连世界杯决赛圈都进不了，或者说更糟糕一些。中国足球真的还需要一个蛮长的过程。&lt;br /&gt;
-马云也开始搞足球了，亚洲俱乐部冠军广州恒大已经更名为广州恒大淘宝队，明白一个俱乐部无法对一个国家的足球产生太大的影响，但至少恒大再次激发了很多球迷心中的足球热情，特别像我这种好多年没看足球的人了。&lt;br /&gt;
-上周六团队组织了一次足球活动，7v7的场地很不多，跑了两个多小时（中途休息了很多次^_^），出汗的感觉真好，发现太久没踢球了，对球的距离感和脚感已经比较糟糕了，如果多踢踢应该会好，不过貌似周边当前情况下，氛围比较少。&lt;br /&gt;
-先写到这里了。&lt;/p&gt;
-</description>
-				<pubDate>Tue, 15 Jul 2014 08:42:09 +0930</pubDate>
-				<link>/my%20life/world-cup-2014.html</link>
-				<guid isPermaLink="true">/my%20life/world-cup-2014.html</guid>
 			</item>
 		
 	</channel>

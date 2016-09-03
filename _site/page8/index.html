@@ -112,6 +112,39 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/copying-large-amounts-of-data-to-index-organized-tables.html">
+        <h2 class="post-title">            
+            复制大数据量到索引组织表
+        </h2>
+        
+        <div class="post-content-preview">
+            当导入索引组织表的数据不能排序时，那么效率是很差的。如果用一个大事务来做，很可能失败，并且导致服务器压力很大。
+在oracle中还是推荐使用根据extent分块来实现大数据量的移动 http://hi.baidu.com/dbaeyes/blog/item/dcf741ada8edac004b...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on June 12, 2011</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/index-organized-tables-iot-oracle.html">
+        <h2 class="post-title">            
+            索引组织表 IOT (ORACLE)
+        </h2>
+        
+        <div class="post-content-preview">
+             索引组织表其实就是存储在一个索引结构中的表
+一般我们在oracle数据库中，用到的都是堆组织表，而在mysql常用引擎innodb中的表就是索引组织表，今天因为业务需要，测试了下oracle的索引组织表
+  需求是这样的，将有几十亿数据的A表的新字段cc更新为一个新值（蛋疼的需求），这个值来...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on June 12, 2011</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/software/recommend-evernotequickhighlighter.html">
         <h2 class="post-title">            
             推荐 evernote & quickhighlighter
@@ -215,50 +248,6 @@ IGNORE is a MySQL extension to standard SQL. It controls how ALTER TABLE work
         </div>
     </a>
     <p class="post-meta">Posted by David on April 14, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/mysql-use-bit-operations.html">
-        <h2 class="post-title">            
-            mysql 使用位运算
-        </h2>
-        
-        <div class="post-content-preview">
-            
-如果你不知道什么是位运算的话， 那么请你先去看看基础的C语言教程吧。
-与运算 a &amp; b  ,
-或运算 a | b ,
-异或运算 a ^ b ,
-或者
-你也可以将 与运算理解为 + 法
-例如
-1|2 = 3   （1+2 = 3）
-1|2|4 = 7 （1+2+4 = 7）
-将 异或...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on April 2, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/oracle-small-degree-points.html">
-        <h2 class="post-title">            
-            Oracle degree 小点
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-在开启并行创建索引时，实际消耗的数据库并行线程是双倍。
-create index ind_qid on crm_detail(queue_id,gmt_create) parallel 6 tablespace tbs_ind ONLINE;
-上面的sql以并行6来创建索引，6个并行用于获...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on March 29, 2011</p>
 </div>
 
 <hr>

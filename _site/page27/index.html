@@ -112,6 +112,48 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/os/linux-background-running-sql-scripts.html">
+        <h2 class="post-title">            
+            linux 后台运行sql脚本
+        </h2>
+        
+        <div class="post-content-preview">
+            tmp_xf_fb.sql
+call fbadmin.SP_FEEDBACK_ALLSUM_DB1(&1);
+-----------------
+cat tmp_xf_fb.sh
+#!/bin/sh
+export ORACLE_SID=newcrm
+export ORACLE_BASE=/op...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on September 24, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/exp-imp-orders.html">
+        <h2 class="post-title">            
+            EXP IMP 顺序
+        </h2>
+        
+        <div class="post-content-preview">
+            EXPORT/IMPORT过程
+
+EXPORT导出的DUMP文件包含两种基本类型的数据
+- DDL (Data Dictionary Language)
+- Data
+DUMP文件包含所有重新创建Data Dictionary的DDL语句，基本上是可以读的格式。
+但是应该注意的是，千万不要用文...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on September 18, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/oracle/use-bulk-collect-limit-handling-large-amounts-of-data.html">
         <h2 class="post-title">            
             使用bulk collect limit处理大量数据
@@ -217,48 +259,6 @@ file_id在整个数据库中是唯一的；relative_fno在整个tablespace中是
         </div>
     </a>
     <p class="post-meta">Posted by David on September 10, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/web-page-optimization-techniques.html">
-        <h2 class="post-title">            
-            WEB分页与优化技术
-        </h2>
-        
-        <div class="post-content-preview">
-            表扫描与索引扫描
-
-•    Where a=41
-•    表扫描（假定没有索引）
-– 1、扫描所有的该表的数据块
-– 2、从数据块中找到记录，并过滤
-– 需要扫描该表所有的数据块
-•    索引扫描
-– 1、在索引中搜索a=41的位置（一般只扫描3个块左右R-&gt;B-&gt;L）
-– ...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on September 8, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/my%20life/wangzai-milk.html">
-        <h2 class="post-title">            
-            旺仔牛奶
-        </h2>
-        
-        <div class="post-content-preview">
-            每天下班回家都披星戴月的，7点钟从公司出来，到家的时候已经是8点半多了。
-为了自己喜欢的事情，这些也是值得的吧。
-工作就是这样，那么也不能苦了自己。 所以呢，在回来的路上买了一箱旺仔牛奶，好喝 o(∩_∩)o... 喝一般的牛奶我不好消化，旺仔则没什么问题，而且甜甜的，喝着舒服。
-这些个天，专...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on September 3, 2008</p>
 </div>
 
 <hr>
