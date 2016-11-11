@@ -76,10 +76,27 @@
 					<integer>11</integer>
 				</dict>
 			</dict>
+			<key>2016-11-11-New-Days.md</key>
+			<dict>
+				<key>explicitUnassignment</key>
+				<true/>
+				<key>firstUnassignment</key>
+				<real>500527864.41325599</real>
+				<key>lastModification</key>
+				<real>500527864.41325599</real>
+				<key>version</key>
+				<dict>
+					<key>86919058a2c959ceea4ce0785f0151f8237f8a75ec1ce0027db3b2e96948b9b2</key>
+					<integer>21</integer>
+				</dict>
+			</dict>
 		</dict>
 	</dict>
 	<key>sheetClusters</key>
 	<array>
+		<array>
+			<string>2016-11-11-New-Days.md</string>
+		</array>
 		<array>
 			<string>2016-09-03-Keep-Writing.md</string>
 		</array>
@@ -109,7 +126,7 @@
 		<key>sheetClusters</key>
 		<dict>
 			<key>86919058a2c959ceea4ce0785f0151f8237f8a75ec1ce0027db3b2e96948b9b2</key>
-			<integer>12</integer>
+			<integer>21</integer>
 		</dict>
 	</dict>
 </dict>
