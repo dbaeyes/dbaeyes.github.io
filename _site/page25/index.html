@@ -112,6 +112,24 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/primary-key-unique-constraint-relationships-between-unique-indexes.html">
+        <h2 class="post-title">            
+            主键 唯一约束 唯一索引 之间的关系
+        </h2>
+        
+        <div class="post-content-preview">
+            1. 创建唯一约束，同时创建唯一索引，此时索引是无法删除的，在disable或者dorp唯一约束的适合同时删除掉了索引。
+2. 先创建索引，再创建该索引字段的唯一约束，此时索引也无法删除了。 但是再disable或者dorp唯一约束的时候，先创建的索引将继续存在生效。
+此规则同样适用于主键
+1...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on December 25, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/see-signs-of-alibaba-netease-jiangnan-avenue.html">
         <h2 class="post-title">            
             看到阿里巴巴、网易的路牌 江南大道的变化
@@ -230,31 +248,6 @@ alter table T1 add constraint PK_T1_ID primary ke...
 首先创建一个分析表，该表是用来保存之前的分析值。
 SQL&gt; begin
 2   dbms_stats.create_stat_table(ownname =&gt; 'TES...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on November 14, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/using-materialized-views-brush-table.html">
-        <h2 class="post-title">            
-            使用物化视图刷表
-        </h2>
-        
-        <div class="post-content-preview">
-            基本步骤，以备查询
-
-原始数据表
-create table mv_test(i number);
-declare
-i integer;
-begin
-for i in 1 .. 10000 loop
-insert into mv_test values(i);
-end loop;
-commit;...
         </div>
     </a>
     <p class="post-meta">Posted by David on November 14, 2008</p>
@@ -391,7 +384,7 @@ commit;...
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                &copy; 2011~2017 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

@@ -7,20 +7,30 @@
 		<atom:link href="/" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>好蛮长的一段时间</title>
+				<description>&lt;h2 id=&quot;section&quot;&gt;最近在干啥&lt;/h2&gt;
+&lt;p&gt;在墨尔本也已经7个多月了，该熟悉的也都熟悉了&lt;/p&gt;
+</description>
+				<pubDate>Tue, 07 Mar 2017 00:00:00 +1030</pubDate>
+				<link>/my%20life/A-Long-Time.html</link>
+				<guid isPermaLink="true">/my%20life/A-Long-Time.html</guid>
+			</item>
+		
+			<item>
 				<title>Keep Writing</title>
 				<description>&lt;h2 id=&quot;forget&quot;&gt;Forget&lt;/h2&gt;
-&lt;p&gt;It’s very easy to forget something when you do not use it for a long time. I have not written the blog on the jekyll for several weeks, I even forget how to start the jekyll server on local. &lt;br /&gt;
+&lt;p&gt;It’s very easy to forget something when you do not use it for a long time. I have not written the blog on the jekyll for several weeks, I even forget how to start the jekyll server on local.&lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt; in the blog folder&lt;br /&gt;
 And this time I met a error,&lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;[2016-09-03 10:31:16] WARN  TCPServer Error: Address already in use - bind(2)&lt;/code&gt;&lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt; jekyll 3.1.2 | Error:  Address already in use - bind(2)&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;Yes, the port is used by other app, try another &lt;br /&gt;
+&lt;p&gt;Yes, the port is used by other app, try another&lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve --watch --port 4444&lt;/code&gt;&lt;br /&gt;
 I think it’s good.&lt;/p&gt;
 
 &lt;h2 id=&quot;recently&quot;&gt;Recently&lt;/h2&gt;
-&lt;p&gt;I met some big problem, I hope it was finished. &lt;br /&gt;
+&lt;p&gt;I met some big problem, I hope it was finished.&lt;br /&gt;
 Everything will be better!&lt;/p&gt;
 </description>
 				<pubDate>Sat, 03 Sep 2016 00:00:00 +0930</pubDate>
@@ -706,6 +716,7 @@ Z&lt;/p&gt;
 &lt;p&gt;接下来把markdown语法熟悉下，非常好用的编辑方式，把Git用用熟，就可以愉快的writing了。&lt;/p&gt;
 
 &lt;p&gt;Cheers~~&lt;/p&gt;
+
 </description>
 				<pubDate>Thu, 24 Mar 2016 00:00:00 +1030</pubDate>
 				<link>/my%20life/blog-move.html</link>
@@ -751,22 +762,6 @@ Z&lt;/p&gt;
 				<pubDate>Thu, 26 Feb 2015 12:24:29 +1030</pubDate>
 				<link>/my%20life/keep-writing-blog.html</link>
 				<guid isPermaLink="true">/my%20life/keep-writing-blog.html</guid>
-			</item>
-		
-			<item>
-				<title>时间 变化</title>
-				<description>&lt;p&gt;计划赶不上变化，随着时间的推移，计划不断的发生变化。 当然周边的状况也在不停的转啊转！&lt;/p&gt;
-&lt;p&gt;一起思考着最好的方案，然后实施，努力把事情做好，想着未来总是会更加美好。 虽然路途不一定平坦，但是不去经历，怎么会体验其中的滋味。&lt;/p&gt;
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-&lt;p&gt;就先写这么写吧。   加油！&lt;/p&gt;
-&lt;p&gt;这个wordpress应该要升级到4.0了，下次再搞搞！做下备份啥的。&lt;/p&gt;
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-&lt;p&gt;哦，有个事情已经要说下！&lt;/p&gt;
-&lt;p&gt;最近长胖了，应该是壮了，也是在不知不觉中发生的变化。感觉应该是4个月前开始的游泳有关系，游泳真的是个好运动，现在差不多每周游2-3次，每次30-40分钟。 感觉非常棒，还学会了自由泳。&lt;/p&gt;
-</description>
-				<pubDate>Thu, 30 Oct 2014 21:43:33 +1030</pubDate>
-				<link>/thinking/time-change.html</link>
-				<guid isPermaLink="true">/thinking/time-change.html</guid>
 			</item>
 		
 	</channel>

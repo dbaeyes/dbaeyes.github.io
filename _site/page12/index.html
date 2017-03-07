@@ -112,6 +112,26 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/mysql/mysql-explain-id.html">
+        <h2 class="post-title">            
+            关于MySql explain 中的ID
+        </h2>
+        
+        <div class="post-content-preview">
+            root@test 10:56:20&gt;explain SELECT T0.*
+-&gt;   FROM
+-&gt; PRODUCT_0000 T0,
+-&gt; PRODUCT_0003 T3
+-&gt;  WHERE T0.ID = T3.id
+-&gt;    AND T0.AUC_...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on June 10, 2010</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/mysql/mysql-limit-number-of-scan-lines-and-order-by-index.html">
         <h2 class="post-title">            
             mysql limit 扫描行数 & order by 与索引关系
@@ -252,25 +272,6 @@ mysql中数值类型占的长度比较固定，对于float的使用心里没什�
 
 <hr>
 
-<div class="post-preview">
-    <a href="/my%20life/what-are-busy-recently.html">
-        <h2 class="post-title">            
-            最近都在忙啥
-        </h2>
-        
-        <div class="post-content-preview">
-            好久没有更新blog了
-微博比blog更简单，消息很多很及时，但是无用的消息居多。不过看看朋友们的近况还是相当方便的
-http://t.sina.com.cn/dbaey
-生活是什么，我们为什么生活，生活的好吗？
-对这个问题，挺难回答的。 生活有很多不如意，慢慢的去适应去改变，享受自己的生活吧...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on March 27, 2010</p>
-</div>
-
-<hr>
-
 
 <!-- Pager -->
 
@@ -400,7 +401,7 @@ http://t.sina.com.cn/dbaey
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                &copy; 2011~2017 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

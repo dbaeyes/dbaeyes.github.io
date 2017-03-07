@@ -112,6 +112,25 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/dbms-xplan-display-cursor-gets-executed-sql-execution-plans.html">
+        <h2 class="post-title">            
+            dbms_xplan.display_cursor 获取执行过的sql的执行计划
+        </h2>
+        
+        <div class="post-content-preview">
+            该函数的语法：
+DBMS_XPLAN.DISPLAY_CURSOR(
+sql_id        IN VARCHAR2 DEFAULT NULL,
+child_number IN NUMBER    DEFAULT NULL,
+format        IN VARCHAR2 DEFAUL...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on June 24, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/thinking/hope-is-a-good-thing.html">
         <h2 class="post-title">            
             Hope is a good thing!
@@ -252,27 +271,6 @@ Elapsed: ...
 
 <hr>
 
-<div class="post-preview">
-    <a href="/oracle/primary-keys-unique-indexes-built-non-unique-indexes.html">
-        <h2 class="post-title">            
-            建主键 唯一索引 非唯一索引
-        </h2>
-        
-        <div class="post-content-preview">
-            表中ID有重复数据，但必须要先建索引给查下用的情况：
-
-SQL&gt; create table tmp_xf1
-2 (id number);
-SQL&gt; insert into tmp_xf1 values(1);
-insert into tmp_xf1 values(1);
-inser...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on June 3, 2009</p>
-</div>
-
-<hr>
-
 
 <!-- Pager -->
 
@@ -402,7 +400,7 @@ inser...
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2016 David ♪ Powered by Jekyll.
+                &copy; 2011~2017 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
