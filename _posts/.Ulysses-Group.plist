@@ -86,12 +86,25 @@
 					<integer>26</integer>
 				</dict>
 			</dict>
+			<key>2018-11-09-4-Years.md</key>
+			<dict>
+				<key>lastModification</key>
+				<real>563460202.36565602</real>
+				<key>version</key>
+				<dict>
+					<key>86919058a2c959ceea4ce0785f0151f8237f8a75ec1ce0027db3b2e96948b9b2</key>
+					<integer>43</integer>
+				</dict>
+			</dict>
 		</dict>
 	</dict>
 	<key>sheetClusters</key>
 	<array>
 		<array>
 			<string>2017-03-07-A-Long-Time.md</string>
+		</array>
+		<array>
+			<string>2018-11-09-4-Years.md</string>
 		</array>
 		<array>
 			<string>2016-09-03-Keep-Writing.md</string>
@@ -122,7 +135,7 @@
 		<key>sheetClusters</key>
 		<dict>
 			<key>86919058a2c959ceea4ce0785f0151f8237f8a75ec1ce0027db3b2e96948b9b2</key>
-			<integer>29</integer>
+			<integer>43</integer>
 		</dict>
 	</dict>
 </dict>
