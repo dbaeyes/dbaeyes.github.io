@@ -112,6 +112,23 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/oracle-undo.html">
+        <h2 class="post-title">            
+            Oracle Undo的学习
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+   回滚段可以说是用来保持数据变化前映象而提供一致读和保障事务完整性的一段磁盘存储区域。当一个事务开始的时候，会首先把变化前的数据和变化后的数据先写入日志缓冲区，然后把变化前的数据写入回滚段，最后才在数据缓冲区中修改（日志缓冲区内容在满足一定的条件后可能被写入磁盘，但在事务提交的时候日志...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on August 13, 2007</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/oracle/hand-built-gallery-em-startup-problems.html">
         <h2 class="post-title">            
             手工建库 EM启动问题
@@ -245,24 +262,6 @@ There are two methods for performing recovery:
 
 <hr>
 
-<div class="post-preview">
-    <a href="/thinking/you-need-to-remember-some-details.html">
-        <h2 class="post-title">            
-            你需要记住一些细节
-        </h2>
-        
-        <div class="post-content-preview">
-            很多时候，必须记住细节，很多东西都是一点一点积累起来的。
-
-某件产品的具体型号，你应该可以记住，没有说记不住，这不是理由，理由只能是你没有用心去记。记住了，你会发现以后会少很多烦恼（不再需要手忙脚乱的去翻看以前的记录或者去查阅google或者百度了）
-学习也是同样，很多题目都似曾相识，但是怎么...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on February 17, 2007</p>
-</div>
-
-<hr>
-
 
 <!-- Pager -->
 
@@ -392,7 +391,7 @@ There are two methods for performing recovery:
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2017 David ♪ Powered by Jekyll.
+                &copy; 2011~2018 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

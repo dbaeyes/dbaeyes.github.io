@@ -112,6 +112,27 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/file-id-and-the-relationship-between-relative-fno.html">
+        <h2 class="post-title">            
+            file_id 和 relative_fno二者的关系
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+
+file_id被称为 绝对文件号，relative_fno被称为相当文件号
+二者在大部分的时候，都是相等的
+file_id在整个数据库中是唯一的；relative_fno在整个tablespace中是唯一的，在数据库中不唯一
+一个tablespace中的最大文件数量为1023，所以，一旦...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on September 12, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/os/linux-scp.html">
         <h2 class="post-title">            
             linux scp
@@ -233,28 +254,6 @@ where p.a...
         </div>
     </a>
     <p class="post-meta">Posted by David on August 5, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/index-cost.html">
-        <h2 class="post-title">            
-            索引成本计算
-        </h2>
-        
-        <div class="post-content-preview">
-            典型索引访问路径的工作流程：
-*为定义索引的列准备相关谓词
-*定位索引的根块
-*沿着索引的分支层（branch level）往下走，一直到叶块
-*遍历整个叶块的链表，一直到最后一个能够与谓词相匹配的索引项
-*对于每个索引项，确定是否访问一个表块（table block）
-cost=
-bleve...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on August 3, 2008</p>
 </div>
 
 <hr>
@@ -388,7 +387,7 @@ bleve...
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2017 David ♪ Powered by Jekyll.
+                &copy; 2011~2018 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

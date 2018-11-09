@@ -112,6 +112,28 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/index-cost.html">
+        <h2 class="post-title">            
+            索引成本计算
+        </h2>
+        
+        <div class="post-content-preview">
+            典型索引访问路径的工作流程：
+*为定义索引的列准备相关谓词
+*定位索引的根块
+*沿着索引的分支层（branch level）往下走，一直到叶块
+*遍历整个叶块的链表，一直到最后一个能够与谓词相匹配的索引项
+*对于每个索引项，确定是否访问一个表块（table block）
+cost=
+bleve...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on August 3, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/check-employment-letter-of-intent.html">
         <h2 class="post-title">            
             签了聘用意向书
@@ -239,25 +261,6 @@ SQL*PLUS...
         </div>
     </a>
     <p class="post-meta">Posted by David on July 22, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/summary-of-oracle-explain-plan.html">
-        <h2 class="post-title">            
-            ORACLE EXPLAIN PLAN的总结
-        </h2>
-        
-        <div class="post-content-preview">
-            在ORACLE数据库中,需要对SQL语句进行优化的话需要知道其执行计划,从而针对性的进行调整.ORACLE的执行计划的获得有几种方法,下面就来总结下。
-
-&nbsp;
-1、EXPLAIN的使用
-    Oracle RDBMS执行每一条SQL语句，都必须经过Oracle优化器的评估。所以，了解...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on July 17, 2008</p>
 </div>
 
 <hr>
@@ -391,7 +394,7 @@ SQL*PLUS...
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2017 David ♪ Powered by Jekyll.
+                &copy; 2011~2018 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

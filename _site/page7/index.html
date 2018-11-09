@@ -112,6 +112,25 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/os/command-nc.html">
+        <h2 class="post-title">            
+            command: nc
+        </h2>
+        
+        <div class="post-content-preview">
+            --translate some info
+host_A:  nc -l 1521
+host_B:  telnet 172.22.27.8 1521
+--file translate, translate file from B to A
+1. host_A :  nc -l 1521 > /...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on September 13, 2012</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/mysql/mysql-logical-backup-has-completed-preparation-of-library-building.html">
         <h2 class="post-title">            
             mysql逻辑备份完成备库搭建
@@ -240,25 +259,6 @@ se...
         </div>
     </a>
     <p class="post-meta">Posted by David on June 22, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/mysql-gap-locking-small-measuring.html">
-        <h2 class="post-title">            
-            mysql 间隙锁小测
-        </h2>
-        
-        <div class="post-content-preview">
-            一个innod的表，如果根据没有索引的列去更新，那么很悲剧，会lock整个表。
-
-update tmp_xf set c =11 where a = 1;
-整个tmp_xf表都会被lock。
-所以我们必须在列a上建索引，但是innodb的索引是会有间隙锁（Next-Key)，主要是存在在upd...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on June 17, 2011</p>
 </div>
 
 <hr>
@@ -392,7 +392,7 @@ update tmp_xf set c =11 where a = 1;
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2017 David ♪ Powered by Jekyll.
+                &copy; 2011~2018 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

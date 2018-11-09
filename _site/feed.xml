@@ -7,8 +7,18 @@
 		<atom:link href="/" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>4 Years to now</title>
+				<description>&lt;h2 id=&quot;4-years&quot;&gt;4 years&lt;/h2&gt;
+&lt;p&gt;It is a long time, it is also a short time.&lt;/p&gt;
+</description>
+				<pubDate>Fri, 09 Nov 2018 00:00:00 +1030</pubDate>
+				<link>/my%20life/4-Years.html</link>
+				<guid isPermaLink="true">/my%20life/4-Years.html</guid>
+			</item>
+		
+			<item>
 				<title>漫长的一段时间</title>
-				<description>&lt;h2 id=&quot;section&quot;&gt;最近&lt;/h2&gt;
+				<description>&lt;h2 id=&quot;最近&quot;&gt;最近&lt;/h2&gt;
 &lt;p&gt;在墨尔本也已经7个多月了，该熟悉的也都熟悉了。 
 最近一段艰难的时间算是过去了，总是向着美好的未来奔跑着。
 在去年圣诞节前搬进了自己在南半球的家，比再之前一次看到的时候感觉好很多，家具也在慢慢添置，相信会是一个温馨快乐的家&lt;/p&gt;
@@ -55,15 +65,14 @@ Everything will be better!&lt;/p&gt;
 		
 			<item>
 				<title>最近</title>
-				<description>&lt;h2 id=&quot;section&quot;&gt;一段时间&lt;/h2&gt;
+				<description>&lt;h2 id=&quot;一段时间&quot;&gt;一段时间&lt;/h2&gt;
 
 &lt;p&gt;一段时间不写，之前熟悉下来的markDown  Jekyll+GitHub会忘记的。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;最近在忙什么&lt;/strong&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;参加了一个找培训感觉还是蛮有帮助的,一个local自己办的有政府的补助，单独面对面的聊了四次，其中一次是模拟面试。 挺感谢他的
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;参加了一个找培训感觉还是蛮有帮助的,一个local自己办的有政府的补助，单独面对面的聊了四次，其中一次是模拟面试。 挺感谢他的
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;小盆友开学了，这个学期的课外活动还是挺多的，加油！&lt;/p&gt;
 
@@ -89,9 +98,8 @@ Everything will be better!&lt;/p&gt;
 
 &lt;p&gt;How to put the YouTube vedio in the jekyll page, just use this scripts&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/yDb_WsAt_Z0&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/yDb_WsAt_Z0&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Easy, right?&lt;/p&gt;
 
@@ -642,7 +650,7 @@ Z&lt;/p&gt;
 		
 			<item>
 				<title>复活节</title>
-				<description>&lt;h2 id=&quot;section&quot;&gt;复活节&lt;/h2&gt;
+				<description>&lt;h2 id=&quot;复活节&quot;&gt;复活节&lt;/h2&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Easter 复活节是一个西方的重要节日，在每年春分月圆之后第一个星期日，连周末一起放假四天。&lt;/p&gt;
@@ -708,7 +716,7 @@ Z&lt;/p&gt;
 		
 			<item>
 				<title>Blog 迁移记</title>
-				<description>&lt;h2 id=&quot;section&quot;&gt;迁移&lt;/h2&gt;
+				<description>&lt;h2 id=&quot;迁移&quot;&gt;迁移&lt;/h2&gt;
 
 &lt;p&gt;Blog空间搬了一次又一次，已经记不清最初的blog在哪边了，MSN sapce or QQ Zone. 有记录在的是 新浪博客，那个时候好多名人都在写新浪博客^_^ 后来挪到了百度空间，那个时候写的是最多的，因为那段时间全力的学习Oracle，而且百度把百度空间的内容搜索靠前了，很容易被搜索到，写的可乐呵了。 然而到了2012年百度空间改版了，改的简洁的连自己都不认识（号称轻博客，反正对于需要敲几行代码进去的是没法用了），而且百度自己提供个人空间的全量导出功能让用户迁移出来自个玩去。  想到空间放在别人的地方，别人家想关就关了，真是一个杯具，所以寻觅一个自己管理维护的空间。 一个DBA同事用wordpress写的很好，那就用呗。 那个时候一个开发告诉我也可以用GitHub+Jekyll。 经过对比，还是选择了wordpress，买空间买域名，然后倒腾倒腾把整个百度空间的内容都搞上去了， &lt;a href=&quot;http://www.dbathink.com&quot;&gt;www.dbathink.com&lt;/a&gt; (dbaeyes的域名被别人注册去了），用的感觉确实很爽，自己弄了很多插件, 还能备份网站，后台还用了MySQL，但自从迁移到wordpress后，写的非常少了。 但每年要交域名和空间的费用，有点浪费。&lt;/p&gt;
 
@@ -752,21 +760,6 @@ Z&lt;/p&gt;
 				<pubDate>Sun, 08 Mar 2015 22:04:03 +1030</pubDate>
 				<link>/thinking/not-self-willed.html</link>
 				<guid isPermaLink="true">/thinking/not-self-willed.html</guid>
-			</item>
-		
-			<item>
-				<title>坚持写blog 呗</title>
-				<description>&lt;p&gt;呵呵，坚持写写blog  每日一写呗&lt;/p&gt;
-&lt;p&gt;这个年没在老家过，去年在USA,今年在AUS&lt;/p&gt;
-&lt;p&gt;从最近的感受来看，阿德莱德确实是一个适合生活的地方，前提是要有工作。&lt;/p&gt;
-&lt;p&gt;小隽挺适应这边的生活的，小家伙哪边都挺能适应的。&lt;/p&gt;
-&lt;p&gt;&amp;nbsp;&lt;br /&gt;
-&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/16442825447/player/&quot; width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen&gt;&lt;/iframe&gt;&lt;/p&gt;
-&lt;p&gt;&lt;iframe src=&quot;https://www.flickr.com/photos/dbaeyes/16462730480/in/photostream/player/&quot; width=&quot;800&quot; height=&quot;600&quot; frameborder=&quot;0&quot; allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen&gt;&lt;/iframe&gt;&lt;/p&gt;
-</description>
-				<pubDate>Thu, 26 Feb 2015 12:24:29 +1030</pubDate>
-				<link>/my%20life/keep-writing-blog.html</link>
-				<guid isPermaLink="true">/my%20life/keep-writing-blog.html</guid>
 			</item>
 		
 	</channel>

@@ -112,6 +112,25 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/mysql/mysql-gap-locking-small-measuring.html">
+        <h2 class="post-title">            
+            mysql 间隙锁小测
+        </h2>
+        
+        <div class="post-content-preview">
+            一个innod的表，如果根据没有索引的列去更新，那么很悲剧，会lock整个表。
+
+update tmp_xf set c =11 where a = 1;
+整个tmp_xf表都会被lock。
+所以我们必须在列a上建索引，但是innodb的索引是会有间隙锁（Next-Key)，主要是存在在upd...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on June 17, 2011</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/oracle/the-formula-of-the-cost-based.html">
         <h2 class="post-title">            
             The formula of the Cost Based
@@ -227,27 +246,6 @@ mysql备库处理binlog日志是单线程的，无论主库有多少个database�
         </div>
     </a>
     <p class="post-meta">Posted by David on May 29, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/table-data-and-field-null-implementation-plan-of-error-in-statistical-information.html">
-        <h2 class="post-title">            
-            表数据量和字段空值统计信息导致的执行计划错误
-        </h2>
-        
-        <div class="post-content-preview">
-            TABLE_CC 表数据量 8KW，
-
-column: Art_id null number  --distinct values:214
-column: User_id  not null number --distinct values: 83w
-&nbsp;
-Index:
-Idx_use...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on May 9, 2011</p>
 </div>
 
 <hr>
@@ -381,7 +379,7 @@ Idx_use...
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2017 David ♪ Powered by Jekyll.
+                &copy; 2011~2018 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
