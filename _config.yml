@@ -1,15 +1,15 @@
 # Site settings
 title: DBAeyes
 header-img: "img/autumn2.jpg"
-tagline: "相遇在南十字星下"  
-description: "Meet at the Southern Cross constellation(Crux)"  
+tagline: "相遇在南十字星下"
+description: "Meet at the Southern Cross constellation(Crux)"
 baseurl: ""
-url: "http://dbaeyes.me"  
-#url: "http://azeril.me"  
+url: "http://dbaeyes.me"
+#url: "http://azeril.me"
 #url: "http://localhost:4000"
 
 # About/contact
-owner: 
+owner:
   name: "David"
   email: renwei.chu@gmail.com
   bio: "上善若水"
@@ -19,21 +19,21 @@ gavatar: http://dreamofbook.qiniudn.com/Az..png
 favicon: img/favicon.ico
 
 douban_username: dbaeyes
-twitter_username: dbaeyes  
-github_username: dbaeyes  
-facebook_username: dbaeyes  
-weibo_username: poofly  
-zhihu_username: dbaeyes  
+twitter_username: dbaeyes
+github_username: dbaeyes
+facebook_username: dbaeyes
+weibo_username: poofly
+zhihu_username: dbaeyes
 
-# Build settings  
-# use Github Flavored Markdown !important  
-# document: http://jekyllrb.com/docs/configuration/#kramdown  
+# Build settings
+# use Github Flavored Markdown !important
+# document: http://jekyllrb.com/docs/configuration/#kramdown
 markdown: kramdown
 kramdown:
   input: GFM
 highlighter: rouge
 
-gems: 
+plugins:
 - jekyll-gallery-generator
 - jekyll-paginate
 permalink: none
@@ -49,7 +49,7 @@ timezone: Australia/Adelaide
 # Defaults for posts
 defaults:
   -
-    scope: 
+    scope:
       path: ""
       type: "posts"
     values:
@@ -58,7 +58,7 @@ defaults:
       header-img: "img/fantasy.jpg" # We don't want posts without a header image, that whould mean white on white
 
 
-# Comments 
+# Comments
 comments :
   provider : duoshuo
   duoshuo :
