@@ -1,6 +1,6 @@
 ---
 layout: post
-title: aphorism
+title: New in 2021
 categories: [My Life ]
 tags: [life]
 description: just remember
