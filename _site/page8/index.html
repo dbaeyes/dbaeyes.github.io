@@ -112,6 +112,65 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/my%20life/impossible-where-noticed-after-reading-const-tables.html">
+        <h2 class="post-title">            
+            Impossible WHERE noticed after reading const tables
+        </h2>
+        
+        <div class="post-content-preview">
+            mark it
+
+在根据主键查询或者唯一性索引查询是出现：Extra: Impossible WHERE noticed after reading const tables
+explain走到这个方式，会很慢，一个空表也是如此，在并发量高的情况下存在相互的等待，因为他要判断之。
+如果直接走索...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on September 25, 2011</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/mysql/mysql-lock-tables-and-unlock-tables.html">
+        <h2 class="post-title">            
+            mysql LOCK TABLES and UNLOCK TABLES
+        </h2>
+        
+        <div class="post-content-preview">
+            参考文档： http://dev.mysql.com/doc/refman/5.1/en/lock-tables.html
+
+文档很详细，一些需要注意的地方：
+lock table有两种模式
+lock tables table_name  read  [or write];
+test1:
+se...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on August 23, 2011</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/mysql/mk-query-digest-a-mysql-log-analysis-tool.html">
+        <h2 class="post-title">            
+            mk-query-digest - a mysql log analysis tool
+        </h2>
+        
+        <div class="post-content-preview">
+            ./mk-query-digest slow.log
+
+--如此简单就可以分析mysql的慢日志，当然如果slow log很大时，这么做会消耗很大的性能。
+主要参数：
+--limit: default: 95%:20  Limit output to the given percentage ...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on August 21, 2011</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/little-june-june-grow-logs.html">
         <h2 class="post-title">            
             小隽隽的成长日志
@@ -195,57 +254,6 @@ cost =
         </div>
     </a>
     <p class="post-meta">Posted by David on June 12, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/software/recommend-evernotequickhighlighter.html">
-        <h2 class="post-title">            
-            推荐 evernote & quickhighlighter
-        </h2>
-        
-        <div class="post-content-preview">
-            推荐一个软件和一个格式化工具
-
-evernote 方便的记录，支持各种平台 android、iphone、ipad、mac、windows、blackberry、web，并且可以相互共享，也算是一朵小云
-使用http://quickhighlighter.com/ 可以把代码漂亮的色彩格式，真...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on June 9, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/mysql-update-large-amounts-of-data-to-reduce-delays.html">
-        <h2 class="post-title">            
-            mysql 在更新大数据量情况下如何降低备库延迟
-        </h2>
-        
-        <div class="post-content-preview">
-            
-mysql备库处理binlog日志是单线程的，无论主库有多少个database或者主库的tps有多高，备库当前的恢复模式都是单进程恢复。这样解决了并发的问题，但是也是备库很容易在主库高tsp的情况下，造成延迟。
-一些情况下，备库的延迟可以通过预热来加快sql的执行速度。预热就是将需要更新的数...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on May 29, 2011</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/mysql-fetch-random-number-index.html">
-        <h2 class="post-title">            
-            mysql取随机数之索引使用
-        </h2>
-        
-        <div class="post-content-preview">
-            之前写过关于mysql取随机数的记录，当时没有去分析表里数据量的分布情况，所以当执行计划不同时，实际的效果有非常大的差别。
-[cc lang='sql']dbaeyes 06:47:52>select count(*) ,status from act_info group by status...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on May 29, 2011</p>
 </div>
 
 <hr>
@@ -379,7 +387,7 @@ mysql备库处理binlog日志是单线程的，无论主库有多少个database�
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2018 David ♪ Powered by Jekyll.
+                &copy; 2011~2022 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

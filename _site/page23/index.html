@@ -112,6 +112,60 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/my%20life/squeezing-squeezing-squeezing-public-transport.html">
+        <h2 class="post-title">            
+            挤啊挤啊挤公交
+        </h2>
+        
+        <div class="post-content-preview">
+            昨天上午挤公交挤的有点惨烈 。
+走到拐弯路口，一辆317过去了，车上人并不算多。 然后 等了20分钟，来了一辆，人太多，挤不上去，车足足停了3分钟，才挤上去5个人，还有6-7人没上去，我干脆不去挤了，想想这辆车人这么多，后面一辆马上就会来了。 果不其然，过了3分钟，另一辆317来了，还还是多啊...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on March 26, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/according-to-the-rowid-built-a-temporary-table-to-update-table-data.html">
+        <h2 class="post-title">            
+            根据rowid建临时表更新大表数据
+        </h2>
+        
+        <div class="post-content-preview">
+            [cc lang="sql"]create table tmp_xf_rowid as
+select rowid rid from xf_detail
+where isdo_bss is not null
+order by 1;
+declare
+i number := 0;
+begin
+for...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on March 24, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/my%20life/another-sleepless-night.html">
+        <h2 class="post-title">            
+            又是一个不眠之夜
+        </h2>
+        
+        <div class="post-content-preview">
+            今天是BC整合的最后一期发布，315的零点准时开始。从昨天下午2点到公司到今天早上8点多回来。
+跟的两个项目发布过程顺利。评价的数据迁移要在其他迁移的完成的基础上才能进行。 所以一直到了2:00多才开始，因为商城的评价记录并不算多，所以预计开4个进程的迁移时间会花3个多小时，后来在服务器负载情...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on March 15, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/today-out-of-the-sun.html">
         <h2 class="post-title">            
             今天出太阳了
@@ -203,64 +257,6 @@ SQLNET.AUTHENTICATION...
         </div>
     </a>
     <p class="post-meta">Posted by David on February 23, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/table-space-management.html">
-        <h2 class="post-title">            
-            表空间管理
-        </h2>
-        
-        <div class="post-content-preview">
-            1.create tablespaces
-
-     sql&gt; create tablespace tablespace_name datafile 'c:\oracle\oradata\file1.dbf' size 100m,
-sql&gt; 'c:\oracle\oradata\f...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on February 23, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/thinking/the-most-recent.html">
-        <h2 class="post-title">            
-            最近
-        </h2>
-        
-        <div class="post-content-preview">
-            近来有点小忙，都是被不熟悉的业务弄的，要写一堆不太熟悉的表数据迁移的脚本，不过做过了就慢慢的熟悉了，对写plsql也算是一个提高吧。
-上个周末项目发布，弄到早上回家的，近来经常感觉睡眠不足。老了？一个恐怖的年头，不过人嘛，差不多到了一定年纪总是会老的，当然不是现在。 所以需要锻炼身体！！！
-活...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on February 21, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/trigger-data-migration.html">
-        <h2 class="post-title">            
-            触发器 迁移数据
-        </h2>
-        
-        <div class="post-content-preview">
-            这种方法可以用于业务比较频繁而且不能停机迁移的情况！
-
-----------------------------------
---源表
-create table test_sync_a
-(id number,
-name varchar2(32),
-mono varchar2(32),
-gmt_...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on February 13, 2009</p>
 </div>
 
 <hr>
@@ -394,7 +390,7 @@ gmt_...
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2018 David ♪ Powered by Jekyll.
+                &copy; 2011~2022 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

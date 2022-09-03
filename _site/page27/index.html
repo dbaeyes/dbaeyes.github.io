@@ -112,6 +112,58 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/importance-of-oracle-hint.html">
+        <h2 class="post-title">            
+            Oracle Hint 的重要性
+        </h2>
+        
+        <div class="post-content-preview">
+            昨天凌晨的操作太失败了，花了3个小时，居然只完成了3个子表的数据订正（一共16个），其中有中间有个步骤需要花1个小时左右的时间。 其实仔细想想也应该是不对的，我使用了hash jion，数据量t1 1600w, t2 100w的样子，应该是不需要那么久。 不过深更半夜的脑袋肯定没有那么好使，没...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on October 23, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/my%20life/fish-is-really-good.html">
+        <h2 class="post-title">            
+            小鱼真好
+        </h2>
+        
+        <div class="post-content-preview">
+            这些个天，有些数据需要订正，晚上加班蛮多。而且主要上班有点远，每天花4个小时在路上 &gt;_&lt;
+今天起来的时候，看到桌子上有一包 好吃点 饼干，还有个小纸条“饿了就吃”    小鱼 真好 ！
+这些日子装修，她花的精力比我多，很多东西都是她处理的，小鱼辛苦了
+
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on October 22, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/my%20life/night-time-is-a-bit-long.html">
+        <h2 class="post-title">            
+            晚上工作的时间有点长
+        </h2>
+        
+        <div class="post-content-preview">
+            不知不觉已经到了凌晨4点半了，虽然感觉不怎么困，但其实身体已经挺疲劳了。 做dba这行有的时候还是蛮辛苦的，万事开头难吧。
+
+今天的工作总的比较顺利的，之前需要跑10多天的动作，现在几个小时就可以搞定了。 方法真是的人想出来的
+继续，估计还需要那么一段时间
+
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on October 12, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/os/crontab.html">
         <h2 class="post-title">            
             crontab
@@ -205,62 +257,6 @@ DUMP文件包含所有重新创建Data Dictionary的DDL语句，基本上是可�
         </div>
     </a>
     <p class="post-meta">Posted by David on September 18, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/use-bulk-collect-limit-handling-large-amounts-of-data.html">
-        <h2 class="post-title">            
-            使用bulk collect limit处理大量数据
-        </h2>
-        
-        <div class="post-content-preview">
-            很多时候需要出来大量的数据，这个时候分批获取和提交对减少系统的负载是非常有帮助的！
-例子：
-create table t
-as
-select * from dba_objects;
-------------------------------
-alter table T add constra...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on September 17, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/my%20life/autumn-notes-on.html">
-        <h2 class="post-title">            
-            中秋小记
-        </h2>
-        
-        <div class="post-content-preview">
-            中秋第一次作为国家法定放假一天。
-不过这个中秋不是休息的中秋，只能说是最近比较忙。 装修的工作已经接近到油漆的末期了，总的工作还是比较满意的，不过真的很辛苦，因为对装修懂的东西不多，很多是第一次接触
-昨天因为有急事要上楼，结果那个时候电梯坏了，只能爬楼梯了，23楼跑起来还真是有点辛苦的，到了1...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on September 14, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/cursor-using-bulk-collect-bulk-fetch.html">
-        <h2 class="post-title">            
-            使用bulk collect实现cursor 批量fetch！
-        </h2>
-        
-        <div class="post-content-preview">
-            尽管我在开发当中使用批量fetch并不是很多，但是oracle提供了这个功能我们最好能熟悉一下，说不定什么时候会用上它。批量fetch肯定需要和集合结合起来使用，所以这就要求我们熟悉集合的内容！这里不对集合的内容做过多介绍！
-
-declare
-cursor c1 is select * fro...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on September 12, 2008</p>
 </div>
 
 <hr>
@@ -394,7 +390,7 @@ cursor c1 is select * fro...
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2018 David ♪ Powered by Jekyll.
+                &copy; 2011~2022 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

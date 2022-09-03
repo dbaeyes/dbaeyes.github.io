@@ -128,7 +128,7 @@
   <li>
     <p>常用分页，其中的 第二层的  rownum &lt;= 20可以控制最内层查询过程中的最大记录数</p>
 
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   select * from (select t1.*, rownum rn
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   select * from (select t1.*, rownum rn
    	  from (select *
          from table_buyer
         where buyer_status = 2
@@ -141,7 +141,7 @@ where rn &gt;= 10;
     <p>分页用between实现<br />
 不推荐，因为第三层不能推到最内层控制查询条数，效率低</p>
 
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select * from (select t.*, rownum rn
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select * from (select t.*, rownum rn
     from (select *
           from table_buyer
          where buyer_status = 2
@@ -153,7 +153,7 @@ where rn &gt;= 10;
     <p>效率最高<br />
 用rowid 分页，大数据量翻页常用写法，常用于单表，并且所有查询和排序字段都在索引中的情况</p>
 
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select * from (select rid
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select * from (select rid
   from (select t.rid, rownum linenum
           from (select rowid rid
                   from table_buyer
@@ -338,7 +338,7 @@ where rn &gt;= 10;
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2018 David ♪ Powered by Jekyll.
+                &copy; 2011~2022 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

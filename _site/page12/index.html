@@ -112,6 +112,83 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/oracle-flashback-query-overview-10g.html">
+        <h2 class="post-title">            
+            Oracle 10g的闪回查询概述
+        </h2>
+        
+        <div class="post-content-preview">
+            与Oracle 9i相比Oracle 10g的Flashback有了非常大的改进，从普通的Flashback Query发展到了多种形式，主要表现在如下几方面新特性：
+
+1、Flashback Database
+Oracle Flashback Database特性允许通过SQL语句Flash...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on August 30, 2010</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/mysql/mysql-uses-a-temporary-table-stored-procedure-to-delete-large-amounts-of-data-in-table.html">
+        <h2 class="post-title">            
+            mysql 使用临时表+存储过程删除大表中的大量数据
+        </h2>
+        
+        <div class="post-content-preview">
+            当一个表mysql的表成长到1000w以上，然后需要更加某些条件去删除其中的几百万数据的时候，如果直接delete将是一件极其痛苦的事情。 时间长是必然的，而且堵塞了正常应用的更新等操作，很有可能的导致数据库hang住和应用的崩溃
+
+--常用的方法，如果表是1000w，符合删除条件的数据是40...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on August 9, 2010</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/my%20life/sanya-outing.html">
+        <h2 class="post-title">            
+            三亚 outing
+        </h2>
+        
+        <div class="post-content-preview">
+            
+
+三亚的天空很清澈
+
+酒店的泳池和棕榈树
+
+亚龙湾海滩的夜景
+
+
+
+早上起来冲冲浪，其实是被浪冲一下 ~\(≧▽≦)/~
+
+
+
+去后海湾钓鱼 潜水
+
+
+
+早上的阳光很美，摆个pose吧
+
+
+酒店里出售的纪念品
+
+酒店大堂的法拉利
+
+坐上中国已经为数不多的麦道90飞机返航
+
+
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on July 1, 2010</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/os/launchyautohotkey-greatly-improve-the-efficiency-of-both-free-software.html">
         <h2 class="post-title">            
             Launchy & AutoHotKey 大大提高工作效率的两个免费软件
@@ -200,71 +277,6 @@ CREATE TABLE `actor` (
         </div>
     </a>
     <p class="post-meta">Posted by David on May 12, 2010</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/sql-page.html">
-        <h2 class="post-title">            
-            sql 分页
-        </h2>
-        
-        <div class="post-content-preview">
-            SQL 分页
-
-
-  
-    常用分页，其中的 第二层的  rownum &lt;= 20可以控制最内层查询过程中的最大记录数
-
-       select * from (select t1.*, rownum rn
-   	  from (select *
-         from t...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on May 8, 2010</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/mysql-explain.html">
-        <h2 class="post-title">            
-            MySQL的 explain
-        </h2>
-        
-        <div class="post-content-preview">
-            
-
-ID：MySQL Query Optimizer选定的执行计划中查询的序列号。
-Select_type：所使用的查询类型，主 要有以下这几种查询类型。
-DEPENDENT SUBQUERY：子查询内层的第一个SELECT，依赖于外部查询的结果集。
-DEPENDENT UNION：子查询中的...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on April 28, 2010</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/mysql/mysql-fetch-random-number-random.html">
-        <h2 class="post-title">            
-            MYSQL 取随机数 random
-        </h2>
-        
-        <div class="post-content-preview">
-            
-mysql 取随机数
---对一个表取任意随机数
-SELECT *
-FROM TMP_XF_TEST
-WHERE ID &gt;= (SELECT FLOOR(RAND() * (SELECT MAX(ID) FROM TMP_XF_TEST)))
-order by id LIMIT 1;
--...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on April 26, 2010</p>
 </div>
 
 <hr>
@@ -398,7 +410,7 @@ order by id LIMIT 1;
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2018 David ♪ Powered by Jekyll.
+                &copy; 2011~2022 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

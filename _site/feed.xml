@@ -7,6 +7,42 @@
 		<atom:link href="/" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>New in 2022</title>
+				<description>&lt;h2 id=&quot;not-used-for-a-while-but-do-not-forget&quot;&gt;Not used for a while but do not forget&lt;/h2&gt;
+
+&lt;p&gt;Yes, I want to restart writing something.&lt;/p&gt;
+
+</description>
+				<pubDate>Sat, 03 Sep 2022 00:00:00 +0930</pubDate>
+				<link>/my%20life/Again.html</link>
+				<guid isPermaLink="true">/my%20life/Again.html</guid>
+			</item>
+		
+			<item>
+				<title>New in 2021</title>
+				<description>&lt;h2 id=&quot;很久不用域名已经过期但是网站还能用&quot;&gt;很久不用，域名已经过期，但是网站还能用&lt;/h2&gt;
+&lt;p&gt;Just for testing!&lt;/p&gt;
+
+&lt;p&gt;You only need one bad apple to spoil the entire barrel.&lt;/p&gt;
+
+</description>
+				<pubDate>Thu, 08 Apr 2021 00:00:00 +0930</pubDate>
+				<link>/my%20life/HiSydeney.html</link>
+				<guid isPermaLink="true">/my%20life/HiSydeney.html</guid>
+			</item>
+		
+			<item>
+				<title>aphorism</title>
+				<description>&lt;h2 id=&quot;say&quot;&gt;Say&lt;/h2&gt;
+&lt;p&gt;You only need one bad apple to spoil the entire barrel.&lt;/p&gt;
+
+</description>
+				<pubDate>Tue, 13 Nov 2018 00:00:00 +1030</pubDate>
+				<link>/my%20life/Say.html</link>
+				<guid isPermaLink="true">/my%20life/Say.html</guid>
+			</item>
+		
+			<item>
 				<title>Double eleven Single Day</title>
 				<description>&lt;h2 id=&quot;10-years&quot;&gt;10 years&lt;/h2&gt;
 &lt;p&gt;The tenth Double Eleven Single Shopping Festival Day, also know as annual Singles’ Day extravaganza. I had joined the first six extravaganzas, full of memories.&lt;/p&gt;
@@ -51,13 +87,13 @@ Try…..&lt;/p&gt;
 				<title>Keep Writing</title>
 				<description>&lt;h2 id=&quot;forget&quot;&gt;Forget&lt;/h2&gt;
 &lt;p&gt;It’s very easy to forget something when you do not use it for a long time. I have not written the blog on the jekyll for several weeks, I even forget how to start the jekyll server on local.&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt; in the blog folder&lt;br /&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt; in the blog folder&lt;br /&gt;
 And this time I met a error,&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;[2016-09-03 10:31:16] WARN  TCPServer Error: Address already in use - bind(2)&lt;/code&gt;&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt; jekyll 3.1.2 | Error:  Address already in use - bind(2)&lt;/code&gt;&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[2016-09-03 10:31:16] WARN  TCPServer Error: Address already in use - bind(2)&lt;/code&gt;&lt;br /&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt; jekyll 3.1.2 | Error:  Address already in use - bind(2)&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Yes, the port is used by other app, try another&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve --watch --port 4444&lt;/code&gt;&lt;br /&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve --watch --port 4444&lt;/code&gt;&lt;br /&gt;
 I think it’s good.&lt;/p&gt;
 
 &lt;h2 id=&quot;recently&quot;&gt;Recently&lt;/h2&gt;
@@ -87,7 +123,7 @@ Everything will be better!&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;最近在忙什么&lt;/strong&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;参加了一个找培训感觉还是蛮有帮助的,一个local自己办的有政府的补助，单独面对面的聊了四次，其中一次是模拟面试。 挺感谢他的
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;参加了一个找培训感觉还是蛮有帮助的,一个local自己办的有政府的补助，单独面对面的聊了四次，其中一次是模拟面试。 挺感谢他的
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;小盆友开学了，这个学期的课外活动还是挺多的，加油！&lt;/p&gt;
@@ -96,7 +132,7 @@ Everything will be better!&lt;/p&gt;
 
 &lt;p&gt;今天是母亲节，老妈，母亲节快乐！&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;eof&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eof&lt;/code&gt;&lt;/p&gt;
 
 </description>
 				<pubDate>Sun, 08 May 2016 00:00:00 +0930</pubDate>
@@ -114,7 +150,7 @@ Everything will be better!&lt;/p&gt;
 
 &lt;p&gt;How to put the YouTube vedio in the jekyll page, just use this scripts&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/yDb_WsAt_Z0&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/yDb_WsAt_Z0&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Easy, right?&lt;/p&gt;
@@ -662,107 +698,6 @@ Z&lt;/p&gt;
 				<pubDate>Wed, 06 Apr 2016 00:00:00 +0930</pubDate>
 				<link>/digital/aussie-say-youtute.html</link>
 				<guid isPermaLink="true">/digital/aussie-say-youtute.html</guid>
-			</item>
-		
-			<item>
-				<title>复活节</title>
-				<description>&lt;h2 id=&quot;复活节&quot;&gt;复活节&lt;/h2&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Easter 复活节是一个西方的重要节日，在每年春分月圆之后第一个星期日，连周末一起放假四天。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;很巧合的是最近好几年的复活节都在澳洲渡过，2012年和朋友来游玩，从黄金海岸一路开房车到凯恩斯；2013年短登游玩了阿德莱德、悉尼和墨尔本。
-今年复活节四天机器挺乐呵的在阿村逛逛&lt;/p&gt;
-
-&lt;p&gt;第一天去了乐高展&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://farm2.staticflickr.com/1466/26045531921_a1ad4b2e03_k.jpg&quot; alt=&quot;lego1&quot; /&gt;&lt;/p&gt;
-
-&lt;figure&gt;
-&lt;img src=&quot;https://farm2.staticflickr.com/1630/25507127594_c0b64b6a55_k.jpg&quot; /&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;第二天 有个阿村国际风筝节 小隽也成功的放飞了他的风筝&lt;/p&gt;
-&lt;figure&gt;
-&lt;img src=&quot;https://farm2.staticflickr.com/1689/26111934565_b785faa147_h.jpg&quot; /&gt;
-&lt;/figure&gt;
-
-&lt;hr /&gt;
-
-&lt;figure&gt;
-&lt;img src=&quot;https://farm2.staticflickr.com/1522/26019444072_babe2822e4_h.jpg&quot; /&gt;  
-&lt;/figure&gt;
-
-&lt;hr /&gt;
-
-&lt;figure&gt;
-&lt;img src=&quot;https://farm2.staticflickr.com/1658/25839152340_86e665890a_h.jpg&quot; /&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;第三天 阿村动物园，土澳唯一有中国大熊猫的地方，一个有大熊猫的地方还能叫阿村，哈哈&lt;/p&gt;
-
-&lt;figure&gt;
-&lt;img src=&quot;https://farm2.staticflickr.com/1626/26019486432_6960d2c20c_h.jpg&quot; /&gt;
-&lt;/figure&gt;
-
-&lt;hr /&gt;
-
-&lt;figure&gt;
-&lt;img src=&quot;https://farm2.staticflickr.com/1448/25509415303_8c3ec6cfb8_h.jpg&quot; /&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;第四天 去了阿村一个很美的地方，山上的植物园，mount lofty，真的很美&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://farm2.staticflickr.com/1445/25839166210_5c6bfc0614_h.jpg&quot; alt=&quot;beautiful&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;节日就这么过去了，周边走走挺好的，阿村的生活也是相当惬意。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;阿村是个好地方&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;eof&lt;/code&gt;&lt;/p&gt;
-
-</description>
-				<pubDate>Mon, 28 Mar 2016 00:00:00 +1030</pubDate>
-				<link>/my%20life/easter-day.html</link>
-				<guid isPermaLink="true">/my%20life/easter-day.html</guid>
-			</item>
-		
-			<item>
-				<title>Blog 迁移记</title>
-				<description>&lt;h2 id=&quot;迁移&quot;&gt;迁移&lt;/h2&gt;
-
-&lt;p&gt;Blog空间搬了一次又一次，已经记不清最初的blog在哪边了，MSN sapce or QQ Zone. 有记录在的是 新浪博客，那个时候好多名人都在写新浪博客^_^ 后来挪到了百度空间，那个时候写的是最多的，因为那段时间全力的学习Oracle，而且百度把百度空间的内容搜索靠前了，很容易被搜索到，写的可乐呵了。 然而到了2012年百度空间改版了，改的简洁的连自己都不认识（号称轻博客，反正对于需要敲几行代码进去的是没法用了），而且百度自己提供个人空间的全量导出功能让用户迁移出来自个玩去。  想到空间放在别人的地方，别人家想关就关了，真是一个杯具，所以寻觅一个自己管理维护的空间。 一个DBA同事用wordpress写的很好，那就用呗。 那个时候一个开发告诉我也可以用GitHub+Jekyll。 经过对比，还是选择了wordpress，买空间买域名，然后倒腾倒腾把整个百度空间的内容都搞上去了， &lt;a href=&quot;http://www.dbathink.com&quot;&gt;www.dbathink.com&lt;/a&gt; (dbaeyes的域名被别人注册去了），用的感觉确实很爽，自己弄了很多插件, 还能备份网站，后台还用了MySQL，但自从迁移到wordpress后，写的非常少了。 但每年要交域名和空间的费用，有点浪费。&lt;/p&gt;
-
-&lt;p&gt;最近申请了Amazon的AWS,前12个月免费，用户体验还不错，考虑着把blog迁移到AWS的EC2虚拟主机上面，应该会有一种不错的感觉吧，查看了价格，免费一年到期后如果直接买三年，那一个月6刀多，跟现在也差不多价格，而且有个虚拟主机可以玩各种东西。 然后，最近在一些东西的时候，发现有太多的开源代码都在GitHub上面，而且GitHub支持静态的网页，关键还免费，不限流量。 那GitHub也就成了一个放blog的好地方了，静态网站工具的选择上看中了Jekyll和Hugo，做了下对比，Hugo是go语言写的，编译很快，非常快，而且很多人说简单；Jekyll是用ruby写的，是Github的作者写的，用的人最多，而且Github原生对它的支持是最好的，但Jekyll需要一些编程基础为好。 Hugo呗，谁让它快还简单呢，但是事实证明这个玩意儿并不好玩，因为用的人少，文档也少，主题也不多，而且对我来说使用不那么直观，折腾了一天不太愉快。那就测试下Jekyll，发现异常好用，而且非常方便识别，对Hubgit的配合也非常完美，还有非常多的主题可以选，我这个主题感谢azeril的制作，很好用。 然后用Jekyll的工具将wordpress导出的xml文件简析出来，就可以用了。&lt;/p&gt;
-
-&lt;p&gt;很喜欢这个主题和操作方式，至于AWS上的虚拟机，继续倒腾，但wordpress应该是不用部署上去了，做下测试是OK的。&lt;/p&gt;
-
-&lt;p&gt;在安装Jekyll和Hugo的过程中，还是蛮多知识点学习到的，而且发现Mac天生的好用。&lt;/p&gt;
-
-&lt;p&gt;接下来把markdown语法熟悉下，非常好用的编辑方式，把Git用用熟，就可以愉快的writing了。&lt;/p&gt;
-
-&lt;p&gt;Cheers~~&lt;/p&gt;
-
-</description>
-				<pubDate>Thu, 24 Mar 2016 00:00:00 +1030</pubDate>
-				<link>/my%20life/blog-move.html</link>
-				<guid isPermaLink="true">/my%20life/blog-move.html</guid>
-			</item>
-		
-			<item>
-				<title>什么心情</title>
-				<description>&lt;p&gt;负面的情绪会直接影响人的心情！&lt;br /&gt;
-有些人就是这样，很难变的。 知道就好了，没有必要为了别人生气&lt;/p&gt;
-&lt;p&gt;看淡看轻松！&lt;/p&gt;
-&lt;p&gt;昨天把葡萄酒的书浏览了下，感觉离葡萄酒还比较远。 喜欢就好，不用纠结！&lt;/p&gt;
-&lt;p&gt;最近坚持游泳有段时间了，感觉挺好的！最近一个人的日子时间比较自由，晚上下班都是自己的时间，但时间花在什么地方比较好呢，有点吃不准，锻炼肯定是的。然后其他时间只要做喜欢的事情，不要浪费发呆就好&lt;/p&gt;
-</description>
-				<pubDate>Wed, 11 Mar 2015 09:51:52 +1030</pubDate>
-				<link>/my%20life/what-mood.html</link>
-				<guid isPermaLink="true">/my%20life/what-mood.html</guid>
 			</item>
 		
 	</channel>

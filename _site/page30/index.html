@@ -112,6 +112,69 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/oracle/exp-00091.html">
+        <h2 class="post-title">            
+            EXP-00091
+        </h2>
+        
+        <div class="post-content-preview">
+            01　查看DB中的NLS_CHARACTERSET的值（提供兩種方法）：
+
+select * from nls_database_parameters t where t.parameter='NLS_CHARACTERSET'
+or
+select * from v$nls_parameter...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on July 24, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/query-top-sql.html">
+        <h2 class="post-title">            
+            查询Top sql
+        </h2>
+        
+        <div class="post-content-preview">
+            From: network
+
+
+&nbsp;
+Top 10 by Buffer Gets:
+set linesize 100
+set pagesize 100
+col sql format a40
+SELECT * FROM
+(SELECT substr(sql_text,1,40) sql,...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on July 23, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/sqlplus-operation-greatly-entire.html">
+        <h2 class="post-title">            
+            SQLPLUS 操作大全 -zt
+        </h2>
+        
+        <div class="post-content-preview">
+            B SQL*PLUS
+Sql*plus 中使用绑定变量：
+sql&gt; variable x number;
+sql&gt; exec :x := 7788;
+sql&gt; SELECT empno,ename from scott.emp where empno=:x;
+SQL*PLUS...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on July 23, 2008</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/oracle/opportunity-cbo-oracle-tuning-rules.html">
         <h2 class="post-title">            
             基于CBO的oracle优化法则
@@ -200,64 +263,6 @@ The SWITCH LOGFILE clause lets you explicitly force Oracle to begin writing t
         </div>
     </a>
     <p class="post-meta">Posted by David on July 16, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/my%20life/gypsum-board-was-available-for-such-a-heavy.html">
-        <h2 class="post-title">            
-            石膏板原来可以这样重！！！
-        </h2>
-        
-        <div class="post-content-preview">
-            在论坛里看到隔壁单元的邻居木工结束了，多了几张板材下来，要低价转让！
-今天鱼儿跟我说，那个邻居把板材送给我们了，哇塞真是好人纳，他们要油漆了，放在里面也不方便，板材已经切小了，也不好退了。
-鱼儿公司连续training两周，晚上回来都比较迟，晚上只好我一个人去拿板材了！
-到了邻居家里，哇塞，乖...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on July 14, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/struggling-for-two-days-oracle-dataguard.html">
-        <h2 class="post-title">            
-            挣扎了两天 oracle dataguard
-        </h2>
-        
-        <div class="post-content-preview">
-            这两天的空余时间都在弄 oracle standby，挣扎了两天，基本模拟了各种可能出现的情况。
-直接后果就是现在头晕，不过虽然学习的是standby，但是对rman 备份 恢复都有了进一步的掌握
-以后要多挣扎，越多挣扎，进步越快！
-痛并快乐着！
-
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on July 13, 2008</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/management-and-maintenance-of-standby.html">
-        <h2 class="post-title">            
-            standby 管理和维护
-        </h2>
-        
-        <div class="post-content-preview">
-            管理：
-
-查询库状态：
-SQL&gt; select name,SWITCHOVER_STATUS,open_mode,PROTECTION_MODE,DATABASE_ROLE
-from v$database;
-验证archive log是否接收和 applied.
-SQL&gt; alte...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on July 13, 2008</p>
 </div>
 
 <hr>
@@ -391,7 +396,7 @@ SQL&gt; alte...
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2018 David ♪ Powered by Jekyll.
+                &copy; 2011~2022 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>

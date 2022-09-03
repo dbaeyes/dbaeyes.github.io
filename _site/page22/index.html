@@ -112,6 +112,64 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
+    <a href="/my%20life/grain-rain.html">
+        <h2 class="post-title">            
+            又到 谷雨
+        </h2>
+        
+        <div class="post-content-preview">
+            4月20号，每次的谷雨节气一般都在这一天。“谷雨之后，雨水渐渐增多，适宜农作物的生长” 这个是对谷雨的解释。
+
+接到了很多朋友的生日祝福，感谢你们！
+鱼儿给我做了一顿丰盛的晚餐 
+很多话突然感觉说不出来，不能说老了吧。 但年纪真的不小了 呵呵 时间就是如此，从不停留。 做一个真正的自己！
+
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on April 20, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/system-automatically-creates-a-temporary.html">
+        <h2 class="post-title">            
+            系统自动产生的临时段
+        </h2>
+        
+        <div class="post-content-preview">
+            在通过DBLINK建一个比较大的表（大概90G）时，花了一个小时建完了。然后默认就是建索引，突然发现对应的索引表空间少了30多G，这样我建索引空间就不够了。奇怪啊，这段时间不应该消耗那么多的索引表空间的。
+查看段空间使用情况，突然发现了一个以数字打头的临时段在索引表空间上
+OWNER     ...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on April 16, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/oracle/cbo-architecture.html">
+        <h2 class="post-title">            
+            CBO体系结构
+        </h2>
+        
+        <div class="post-content-preview">
+            今天听了B2C 陈立同学的CBO体系结构的分享，收益颇多。 够我消化好一阵子了，很多东西是在不断的摸索中积累起来的。 向大牛们学习！
+
+简单记录一下
+基于规则的优化器
+1: 通过rowid访问单笔记录
+2: Single Row by Cluster Join
+3: Single Row by...
+        </div>
+    </a>
+    <p class="post-meta">Posted by David on April 15, 2009</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
     <a href="/my%20life/fitness-action.html">
         <h2 class="post-title">            
             健身行动
@@ -192,60 +250,6 @@
         </div>
     </a>
     <p class="post-meta">Posted by David on March 31, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/my%20life/squeezing-squeezing-squeezing-public-transport.html">
-        <h2 class="post-title">            
-            挤啊挤啊挤公交
-        </h2>
-        
-        <div class="post-content-preview">
-            昨天上午挤公交挤的有点惨烈 。
-走到拐弯路口，一辆317过去了，车上人并不算多。 然后 等了20分钟，来了一辆，人太多，挤不上去，车足足停了3分钟，才挤上去5个人，还有6-7人没上去，我干脆不去挤了，想想这辆车人这么多，后面一辆马上就会来了。 果不其然，过了3分钟，另一辆317来了，还还是多啊...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on March 26, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/oracle/according-to-the-rowid-built-a-temporary-table-to-update-table-data.html">
-        <h2 class="post-title">            
-            根据rowid建临时表更新大表数据
-        </h2>
-        
-        <div class="post-content-preview">
-            [cc lang="sql"]create table tmp_xf_rowid as
-select rowid rid from xf_detail
-where isdo_bss is not null
-order by 1;
-declare
-i number := 0;
-begin
-for...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on March 24, 2009</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/my%20life/another-sleepless-night.html">
-        <h2 class="post-title">            
-            又是一个不眠之夜
-        </h2>
-        
-        <div class="post-content-preview">
-            今天是BC整合的最后一期发布，315的零点准时开始。从昨天下午2点到公司到今天早上8点多回来。
-跟的两个项目发布过程顺利。评价的数据迁移要在其他迁移的完成的基础上才能进行。 所以一直到了2:00多才开始，因为商城的评价记录并不算多，所以预计开4个进程的迁移时间会花3个多小时，后来在服务器负载情...
-        </div>
-    </a>
-    <p class="post-meta">Posted by David on March 15, 2009</p>
 </div>
 
 <hr>
@@ -379,7 +383,7 @@ for...
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2018 David ♪ Powered by Jekyll.
+                &copy; 2011~2022 David ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
