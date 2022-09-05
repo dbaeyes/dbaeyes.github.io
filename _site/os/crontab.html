@@ -10,7 +10,7 @@
 
     <title>crontab - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/os/crontab.html">
+    <link rel="canonical" href="http://localhost:4000/os/crontab.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,41 +125,43 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p><strong>名称</strong> : crontab</p>
-<div><strong>使用权限</strong> : root用户和crontab文件的所有者<br />
-<strong>语法</strong> :<br />
-crontab [-e [UserName]|-l [UserName]|-r [UserName]|-v [UserName]|File ]<br />
-<strong>说明</strong> :<br />
-crontab 是用来让使用者在固定时间或固定间隔执行程式之用，换句话说，也就是类似使用者的时程表。-u user 是指设定指定 user 的时程表，这个前提是你必须要有其权限(比如说是 root)才能够指定他人的时程表。如果不使用 -u user 的话，就是表示设定自己的时程表。<br />
-<strong>参数</strong> :<br />
--e [UserName]: 执行文字编辑器来设定时程表，内定的文字编辑器是 VI，如果你想用别的文字编辑器，则请先设定 VISUAL 环境变数来指定使用那个文字编辑器(比如说 setenv VISUAL joe)<br />
--r [UserName]: 删除目前的时程表<br />
--l [UserName]: 列出目前的时程表<br />
--v [UserName]:列出用户cron作业的状态<br />
-<strong>时程表的格式如下</strong> :<br />
-f1 f2 f3 f4 f5 program<br />
-其中 f1 是表示分钟，f2 表示小时，f3 表示一个月份中的第几日，f4 表示月份，f5 表示一个星期中的第几天。program 表示要执行的程式。<br />
-当 f1 为 * 时表示每分钟都要执行 program，f2 为 * 时表示每小时都要执行程式，其余类推<br />
-当 f1 为 a-b 时表示从第 a 分钟到第 b 分钟这段时间内要执行，f2 为 a-b 时表示从第 a 到第 b 小时都要执行，其余类推<br />
-当 f1 为 */n 时表示每 n 分钟个时间间隔执行一次，f2 为 */n 表示每 n 小时个时间间隔执行一次，其余类推<br />
-当 f1 为 a, b, c,... 时表示第 a, b, c,... 分钟要执行，f2 为 a, b, c,... 时表示第 a, b, c...个小时要执行，其余类推<br />
-使用者也可以将所有的设定先存放在档案 file 中，用 crontab file 的方式来设定时程表。<br />
-<strong>使用方法</strong>:<br />
-用VI编辑一个文件 cronfile，然后在这个文件中输入格式良好的时程表。编辑完成后，保存并退出。<br />
-在命令行输入<br />
-$: crontab cronfile<br />
-这样就将cronfile文件提交给c r o n进程，同时，新创建cronfile的一个副本已经被放在/ v a r / s p o o l / c r o n目录中，文件名就是用户名。<br />
-<strong>例子</strong> :<br />
-每月每天每小时的第 0 分钟执行一次 /bin/ls :<br />
-0 * * * * /bin/ls<br />
-在 12 月内, 每天的早上 6 点到 12 点中，每隔 20 分钟执行一次 /usr/bin/backup :<br />
-*/20 6-12 * 12 * /usr/bin/backup<br />
-周一到周五每天下午 5:00 寄一封信给 alex@domain.name :<br />
-0 17 * * 1-5 mail -s "hi" alex@domain.name &lt; /tmp/maildata<br />
-每月每天的午夜 0 点 20 分, 2 点 20 分, 4 点 20 分....执行 echo "haha"<br />
-20 0-23/2 * * * echo "haha"<br />
-<strong>注意</strong> :<br />
-当程式在你所指定的时间执行后，系统会寄一封信给你，显示该程式执行的内容，若是你不希望收到这样的信，请在每一行空一格之后加上 &gt; /dev/null 2&gt;&amp;1 即可。</p>
-<p>参考鸟哥的私房菜 http://linux.vbird.org/linux_basic/0430cron.php</p></div>
+<div>
+<strong>使用权限</strong> : root用户和crontab文件的所有者<br>
+<strong>语法</strong> :<br>
+crontab [-e [UserName]|-l [UserName]|-r [UserName]|-v [UserName]|File ]<br>
+<strong>说明</strong> :<br>
+crontab 是用来让使用者在固定时间或固定间隔执行程式之用，换句话说，也就是类似使用者的时程表。-u user 是指设定指定 user 的时程表，这个前提是你必须要有其权限(比如说是 root)才能够指定他人的时程表。如果不使用 -u user 的话，就是表示设定自己的时程表。<br>
+<strong>参数</strong> :<br>
+-e [UserName]: 执行文字编辑器来设定时程表，内定的文字编辑器是 VI，如果你想用别的文字编辑器，则请先设定 VISUAL 环境变数来指定使用那个文字编辑器(比如说 setenv VISUAL joe)<br>
+-r [UserName]: 删除目前的时程表<br>
+-l [UserName]: 列出目前的时程表<br>
+-v [UserName]:列出用户cron作业的状态<br>
+<strong>时程表的格式如下</strong> :<br>
+f1 f2 f3 f4 f5 program<br>
+其中 f1 是表示分钟，f2 表示小时，f3 表示一个月份中的第几日，f4 表示月份，f5 表示一个星期中的第几天。program 表示要执行的程式。<br>
+当 f1 为 * 时表示每分钟都要执行 program，f2 为 * 时表示每小时都要执行程式，其余类推<br>
+当 f1 为 a-b 时表示从第 a 分钟到第 b 分钟这段时间内要执行，f2 为 a-b 时表示从第 a 到第 b 小时都要执行，其余类推<br>
+当 f1 为 */n 时表示每 n 分钟个时间间隔执行一次，f2 为 */n 表示每 n 小时个时间间隔执行一次，其余类推<br>
+当 f1 为 a, b, c,... 时表示第 a, b, c,... 分钟要执行，f2 为 a, b, c,... 时表示第 a, b, c...个小时要执行，其余类推<br>
+使用者也可以将所有的设定先存放在档案 file 中，用 crontab file 的方式来设定时程表。<br>
+<strong>使用方法</strong>:<br>
+用VI编辑一个文件 cronfile，然后在这个文件中输入格式良好的时程表。编辑完成后，保存并退出。<br>
+在命令行输入<br>
+$: crontab cronfile<br>
+这样就将cronfile文件提交给c r o n进程，同时，新创建cronfile的一个副本已经被放在/ v a r / s p o o l / c r o n目录中，文件名就是用户名。<br>
+<strong>例子</strong> :<br>
+每月每天每小时的第 0 分钟执行一次 /bin/ls :<br>
+0 * * * * /bin/ls<br>
+在 12 月内, 每天的早上 6 点到 12 点中，每隔 20 分钟执行一次 /usr/bin/backup :<br>
+*/20 6-12 * 12 * /usr/bin/backup<br>
+周一到周五每天下午 5:00 寄一封信给 alex@domain.name :<br>
+0 17 * * 1-5 mail -s "hi" alex@domain.name &lt; /tmp/maildata<br>
+每月每天的午夜 0 点 20 分, 2 点 20 分, 4 点 20 分....执行 echo "haha"<br>
+20 0-23/2 * * * echo "haha"<br>
+<strong>注意</strong> :<br>
+当程式在你所指定的时间执行后，系统会寄一封信给你，显示该程式执行的内容，若是你不希望收到这样的信，请在每一行空一格之后加上 &gt; /dev/null 2&gt;&amp;1 即可。
+<p>参考鸟哥的私房菜 http://linux.vbird.org/linux_basic/0430cron.php</p>
+</div>
 
 
                 <hr>
@@ -172,12 +174,12 @@ $: crontab cronfile<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/night-work.html" data-toggle="tooltip" data-placement="top" title="晚上工作下">&larr; Previous Post</a>
+                        <a href="/oracle/night-work.html" data-toggle="tooltip" data-placement="top" title="晚上工作下">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/night-time-is-a-bit-long.html" data-toggle="tooltip" data-placement="top" title="晚上工作的时间有点长">Next Post &rarr;</a>
+                        <a href="/my%20life/night-time-is-a-bit-long.html" data-toggle="tooltip" data-placement="top" title="晚上工作的时间有点长">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -202,7 +204,7 @@ $: crontab cronfile<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -331,7 +333,7 @@ $: crontab cronfile<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -339,13 +341,13 @@ $: crontab cronfile<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

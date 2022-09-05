@@ -10,7 +10,7 @@
 
     <title>oracle的一些字符转义 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/oracle-escape-characters.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/oracle-escape-characters.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -126,47 +126,47 @@
 
                 <p>sql&gt; select * from tmp_xf;</p>
 <div>
-TEXT<br />
---------------------<br />
-abcdefg<br />
-abc_defg<br />
-abc%defg<br />
-abc&amp;defg<br />
-abc/defg<br />
-abc%defg<br />
-abc defg</p>
+TEXT<br>
+--------------------<br>
+abcdefg<br>
+abc_defg<br>
+abc%defg<br>
+abc&amp;defg<br>
+abc/defg<br>
+abc%defg<br>
+abc defg
 <p>7 rows selected.</p>
 <p>SQL&gt; select * from tmp_xf where text like 'abc\_%' escape '\';</p>
-<p>TEXT<br />
---------------------<br />
+<p>TEXT<br>
+--------------------<br>
 abc_defg</p>
 <p>转义字符为'\';</p>
 <p>SQL&gt; select * from tmp_xf where text like 'abc _%' escape ' ';</p>
-<p>TEXT<br />
---------------------<br />
+<p>TEXT<br>
+--------------------<br>
 abc_defg</p>
 <p>转义字符为' ';</p>
 <p>'&amp;'不能通过转义字符查找：</p>
-<p>SQL&gt; select * from tmp_xf where text like '%\&amp;%' escape'\';<br />
-select * from tmp_xf where text like '%\&amp;%' escape'\'<br />
-*<br />
-ERROR at line 1:<br />
+<p>SQL&gt; select * from tmp_xf where text like '%\&amp;%' escape'\';<br>
+select * from tmp_xf where text like '%\&amp;%' escape'\'<br>
+*<br>
+ERROR at line 1:<br>
 ORA-01424: missing or illegal character following the escape character</p>
-<p>转义方式：<br />
+<p>转义方式：<br>
 SQL&gt; select ascii('&amp;') from dual;</p>
-<p>ASCII('&amp;')<br />
-----------<br />
+<p>ASCII('&amp;')<br>
+----------<br>
 38</p>
 <p>SQL&gt; select * from tmp_xf where text like '%'||chr(38)||'%';</p>
-<p>TEXT<br />
---------------------<br />
+<p>TEXT<br>
+--------------------<br>
 abc&amp;defg</p>
 <p>单引号的转义，使用两个连续的单引号：</p>
 <p>SQL&gt; insert into tmp_xf values ('abc''defg');</p>
 <p>1 row created.</p>
 <p>SQL&gt; select * from tmp_xf where text like '%''%';</p>
-<p>TEXT<br />
---------------------<br />
+<p>TEXT<br>
+--------------------<br>
 abc'defg</p>
 <p>特殊符号的数据的插入</p>
 <p>SQL&gt; insert into tmp_xf values ('abc'||chr(38)||'xxxx');</p>
@@ -174,12 +174,13 @@ abc'defg</p>
 <p>SQL&gt; commit;</p>
 <p>Commit complete.</p>
 <p>SQL&gt; select * from tmp_xf where text like '%xx';</p>
-<p>TEXT<br />
---------------------<br />
+<p>TEXT<br>
+--------------------<br>
 abc&amp;xxxx</p>
-<p>其实简单化的方法是设置参数<br />
-set define off;<br />
-这样可以方便的inset特殊字符</p></div>
+<p>其实简单化的方法是设置参数<br>
+set define off;<br>
+这样可以方便的inset特殊字符</p>
+</div>
 
 
                 <hr>
@@ -192,12 +193,12 @@ set define off;<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/mysql-import-export-methods-and-tools-zt.html" data-toggle="tooltip" data-placement="top" title="MySQL导入导出方法与工具 (zt)">&larr; Previous Post</a>
+                        <a href="/mysql/mysql-import-export-methods-and-tools-zt.html" data-toggle="tooltip" data-placement="top" title="MySQL导入导出方法与工具 (zt)">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/single-and-joint-indexes-a-simple-test.html" data-toggle="tooltip" data-placement="top" title="单一索引和联合索引 简单测试">Next Post &rarr;</a>
+                        <a href="/oracle/single-and-joint-indexes-a-simple-test.html" data-toggle="tooltip" data-placement="top" title="单一索引和联合索引 简单测试">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -222,7 +223,7 @@ set define off;<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -351,7 +352,7 @@ set define off;<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -359,13 +360,13 @@ set define off;<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

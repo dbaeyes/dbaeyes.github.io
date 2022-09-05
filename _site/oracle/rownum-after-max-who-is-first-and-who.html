@@ -10,7 +10,7 @@
 
     <title>rownum max 谁先谁后 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/rownum-after-max-who-is-first-and-who.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/rownum-after-max-who-is-first-and-who.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,13 +125,13 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>select max(gmt_create) from t_tname where author_id=:1 and rownum=1;</p>
-<div>这个sql是否满足author_id下取最大的时间。<br />
-答案是肯定的，不满足<br />
-这个sql会先取满足条件的 where author_id=:1 一条记录，再取MAX就没有任何意义了。</p>
-<p>但是到author_id上存在索引的情况下，执行计划会是<br />
-SORT AGGREGATE<br />
-COUNT STOPKEY<br />
-FIRST ROW<br />
+<div>这个sql是否满足author_id下取最大的时间。<br>
+答案是肯定的，不满足<br>
+这个sql会先取满足条件的 where author_id=:1 一条记录，再取MAX就没有任何意义了。
+<p>但是到author_id上存在索引的情况下，执行计划会是<br>
+SORT AGGREGATE<br>
+COUNT STOPKEY<br>
+FIRST ROW<br>
 INDEX RANGE SCAN (MIN/MAX)    DX_FEED_RECEIVE_00_RATED</p>
 <p>这样取到的结果又正确了，当然这个可以理解为一种特殊情况。</p>
 <p>对于sql中有rownum的需要特别关照 取到的值是否是你想要的，rownum是oracle获取到数据之后的一个伪列</p>
@@ -143,13 +143,14 @@ INDEX RANGE SCAN (MIN/MAX)    DX_FEED_RECEIVE_00_RATED</p>
 having &lt;having clause&gt;
  order by &lt;columns&gt;;</pre>
 <p>Think of it as being processed in this order:</p>
-<p>1. The FROM/WHERE clause goes first.<br />
-2. ROWNUM is assigned and incremented to each output row from the FROM/WHERE clause.<br />
-3. SELECT is applied.<br />
-4. GROUP BY is applied.<br />
-5. HAVING is applied.<br />
+<p>1. The FROM/WHERE clause goes first.<br>
+2. ROWNUM is assigned and incremented to each output row from the FROM/WHERE clause.<br>
+3. SELECT is applied.<br>
+4. GROUP BY is applied.<br>
+5. HAVING is applied.<br>
 6. ORDER BY is applied.</p>
-<p>-- 详情请参考： <a href="http://www.oracle.com/technology/oramag/oracle/06-sep/o56asktom.html" target="_blank">www.oracle.com/technology/oramag/oracle/06-sep/o56asktom.html</a></div>
+<p>-- 详情请参考： <a href="http://www.oracle.com/technology/oramag/oracle/06-sep/o56asktom.html" target="_blank">www.oracle.com/technology/oramag/oracle/06-sep/o56asktom.html</a></p>
+</div>
 
 
                 <hr>
@@ -162,12 +163,12 @@ having &lt;having clause&gt;
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/swimming.html" data-toggle="tooltip" data-placement="top" title="游泳">&larr; Previous Post</a>
+                        <a href="/my%20life/swimming.html" data-toggle="tooltip" data-placement="top" title="游泳">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-set-names.html" data-toggle="tooltip" data-placement="top" title="mysql set names">Next Post &rarr;</a>
+                        <a href="/mysql/mysql-set-names.html" data-toggle="tooltip" data-placement="top" title="mysql set names">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -192,7 +193,7 @@ having &lt;having clause&gt;
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -321,7 +322,7 @@ having &lt;having clause&gt;
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -329,13 +330,13 @@ having &lt;having clause&gt;
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

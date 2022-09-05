@@ -10,7 +10,7 @@
 
     <title>EXP-00091 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/exp-00091.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/exp-00091.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -124,12 +124,12 @@
 
                 <p>01　查看DB中的NLS_CHARACTERSET的值（提供兩種方法）：</p>
 <div>
-<p>select * from nls_database_parameters t where t.parameter='NLS_CHARACTERSET'<br />
-or<br />
-select * from v$nls_parameters where parameter='NLS_CHARACTERSET';<br />
+<p>select * from nls_database_parameters t where t.parameter='NLS_CHARACTERSET'<br>
+or<br>
+select * from v$nls_parameters where parameter='NLS_CHARACTERSET';<br>
 SQL&gt; select * from v$nls_parameters where parameter='NLS_CHARACTERSET';</p>
-<p>PARAMETER　　　　      VALUE<br />
------------------------　　----------------------------------------------<br />
+<p>PARAMETER　　　　      VALUE<br>
+-----------------------　　----------------------------------------------<br>
 NLS_CHARACTERSET    AL32UTF8</p>
 <p>step 02　根據step 01查出的NLS_CHARACTERSET（AL32UTF8）來設定exp的環境變量：</p>
 <p>WINNT&gt; set NLS_LANG=AMERICAN_AMERICA.AL32UTF8</p>
@@ -149,12 +149,12 @@ NLS_CHARACTERSET    AL32UTF8</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/query-top-sql.html" data-toggle="tooltip" data-placement="top" title="查询Top sql">&larr; Previous Post</a>
+                        <a href="/oracle/query-top-sql.html" data-toggle="tooltip" data-placement="top" title="查询Top sql">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/a-chuckle.html" data-toggle="tooltip" data-placement="top" title="窃喜一下">Next Post &rarr;</a>
+                        <a href="/my%20life/a-chuckle.html" data-toggle="tooltip" data-placement="top" title="窃喜一下">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -179,7 +179,7 @@ NLS_CHARACTERSET    AL32UTF8</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -308,7 +308,7 @@ NLS_CHARACTERSET    AL32UTF8</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -316,13 +316,13 @@ NLS_CHARACTERSET    AL32UTF8</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

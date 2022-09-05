@@ -10,7 +10,7 @@
 
     <title>metalink上对直方图的介绍 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/introduction-to-histograms-on-metalink.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/introduction-to-histograms-on-metalink.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -174,58 +174,58 @@
 </table>
 <pre><span style="font-size: small;">Histograms </span></pre>
 <p><span style="font-size: small;">========== </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">For uniformly distributed data, the cost-based approach makes fairly accurate </span></p>
 <p><span style="font-size: small;">guesses at the cost of executing a particular statement. However, when the </span></p>
 <p><span style="font-size: small;">data is not uniformly distributed, the optimizer cannot accurately estimate </span></p>
 <p><span style="font-size: small;">the selectivity of a query. Beginning in release 7.3, for columns which do not </span></p>
 <p><span style="font-size: small;">have uniform data distribution, Oracle will allow you to store histograms </span></p>
 <p><span style="font-size: small;">describing the data distribution of a particular column. </span></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p> </p>
+<p> </p>
 <p><span style="font-size: small;">When to Use Histograms </span></p>
 <p><span style="font-size: small;">---------------------- </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">Histograms are stored in the dictionary and computed by using the ANALYZE </span></p>
 <p><span style="font-size: small;">command on a particular column. Therefore, there is a maintenance and space </span></p>
 <p><span style="font-size: small;">cost for using histograms. You should only compute histograms for columns </span></p>
 <p><span style="font-size: small;">which you know have highly-skewed data distribution. </span></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p> </p>
+<p> </p>
 <p><span style="font-size: small;">When to Not Use Histograms </span></p>
 <p><span style="font-size: small;">-------------------------- </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">Also, be aware that histograms, as well as all optimizer statistics, are </span></p>
 <p><span style="font-size: small;">static. If the data distribution of a column changes frequently, it is </span></p>
 <p><span style="font-size: small;">necessary to recompute the histogram for a given column. Histograms are not </span></p>
 <p><span style="font-size: small;">useful for columns with the following characteristics: </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;"> o all predicates on the column use bind variables </span></p>
 <p><span style="font-size: small;"> o the column data is uniformly distributed </span></p>
 <p><span style="font-size: small;"> o the column is not used in WHERE clauses of queries </span></p>
 <p><span style="font-size: small;"> o the column is unique and is used only with equality predicates </span></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p> </p>
+<p> </p>
 <p><span style="font-size: small;">How to Use Histograms </span></p>
 <p><span style="font-size: small;">--------------------- </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">Create histograms on columns that are frequently used in WHERE clauses of </span></p>
 <p><span style="font-size: small;">queries and have a highly-skewed data distribution. You create a histogram </span></p>
 <p><span style="font-size: small;">by using the ANALYZE TABLE command. For example, if you want to create a </span></p>
 <p><span style="font-size: small;">10-bucket histogram on the SAL column of the EMP table, issue the following </span></p>
 <p><span style="font-size: small;">statement: </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;"> DBMS_STATS.GATHER_TABLE_STATS (NULL,'EMP', method_opt =&gt; 'FOR COLUMNS sal SIZE 10'); </span></p>
 <p><span style="font-size: small;"> ANALYZE TABLE emp COMPUTE STATISTICS FOR COLUMNS sal SIZE 10; </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">The SIZE keyword states the maximum number of buckets for the histogram. </span></p>
 <p><span style="font-size: small;">You would create a histogram on the SAL column if there were an unusual </span></p>
 <p><span style="font-size: small;">number of employees with the same salary and few employees with other </span></p>
 <p><span style="font-size: small;">salaries. </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">The 'FOR' clause can be used with either COMPUTE STATISTICS or ESTIMATE </span></p>
 <p><span style="font-size: small;">STATISTICS. The following clauses can be used with the ANALYZE TABLE command: </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;"> FOR TABLE </span></p>
 <p><span style="font-size: small;"> collect table statistics for the table </span></p>
 <p><span style="font-size: small;"> FOR ALL COLUMNS </span></p>
@@ -241,46 +241,46 @@
 <p><span style="font-size: small;"> histogram. </span></p>
 <p><span style="font-size: small;"> Default value: 75 </span></p>
 <p><span style="font-size: small;"> Range of values: 1 - 254 </span></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p> </p>
+<p> </p>
 <p><span style="font-size: small;">Choosing the Number of Buckets for a Histogram </span></p>
 <p><span style="font-size: small;">---------------------------------------------- </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">The default number of buckets is 75. This value provides an appropriate level </span></p>
 <p><span style="font-size: small;">of detail for most data distributions. However, since the number of buckets </span></p>
 <p><span style="font-size: small;">in the histogram, the sampling rate, and the data distribution all affect </span></p>
 <p><span style="font-size: small;">the usefulness of a histogram, you may need to experiment with different </span></p>
 <p><span style="font-size: small;">numbers of buckets to obtain the best results. </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">If the number of frequently occurring distinct values in a column is relatively </span></p>
 <p><span style="font-size: small;">small, then it is useful to set the number of buckets to be greater than the </span></p>
 <p><span style="font-size: small;">number of frequently occurring distinct values. </span></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p> </p>
+<p> </p>
 <p><span style="font-size: small;">Viewing Histograms </span></p>
 <p><span style="font-size: small;">------------------ </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">You can find information about existing histograms in the database through the </span></p>
 <p><span style="font-size: small;">following data dictionary views: </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;"> USER_TAB_HISTOGRAMS, ALL_TAB_HISTOGRAMS, and DBA_TAB_HISTOGRAMS. </span></p>
 <p><span style="font-size: small;"> USER_PART_HISTOGRAMS, ALL_PART_HISTOGRAMS, and DBA_PART_HISTOGRAMS. </span></p>
 <p><span style="font-size: small;"> USER_SUBPART_HISTOGRAMS, ALL_SUBPART_HISTOGRAMS, and DBA_SUBPART_HISTOGRAMS. </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">The number of buckets in each column's histogram is found in these dictionary views : </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;"> o USER_TAB_COL_STATISTICS, ALL_TAB_COL_STATISTICS,DBA_TAB_COL_STATISTICS </span></p>
 <p><span style="font-size: small;"> (extracted from USER_TAB_COLUMNS, ALL_TAB_COLUMNS, and DBA_TAB_COLUMNS) </span></p>
 <p><span style="font-size: small;"> o USER_PART_COL_STATISTICS,ALL_PART_COL_STATISTICS, DBA_PART_COL_STATISTICS, </span></p>
 <p><span style="font-size: small;"> o USER_SUBPART_COL_STATISTICS, ALL_SUBPART_COL_STATISTICS, DBA_SUBPART_COL_STATISTICS </span></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p> </p>
+<p> </p>
 <p><span style="font-size: small;">These views have the same definition. </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">DBA_TAB_HISTOGRAMS </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">This view lists histograms on columns of all tables. </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">Column name Represents This </span></p>
 <p><span style="font-size: small;">--------------------------------------------------------- </span></p>
 <p><span style="font-size: small;">OWNER Owner of table </span></p>
@@ -288,15 +288,15 @@
 <p><span style="font-size: small;">COLUMN_NAME Column name </span></p>
 <p><span style="font-size: small;">ENDPOINT_NUMBER Endpoint number </span></p>
 <p><span style="font-size: small;">ENDPOINT_VALUE Normalized endpoint values for this bucket </span></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p> </p>
+<p> </p>
+<p> </p>
 <p><span style="font-size: small;">DBA_TAB_COLUMNS </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">This view contains information which describes columns of all tables. </span></p>
 <p><span style="font-size: small;">(NOTE: Views and clusters, although included in this view are not relevant </span></p>
 <p><span style="font-size: small;"> to histograms.) </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">Column Name Represents This </span></p>
 <p><span style="font-size: small;">---------------------------------------------------------- </span></p>
 <p><span style="font-size: small;">OWNER Owner of table </span></p>
@@ -323,17 +323,17 @@
 <p><span style="font-size: small;">NUM_BUCKETS The number of buckets in the histogram </span></p>
 <p><span style="font-size: small;">LAST_ANALYZED The date that analyze was last run on the table </span></p>
 <p><span style="font-size: small;">SAMPLE_SIZE The amount of data sampled </span></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p> </p>
+<p> </p>
 <p><span style="font-size: small;">The column LAST_ANALYZED is useful in determining the last time </span></p>
 <p><span style="font-size: small;">statistics, with or without histograms, were computed. This is </span></p>
 <p><span style="font-size: small;">often important to assess the reason for cost-based optimizer's </span></p>
 <p><span style="font-size: small;">choices of execution paths. All tables involved in a query must be </span></p>
-<p><span style="font-size: small;">regularly analyzed as data changes.<br />
+<p><span style="font-size: small;">regularly analyzed as data changes.<br>
 </span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">----</span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">今天遇到的案例是：</span></p>
 <p><span style="font-size: small;">select count(*) from t_name where seller_id=175754307 and </span><span><span style="font-size: small;">is_main = 1;</span></span></p>
 <p><span><span style="font-size: small;">索引存在在 idx_t_name_sellerid(seller_id,... ...)，其中条件is_main不在索引列的</span></span></p>
@@ -341,18 +341,18 @@
 <p><span><span style="font-size: small;">后来，高人 发现 seller_id 的 </span></span><span><span style="font-size: small;">Buckets 是默认的75，因为seller_id的删选度还是比较高的，可以将buckets设置为1试试</span></span></p>
 <p><span><span style="font-size: small;">analyze table t_name compute statistics column seller_id size 1.</span></span></p>
 <p><span style="font-size: small;">事实证明--&gt; 方法可行。 柱状图的buckets还需要再研究下哈</span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="font-size: small;">-- 这里还有个写的不错的文章，很好理解。</span></p>
 <p>http://sunwgneuqsoft.itpub.net/post/34741/456504</p>
-<p>在user_tab_columns里面有一个列叫做NUMBER_BUCTETS,这个代表直方图的篮子个数。这么讲吧，在表SUNWG中一共有6000条记录，<br />
-我把这6000条记录按照ID的大小进行排序，排序后的结果大概是1，1，1…1999，2000，2001，一共有6000条。在前面我做直方图<br />
-统计的时候设置的BUCTET的个数是10，就等于把这6000条记录按照ID的顺序分成十份，放到十个篮子中。那么第一个篮子的开始值<br />
+<p>在user_tab_columns里面有一个列叫做NUMBER_BUCTETS,这个代表直方图的篮子个数。这么讲吧，在表SUNWG中一共有6000条记录，<br>
+我把这6000条记录按照ID的大小进行排序，排序后的结果大概是1，1，1…1999，2000，2001，一共有6000条。在前面我做直方图<br>
+统计的时候设置的BUCTET的个数是10，就等于把这6000条记录按照ID的顺序分成十份，放到十个篮子中。那么第一个篮子的开始值<br>
 就应该是ENDPOINT_NUMBER = 0所代表的ENDPOINT_VALUE，也就是1，第一个篮子的截止值就应该是ENDPOINT_NUMBER = 1所代表的ENDPOINT_VALUE，也是1。</p>
 <p>直方图信息的准确性就由两个数值决定，一个是BUCTET的个数，一个NUM_DISTINCT的个数。</p>
-<p>当BUCTET &lt; NUM_DISTINCT得到的是HEIGHT BALANCED（高度平衡）直方图，而当BUCTET = NUM_DISTINCT的时候得到的是FREQUENCY（频率）直方图。<br />
+<p>当BUCTET &lt; NUM_DISTINCT得到的是HEIGHT BALANCED（高度平衡）直方图，而当BUCTET = NUM_DISTINCT的时候得到的是FREQUENCY（频率）直方图。<br>
 这里面BUCTET的最大值是254，所以我们一般见到的直方图都是HEIGHT BALANCED（高度平衡）直方图。</p>
 <p>一般说来，BUCTET越多，那么关于列的分布情况信息就越准确，可是在统计直方图的时候会消耗更多的资源。</p>
-<p>当我们设置BUCTET = 1的时候，就等于是删除了直方图信息。<br />
+<p>当我们设置BUCTET = 1的时候，就等于是删除了直方图信息。<br>
 Analyze table sunwg compute statistics for table for columns id size 1;</p>
 <pre><span style="font-size: small;"> 继续研究下 </span>《基于成本的<em>Oracle</em>优化法则》，里面也有不错的介绍</pre>
 </div>
@@ -368,12 +368,12 @@ Analyze table sunwg compute statistics for table for columns id size 1;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/surprised-the-thief.html" data-toggle="tooltip" data-placement="top" title="惊遇小偷">&larr; Previous Post</a>
+                        <a href="/my%20life/surprised-the-thief.html" data-toggle="tooltip" data-placement="top" title="惊遇小偷">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/software/qq-has-been-blocked.html" data-toggle="tooltip" data-placement="top" title="QQ又被屏蔽了">Next Post &rarr;</a>
+                        <a href="/software/qq-has-been-blocked.html" data-toggle="tooltip" data-placement="top" title="QQ又被屏蔽了">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -398,7 +398,7 @@ Analyze table sunwg compute statistics for table for columns id size 1;</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -527,7 +527,7 @@ Analyze table sunwg compute statistics for table for columns id size 1;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -535,13 +535,13 @@ Analyze table sunwg compute statistics for table for columns id size 1;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

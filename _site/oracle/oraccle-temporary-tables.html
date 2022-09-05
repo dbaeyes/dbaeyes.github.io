@@ -10,7 +10,7 @@
 
     <title>ORACCLE 临时表 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/oraccle-temporary-tables.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/oraccle-temporary-tables.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -178,128 +178,128 @@
 <p>4 、高级用户可以访问全局数据，以实现更加复杂的功能</p>
 <p>--from：<a href="http://www.sucai.com/Tech/List4/20461.htm" target="_blank">www.sucai.com/Tech/List4/20461.htm</a></p>
 <p>基于临时表迁移历史数据</p>
-<p>Create or Replace procedure sp_move_data(p_total number default 500000)<br />
-/*<br />
-作者:<br />
-时间:<br />
-目的：<br />
-*/<br />
-as<br />
-v_spname varchar2(30) := 'sp_move_data';<br />
-loopcount   integer; --循环次数<br />
-sumcount    integer; --符合条件的记录数<br />
-begcount    integer; --开始下标<br />
-endcount    integer; --结束下标<br />
-pagecount   integer; --每次移动条数<br />
-thiscount   number;<br />
-errormsg    varchar2(2000);<br />
-start_time  number;<br />
-end_time    number;<br />
-elapse_time number;<br />
-v_flag      number;<br />
+<p>Create or Replace procedure sp_move_data(p_total number default 500000)<br>
+/*<br>
+作者:<br>
+时间:<br>
+目的：<br>
+*/<br>
+as<br>
+v_spname varchar2(30) := 'sp_move_data';<br>
+loopcount   integer; --循环次数<br>
+sumcount    integer; --符合条件的记录数<br>
+begcount    integer; --开始下标<br>
+endcount    integer; --结束下标<br>
+pagecount   integer; --每次移动条数<br>
+thiscount   number;<br>
+errormsg    varchar2(2000);<br>
+start_time  number;<br>
+end_time    number;<br>
+elapse_time number;<br>
+v_flag      number;<br>
 v_cnt       number; --统计每批迁移的数量</p>
-<p>begin<br />
---判断标识位，防止并发<br />
-select flag into v_flag<br />
-from tmp_mv_flag<br />
+<p>begin<br>
+--判断标识位，防止并发<br>
+select flag into v_flag<br>
+from tmp_mv_flag<br>
 where code = v_spname;</p>
-<p>--如果flag = 0,说明没有别的进程在执行,本进程可以执行<br />
-if v_flag = 0 then<br />
---更新flag,防止其它进程执行<br />
-update tmp_mv_flag<br />
-set flag = -2, gmt_modified = sysdate<br />
-where code = v_spname<br />
+<p>--如果flag = 0,说明没有别的进程在执行,本进程可以执行<br>
+if v_flag = 0 then<br>
+--更新flag,防止其它进程执行<br>
+update tmp_mv_flag<br>
+set flag = -2, gmt_modified = sysdate<br>
+where code = v_spname<br>
 and flag = 0;</p>
 <p>commit;</p>
-<p>--取出本次迁移需要的rowid,基于会话的临时表<br />
---execute immediate 'truncate table tmp_mv_rids_sess';<br />
-insert into tmp_mv_rids_sess<br />
-(rid, rn)<br />
-select rid, rownum as rn<br />
-from (select /*+ index(x idx_move_data_table_04_fdate) */<br />
-rowid rid<br />
-from move_data_table_04_dbf x<br />
-where feedbackdate &lt;= trunc(sysdate) - 180<br />
-order by feedbackdate)<br />
+<p>--取出本次迁移需要的rowid,基于会话的临时表<br>
+--execute immediate 'truncate table tmp_mv_rids_sess';<br>
+insert into tmp_mv_rids_sess<br>
+(rid, rn)<br>
+select rid, rownum as rn<br>
+from (select /*+ index(x idx_move_data_table_04_fdate) */<br>
+rowid rid<br>
+from move_data_table_04_dbf x<br>
+where feedbackdate &lt;= trunc(sysdate) - 180<br>
+order by feedbackdate)<br>
 where rownum &lt;= p_total;</p>
-<p>--本次需要迁移的记录总数<br />
-sumcount := sql%rowcount;<br />
+<p>--本次需要迁移的记录总数<br>
+sumcount := sql%rowcount;<br>
 commit;</p>
-<p>--每个事务迁100条记录<br />
+<p>--每个事务迁100条记录<br>
 pagecount := 100;</p>
-<p>--计算循环次数，并循环<br />
-loopcount := trunc(sumcount / pagecount) + 1;<br />
-for i in 1 .. loopcount<br />
-loop<br />
---计算本批迁移记录的记录范围<br />
-begcount   := (i - 1) * pagecount + 1;<br />
-endcount   := i * pagecount;<br />
+<p>--计算循环次数，并循环<br>
+loopcount := trunc(sumcount / pagecount) + 1;<br>
+for i in 1 .. loopcount<br>
+loop<br>
+--计算本批迁移记录的记录范围<br>
+begcount   := (i - 1) * pagecount + 1;<br>
+endcount   := i * pagecount;<br>
 start_time := dbms_utility.get_time;</p>
-<p>--基于事务的临时表，用来保存本批迁移的rowid<br />
+<p>--基于事务的临时表，用来保存本批迁移的rowid<br>
 --delete from tmp_mv_trans;</p>
-<p>insert into tmp_mv_trans(rid)<br />
-select rid from tmp_mv_rids_sess t<br />
-where t.rn &gt;= begcount<br />
+<p>insert into tmp_mv_trans(rid)<br>
+select rid from tmp_mv_rids_sess t<br>
+where t.rn &gt;= begcount<br>
 and t.rn &lt;= endcount;</p>
-<p>--迁数据到历史库的表<br />
-insert into his_md_table(id, rated_uid, ..)<br />
-select /*+ ordered use_nl(t f)*/<br />
-f.id, f.rated_uid, ...<br />
-from tmp_mv_trans t, move_data_table_04_dbf f<br />
-where t.rid = f.rowid<br />
+<p>--迁数据到历史库的表<br>
+insert into his_md_table(id, rated_uid, ..)<br>
+select /*+ ordered use_nl(t f)*/<br>
+f.id, f.rated_uid, ...<br>
+from tmp_mv_trans t, move_data_table_04_dbf f<br>
+where t.rid = f.rowid<br>
 and f.feedbackdate &lt;= trunc(sysdate) - 180;</p>
 <p>v_cnt := sql%rowcount;</p>
-<p>--从线上删除评价表记录<br />
-delete /*+ ordered use_nl(t) */<br />
-from move_data_table_04_dbf t<br />
-where rowid in<br />
-(select rid from tmp_mv_trans)<br />
+<p>--从线上删除评价表记录<br>
+delete /*+ ordered use_nl(t) */<br>
+from move_data_table_04_dbf t<br>
+where rowid in<br>
+(select rid from tmp_mv_trans)<br>
 and t.feedbackdate &lt;= trunc(sysdate) - 180;</p>
-<p>--计算并记录本批迁移的记录数和花费的时间<br />
-end_time    := dbms_utility.get_time;<br />
+<p>--计算并记录本批迁移的记录数和花费的时间<br>
+end_time    := dbms_utility.get_time;<br>
 elapse_time := (end_time - start_time) / 100;</p>
-<p>insert into tmp_time<br />
-(count_time, elapse_time, exec_time, exec_proc, exec_cnt, exec_tab)<br />
-values<br />
-(i, elapse_time, sysdate, v_spname, v_cnt, 'auction_feedbacks');<br />
+<p>insert into tmp_time<br>
+(count_time, elapse_time, exec_time, exec_proc, exec_cnt, exec_tab)<br>
+values<br>
+(i, elapse_time, sysdate, v_spname, v_cnt, 'auction_feedbacks');<br>
 commit;</p>
 <p>end loop;</p>
-<p>--本次迁移完成，更新标识位<br />
-update tmp_mv_flag<br />
-set flag = 0, gmt_modified = sysdate<br />
-where code = v_spname;<br />
+<p>--本次迁移完成，更新标识位<br>
+update tmp_mv_flag<br>
+set flag = 0, gmt_modified = sysdate<br>
+where code = v_spname;<br>
 commit;</p>
-<p>execute immediate 'alter session close database link lnk_dbfb';<br />
-end if;<br />
-exception<br />
-when others then<br />
+<p>execute immediate 'alter session close database link lnk_dbfb';<br>
+end if;<br>
+exception<br>
+when others then<br>
 rollback;</p>
-<p>errormsg := sqlerrm;<br />
-insert into tmp_debug<br />
-(debug_id, error_msg, error_time)<br />
-values<br />
+<p>errormsg := sqlerrm;<br>
+insert into tmp_debug<br>
+(debug_id, error_msg, error_time)<br>
+values<br>
 (v_spname, errormsg, sysdate);</p>
-<p>--执行完毕,解除锁<br />
-update tmp_mv_flag<br />
-set flag = 0, gmt_modified = sysdate<br />
-where code = v_spname;<br />
-commit;<br />
-manager.sp_write_alert(errormsg);<br />
-execute immediate 'alter session close database link lnk_dbfb';<br />
-end;<br />
+<p>--执行完毕,解除锁<br>
+update tmp_mv_flag<br>
+set flag = 0, gmt_modified = sysdate<br>
+where code = v_spname;<br>
+commit;<br>
+manager.sp_write_alert(errormsg);<br>
+execute immediate 'alter session close database link lnk_dbfb';<br>
+end;<br>
 /</p>
 <p>------涉及到表---------------</p>
-<p>create table tmp_mv_flag(<br />
-CODE               VARCHAR2(32),<br />
-FLAG               NUMBER      ,<br />
+<p>create table tmp_mv_flag(<br>
+CODE               VARCHAR2(32),<br>
+FLAG               NUMBER      ,<br>
 GMT_MODIFIED       DATE        );</p>
-<p>create table  tmp_mv_rids_sess(<br />
-RID   VARCHAR2(32)<br />
-RN    NUMBER)<br />
+<p>create table  tmp_mv_rids_sess(<br>
+RID   VARCHAR2(32)<br>
+RN    NUMBER)<br>
 on Commit Preserve Rows ;</p>
 <p>create index idx_fr_sess on tmp_mv_rids_sess(rn,rid);</p>
-<p>create table tmp_mv_trans(<br />
-RID VARCHAR2(32)<br />
+<p>create table tmp_mv_trans(<br>
+RID VARCHAR2(32)<br>
 )on Commit delete Rows ;</p>
 </div>
 
@@ -314,12 +314,12 @@ RID VARCHAR2(32)<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/the-tiger.html" data-toggle="tooltip" data-placement="top" title="虎年">&larr; Previous Post</a>
+                        <a href="/my%20life/the-tiger.html" data-toggle="tooltip" data-placement="top" title="虎年">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/lotte.html" data-toggle="tooltip" data-placement="top" title="乐天">Next Post &rarr;</a>
+                        <a href="/my%20life/lotte.html" data-toggle="tooltip" data-placement="top" title="乐天">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -344,7 +344,7 @@ RID VARCHAR2(32)<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -473,7 +473,7 @@ RID VARCHAR2(32)<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -481,13 +481,13 @@ RID VARCHAR2(32)<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

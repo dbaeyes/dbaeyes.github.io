@@ -10,7 +10,7 @@
 
     <title>调整sequence大小之脚本 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/resize-the-sequence-of-scripts.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/resize-the-sequence-of-scripts.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,30 +125,31 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>--调整序列到表中最大ID的脚本</p>
-<div>set linesize 2000</p>
-<p>set feedback off<br />
-set define off<br />
-set head off<br />
+<div>set linesize 2000
+<p>set feedback off<br>
+set define off<br>
+set head off<br>
 set timing off</p>
-<p>--删除seq脚本<br />
+<p>--删除seq脚本<br>
 SELECT 'DROP SEQUENCE '||F.SEQUENCE_NAME ||';' FROM user_sequences f;</p>
-<p>--获取创建seq脚本<br />
-select 'select ''create sequence SEQ_'|| t.TABLE_NAME||'_ID start with ''||'||<br />
-'decode((select max('||t.COLUMN_NAME||') from '||t.TABLE_NAME||'),null,1,(select max('||t.COLUMN_NAME||') from '|| t.TABLE_NAME||')+1)||'';'' from dual;'<br />
-from cols t where t.COLUMN_ID = 1 and<br />
-t.TABLE_NAME in (<br />
-select REPLACE(replace(f.sequence_name,'SEQ_',''),'_ID','') from user_sequences f<br />
+<p>--获取创建seq脚本<br>
+select 'select ''create sequence SEQ_'|| t.TABLE_NAME||'_ID start with ''||'||<br>
+'decode((select max('||t.COLUMN_NAME||') from '||t.TABLE_NAME||'),null,1,(select max('||t.COLUMN_NAME||') from '|| t.TABLE_NAME||')+1)||'';'' from dual;'<br>
+from cols t where t.COLUMN_ID = 1 and<br>
+t.TABLE_NAME in (<br>
+select REPLACE(replace(f.sequence_name,'SEQ_',''),'_ID','') from user_sequences f<br>
 );</p>
-<p>--执行上面跑出来的脚本<br />
-...............<br />
+<p>--执行上面跑出来的脚本<br>
+...............<br>
 ...............</p>
-<p>--找出不符合 seq_table_name_id 方式创建的序列<br />
-SELECT 'DROP SEQUENCE '||F.SEQUENCE_NAME ||';' FROM user_sequences f<br />
+<p>--找出不符合 seq_table_name_id 方式创建的序列<br>
+SELECT 'DROP SEQUENCE '||F.SEQUENCE_NAME ||';' FROM user_sequences f<br>
 WHERE F.SEQUENCE_NAME NOT IN (SELECT 'SEQ_'||TNAME||'_ID' FROM TAB);</p>
-<p>--统计表数据量总数的脚本<br />
-select 'select '''||tname||''', count(*) from '||tname||';' from tab where tname not like 'TMP%'<br />
+<p>--统计表数据量总数的脚本<br>
+select 'select '''||tname||''', count(*) from '||tname||';' from tab where tname not like 'TMP%'<br>
 AND TNAME NOT LIKE 'BIN%' ORDER BY tname;</p>
-<p>--保存以备用</p></div>
+<p>--保存以备用</p>
+</div>
 
 
                 <hr>
@@ -161,12 +162,12 @@ AND TNAME NOT LIKE 'BIN%' ORDER BY tname;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/2009-west-lamma-show.html" data-toggle="tooltip" data-placement="top" title="2009 西博车展">&larr; Previous Post</a>
+                        <a href="/my%20life/2009-west-lamma-show.html" data-toggle="tooltip" data-placement="top" title="2009 西博车展">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/time.html" data-toggle="tooltip" data-placement="top" title="时间">Next Post &rarr;</a>
+                        <a href="/my%20life/time.html" data-toggle="tooltip" data-placement="top" title="时间">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -191,7 +192,7 @@ AND TNAME NOT LIKE 'BIN%' ORDER BY tname;</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -320,7 +321,7 @@ AND TNAME NOT LIKE 'BIN%' ORDER BY tname;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -328,13 +329,13 @@ AND TNAME NOT LIKE 'BIN%' ORDER BY tname;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

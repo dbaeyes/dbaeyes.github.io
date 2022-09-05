@@ -10,7 +10,7 @@
 
     <title>全库导入的一般步骤 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/general-library-import-steps.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/general-library-import-steps.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -126,23 +126,23 @@
 
                 <p>IMP全库导入的一般步骤</p>
 <div>
-1.先全库加rows=n把结构导进去<br />
-imp system/manager file=exp.dmp log=imp.log full=y rows=n indexes=n<br />
-2.使业务用户的触发器失效/删除主键和唯一索引<br />
-spool drop_pk_u.sql</p>
-<p>select 'alter table '||table_name||' drop constraint '||constraint_name||';'<br />
-from user_constraints<br />
-where constraint_type in ('P','U')<br />
+1.先全库加rows=n把结构导进去<br>
+imp system/manager file=exp.dmp log=imp.log full=y rows=n indexes=n<br>
+2.使业务用户的触发器失效/删除主键和唯一索引<br>
+spool drop_pk_u.sql
+<p>select 'alter table '||table_name||' drop constraint '||constraint_name||';'<br>
+from user_constraints<br>
+where constraint_type in ('P','U')<br>
 /</p>
 <p>spool off</p>
 <p>spool disable_trigger.sql</p>
-<p>select 'alter trigger '||trigger_name||' disable;'<br />
-from user_triggers<br />
+<p>select 'alter trigger '||trigger_name||' disable;'<br>
+from user_triggers<br>
 /</p>
 <p>spool off</p>
-<p>@drop_pk_u.sql<br />
+<p>@drop_pk_u.sql<br>
 @disable_trigger.sql</p>
-<p>3.以ignore=y全库导入<br />
+<p>3.以ignore=y全库导入<br>
 imp system/manager file=exp.dmp log=imp.log full=y ignore=y</p>
 <p>4.通过toad提取源数据库创建主键和索引的脚本,在目标数据库中创建主键和索引.</p>
 </div>
@@ -158,12 +158,12 @@ imp system/manager file=exp.dmp log=imp.log full=y ignore=y</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/rman-copy-database.html" data-toggle="tooltip" data-placement="top" title="RMAN 复制数据库">&larr; Previous Post</a>
+                        <a href="/oracle/rman-copy-database.html" data-toggle="tooltip" data-placement="top" title="RMAN 复制数据库">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/management-and-maintenance-of-standby.html" data-toggle="tooltip" data-placement="top" title="standby 管理和维护">Next Post &rarr;</a>
+                        <a href="/oracle/management-and-maintenance-of-standby.html" data-toggle="tooltip" data-placement="top" title="standby 管理和维护">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -188,7 +188,7 @@ imp system/manager file=exp.dmp log=imp.log full=y ignore=y</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -317,7 +317,7 @@ imp system/manager file=exp.dmp log=imp.log full=y ignore=y</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -325,13 +325,13 @@ imp system/manager file=exp.dmp log=imp.log full=y ignore=y</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

@@ -10,7 +10,7 @@
 
     <title>standby 管理和维护 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/management-and-maintenance-of-standby.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/management-and-maintenance-of-standby.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -127,105 +127,107 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p><strong style="color: #ff6600;">管理：</strong></p>
-<div><em><strong><br />
-</strong></em><em><strong>查询库状态：</strong></em><br />
-SQL&gt; select name,SWITCHOVER_STATUS,open_mode,PROTECTION_MODE,DATABASE_ROLE<br />
-from v$database;</p>
-<p>验证archive log是否接收和 applied.<br />
+<div>
+<em><strong><br>
+</strong></em><em><strong>查询库状态：</strong></em><br>
+SQL&gt; select name,SWITCHOVER_STATUS,open_mode,PROTECTION_MODE,DATABASE_ROLE<br>
+from v$database;
+<p>验证archive log是否接收和 applied.<br>
 SQL&gt; alter session set nls_datE_format='YYYY-MM-DD HH24:MI:SS';</p>
-<p>select SEQUENCE#,DEST_ID,ARCHIVED,APPLIED,DELETED,<br />
+<p>select SEQUENCE#,DEST_ID,ARCHIVED,APPLIED,DELETED,<br>
 STATUS,FIRST_TIME from v$archived_log order by SEQUENCE#;</p>
-<p><em><strong>启动到管理模式:</strong></em><br />
-SQL&gt; shutdown immediate;<br />
-SQL&gt; startup nomount<br />
-SQL&gt; alter database mount standby database<br />
-SQL&gt; recover managed standby database disconnect from session;<br />
+<p><em><strong>启动到管理模式:</strong></em><br>
+SQL&gt; shutdown immediate;<br>
+SQL&gt; startup nomount<br>
+SQL&gt; alter database mount standby database<br>
+SQL&gt; recover managed standby database disconnect from session;<br>
 ----------</p>
 <p>SQL&gt; ALTER DATABASE RECOVER MANAGED STANDBY DATABASE DISCONNECT FROM SESSION;</p>
-<p>10g以后，采用联机日志的传递传递方式，<br />
+<p>10g以后，采用联机日志的传递传递方式，<br>
 SQL&gt; recover managed standby database using current logfile disconnect from session;</p>
-<p><em><strong>启动到只读模式：</strong></em><br />
-SQL&gt; shutdown immediate;<br />
-SQL&gt; startup nomount<br />
-SQL&gt; alter database mount standby database<br />
+<p><em><strong>启动到只读模式：</strong></em><br>
+SQL&gt; shutdown immediate;<br>
+SQL&gt; startup nomount<br>
+SQL&gt; alter database mount standby database<br>
 SQL&gt; alter databae open read only;</p>
-<p><em><strong>在管理模式恢复到只读模式</strong></em>：<br />
-SQL&gt; recover managed standby database cancel;<br />
+<p><em><strong>在管理模式恢复到只读模式</strong></em>：<br>
+SQL&gt; recover managed standby database cancel;<br>
 SQL&gt; alter database open read only</p>
-<p>在只读模式可以给数据库添加临时数据文件（在rman备份是没有备份的），想让standby提供只读服务或者切换成主库，最好先增加链式文件<br />
+<p>在只读模式可以给数据库添加临时数据文件（在rman备份是没有备份的），想让standby提供只读服务或者切换成主库，最好先增加链式文件<br>
 SQL&gt; alter tablespace temp add tempfile 'C:\oracle\product\10.2.0\oradata\dgtest\temp02.dbf' size 100m;</p>
-<p><em><strong>只读模式到管理模式</strong></em><br />
+<p><em><strong>只读模式到管理模式</strong></em><br>
 SQL&gt; recover managed standby database disconnect from session;</p>
-<p>在备库进行备份<br />
-1.停止应用程序，跳转到 read only模式，同坐backup database命令来备份数据库，这样数据库处于一致性模式<br />
-2. 备份完成后，备份控制文件<br />
+<p>在备库进行备份<br>
+1.停止应用程序，跳转到 read only模式，同坐backup database命令来备份数据库，这样数据库处于一致性模式<br>
+2. 备份完成后，备份控制文件<br>
 SQL&gt; ALTER DATABASE BACKUP CONTROLFILE TO 'FILE NAME';</p>
 <p><span style="color: #ff6600;"><strong>主备切换</strong></span></p>
-<p><em><strong>正常切换 (switchover)</strong></em><br />
+<p><em><strong>正常切换 (switchover)</strong></em><br>
 切换准备: 准备参数文件，平时应该备好，注意参数 fal_server，fal_client</p>
-<p>先确认能否转换：<br />
+<p>先确认能否转换：<br>
 SELECT SWITCHOVER_STATUS FROM V$DATABASE;</p>
-<p>主 -&gt; 备<br />
-$lsnrclt stop<br />
-杀光进程或者重启数据库<br />
+<p>主 -&gt; 备<br>
+$lsnrclt stop<br>
+杀光进程或者重启数据库<br>
 SQL&gt; alter database commit to switchover to physical standby with session shutdown;</p>
-<p>SQL&gt; shutdown immediate;<br />
-SQL&gt; startup nomount pfile ='';<br />
-SQL&gt; alter database mount standby database;<br />
+<p>SQL&gt; shutdown immediate;<br>
+SQL&gt; startup nomount pfile ='';<br>
+SQL&gt; alter database mount standby database;<br>
 SQL&gt; recover managed standby database disconnect;</p>
-<p>备 -&gt; 主<br />
-SQL&gt; alter database commit to switchover to primary with session shutdown;<br />
-SQL&gt; shutdown immediate<br />
+<p>备 -&gt; 主<br>
+SQL&gt; alter database commit to switchover to primary with session shutdown;<br>
+SQL&gt; shutdown immediate<br>
 SQL&gt; startup pfile =''</p>
 <p>如果考虑在主备库来回切换，要保证数据库版本一致，参数compatible一致</p>
-<p><em><strong>失败切换 (Failover)</strong></em><br />
+<p><em><strong>失败切换 (Failover)</strong></em><br>
 主服务器不能使用情况下</p>
-<p>在备库<br />
+<p>在备库<br>
 SQL&gt; recover managed standby database cancel;</p>
-<p>--如果在备用库上有备用库日志文件，参考命令<br />
-SQL&gt; alter database recover managed standby database finish; -- [force|wait|nowait] 10g or later<br />
---没有备库日志文件[10gR2之前]<br />
+<p>--如果在备用库上有备用库日志文件，参考命令<br>
+SQL&gt; alter database recover managed standby database finish; -- [force|wait|nowait] 10g or later<br>
+--没有备库日志文件[10gR2之前]<br>
 SQL&gt; alter database recover managed standby database finish skip standby logfile;</p>
-<p>--切换备库到主库<br />
-SQL&gt; alter database commit to switchover to primary;<br />
--- open<br />
-SQL&gt; shutdown immediate;<br />
+<p>--切换备库到主库<br>
+SQL&gt; alter database commit to switchover to primary;<br>
+-- open<br>
+SQL&gt; shutdown immediate;<br>
 SQL&gt; startup pfile=''</p>
-<p>如果还有为传递的归档日志或者主库的联机日志<br />
-SQL&gt;alter database register logfile 'c:\...'<br />
+<p>如果还有为传递的归档日志或者主库的联机日志<br>
+SQL&gt;alter database register logfile 'c:\...'<br>
 SQL&gt;recover standby database;</p>
-<p><em><strong>强行切换（激活）</strong></em><br />
-激活备用服务器，在重启数据库时，备库会resetlog。<br />
-SQL&gt;alter system archive log current;<br />
-SQL&gt;recover managed standby database cancel;<br />
-SQL&gt;alter database activate standby database;<br />
-SQL&gt;shutdown immediate;<br />
+<p><em><strong>强行切换（激活）</strong></em><br>
+激活备用服务器，在重启数据库时，备库会resetlog。<br>
+SQL&gt;alter system archive log current;<br>
+SQL&gt;recover managed standby database cancel;<br>
+SQL&gt;alter database activate standby database;<br>
+SQL&gt;shutdown immediate;<br>
 SQL&gt;startup pfile=''</p>
-<p>-----<br />
-apply 主库redolog并强制切换<br />
-SQL&gt; ALTER DATABASE RECOVER MANAGED STANDBY DATABASE CANCEL;<br />
---选定redolog恢复<br />
+<p>-----<br>
+apply 主库redolog并强制切换<br>
+SQL&gt; ALTER DATABASE RECOVER MANAGED STANDBY DATABASE CANCEL;<br>
+--选定redolog恢复<br>
 SQL&gt; recover standby database until cancel;</p>
-<p>Specify log: {&lt;RET&gt;=suggested | filename | AUTO | CANCEL}<br />
-/u01/oradata/dgtest/redo02.log<br />
-Log applied.<br />
+<p>Specify log: {&lt;RET&gt;=suggested | filename | AUTO | CANCEL}<br>
+/u01/oradata/dgtest/redo02.log<br>
+Log applied.<br>
 Media recovery complete.</p>
 <p>recovery 完成之后就要failover了。</p>
-<p>SQL&gt;alter database activate standby database;<br />
-SQL&gt;shutdown immediate;<br />
-SQL&gt;startup pfile=''<br />
--- http://hi.baidu.com/wa0362/blog/item/33e52912a91eadcbc2fd78b9.html<br />
+<p>SQL&gt;alter database activate standby database;<br>
+SQL&gt;shutdown immediate;<br>
+SQL&gt;startup pfile=''<br>
+-- http://hi.baidu.com/wa0362/blog/item/33e52912a91eadcbc2fd78b9.html<br>
 -- http://zf_wu.itpub.net/</p>
 <p>-- 参考来源： 《oracle高可用环境》</p>
-<p>--http://www.oracleblog.cn/study-note/reduce-the-data-loss-of-data-guard-when-failover/<br />
+<p>--http://www.oracleblog.cn/study-note/reduce-the-data-loss-of-data-guard-when-failover/<br>
 <strong>相关视图</strong><strong></strong></p>
-<p>v$archive_dest<br />
-v$archive_dest_status<br />
-v$log_history<br />
-v$archvied_log<br />
-v$managed_standby<br />
+<p>v$archive_dest<br>
+v$archive_dest_status<br>
+v$log_history<br>
+v$archvied_log<br>
+v$managed_standby<br>
 v$archive_gap</p>
-<p>-- EOF --</p></div>
+<p>-- EOF --</p>
+</div>
 
 
                 <hr>
@@ -238,12 +240,12 @@ v$archive_gap</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/general-library-import-steps.html" data-toggle="tooltip" data-placement="top" title="全库导入的一般步骤">&larr; Previous Post</a>
+                        <a href="/oracle/general-library-import-steps.html" data-toggle="tooltip" data-placement="top" title="全库导入的一般步骤">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/struggling-for-two-days-oracle-dataguard.html" data-toggle="tooltip" data-placement="top" title="挣扎了两天 oracle dataguard">Next Post &rarr;</a>
+                        <a href="/oracle/struggling-for-two-days-oracle-dataguard.html" data-toggle="tooltip" data-placement="top" title="挣扎了两天 oracle dataguard">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -268,7 +270,7 @@ v$archive_gap</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -397,7 +399,7 @@ v$archive_gap</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -405,13 +407,13 @@ v$archive_gap</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

@@ -10,7 +10,7 @@
 
     <title>根据rowid建临时表更新大表数据 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/according-to-the-rowid-built-a-temporary-table-to-update-table-data.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/according-to-the-rowid-built-a-temporary-table-to-update-table-data.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -124,21 +124,21 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>[cc lang="sql"]create table tmp_xf_rowid as<br />
-select rowid rid from xf_detail<br />
-where isdo_bss is not null<br />
+                <p>[cc lang="sql"]create table tmp_xf_rowid as<br>
+select rowid rid from xf_detail<br>
+where isdo_bss is not null<br>
 order by 1;</p>
-<p>declare<br />
-i number := 0;<br />
-begin<br />
-for c in (select * from tmp_xf_rowid) loop<br />
-    update xf_detail t set isdo_bss = null where t.rowid = c.rid;<br />
-    i := i + 1;<br />
-    if mod(i, 100) = 0 then<br />
-      commit;<br />
-    end if;<br />
-end loop;<br />
-commit;<br />
+<p>declare<br>
+i number := 0;<br>
+begin<br>
+for c in (select * from tmp_xf_rowid) loop<br>
+    update xf_detail t set isdo_bss = null where t.rowid = c.rid;<br>
+    i := i + 1;<br>
+    if mod(i, 100) = 0 then<br>
+      commit;<br>
+    end if;<br>
+end loop;<br>
+commit;<br>
 end;[/cc]</p>
 
 
@@ -152,12 +152,12 @@ end;[/cc]</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/another-sleepless-night.html" data-toggle="tooltip" data-placement="top" title="又是一个不眠之夜">&larr; Previous Post</a>
+                        <a href="/my%20life/another-sleepless-night.html" data-toggle="tooltip" data-placement="top" title="又是一个不眠之夜">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/squeezing-squeezing-squeezing-public-transport.html" data-toggle="tooltip" data-placement="top" title="挤啊挤啊挤公交">Next Post &rarr;</a>
+                        <a href="/my%20life/squeezing-squeezing-squeezing-public-transport.html" data-toggle="tooltip" data-placement="top" title="挤啊挤啊挤公交">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -182,7 +182,7 @@ end;[/cc]</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -311,7 +311,7 @@ end;[/cc]</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -319,13 +319,13 @@ end;[/cc]</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

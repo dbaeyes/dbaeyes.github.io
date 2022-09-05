@@ -10,7 +10,7 @@
 
     <title>v$sql_bind_capture 获取绑定变量 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/vsql-bind-capture-gets-the-bound-variables.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/vsql-bind-capture-gets-the-bound-variables.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -126,71 +126,72 @@
 
                 <p>--查看绑定变量的值可以通过视图v$sql_bind_capture 来获取</p>
 <div>
-小测一下，记录之：<br />
-var v_id number;<br />
-var v_date varchar2(50);</p>
-<p>exec :v_id := 509105861;<br />
+小测一下，记录之：<br>
+var v_id number;<br>
+var v_date varchar2(50);
+<p>exec :v_id := 509105861;<br>
 exec :v_date := '2009-12-26 12:37:51';</p>
-<p>select * from tmp_xf_test where id =:v_id and gmt_create &gt; to_date(:v_date ,'yyyy-mm-dd hh24:mi:ss');<br />
+<p>select * from tmp_xf_test where id =:v_id and gmt_create &gt; to_date(:v_date ,'yyyy-mm-dd hh24:mi:ss');<br>
 ---</p>
-<p>1  SELECT hash_value,sql_id,NAME,POSITION,DATATYPE_STRING,LAST_CAPTURED,value_string FROM v$sql_bind_capture<br />
-2  WHERE hash_value = 615294788<br />
-3*<br />
+<p>1  SELECT hash_value,sql_id,NAME,POSITION,DATATYPE_STRING,LAST_CAPTURED,value_string FROM v$sql_bind_capture<br>
+2  WHERE hash_value = 615294788<br>
+3*<br>
 SQL&gt; /</p>
-<p>HASH_VALUE SQL_ID        NAME                   POSITION DATATYPE_STRING      LAST_CAPTURED       VALUE_STRING<br />
----------- ------------- -------------------- ---------- -------------------- ------------------- ------------------------------<br />
-615294788 8n3ruvckat9u4 :V_ID                         1 NUMBER               2009-12-29 10:54:38 509105861<br />
+<p>HASH_VALUE SQL_ID        NAME                   POSITION DATATYPE_STRING      LAST_CAPTURED       VALUE_STRING<br>
+---------- ------------- -------------------- ---------- -------------------- ------------------- ------------------------------<br>
+615294788 8n3ruvckat9u4 :V_ID                         1 NUMBER               2009-12-29 10:54:38 509105861<br>
 615294788 8n3ruvckat9u4 :V_DATE                       2 VARCHAR2(128)        2009-12-29 10:54:38 2009-12-26 12:37:51</p>
-<p>exec :v_id := 509197545;<br />
+<p>exec :v_id := 509197545;<br>
 exec :v_date := '2009-12-25 00:00:00';</p>
-<p>select * from tmp_xf_test where id =:v_id and gmt_create &gt; to_date(:v_date ,'yyyy-mm-dd hh24:mi:ss');<br />
---------<br />
-1  SELECT hash_value,sql_id,NAME,POSITION,DATATYPE_STRING,LAST_CAPTURED,value_string FROM v$sql_bind_capture<br />
-2  WHERE hash_value = 615294788<br />
-3*<br />
+<p>select * from tmp_xf_test where id =:v_id and gmt_create &gt; to_date(:v_date ,'yyyy-mm-dd hh24:mi:ss');<br>
+--------<br>
+1  SELECT hash_value,sql_id,NAME,POSITION,DATATYPE_STRING,LAST_CAPTURED,value_string FROM v$sql_bind_capture<br>
+2  WHERE hash_value = 615294788<br>
+3*<br>
 SQL&gt; /</p>
-<p>HASH_VALUE SQL_ID        NAME                   POSITION DATATYPE_STRING      LAST_CAPTURED       VALUE_STRING<br />
----------- ------------- -------------------- ---------- -------------------- ------------------- ------------------------------<br />
-615294788 8n3ruvckat9u4 :V_ID                         1 NUMBER               2009-12-29 11:23:46 509197545<br />
-615294788 8n3ruvckat9u4 :V_DATE                       2 VARCHAR2(128)        2009-12-29 11:23:46 2009-12-25 00:00:00<br />
+<p>HASH_VALUE SQL_ID        NAME                   POSITION DATATYPE_STRING      LAST_CAPTURED       VALUE_STRING<br>
+---------- ------------- -------------------- ---------- -------------------- ------------------- ------------------------------<br>
+615294788 8n3ruvckat9u4 :V_ID                         1 NUMBER               2009-12-29 11:23:46 509197545<br>
+615294788 8n3ruvckat9u4 :V_DATE                       2 VARCHAR2(128)        2009-12-29 11:23:46 2009-12-25 00:00:00<br>
 ---视图中的绑定变量值发生改变了。</p>
 <p>这个值的变换频率_cursor_bind_capture_interval 隐含参数控制</p>
-<p>21:16:19 sys@ORCL&gt; col name for a55<br />
-21:16:20 sys@ORCL&gt; col value for a45<br />
-21:16:20 sys@ORCL&gt; set lines 200<br />
-21:16:20 sys@ORCL&gt; set pages 200<br />
-21:16:20 sys@ORCL&gt;<br />
-21:16:20 sys@ORCL&gt; select /* tbsql */ /*+ rule */<br />
-21:16:20   2  x.ksppinm  name,<br />
-21:16:20   3  y.ksppstvl  value,<br />
-21:16:20   4  y.ksppstdf  isdefault,<br />
-21:16:20   5  decode(bitand(y.ksppstvf,7),1,'MODIFIED',4,'SYSTEM_MOD','FALSE')ismod,<br />
-21:16:20   6  decode(bitand(y.ksppstvf,2),2,'TRUE','FALSE')  isadj<br />
-21:16:20   7  from<br />
-21:16:20   8  sys.x$ksppi x,<br />
-21:16:20   9  sys.x$ksppcv y<br />
-21:16:20  10  where<br />
-21:16:20  11  x.inst_id = userenv('Instance') and<br />
-21:16:20  12  y.inst_id = userenv('Instance') and<br />
-21:16:20  13  x.indx = y.indx and<br />
-21:16:20  14  x.ksppinm like '%&amp;PAR%'<br />
-21:16:20  15  order by<br />
-21:16:20  16  translate(x.ksppinm, ' _', ' ');<br />
-输入 par 的值:  _cursor_bind_capture_interval<br />
-原值   14: x.ksppinm like '%&amp;PAR%'<br />
+<p>21:16:19 sys@ORCL&gt; col name for a55<br>
+21:16:20 sys@ORCL&gt; col value for a45<br>
+21:16:20 sys@ORCL&gt; set lines 200<br>
+21:16:20 sys@ORCL&gt; set pages 200<br>
+21:16:20 sys@ORCL&gt;<br>
+21:16:20 sys@ORCL&gt; select /* tbsql */ /*+ rule */<br>
+21:16:20   2  x.ksppinm  name,<br>
+21:16:20   3  y.ksppstvl  value,<br>
+21:16:20   4  y.ksppstdf  isdefault,<br>
+21:16:20   5  decode(bitand(y.ksppstvf,7),1,'MODIFIED',4,'SYSTEM_MOD','FALSE')ismod,<br>
+21:16:20   6  decode(bitand(y.ksppstvf,2),2,'TRUE','FALSE')  isadj<br>
+21:16:20   7  from<br>
+21:16:20   8  sys.x$ksppi x,<br>
+21:16:20   9  sys.x$ksppcv y<br>
+21:16:20  10  where<br>
+21:16:20  11  x.inst_id = userenv('Instance') and<br>
+21:16:20  12  y.inst_id = userenv('Instance') and<br>
+21:16:20  13  x.indx = y.indx and<br>
+21:16:20  14  x.ksppinm like '%&amp;PAR%'<br>
+21:16:20  15  order by<br>
+21:16:20  16  translate(x.ksppinm, ' _', ' ');<br>
+输入 par 的值:  _cursor_bind_capture_interval<br>
+原值   14: x.ksppinm like '%&amp;PAR%'<br>
 新值   14: x.ksppinm like '%_cursor_bind_capture_interval%'</p>
-<p>NAME                                                    VALUE<br />
-ISDEFAULT ISMOD      ISADJ<br />
-------------------------------------------------------- ------------------------<br />
---------------------- --------- ---------- -----<br />
-_cursor_bind_capture_interval                            900<br />
+<p>NAME                                                    VALUE<br>
+ISDEFAULT ISMOD      ISADJ<br>
+------------------------------------------------------- ------------------------<br>
+--------------------- --------- ---------- -----<br>
+_cursor_bind_capture_interval                            900<br>
 TRUE      SYSTEM_MOD FALSE</p>
-<p>默认值900取一次绑定值<br />
-可以通过<br />
-alter system set "_cursor_bind_capture_interval"=60;<br />
+<p>默认值900取一次绑定值<br>
+可以通过<br>
+alter system set "_cursor_bind_capture_interval"=60;<br>
 来修改，这个只在特殊情况下用于排查问题偶然用到，没事悠着点，别乱改 丷</p>
-<p>关于v$sql_bind_capture 视图请看文档：<br />
-<a href="http://download.oracle.com/docs/cd/B19306_01/server.102/b14237/dynviews_2114.htm#REFRN30310" target="_blank">http://download.oracle.com/docs/cd/B19306_01/server.102/b14237/dynviews_2114.htm#REFRN30310</a></div>
+<p>关于v$sql_bind_capture 视图请看文档：<br>
+<a href="http://download.oracle.com/docs/cd/B19306_01/server.102/b14237/dynviews_2114.htm#REFRN30310" target="_blank">http://download.oracle.com/docs/cd/B19306_01/server.102/b14237/dynviews_2114.htm#REFRN30310</a></p>
+</div>
 
 
                 <hr>
@@ -203,12 +204,12 @@ alter system set "_cursor_bind_capture_interval"=60;<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/os/linux-tar.html" data-toggle="tooltip" data-placement="top" title="LINUX TAR">&larr; Previous Post</a>
+                        <a href="/os/linux-tar.html" data-toggle="tooltip" data-placement="top" title="LINUX TAR">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/n73-disassemble.html" data-toggle="tooltip" data-placement="top" title="N73 拆解">Next Post &rarr;</a>
+                        <a href="/my%20life/n73-disassemble.html" data-toggle="tooltip" data-placement="top" title="N73 拆解">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -233,7 +234,7 @@ alter system set "_cursor_bind_capture_interval"=60;<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -362,7 +363,7 @@ alter system set "_cursor_bind_capture_interval"=60;<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -370,13 +371,13 @@ alter system set "_cursor_bind_capture_interval"=60;<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

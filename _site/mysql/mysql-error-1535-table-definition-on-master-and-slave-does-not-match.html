@@ -10,7 +10,7 @@
 
     <title>MySQL error 1535 --table definition on master and slave does not match - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/mysql/mysql-error-1535-table-definition-on-master-and-slave-does-not-match.html">
+    <link rel="canonical" href="http://localhost:4000/mysql/mysql-error-1535-table-definition-on-master-and-slave-does-not-match.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,45 +125,45 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>It will be slave error when change column type on slave first.</p>
-<p>Table definition:<br />
-[cc lang='sql']<br />
-CREATE TABLE `table_xf` (<br />
-`i` int(11) NOT NULL AUTO_INCREMENT,<br />
-`name` varchar(16) DEFAULT NULL,<br />
-PRIMARY KEY (`i`)<br />
+<p>Table definition:<br>
+[cc lang='sql']<br>
+CREATE TABLE `table_xf` (<br>
+`i` int(11) NOT NULL AUTO_INCREMENT,<br>
+`name` varchar(16) DEFAULT NULL,<br>
+PRIMARY KEY (`i`)<br>
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk</p>
-<p>select * from table_xf;<br />
-+---+------+<br />
-| i | name |<br />
-+---+------+<br />
-| 1 | a |<br />
-| 2 | b |<br />
-| 3 | c |<br />
-+---+------+<br />
-3 rows in set (0.00 sec)<br />
+<p>select * from table_xf;<br>
++---+------+<br>
+| i | name |<br>
++---+------+<br>
+| 1 | a |<br>
+| 2 | b |<br>
+| 3 | c |<br>
++---+------+<br>
+3 rows in set (0.00 sec)<br>
 [/cc]</p>
-<p>Then do the column change on the slave first<br />
-[cc lang='sql']<br />
-root@xf_ccc 08:50:43&gt;alter table table_xf modify column i bigint not null auto_increment;<br />
-Query OK, 3 rows affected (0.18 sec)<br />
-Records: 3 Duplicates: 0 Warnings: 0<br />
-[/cc]<br />
-When update the record on the Master,<br />
-[cc lang='sql']<br />
-root@xf_ccc 08:51:21&gt;update table_xf set name='a1' where i=1;<br />
-Query OK, 1 row affected (0.00 sec)<br />
-Rows matched: 1 Changed: 1 Warnings: 0<br />
+<p>Then do the column change on the slave first<br>
+[cc lang='sql']<br>
+root@xf_ccc 08:50:43&gt;alter table table_xf modify column i bigint not null auto_increment;<br>
+Query OK, 3 rows affected (0.18 sec)<br>
+Records: 3 Duplicates: 0 Warnings: 0<br>
+[/cc]<br>
+When update the record on the Master,<br>
+[cc lang='sql']<br>
+root@xf_ccc 08:51:21&gt;update table_xf set name='a1' where i=1;<br>
+Query OK, 1 row affected (0.00 sec)<br>
+Rows matched: 1 Changed: 1 Warnings: 0<br>
 [/cc]</p>
-<p>The Slave's error info in the "show slave status"<br />
-<span style="color: #ff0000;">Last_Errno: 1535</span><br />
+<p>The Slave's error info in the "show slave status"<br>
+<span style="color: #ff0000;">Last_Errno: 1535</span><br>
 <span style="color: #ff0000;"> Last_Error: Table definition on master and slave does not match: Column 0 type mismatch - received type 3, xf_ccc.table_xf has type 8</span></p>
-<p>After do the change on the Master and skip the erro on the Salve<br />
-SET GLOBAL SQL_slave_SKIP_COUNTER = 1;<br />
+<p>After do the change on the Master and skip the erro on the Salve<br>
+SET GLOBAL SQL_slave_SKIP_COUNTER = 1;<br>
 START SLAVE;</p>
 <p>The master and slave will be OK, but the discordant data should be corrected.</p>
 <p>You also can set the variables for this issue.</p>
 <p>set global <a href="http://dev.mysql.com/doc/refman/5.1/en/replication-options-slave.html#sysvar_slave_type_conversions">slave_type_conversions</a>=’ALL_NON_LOSSY’;</p>
-<p><a href="http://www.dbathink.com/2013/01/mysql-error-1535-table-definition-on-master-and-slave-does-not-match/slave_type_conversions/" rel="attachment wp-att-1567"><img class="alignnone size-full wp-image-1567" alt="slave_type_conversions" src="http://www.dbathink.com/wp-content/uploads/2013/01/slave_type_conversions.jpg" width="761" height="417" data-pinit="registered" /></a></p>
+<p><a href="http://www.dbathink.com/2013/01/mysql-error-1535-table-definition-on-master-and-slave-does-not-match/slave_type_conversions/" rel="attachment wp-att-1567"><img class="alignnone size-full wp-image-1567" alt="slave_type_conversions" src="http://www.dbathink.com/wp-content/uploads/2013/01/slave_type_conversions.jpg" width="761" height="417" data-pinit="registered"></a></p>
 <p>Changing the type conversion mode requires restarting the slave with the new <code>slave_type_conversions</code>setting.</p>
 <p>Then start slave.</p>
 <p>--eof</p>
@@ -179,12 +179,12 @@ START SLAVE;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/travel/airbnb-coupon-codes-2013.html" data-toggle="tooltip" data-placement="top" title="Airbnb coupon 2013 25$ off">&larr; Previous Post</a>
+                        <a href="/travel/airbnb-coupon-codes-2013.html" data-toggle="tooltip" data-placement="top" title="Airbnb coupon 2013 25$ off">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-lock-info-waiting-for-table-metadata-lock.html" data-toggle="tooltip" data-placement="top" title="MySQL lock info  --  Waiting for table metadata lock">Next Post &rarr;</a>
+                        <a href="/mysql/mysql-lock-info-waiting-for-table-metadata-lock.html" data-toggle="tooltip" data-placement="top" title="MySQL lock info  --  Waiting for table metadata lock">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -209,7 +209,7 @@ START SLAVE;</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -338,7 +338,7 @@ START SLAVE;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -346,13 +346,13 @@ START SLAVE;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

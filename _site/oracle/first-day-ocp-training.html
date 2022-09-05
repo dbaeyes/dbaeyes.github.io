@@ -10,7 +10,7 @@
 
     <title>OCP 培训第一天 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/first-day-ocp-training.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/first-day-ocp-training.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -134,22 +134,22 @@
 <p>坐我旁边的老兄是湖南来的，是公务员，培训费当然是公家的，而且一培训还是两门，已经在 上海10多天了，前不久就是10G DBA I的课程，真是辛苦公务员哦，而且貌似一下子培训两门的一共有5人。 顿时faint！ 公款就是好啊，不过我也没有好失望的，比较自己喜欢这个东西，就当爱好吧。 （哎，心里总还是有点那个不是那个。。。 滋味）</p>
 <p>虽然是为了证书来培训的，但是培训的过程也是一个非常好的学习过程，尽量能把吸收的全部掌握。 这样才不枉费我的钱啊！ 呵呵，也不能老说钱了！</p>
 <p>知识小记：</p>
-<p><strong><em>RMAN</em></strong><br />
+<p><strong><em>RMAN</em></strong><br>
 1. RMAN can backup: data files, control files archived redo logs, spfile. NOT the redo log files</p>
 <p>2. ORACLE 自身并不支持tape，需要第三方的软件。 oracle自己有SECURE BACKUP软件</p>
 <p>3. RMAN中的RETENTION POLICY 设置要小于等于 控制文件的 CONTROL FILE RECORD KEEP TIME</p>
 <p>4. BACKUP RECOVER AREA 只能备份到tape上</p>
-<p>5. RMAN&gt; BACKUP DATABASE PLUS ARCHIVELOG;<br />
+<p>5. RMAN&gt; BACKUP DATABASE PLUS ARCHIVELOG;<br>
 如果备份是是 archived redo log files不能包含其他类型的文件</p>
-<p>6. list backup;<br />
-list backup of database;<br />
-list copy;<br />
+<p>6. list backup;<br>
+list backup of database;<br>
+list copy;<br>
 list copy of database archivelog from time = 'sysdate -7';</p>
-<p>7. report need backup recovery window of 7 days;<br />
+<p>7. report need backup recovery window of 7 days;<br>
 report need backup redundancy 2;</p>
-<p>report obsolete;<br />
+<p>report obsolete;<br>
 report obsolete redundancy 2;</p>
-<p>delete obsolete redundancy 2;<br />
+<p>delete obsolete redundancy 2;<br>
 delete backup;</p>
 <p>8. V$PROCESS, V$SESSION, V$SESSION_LONGOPS</p>
 <p>做过rman备份后，如果丢失了控制文件，数据库只能启动到nomount模式，那么可以使用rman恢复备份的控制文件</p>
@@ -157,8 +157,8 @@ delete backup;</p>
 <p>SQL&gt; alter database mount;</p>
 <p>RMAN&gt; recover database; -- 如果是创建了新的控制文件，需要 USING BACKUP CONTROFILE;</p>
 <p>SQL&gt; alter database open resetlogs;</p>
-<p>--<br />
-9, orapwd file=$ORACLE_HOME/dbs/orapwORCL password = oracle entries=5; 其中的5不是可以连接SYS的最大个数，而是字段加密算法的复杂程度。<br />
+<p>--<br>
+9, orapwd file=$ORACLE_HOME/dbs/orapwORCL password = oracle entries=5; 其中的5不是可以连接SYS的最大个数，而是字段加密算法的复杂程度。<br>
 新建了passwd文件后，需要重新将sys的权限分配。</p>
 <p>-- EOF--</p>
 </div>
@@ -174,12 +174,12 @@ delete backup;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/oracle/first-arrived-in-shanghai.html" data-toggle="tooltip" data-placement="top" title="初到上海">&larr; Previous Post</a>
+                        <a href="/my%20life/oracle/first-arrived-in-shanghai.html" data-toggle="tooltip" data-placement="top" title="初到上海">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/oracle/ocp-training-day.html" data-toggle="tooltip" data-placement="top" title="OCP 培训第二天">Next Post &rarr;</a>
+                        <a href="/my%20life/oracle/ocp-training-day.html" data-toggle="tooltip" data-placement="top" title="OCP 培训第二天">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -204,7 +204,7 @@ delete backup;</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -333,7 +333,7 @@ delete backup;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -341,13 +341,13 @@ delete backup;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

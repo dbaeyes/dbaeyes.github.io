@@ -10,7 +10,7 @@
 
     <title>Linux操作系统下/etc/hosts文件配置方法 (zt) - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/os/etchosts-file-under-linux-operating-system-configuration-method-zt.html">
+    <link rel="canonical" href="http://localhost:4000/os/etchosts-file-under-linux-operating-system-configuration-method-zt.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -126,13 +126,13 @@
 <div>
 <p>Hosts - The static table lookup for host name（主机名查询静态表）</p>
 <p>hosts文件是Linux系统中一个负责IP地址与域名快速解析的文件，以ASCII格式保存在“/etc”目录下，文件名为“hosts”（不同的linux版本，这个配置文件也可能不同。比如Debian的对应文件是/etc/hostname）。hosts文件包含了IP地址和主机名之间的映射，还包括主机名的别名。在没有域名服务器的情况下，系统上的所有网络程序都通过查询该文件来解析对应于某个主机名的IP地址，否则就需要使用DNS服务程序来解决。通常可以将常用的域名和IP地址映射加入到hosts文件中，实现快速方便的访问。</p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>2、配置文件</strong></p>
-<p>&nbsp;</p>
+<p> </p>
 <p>这个文件可以配置主机ip及对应的主机名，对于服务器类型的linux系统其作用还是不可忽略的。在局域网或是INTERNET上，每台主机都有一个IP地址，它区分开每台主机，并可以根据ip进行通讯。但IP地址不方便记忆，所以又有了域名。在一个局域网中，每台机器都有一个主机名，用于区分主机，便于相互访问。</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>Linux主机名的相关配置文件就是/etc/hosts;这个文件告诉本主机哪些域名对应那些ip，那些主机名对应哪些ip：</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>比如文件中有这样的定义</p>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
@@ -143,9 +143,9 @@
 </tr>
 </tbody>
 </table>
-<p>&nbsp;</p>
+<p> </p>
 <p>假设192.168.1.100是一台网站服务器，在网页中输入http://linumu100或http://test100就会打开192.168.1.100的网页。</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>通常情况下这个文件首先记录了本机的ip和主机名：</p>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
@@ -157,14 +157,15 @@
 </tbody>
 </table>
 <p><strong>3、配置文件格式说明</strong></p>
-<p>&nbsp;</p>
+<p> </p>
 <p>一般/etc/hosts 的内容一般有如下类似内容：</p>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
-<td bgcolor="#e6e6e6">127.0.0.1 localhost.localdomain localhost</p>
+<td bgcolor="#e6e6e6">127.0.0.1 localhost.localdomain localhost
 <p>192.168.1.100 linmu100.com linmu100</p>
-<p>192.168.1.120 ftpserver ftp120</td>
+<p>192.168.1.120 ftpserver ftp120</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -179,43 +180,43 @@
 </tr>
 </tbody>
 </table>
-<p>&nbsp;</p>
+<p> </p>
 <p>第一部份：网络IP地址；</p>
 <p>第二部份：主机名或域名；</p>
 <p>第三部份：主机名别名；</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>当然每行也可以是两部份，即主机IP地址和主机名；比如 192.168.1.100 linmu100。</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>这里可以稍微解释一下主机名(hostname)和域名(Domain）的区别：主机名通常在局域网内使用，通过hosts文件，主机名就被解析到对应ip；域名通常在internet上使用，但如果本机不想使用internet上的域名解析，这时就可以更改hosts文件，加入自己的域名解析。</p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>4、 /hosts文件可以帮助解决哪些问题</strong></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>4.1 远程登录linux主机过慢问题</strong></p>
-<p>&nbsp;</p>
+<p> </p>
 <p>有时客户端想远程登录一台linux主机，但每次登录输入密码后都会等很长一段时间才会进入，这是因为linux主机在返回信息时需要解析ip，如果在linux主机的hosts文件事先加入客户端的ip地址，这时再从客户端远程登录linux就会变很快。</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>注：这里所说的远程登录不仅仅是ssh，还可能是mysql远程登录，或是文件共享的查询等。</p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>4.2 双机互连</strong></p>
-<p>&nbsp;</p>
+<p> </p>
 <p>当两台主机只是双机互连时，这时两台主机都需要设置自己的ip，同时在对方的hosts文件里加入自己的ip和主机名。</p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>5、主机名修改工具hostname;</strong></p>
-<p>&nbsp;</p>
+<p> </p>
 <p>其实主机名的修改也有专用工具，就是hostname</p>
 <p>hostname - show or set the system’s host name</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>显示主机名：</p>
 <p># hostname</p>
 <p>linmu100</p>
 <p>此主机的主机名是linmu100，不加参数是用来显示当前主机的主机名；</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>临时设置主机名：</p>
 <p># hostname test100</p>
 <p># hostname 注：显示主机名</p>
 <p>test100</p>
 <p>通过hostname 工具来设置主机名只是临时的，下次重启系统时，此主机名将不会存在；</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>显示主机IP：</p>
 <p># hostname -i</p>
 <p>192.168.1.100</p>
@@ -232,12 +233,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/software/securecrt-and-easy-setup-zt.html" data-toggle="tooltip" data-placement="top" title="SecureCRT好用的设置 (zt)">&larr; Previous Post</a>
+                        <a href="/software/securecrt-and-easy-setup-zt.html" data-toggle="tooltip" data-placement="top" title="SecureCRT好用的设置 (zt)">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/using-materialized-views-brush-table.html" data-toggle="tooltip" data-placement="top" title="使用物化视图刷表">Next Post &rarr;</a>
+                        <a href="/oracle/using-materialized-views-brush-table.html" data-toggle="tooltip" data-placement="top" title="使用物化视图刷表">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -262,7 +263,7 @@
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -391,7 +392,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -399,13 +400,13 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

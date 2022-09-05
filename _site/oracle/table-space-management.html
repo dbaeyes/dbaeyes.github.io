@@ -10,7 +10,7 @@
 
     <title>表空间管理 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/table-space-management.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/table-space-management.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -158,21 +158,21 @@
 <p>sql&gt; alter database rename file 'c:\oracle\oradata\app_data.dbf'</p>
 <p>sql&gt; to 'c:\oracle\app_data.dbf';</p>
 <p>---from eygle :http://www.eygle.com/archives/2005/11/oracle_howto_move_datafile_readonly.html</p>
-<p>在Oracle数据库中，有多种方式可以移动数据文件的位置，之前介绍过几种方法:<a href="http://www.eygle.com/archives/2004/10/oracle_howto_move_datefile.html">Oracle HowTo:在非归档模式下如何更改数据文件位置</a>，<a href="http://www.eygle.com/archives/2005/11/oracle_howt_move_datafile2.html">Oracle HowTo:如何移动数据文件的位置?</a><br />
-以上两种方法，可能在要求较高的24x7系统中不适合采用，因为会使表空间长时间不可用。<br />
+<p>在Oracle数据库中，有多种方式可以移动数据文件的位置，之前介绍过几种方法:<a href="http://www.eygle.com/archives/2004/10/oracle_howto_move_datefile.html">Oracle HowTo:在非归档模式下如何更改数据文件位置</a>，<a href="http://www.eygle.com/archives/2005/11/oracle_howt_move_datafile2.html">Oracle HowTo:如何移动数据文件的位置?</a><br>
+以上两种方法，可能在要求较高的24x7系统中不适合采用，因为会使表空间长时间不可用。<br>
 特别是当表空间数据文件巨大时，物理拷贝可能需要较长的时间。</p>
-<p>本文推荐另外一种方法，可以做一个折中,以下是一个简单的步骤说明:<br />
-1.将表空间置于只读<br />
-只读状态可以使数据仍然可为用户访问.<br />
-<strong>alter tablespace <em>tablespace_name</em> read only;<br />
-</strong>2.物理拷贝文件<br />
-3.将表空间offline<br />
-alter tablespace <em>tablespace_name</em> offline;<br />
-4.rename数据文件<br />
-alter database rename file <em>'old_dir_file'</em> to <em>'new_dir_file'</em>;<br />
-5.将表空间联机<br />
-alter tablespace <em>tablespace_name</em> online;<br />
-6.将表空间置于read write模式<br />
+<p>本文推荐另外一种方法，可以做一个折中,以下是一个简单的步骤说明:<br>
+1.将表空间置于只读<br>
+只读状态可以使数据仍然可为用户访问.<br>
+<strong>alter tablespace <em>tablespace_name</em> read only;<br>
+</strong>2.物理拷贝文件<br>
+3.将表空间offline<br>
+alter tablespace <em>tablespace_name</em> offline;<br>
+4.rename数据文件<br>
+alter database rename file <em>'old_dir_file'</em> to <em>'new_dir_file'</em>;<br>
+5.将表空间联机<br>
+alter tablespace <em>tablespace_name</em> online;<br>
+6.将表空间置于read write模式<br>
 alter tablespace <em>tablespace_name</em> read write;</p>
 </div>
 
@@ -187,12 +187,12 @@ alter tablespace <em>tablespace_name</em> read write;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/thinking/the-most-recent.html" data-toggle="tooltip" data-placement="top" title="最近">&larr; Previous Post</a>
+                        <a href="/thinking/the-most-recent.html" data-toggle="tooltip" data-placement="top" title="最近">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/ora-01031-sqlplus-as-sysdba.html" data-toggle="tooltip" data-placement="top" title="ora-01031 sqlplus /as sysdba">Next Post &rarr;</a>
+                        <a href="/oracle/ora-01031-sqlplus-as-sysdba.html" data-toggle="tooltip" data-placement="top" title="ora-01031 sqlplus /as sysdba">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -217,7 +217,7 @@ alter tablespace <em>tablespace_name</em> read write;</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -346,7 +346,7 @@ alter tablespace <em>tablespace_name</em> read write;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -354,13 +354,13 @@ alter tablespace <em>tablespace_name</em> read write;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

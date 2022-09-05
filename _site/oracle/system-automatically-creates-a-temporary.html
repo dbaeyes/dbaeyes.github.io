@@ -10,7 +10,7 @@
 
     <title>系统自动产生的临时段 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/system-automatically-creates-a-temporary.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/system-automatically-creates-a-temporary.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,14 +125,14 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>在通过DBLINK建一个比较大的表（大概90G）时，花了一个小时建完了。然后默认就是建索引，突然发现对应的索引表空间少了30多G，这样我建索引空间就不够了。奇怪啊，这段时间不应该消耗那么多的索引表空间的。</p>
-<div>查看段空间使用情况，突然发现了一个以数字打头的临时段在索引表空间上<br />
-OWNER      SEGMENT_NAME                   PARTITION_NAME            SEGMENT_TYPE            size(G) TABLESPACE_NAMEFBADMIN    628.231711                                               TEMPORARY                 32.36 TBS_FEEL_IND<br />
-TBS_TEMP01                           156288   20004858      16466.00        10.54     139821.95</p>
+<div>查看段空间使用情况，突然发现了一个以数字打头的临时段在索引表空间上<br>
+OWNER      SEGMENT_NAME                   PARTITION_NAME            SEGMENT_TYPE            size(G) TABLESPACE_NAMEFBADMIN    628.231711                                               TEMPORARY                 32.36 TBS_FEEL_IND<br>
+TBS_TEMP01                           156288   20004858      16466.00        10.54     139821.95
 <p>临时表空间有150多G，没道理消耗光的。 之前在其他库上也看到过类似的段。</p>
 <p>是什么原因导致产生这样的临时段的，这个需要去研究一下。</p>
 <p>这个临时段的危害还是蛮大的，特别是在定时自动执行脚本的时候，如果没有发现这个段的存在，而导致空间不够，那么就比较惨。</p>
 <p>很多时候，执行比较大的脚本还是必须人肉参与才是王道。 意想不到的情况太多了</p>
-<p>--续1<br />
+<p>--续1<br>
 过了半个小时，系统自动将该临时段释放掉了 ⊙﹏⊙b</p>
 </div>
 
@@ -147,12 +147,12 @@ TBS_TEMP01                           156288   200048
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/cbo-architecture.html" data-toggle="tooltip" data-placement="top" title="CBO体系结构">&larr; Previous Post</a>
+                        <a href="/oracle/cbo-architecture.html" data-toggle="tooltip" data-placement="top" title="CBO体系结构">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/grain-rain.html" data-toggle="tooltip" data-placement="top" title="又到 谷雨">Next Post &rarr;</a>
+                        <a href="/my%20life/grain-rain.html" data-toggle="tooltip" data-placement="top" title="又到 谷雨">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -177,7 +177,7 @@ TBS_TEMP01                           156288   200048
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -306,7 +306,7 @@ TBS_TEMP01                           156288   200048
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -314,13 +314,13 @@ TBS_TEMP01                           156288   200048
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

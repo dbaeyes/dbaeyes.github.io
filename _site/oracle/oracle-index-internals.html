@@ -10,7 +10,7 @@
 
     <title>Oracle Index Internals (zt) - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/oracle-index-internals.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/oracle-index-internals.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,71 +125,72 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>from:Oracle Index Internals</p>
-<div>Classic Oracle Index Myths<br />
-Oracle B-tree indexes can become “unbalanced” over time and need to be rebuilt<br />
-Deleted space in an index is “deadwood” and over time requires the index to be rebuilt<br />
-If an index reaches “x” number of levels, it becomes inefficient and requires the index to be rebuilt<br />
-If an index has a poor clustering factor, the index needs to be rebuilt<br />
-To improve performance, indexes need to be regularly rebuilt</p>
-<p>Index Fundamentals<br />
-Oracle’s implements a form of B*Tree index<br />
-Oracle’s B-Tree index is always balanced. Always.<br />
-Index entries must always be ordered.<br />
-An update consists of a delete and an insert<br />
-Each leaf block has pointers to next/previous blocks<br />
-Each leaf block contains the index entry with corresponding rowid<br />
+<div>Classic Oracle Index Myths<br>
+Oracle B-tree indexes can become “unbalanced” over time and need to be rebuilt<br>
+Deleted space in an index is “deadwood” and over time requires the index to be rebuilt<br>
+If an index reaches “x” number of levels, it becomes inefficient and requires the index to be rebuilt<br>
+If an index has a poor clustering factor, the index needs to be rebuilt<br>
+To improve performance, indexes need to be regularly rebuilt
+<p>Index Fundamentals<br>
+Oracle’s implements a form of B*Tree index<br>
+Oracle’s B-Tree index is always balanced. Always.<br>
+Index entries must always be ordered.<br>
+An update consists of a delete and an insert<br>
+Each leaf block has pointers to next/previous blocks<br>
+Each leaf block contains the index entry with corresponding rowid<br>
 Index scans use ‘sequential’, single block reads(with exception of Fast Full Index Scan)</p>
-<p>Index Rebuilds<br />
-? As discussed, most indexes are efficient at allocating and reusing space<br />
-? Randomly inserted indexes operate at average 25% free space<br />
-? Monotonically increasing indexes operate at close to 0% free space<br />
-? Deleted space is generally reusable<br />
-? Only in specific scenarios could unused space be expected to be higher    and remain unusable<br />
+<p>Index Rebuilds<br>
+? As discussed, most indexes are efficient at allocating and reusing space<br>
+? Randomly inserted indexes operate at average 25% free space<br>
+? Monotonically increasing indexes operate at close to 0% free space<br>
+? Deleted space is generally reusable<br>
+? Only in specific scenarios could unused space be expected to be higher    and remain unusable<br>
 ? So when may index rebuilds be necessary ?</p>
-<p>Conditions for Rebuilds<br />
-Large free space (generally 50%+), which indexes rarely reach, and<br />
-Large selectivity, which most index accesses never reach, and<br />
-Response times are adversely affected, which rarely are.<br />
-Note requirement of some free space anyways to avoid insert and subsequent free space issues<br />
-Benefit of rebuild based on various dependencies which include:<br />
-– Size of index<br />
-– Clustering Factor<br />
-– Caching characteristics<br />
-– Frequency of index accesses<br />
-– Selectivity (cardinality) of index accesses<br />
-– Range of selectivity (random or specific range)<br />
-– Efficiency of dependent SQL<br />
-– Fragmentation characteristics (does it effect portion of index frequently used)<br />
-– I/O characteristics of index  (serve contention or I/O bottlenecks)<br />
+<p>Conditions for Rebuilds<br>
+Large free space (generally 50%+), which indexes rarely reach, and<br>
+Large selectivity, which most index accesses never reach, and<br>
+Response times are adversely affected, which rarely are.<br>
+Note requirement of some free space anyways to avoid insert and subsequent free space issues<br>
+Benefit of rebuild based on various dependencies which include:<br>
+– Size of index<br>
+– Clustering Factor<br>
+– Caching characteristics<br>
+– Frequency of index accesses<br>
+– Selectivity (cardinality) of index accesses<br>
+– Range of selectivity (random or specific range)<br>
+– Efficiency of dependent SQL<br>
+– Fragmentation characteristics (does it effect portion of index frequently used)<br>
+– I/O characteristics of index  (serve contention or I/O bottlenecks)<br>
 – The list goes on and on ….</p>
-<p>Other Rebuild Issues To Consider Other Rebuild Issues To Consider<br />
-More efficient index structures can reduce stress on buffer cache. Harder to formulate but requires consideration<br />
-If you have the resources and you have the appropriate maintenance window, then the cost vs. benefit equation more favorable to rebuild<br />
-– Benefit maybe low but perhaps so is the relative cost<br />
+<p>Other Rebuild Issues To Consider Other Rebuild Issues To Consider<br>
+More efficient index structures can reduce stress on buffer cache. Harder to formulate but requires consideration<br>
+If you have the resources and you have the appropriate maintenance window, then the cost vs. benefit equation more favorable to rebuild<br>
+– Benefit maybe low but perhaps so is the relative cost<br>
 Rebuild or Coalesce ?</p>
-<p>Index Coalesce<br />
-More efficient, less resource intensive, less<br />
-locking issues than rebuild option<br />
-Can significantly reduce number of leaf blocks in<br />
-some scenarios<br />
-Requires sum of free space to exceed 50% +<br />
-pctfree in consecutive leaf blocks<br />
-However, as generally needs excessive 50%+<br />
-freespace for rebuild to be effective<br />
-Does not reduce index height<br />
+<p>Index Coalesce<br>
+More efficient, less resource intensive, less<br>
+locking issues than rebuild option<br>
+Can significantly reduce number of leaf blocks in<br>
+some scenarios<br>
+Requires sum of free space to exceed 50% +<br>
+pctfree in consecutive leaf blocks<br>
+However, as generally needs excessive 50%+<br>
+freespace for rebuild to be effective<br>
+Does not reduce index height<br>
 alter index bowie_idx coalesce;</p>
-<p>Summary<br />
-The vast majority of indexes do not require rebuilding<br />
-Oracle B-tree indexes can become “unbalanced” and need to be rebuilt is a myth<br />
-Deleted space in an index is “deadwood” and over time requires the index to be rebuilt is a myth<br />
-If an index reaches “x” number of levels, it becomes inefficient and requires the index to be rebuilt is a myth<br />
-If an index has a poor clustering factor, the index needs to be rebuilt is a myth<br />
+<p>Summary<br>
+The vast majority of indexes do not require rebuilding<br>
+Oracle B-tree indexes can become “unbalanced” and need to be rebuilt is a myth<br>
+Deleted space in an index is “deadwood” and over time requires the index to be rebuilt is a myth<br>
+If an index reaches “x” number of levels, it becomes inefficient and requires the index to be rebuilt is a myth<br>
+If an index has a poor clustering factor, the index needs to be rebuilt is a myth<br>
 To improve performance, indexes need to be regularly rebuilt is a myth</p>
-<p>Cost =<br />
-BLevel +<br />
-Index Selective × Leaf Blocks<br />
-[ + Table Selective × Clustering Factor]<br />
-[ - 1]</p></div>
+<p>Cost =<br>
+BLevel +<br>
+Index Selective × Leaf Blocks<br>
+[ + Table Selective × Clustering Factor]<br>
+[ - 1]</p>
+</div>
 
 
                 <hr>
@@ -202,12 +203,12 @@ Index Selective × Leaf Blocks<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/digital/electric-iron.html" data-toggle="tooltip" data-placement="top" title="电烙铁">&larr; Previous Post</a>
+                        <a href="/digital/electric-iron.html" data-toggle="tooltip" data-placement="top" title="电烙铁">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/os/linux-tar.html" data-toggle="tooltip" data-placement="top" title="LINUX TAR">Next Post &rarr;</a>
+                        <a href="/os/linux-tar.html" data-toggle="tooltip" data-placement="top" title="LINUX TAR">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -232,7 +233,7 @@ Index Selective × Leaf Blocks<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -361,7 +362,7 @@ Index Selective × Leaf Blocks<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -369,13 +370,13 @@ Index Selective × Leaf Blocks<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

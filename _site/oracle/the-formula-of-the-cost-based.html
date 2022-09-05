@@ -10,7 +10,7 @@
 
     <title>The formula of the Cost Based - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/the-formula-of-the-cost-based.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/the-formula-of-the-cost-based.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -127,70 +127,70 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>Mark it!!!</p>
-<p><strong>cost =<br />
-    blevel +<br />
-    ceiling(leaf_blocks * effective index selectivity) +<br />
+<p><strong>cost =<br>
+    blevel +<br>
+    ceiling(leaf_blocks * effective index selectivity) +<br>
     ceiling(clustering_factor * effective table selectivity)</strong></p>
-<p>1.   The first line of the formula represents the number of block visits needed to descend through the index (excluding the cost of actually hitting the first leaf block you want).<br />
-2.   The second line of the formula represents the number of leaf blocks that you will have to walk along to acquire all the rowids matching a given set of input values. The effective index selectivity corresponds to the entry labelled ix_sel in the 10053 trace file.<br />
+<p>1.   The first line of the formula represents the number of block visits needed to descend through the index (excluding the cost of actually hitting the first leaf block you want).<br>
+2.   The second line of the formula represents the number of leaf blocks that you will have to walk along to acquire all the rowids matching a given set of input values. The effective index selectivity corresponds to the entry labelled ix_sel in the 10053 trace file.<br>
 3.   The third line represents the number of visits to table blocks that you will have to make to pick up the rows by way of the selected index. The effective table selectivity corresponds to the thing that used to be labelled tb_sel in the 10053 trace file, but ends up being labelled (more accurately) as ix_sel_with_filters in the 10g trace file. This line often generates the biggest component of the cost, and introduces the biggest error in the calculation of the cost of using a B-tree index.</p>
-<p>-----------------example-----------<br />
+<p>-----------------example-----------<br>
 from:Cost Based Oracle Fundamentals page:88</p>
-<p>[cc lang='sql']CREATE INDEX t1_i1 ON t1(date_ord, seq_ord);<br />
-BEGIN<br />
-        dbms_stats.gather_table_stats(<br />
-                USER,<br />
-                't1',<br />
-                CASCADE => TRUE,<br />
-                estimate_percent => NULL,<br />
-                method_opt => 'for all columns size 1'<br />
-        );<br />
-END;<br />
+<p>[cc lang='sql']CREATE INDEX t1_i1 ON t1(date_ord, seq_ord);<br>
+BEGIN<br>
+        dbms_stats.gather_table_stats(<br>
+                USER,<br>
+                't1',<br>
+                CASCADE =&gt; TRUE,<br>
+                estimate_percent =&gt; NULL,<br>
+                method_opt =&gt; 'for all columns size 1'<br>
+        );<br>
+END;<br>
 /</p>
-<p>SELECT<br />
-        blocks,<br />
-        num_rows<br />
-FROM<br />
-        user_tables<br />
-WHERE<br />
+<p>SELECT<br>
+        blocks,<br>
+        num_rows<br>
+FROM<br>
+        user_tables<br>
+WHERE<br>
         table_name = 'T1';</p>
-<p>    BLOCKS   NUM_ROWS<br />
----------- ----------<br />
+<p>    BLOCKS   NUM_ROWS<br>
+---------- ----------<br>
        749      26000</p>
-<p>SELECT<br />
-        index_name,<br />
-        blevel,<br />
-        leaf_blocks,<br />
-        clustering_factor<br />
-FROM<br />
-        user_indexes<br />
-WHERE<br />
-        table_name = 'T1'<br />
-;<br />
-INDEX_NAME               BLEVEL LEAF_BLOCKS CLUSTERING_FACTOR<br />
--------------------- ---------- ----------- -----------------<br />
+<p>SELECT<br>
+        index_name,<br>
+        blevel,<br>
+        leaf_blocks,<br>
+        clustering_factor<br>
+FROM<br>
+        user_indexes<br>
+WHERE<br>
+        table_name = 'T1'<br>
+;<br>
+INDEX_NAME               BLEVEL LEAF_BLOCKS CLUSTERING_FACTOR<br>
+-------------------- ---------- ----------- -----------------<br>
 T1_I1                         1          86              1008</p>
-<p>SELECT  COUNT(small_vc)<br />
-FROM    t1<br />
-WHERE   date_ord = TRUNC(SYSDATE) + 7<br />
+<p>SELECT  COUNT(small_vc)<br>
+FROM    t1<br>
+WHERE   date_ord = TRUNC(SYSDATE) + 7<br>
 ;</p>
-<p>IN this CASE, we are after 1 DAY OUT OF 26—a selectivity OF 3.846% OR 0.03846<br />
+<p>IN this CASE, we are after 1 DAY OUT OF 26—a selectivity OF 3.846% OR 0.03846<br>
 COST = 1 +</p>
-<p>        CEIL(0.03846 * 86) +<br />
-        CEIL(0.03846 * 1,008)<br />
+<p>        CEIL(0.03846 * 86) +<br>
+        CEIL(0.03846 * 1,008)<br>
         = 1 + 4 + 39 = 44[/cc]</p>
 <p>VS</p>
-<p>[cc lang='sql']SET autotrace traceonly EXPLAIN<br />
-SELECT  COUNT(small_vc)<br />
-FROM    t1<br />
-WHERE   date_ord = TRUNC(SYSDATE) + 7<br />
-;<br />
-SET autotrace off<br />
-Execution PLAN (9.2.0.6 autotrace)<br />
-----------------------------------------------------------<br />
-   0      SELECT STATEMENT Optimizer=ALL_ROWS (COST=44 Card=1 Bytes=13)<br />
-   1    0   SORT (AGGREGATE)<br />
-   2    1     TABLE ACCESS (BY INDEX ROWID) OF 'T1' (COST=44 Card=1000 Bytes=13000)<br />
+<p>[cc lang='sql']SET autotrace traceonly EXPLAIN<br>
+SELECT  COUNT(small_vc)<br>
+FROM    t1<br>
+WHERE   date_ord = TRUNC(SYSDATE) + 7<br>
+;<br>
+SET autotrace off<br>
+Execution PLAN (9.2.0.6 autotrace)<br>
+----------------------------------------------------------<br>
+   0      SELECT STATEMENT Optimizer=ALL_ROWS (COST=44 Card=1 Bytes=13)<br>
+   1    0   SORT (AGGREGATE)<br>
+   2    1     TABLE ACCESS (BY INDEX ROWID) OF 'T1' (COST=44 Card=1000 Bytes=13000)<br>
    3    2       INDEX (RANGE SCAN) OF 'T1_I1' (NON-UNIQUE) (COST=5 Card=1000)[/cc]</p>
 <p>--------</p>
 <p>The important reference for adjust the table(index)'s statistics:</p>
@@ -207,12 +207,12 @@ Execution PLAN (9.2.0.6 autotrace)<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/copying-large-amounts-of-data-to-index-organized-tables.html" data-toggle="tooltip" data-placement="top" title="复制大数据量到索引组织表">&larr; Previous Post</a>
+                        <a href="/oracle/copying-large-amounts-of-data-to-index-organized-tables.html" data-toggle="tooltip" data-placement="top" title="复制大数据量到索引组织表">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-gap-locking-small-measuring.html" data-toggle="tooltip" data-placement="top" title="mysql 间隙锁小测">Next Post &rarr;</a>
+                        <a href="/mysql/mysql-gap-locking-small-measuring.html" data-toggle="tooltip" data-placement="top" title="mysql 间隙锁小测">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -237,7 +237,7 @@ Execution PLAN (9.2.0.6 autotrace)<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -366,7 +366,7 @@ Execution PLAN (9.2.0.6 autotrace)<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -374,13 +374,13 @@ Execution PLAN (9.2.0.6 autotrace)<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

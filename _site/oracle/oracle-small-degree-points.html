@@ -10,7 +10,7 @@
 
     <title>Oracle degree 小点 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/oracle-small-degree-points.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/oracle-small-degree-points.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -128,38 +128,38 @@
 <div>
 <p>在开启并行创建索引时，实际消耗的数据库并行线程是双倍。</p>
 <p>create index ind_qid on crm_detail(queue_id,gmt_create) parallel 6 tablespace tbs_ind ONLINE;</p>
-<p>上面的sql以并行6来创建索引，6个并行用于获取数据，6个并行用于索引。从下面的视图中也可以获取相关信息。对应的qcsid为603<br />
-SID    SERIAL#      QCSID  QCSERIAL#  QCINST_ID SERVER_GROUP SERVER_SET    SERVER#     DEGREE REQ_DEGREE<br />
------ ---------- ---------- ---------- ---------- ------------ ---------- ---------- ---------- ----------<br />
-1360      34534       1360<br />
-537      17838       1360      34534          1            1          1          1          4          8<br />
-583       6982       1360      34534          1            1          1          2          4          8<br />
-747      10018       1360      34534          1            1          1          3          4          8<br />
-532      28145       1360      34534          1            1          1          4          4          8<br />
-603      58749        603<br />
-780      32071        603      58749          1            1          1          1          6          6<br />
-754      14332        603      58749          1            1          1          2          6          6<br />
-502      63681        603      58749          1            1          1          3          6          6<br />
-590      46158        603      58749          1            1          1          4          6          6<br />
-653      26832        603      58749          1            1          1          5          6          6<br />
-783      25546        603      58749          1            1          1          6          6          6<br />
-584      27449        603      58749          1            1          2          1          6          6<br />
-749       3704        603      58749          1            1          2          2          6          6<br />
-762       8393        603      58749          1            1          2          3          6          6<br />
-596      13055        603      58749          1            1          2          4          6          6<br />
-740      25279        603      58749          1            1          2          5          6          6<br />
+<p>上面的sql以并行6来创建索引，6个并行用于获取数据，6个并行用于索引。从下面的视图中也可以获取相关信息。对应的qcsid为603<br>
+SID    SERIAL#      QCSID  QCSERIAL#  QCINST_ID SERVER_GROUP SERVER_SET    SERVER#     DEGREE REQ_DEGREE<br>
+----- ---------- ---------- ---------- ---------- ------------ ---------- ---------- ---------- ----------<br>
+1360      34534       1360<br>
+537      17838       1360      34534          1            1          1          1          4          8<br>
+583       6982       1360      34534          1            1          1          2          4          8<br>
+747      10018       1360      34534          1            1          1          3          4          8<br>
+532      28145       1360      34534          1            1          1          4          4          8<br>
+603      58749        603<br>
+780      32071        603      58749          1            1          1          1          6          6<br>
+754      14332        603      58749          1            1          1          2          6          6<br>
+502      63681        603      58749          1            1          1          3          6          6<br>
+590      46158        603      58749          1            1          1          4          6          6<br>
+653      26832        603      58749          1            1          1          5          6          6<br>
+783      25546        603      58749          1            1          1          6          6          6<br>
+584      27449        603      58749          1            1          2          1          6          6<br>
+749       3704        603      58749          1            1          2          2          6          6<br>
+762       8393        603      58749          1            1          2          3          6          6<br>
+596      13055        603      58749          1            1          2          4          6          6<br>
+740      25279        603      58749          1            1          2          5          6          6<br>
 640       3699        603      58749          1            1          2          6          6          6</p>
-<p>---<br />
-查询当前系统开启的最大并行数<br />
+<p>---<br>
+查询当前系统开启的最大并行数<br>
 &gt;show parameter paral</p>
-<p>NAME                                 TYPE        VALUE<br />
------------------------------------- ----------- ------------------------------<br />
+<p>NAME                                 TYPE        VALUE<br>
+------------------------------------ ----------- ------------------------------<br>
 parallel_max_servers                 integer     16</p>
 <p>当sql请求的最大并行度超过系统可用的并行数时，系统自动将剩余的并行数给该请求</p>
-<p>在上面的视图中可以看到QCSID为1360的进程请求的平行度为8，但是系统只剩下4个并行数可以分配，以此degree为4<br />
+<p>在上面的视图中可以看到QCSID为1360的进程请求的平行度为8，但是系统只剩下4个并行数可以分配，以此degree为4<br>
 QCSID:13360  SQL: create table tmp_table as select /*+ parallel(t,8) */ * from  crm_users t;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p> </p>
+<p> </p>
 </div>
 
 
@@ -173,12 +173,12 @@ QCSID:13360  SQL: create table tmp_table as select /*+ parallel(t,8) */ * from�
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/fooling-around.html" data-toggle="tooltip" data-placement="top" title="瞎忙">&larr; Previous Post</a>
+                        <a href="/my%20life/fooling-around.html" data-toggle="tooltip" data-placement="top" title="瞎忙">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-use-bit-operations.html" data-toggle="tooltip" data-placement="top" title="mysql 使用位运算">Next Post &rarr;</a>
+                        <a href="/mysql/mysql-use-bit-operations.html" data-toggle="tooltip" data-placement="top" title="mysql 使用位运算">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -203,7 +203,7 @@ QCSID:13360  SQL: create table tmp_table as select /*+ parallel(t,8) */ * from�
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -332,7 +332,7 @@ QCSID:13360  SQL: create table tmp_table as select /*+ parallel(t,8) */ * from�
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -340,13 +340,13 @@ QCSID:13360  SQL: create table tmp_table as select /*+ parallel(t,8) */ * from�
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

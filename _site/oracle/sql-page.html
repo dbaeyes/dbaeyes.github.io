@@ -10,7 +10,7 @@
 
     <title>sql 分页 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/sql-page.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/sql-page.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -128,7 +128,8 @@
   <li>
     <p>常用分页，其中的 第二层的  rownum &lt;= 20可以控制最内层查询过程中的最大记录数</p>
 
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   select * from (select t1.*, rownum rn
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>   select * from (select t1.*, rownum rn
    	  from (select *
          from table_buyer
         where buyer_status = 2
@@ -138,10 +139,11 @@ where rn &gt;= 10;
 </code></pre></div>    </div>
   </li>
   <li>
-    <p>分页用between实现<br />
+    <p>分页用between实现<br>
 不推荐，因为第三层不能推到最内层控制查询条数，效率低</p>
 
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select * from (select t.*, rownum rn
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>select * from (select t.*, rownum rn
     from (select *
           from table_buyer
          where buyer_status = 2
@@ -150,10 +152,11 @@ where rn &gt;= 10;
 </code></pre></div>    </div>
   </li>
   <li>
-    <p>效率最高<br />
+    <p>效率最高<br>
 用rowid 分页，大数据量翻页常用写法，常用于单表，并且所有查询和排序字段都在索引中的情况</p>
 
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select * from (select rid
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>select * from (select rid
   from (select t.rid, rownum linenum
           from (select rowid rid
                   from table_buyer
@@ -179,12 +182,12 @@ where rn &gt;= 10;
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/mysql-explain.html" data-toggle="tooltip" data-placement="top" title="MySQL的 explain">&larr; Previous Post</a>
+                        <a href="/mysql/mysql-explain.html" data-toggle="tooltip" data-placement="top" title="MySQL的 explain">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-index-lock.html" data-toggle="tooltip" data-placement="top" title="MYSQL index 锁的一点情况">Next Post &rarr;</a>
+                        <a href="/mysql/mysql-index-lock.html" data-toggle="tooltip" data-placement="top" title="MYSQL index 锁的一点情况">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -209,7 +212,7 @@ where rn &gt;= 10;
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -338,7 +341,7 @@ where rn &gt;= 10;
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -346,13 +349,13 @@ where rn &gt;= 10;
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

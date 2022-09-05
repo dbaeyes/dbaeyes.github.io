@@ -4,13 +4,12 @@ header-img: "img/autumn2.jpg"
 tagline: "相遇在南十字星下"
 description: "Meet at the Southern Cross constellation(Crux)"
 baseurl: ""
-url: "http://dbaeyes.me"
-#url: "http://azeril.me"
+url: "https://dbaeyes.github.io"
 #url: "http://localhost:4000"
 
 # About/contact
 owner:
-  name: "David"
+  name: "Vincent"
   email: renwei.chu@gmail.com
   bio: "上善若水"
 
@@ -67,7 +66,7 @@ comments :
       short_name : David
 
 # Analytics and webmaster tools stuff goes here
-google_analytics: UA-66863061-1
+# google_analytics: UA-66863061-1
 google_verify:
 # https://ssl.bing.com/webmaster/configure/verify/ownership Option 2 content= goes here
 bing_verify:

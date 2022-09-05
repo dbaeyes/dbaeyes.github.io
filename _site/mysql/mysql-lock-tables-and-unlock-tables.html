@@ -10,7 +10,7 @@
 
     <title>mysql LOCK TABLES and UNLOCK TABLES - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/mysql/mysql-lock-tables-and-unlock-tables.html">
+    <link rel="canonical" href="http://localhost:4000/mysql/mysql-lock-tables-and-unlock-tables.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -137,7 +137,7 @@
 <p><span style="color: #0000ff;">session 2:</span></p>
 <p>1. 可以查询</p>
 <p>2. dml： 等待，直到session 1  unlock tables 或者超时</p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="color: #ff0000;"> test2:</span></p>
 <p><span style="color: #0000ff;">session1:</span></p>
 <p>lock tables tmp_xf_lock write;</p>
@@ -149,7 +149,7 @@
 <p>2，不可以dml ，都是等待状态</p>
 <p>这些文档里描写的很清楚，所以当只是想停止对表加锁，不让表表数据再发生变更，那么用 read。如果只是想让自己可以更改数据，其他用户不能查询也不能变更数据，那么用 wirte（阻塞了其他线程的读写，有点狠，都不让读了）。 用处各不相同，注意好选择。 看字面意思的 lock write可能会产生误解。</p>
 <p><span style="color: #ff9900;"> FLUSH TABLES WITH READ LOCK; 这样可以锁住所有表</span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><span style="color: #0000ff;">READ [LOCAL] lock:</span></p>
 <p>The session that holds the lock can read the table (but not write it).</p>
 <p>Multiple sessions can acquire a READ lock for the table at the same time.</p>
@@ -160,7 +160,7 @@
 <p>Only the session that holds the lock can access the table. No other session can access it until the lock is released.</p>
 <p>Lock requests for the table by other sessions block while the WRITE lock is held.</p>
 <p>The LOW_PRIORITY modifier affects lock scheduling if the WRITE lock request must wait, as described later.</p>
-<p>&nbsp;</p>
+<p> </p>
 <div>关于对表别名的lock，参考文档☞</div>
 </div>
 
@@ -175,12 +175,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/mk-query-digest-a-mysql-log-analysis-tool.html" data-toggle="tooltip" data-placement="top" title="mk-query-digest - a mysql log analysis tool">&larr; Previous Post</a>
+                        <a href="/mysql/mk-query-digest-a-mysql-log-analysis-tool.html" data-toggle="tooltip" data-placement="top" title="mk-query-digest - a mysql log analysis tool">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/impossible-where-noticed-after-reading-const-tables.html" data-toggle="tooltip" data-placement="top" title="Impossible WHERE noticed after reading const tables">Next Post &rarr;</a>
+                        <a href="/my%20life/impossible-where-noticed-after-reading-const-tables.html" data-toggle="tooltip" data-placement="top" title="Impossible WHERE noticed after reading const tables">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -205,7 +205,7 @@
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -334,7 +334,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -342,13 +342,13 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

@@ -10,7 +10,7 @@
 
     <title>mysql set names - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/mysql/mysql-set-names.html">
+    <link rel="canonical" href="http://localhost:4000/mysql/mysql-set-names.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -123,40 +123,40 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <h1></h1>
-<div>开发过程中，最好明确使用何种字符集<br />
-使用：set names 'x' 来明确</p>
+<div>开发过程中，最好明确使用何种字符集<br>
+使用：set names 'x' 来明确
 <p>A SET <span>NAMES</span> 'x' statement is equivalent to these three statements:</p>
-<p>SET character_set_client = x;<br />
-SET character_set_results = x;<br />
+<p>SET character_set_client = x;<br>
+SET character_set_results = x;<br>
 SET character_set_connection = x;</p>
 <p>这样对于数据库端设置的依赖性将大大降低。</p>
-<p>root@xxx&gt;show variables like '%char%';<br />
-+--------------------------+----------------------------------+<br />
-| Variable_name            | Value                            |<br />
-+--------------------------+----------------------------------+<br />
-| character_set_client     | gbk                              |<br />
-| character_set_connection | gbk                              |<br />
-| character_set_database   | utf8                             |<br />
-| character_set_filesystem | binary                           |<br />
-| character_set_results    | gbk                              |<br />
-| character_set_server     | gbk                              |<br />
-| character_set_system     | utf8                             |<br />
-| character_sets_dir       | /u01/mysql/share/mysql/charsets/ |<br />
-+--------------------------+----------------------------------+<br />
+<p>root@xxx&gt;show variables like '%char%';<br>
++--------------------------+----------------------------------+<br>
+| Variable_name            | Value                            |<br>
++--------------------------+----------------------------------+<br>
+| character_set_client     | gbk                              |<br>
+| character_set_connection | gbk                              |<br>
+| character_set_database   | utf8                             |<br>
+| character_set_filesystem | binary                           |<br>
+| character_set_results    | gbk                              |<br>
+| character_set_server     | gbk                              |<br>
+| character_set_system     | utf8                             |<br>
+| character_sets_dir       | /u01/mysql/share/mysql/charsets/ |<br>
++--------------------------+----------------------------------+<br>
 8 rows in set (0.00 sec)</p>
 <p>root@xxx&gt;set names 'utf8';</p>
-<p>root@xxx&gt;show variables like '%char%';<br />
-+--------------------------+----------------------------------+<br />
-| Variable_name            | Value                            |<br />
-+--------------------------+----------------------------------+<br />
-| character_set_client     | utf8                             |<br />
-| character_set_connection | utf8                             |<br />
-| character_set_database   | utf8                             |<br />
-| character_set_filesystem | binary                           |<br />
-| character_set_results    | utf8                             |<br />
-| character_set_server     | gbk                              |<br />
-| character_set_system     | utf8                             |<br />
-| character_sets_dir       | /u01/mysql/share/mysql/charsets/ |<br />
+<p>root@xxx&gt;show variables like '%char%';<br>
++--------------------------+----------------------------------+<br>
+| Variable_name            | Value                            |<br>
++--------------------------+----------------------------------+<br>
+| character_set_client     | utf8                             |<br>
+| character_set_connection | utf8                             |<br>
+| character_set_database   | utf8                             |<br>
+| character_set_filesystem | binary                           |<br>
+| character_set_results    | utf8                             |<br>
+| character_set_server     | gbk                              |<br>
+| character_set_system     | utf8                             |<br>
+| character_sets_dir       | /u01/mysql/share/mysql/charsets/ |<br>
 +--------------------------+----------------------------------+</p>
 <p>SET NAMES显示客户端发送的SQL语句中使用什么字符集。因此，SET NAMES 'cp1251'语句告诉服务器“将来从这个客户端传来的信息采用字符集cp1251”。它还为服务器发送回客户端的结果指定了字符集。（例如，如果你使用一个SELECT语句，它表示列值使用了什么字符集。）</p>
 <p>SET NAMES '<em>x</em>'语句与这三个语句等价：</p>
@@ -169,11 +169,11 @@ SET character_set_connection = x;</p>
 <pre>mysql&gt; <strong>SET character_set_results = <em>x</em>;</strong></pre>
 <pre>mysql&gt; <strong>SET collation_connection = @@collation_database;</strong></pre>
 <p>当一个客户端连接时，它向服务器发送希望使用的字符集名称。服务器为那个字符集设置character_set_client、character_set_results和 character_set_connection变量。（实际上，服务器为使用该字符集执行一个SET NAMES操作。）</p>
-<p>###############<br />
-有一种情况请关注下： 在操作系统不是中文，但是又想把从其他环境dump的文件放进去，有可能出现的一种状况是，放上去的文件很难识别，导致insert的数据直接查询会是乱码。 应用如果不健壮（没有在客户端设置明确的字符集‘set nanme ..'的话，也会存在问题。 那请将dump出来的文件保存为ASNI/ASCII类型，很有可能解决遇到的问题<br />
+<p>###############<br>
+有一种情况请关注下： 在操作系统不是中文，但是又想把从其他环境dump的文件放进去，有可能出现的一种状况是，放上去的文件很难识别，导致insert的数据直接查询会是乱码。 应用如果不健壮（没有在客户端设置明确的字符集‘set nanme ..'的话，也会存在问题。 那请将dump出来的文件保存为ASNI/ASCII类型，很有可能解决遇到的问题<br>
 ####################</p>
-<p>关于字符格式可以参考：<br />
-<a href="http://hi.baidu.com/1459/blog/item/ea830bf3314abdc20b46e07c.html" target="_blank">hi.baidu.com/1459/blog/item/ea830bf3314abdc20b46e07c.html</a><br />
+<p>关于字符格式可以参考：<br>
+<a href="http://hi.baidu.com/1459/blog/item/ea830bf3314abdc20b46e07c.html" target="_blank">hi.baidu.com/1459/blog/item/ea830bf3314abdc20b46e07c.html</a><br>
 <a href="http://hi.baidu.com/%D6%F0%C4%BE/blog/item/772c5944d5e77e8bb3b7dcab.html" target="_blank">hi.baidu.com/%D6%F0%C4%BE/blog/item/772c5944d5e77e8bb3b7dcab.html</a></p>
 <p><a href="http://dev.mysql.com/doc/refman/5.1/en/server-system-variables.html" target="_blank">http://dev.mysql.com/doc/refman/5.1/en/server-system-variables.html</a></p>
 <table border="1">
@@ -281,12 +281,12 @@ SET character_set_connection = x;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/rownum-after-max-who-is-first-and-who.html" data-toggle="tooltip" data-placement="top" title="rownum max 谁先谁后">&larr; Previous Post</a>
+                        <a href="/oracle/rownum-after-max-who-is-first-and-who.html" data-toggle="tooltip" data-placement="top" title="rownum max 谁先谁后">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-page-quiz.html" data-toggle="tooltip" data-placement="top" title="mysql 分页小测">Next Post &rarr;</a>
+                        <a href="/mysql/mysql-page-quiz.html" data-toggle="tooltip" data-placement="top" title="mysql 分页小测">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -311,7 +311,7 @@ SET character_set_connection = x;</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -440,7 +440,7 @@ SET character_set_connection = x;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -448,13 +448,13 @@ SET character_set_connection = x;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

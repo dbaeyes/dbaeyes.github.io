@@ -10,7 +10,7 @@
 
     <title>WEB分页与优化技术 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/web-page-optimization-techniques.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/web-page-optimization-techniques.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -137,7 +137,7 @@
 <p>– <span style="font-family: Calibri;">3</span>、根据<span style="font-family: Calibri;">rowid</span>，回表查询数据，如果数据量少，回表就少</p>
 <p>– 假定需要的数据都在索引中，可以不回表</p>
 <p>•    如索引为<span style="font-family: Calibri;">(a,b)</span>，查询为<span style="font-family: Calibri;">select b from table where a=41</span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p>•    处决于扫描的数据量对应表的总量的百分比</p>
 <p>•    少量数据扫描，索引扫描总是好的</p>
 <p>•    <span style="font-family: Calibri;">OLTP</span>系统，尽量采用索引扫描<span style="font-family: Calibri;">(</span>因为查询结果一般很小）</p>
@@ -162,7 +162,7 @@
 <p>•    特征</p>
 <p>– 越靠前越快（正好是大部分人只对前面数据感兴趣）</p>
 <p>– 如果有<span style="font-family: Calibri;">where</span>条件，也仅仅是选出足够的数据就停止扫描，不用扫描所有块</p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>分页案例二：排序分页</strong></p>
 <p>•    要求排序后分页（我们的大部分分页需求）</p>
 <p>•    正确写法</p>
@@ -176,7 +176,7 @@
 <p>•    如果是索引扫描，必须选择出所有的数据</p>
 <p>•    可以采用分析函数</p>
 <p>– <span style="font-family: Calibri;">Select * from (select row_number over(order by field) rn,t.* from table) where rn&gt;=m and rn &lt;=n</span></p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>分页优化</strong></p>
 <p>•    如果是很大的表，需要足够多的<span style="font-family: Calibri;">where</span>条件，筛选出定量的记录并分页</p>
 <p>•    如果有排序要求，先排序后分页</p>
@@ -197,12 +197,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/wangzai-milk.html" data-toggle="tooltip" data-placement="top" title="旺仔牛奶">&larr; Previous Post</a>
+                        <a href="/my%20life/wangzai-milk.html" data-toggle="tooltip" data-placement="top" title="旺仔牛奶">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/os/linux-scp.html" data-toggle="tooltip" data-placement="top" title="linux scp">Next Post &rarr;</a>
+                        <a href="/os/linux-scp.html" data-toggle="tooltip" data-placement="top" title="linux scp">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -227,7 +227,7 @@
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -356,7 +356,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -364,13 +364,13 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

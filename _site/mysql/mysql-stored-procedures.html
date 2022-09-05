@@ -10,7 +10,7 @@
 
     <title>MYSQL 存储过程 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/mysql/mysql-stored-procedures.html">
+    <link rel="canonical" href="http://localhost:4000/mysql/mysql-stored-procedures.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,98 +125,99 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>现在我们需要一个分隔符，实现这个步骤的SQL语句如下：</p>
-<div>s<br />
-如果以后要恢复使用“;”（分号）作为分隔符，输入下 "DELIMITER ;".</p>
-<p>存储过程<br />
-CREATE PROCEDURE p7 ()<br />
-BEGIN<br />
-SET @a = 5;<br />
-SET @b = 5;<br />
-INSERT INTO t VALUES (@a);<br />
-SELECT s1 * @a FROM t WHERE s1 &gt;= @b;<br />
+<div>s<br>
+如果以后要恢复使用“;”（分号）作为分隔符，输入下 "DELIMITER ;".
+<p>存储过程<br>
+CREATE PROCEDURE p7 ()<br>
+BEGIN<br>
+SET <a href="https://github.com/a" class="user-mention">@a</a> = 5;<br>
+SET <a href="https://github.com/b" class="user-mention">@b</a> = 5;<br>
+INSERT INTO t VALUES (<a href="https://github.com/a" class="user-mention">@a</a>);<br>
+SELECT s1 * <a href="https://github.com/a" class="user-mention">@a</a> FROM t WHERE s1 &gt;= <a href="https://github.com/b" class="user-mention">@b</a>;<br>
 END; //              /* I won't CALL this. 这个语句将不会被调用*/</p>
-<p>CREATE PROCEDURE p9 ()<br />
-BEGIN<br />
-DECLARE a INT /* there is no DEFAULT clause */;<br />
-DECLARE b INT /* there is no DEFAULT clause */;<br />
-SET a = 5;        /* there is a SET statement */<br />
-SET b = 5;        /* there is a SET statement */<br />
-INSERT INTO t VALUES (a);<br />
-SELECT s1 * a FROM t WHERE s1 &gt;= b;<br />
+<p>CREATE PROCEDURE p9 ()<br>
+BEGIN<br>
+DECLARE a INT /* there is no DEFAULT clause */;<br>
+DECLARE b INT /* there is no DEFAULT clause */;<br>
+SET a = 5;        /* there is a SET statement */<br>
+SET b = 5;        /* there is a SET statement */<br>
+INSERT INTO t VALUES (a);<br>
+SELECT s1 * a FROM t WHERE s1 &gt;= b;<br>
 END; //              /* I won't CALL this */</p>
 <p>-------------</p>
-<p>CREATE PROCEDURE p8 ()<br />
-BEGIN<br />
-DECLARE a INT;<br />
-DECLARE b INT;<br />
-SET a = 5;<br />
-SET b = 5;<br />
-INSERT INTO t VALUES (a);<br />
-SELECT s1 * a FROM t WHERE s1 &gt;= b;<br />
+<p>CREATE PROCEDURE p8 ()<br>
+BEGIN<br>
+DECLARE a INT;<br>
+DECLARE b INT;<br>
+SET a = 5;<br>
+SET b = 5;<br>
+INSERT INTO t VALUES (a);<br>
+SELECT s1 * a FROM t WHERE s1 &gt;= b;<br>
 END; //       /* I won't CALL this */</p>
-<p>--循环语句<br />
+<p>--循环语句<br>
 WHILE ... END WHILE</p>
-<p>CREATE PROCEDURE p14 ()<br />
-BEGIN<br />
-DECLARE v INT;<br />
-SET v = 0;<br />
-WHILE v &lt; 5 DO<br />
-INSERT INTO t VALUES (v);<br />
-SET v = v + 1;<br />
-END WHILE;<br />
+<p>CREATE PROCEDURE p14 ()<br>
+BEGIN<br>
+DECLARE v INT;<br>
+SET v = 0;<br>
+WHILE v &lt; 5 DO<br>
+INSERT INTO t VALUES (v);<br>
+SET v = v + 1;<br>
+END WHILE;<br>
 END; //</p>
 <p>LOOP ... END LOOP</p>
-<p>CREATE PROCEDURE p16 ()<br />
-BEGIN<br />
-DECLARE v INT;<br />
-SET v = 0;<br />
-loop_label: LOOP<br />
-INSERT INTO t VALUES (v);<br />
-SET v = v + 1;<br />
-IF v &gt;= 5 THEN<br />
-LEAVE loop_label;<br />
-END IF;<br />
-END LOOP;<br />
+<p>CREATE PROCEDURE p16 ()<br>
+BEGIN<br>
+DECLARE v INT;<br>
+SET v = 0;<br>
+loop_label: LOOP<br>
+INSERT INTO t VALUES (v);<br>
+SET v = v + 1;<br>
+IF v &gt;= 5 THEN<br>
+LEAVE loop_label;<br>
+END IF;<br>
+END LOOP;<br>
 END; //</p>
-<p>CREATE PROCEDURE p12 (IN parameter1 INT)<br />
-BEGIN<br />
-DECLARE variable1 INT;<br />
-SET variable1 = parameter1 + 1;<br />
-IF variable1 = 0 THEN<br />
-INSERT INTO t VALUES (17);<br />
-END IF;<br />
-IF parameter1 = 0 THEN<br />
-UPDATE t SET s1 = s1 + 1;<br />
-ELSE<br />
-UPDATE t SET s1 = s1 + 2;<br />
-END IF;<br />
+<p>CREATE PROCEDURE p12 (IN parameter1 INT)<br>
+BEGIN<br>
+DECLARE variable1 INT;<br>
+SET variable1 = parameter1 + 1;<br>
+IF variable1 = 0 THEN<br>
+INSERT INTO t VALUES (17);<br>
+END IF;<br>
+IF parameter1 = 0 THEN<br>
+UPDATE t SET s1 = s1 + 1;<br>
+ELSE<br>
+UPDATE t SET s1 = s1 + 2;<br>
+END IF;<br>
 END; //</p>
 <p>-------------------</p>
-<p>SET @a = 'tmp_xf_test';<br />
-set @sqlstr=concat('select * from ','',@a);<br />
-prepare stmt from @sqlstr;<br />
-execute stmt;<br />
-@a 是表名</p>
-<p>CREATE PROCEDURE `bbc`.`tmp_xf_proc` ()<br />
-BEGIN<br />
-DECLARE stmt varchar(2000);<br />
+<p>SET <a href="https://github.com/a" class="user-mention">@a</a> = 'tmp_xf_test';<br>
+set <a href="https://github.com/sqlstr" class="user-mention">@sqlstr</a>=concat('select * from ','',<a href="https://github.com/a" class="user-mention">@a</a>);<br>
+prepare stmt from <a href="https://github.com/sqlstr" class="user-mention">@sqlstr</a>;<br>
+execute stmt;<br>
+<a href="https://github.com/a" class="user-mention">@a</a> 是表名</p>
+<p>CREATE PROCEDURE `bbc`.`tmp_xf_proc` ()<br>
+BEGIN<br>
+DECLARE stmt varchar(2000);<br>
 declare p_table varchar(50);</p>
-<p>SET @a = 'tmp_xf_test';<br />
-set @sqlstr=concat('select * from ','',@a);<br />
-prepare stmt from @sqlstr;<br />
-execute stmt;<br />
+<p>SET <a href="https://github.com/a" class="user-mention">@a</a> = 'tmp_xf_test';<br>
+set <a href="https://github.com/sqlstr" class="user-mention">@sqlstr</a>=concat('select * from ','',<a href="https://github.com/a" class="user-mention">@a</a>);<br>
+prepare stmt from <a href="https://github.com/sqlstr" class="user-mention">@sqlstr</a>;<br>
+execute stmt;<br>
 END;</p>
-<p>set @sqlstr=concat('insert into users(name,password,age,adddate) values(');<br />
-set @sqlstr=concat(@sqlstr,'''',name2,'''',',','''',password2,'''',',',age2,',','''',adddate2,'''',')');<br />
-prepare stmt from @sqlstr;</p>
-<p>mysql&gt; PREPARE stmt1 FROM 'SELECT SQRT(POW(?,2) + POW(?,2)) AS hypotenuse';<br />
-mysql&gt; SET @a = 3;<br />
-mysql&gt; SET @b = 4;<br />
-mysql&gt; EXECUTE stmt1 USING @a, @b;<br />
-mysql&gt; SET @a = 'select * from table1 ';<br />
-mysql&gt; SET @b = 'where column1&gt;10 limit 1';<br />
-mysql&gt; SET @a = concat(@a,@b);<br />
-mysql&gt; PREPARE stmt1 FROM @a;</p></div>
+<p>set <a href="https://github.com/sqlstr" class="user-mention">@sqlstr</a>=concat('insert into users(name,password,age,adddate) values(');<br>
+set <a href="https://github.com/sqlstr" class="user-mention">@sqlstr</a>=concat(<a href="https://github.com/sqlstr" class="user-mention">@sqlstr</a>,'''',name2,'''',',','''',password2,'''',',',age2,',','''',adddate2,'''',')');<br>
+prepare stmt from <a href="https://github.com/sqlstr" class="user-mention">@sqlstr</a>;</p>
+<p>mysql&gt; PREPARE stmt1 FROM 'SELECT SQRT(POW(?,2) + POW(?,2)) AS hypotenuse';<br>
+mysql&gt; SET <a href="https://github.com/a" class="user-mention">@a</a> = 3;<br>
+mysql&gt; SET <a href="https://github.com/b" class="user-mention">@b</a> = 4;<br>
+mysql&gt; EXECUTE stmt1 USING <a href="https://github.com/a" class="user-mention">@a</a>, <a href="https://github.com/b" class="user-mention">@b</a>;<br>
+mysql&gt; SET <a href="https://github.com/a" class="user-mention">@a</a> = 'select * from table1 ';<br>
+mysql&gt; SET <a href="https://github.com/b" class="user-mention">@b</a> = 'where column1&gt;10 limit 1';<br>
+mysql&gt; SET <a href="https://github.com/a" class="user-mention">@a</a> = concat(<a href="https://github.com/a" class="user-mention">@a</a>,<a href="https://github.com/b" class="user-mention">@b</a>);<br>
+mysql&gt; PREPARE stmt1 FROM <a href="https://github.com/a" class="user-mention">@a</a>;</p>
+</div>
 
 
                 <hr>
@@ -229,12 +230,12 @@ mysql&gt; PREPARE stmt1 FROM @a;</p></div>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/jot-photography-knowledge-accumulated.html" data-toggle="tooltip" data-placement="top" title="摄影知识 简单记录+累积">&larr; Previous Post</a>
+                        <a href="/my%20life/jot-photography-knowledge-accumulated.html" data-toggle="tooltip" data-placement="top" title="摄影知识 简单记录+累积">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/the-escape-character-for-mysql.html" data-toggle="tooltip" data-placement="top" title="MySQL的转义字符“\”">Next Post &rarr;</a>
+                        <a href="/mysql/the-escape-character-for-mysql.html" data-toggle="tooltip" data-placement="top" title="MySQL的转义字符“\”">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -259,7 +260,7 @@ mysql&gt; PREPARE stmt1 FROM @a;</p></div>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -388,7 +389,7 @@ mysql&gt; PREPARE stmt1 FROM @a;</p></div>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -396,13 +397,13 @@ mysql&gt; PREPARE stmt1 FROM @a;</p></div>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

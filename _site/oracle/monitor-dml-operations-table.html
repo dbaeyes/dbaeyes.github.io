@@ -10,7 +10,7 @@
 
     <title>监控表的DML操作 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/monitor-dml-operations-table.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/monitor-dml-operations-table.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -126,99 +126,100 @@
 
                 <p>晕，这年头数据老是被篡改，开发环境都这样。。。。 应开发人员要求，简单记录一下操作</p>
 <div>
-create table TMP_MONITOR<br />
-(<br />
-USERNAME   VARCHAR2(100),<br />
-OSUSER     VARCHAR2(100),<br />
-MACHINE    VARCHAR2(100),<br />
-TERMINAL   VARCHAR2(100),<br />
-PROGRAM    VARCHAR2(100),<br />
-SQL_ID     VARCHAR2(100),<br />
-MODULE     VARCHAR2(100),<br />
-GMT_CREATE DATE,<br />
-SQLTEXT    VARCHAR2(2000)<br />
-);</p>
-<p>------------------------<br />
+create table TMP_MONITOR<br>
+(<br>
+USERNAME   VARCHAR2(100),<br>
+OSUSER     VARCHAR2(100),<br>
+MACHINE    VARCHAR2(100),<br>
+TERMINAL   VARCHAR2(100),<br>
+PROGRAM    VARCHAR2(100),<br>
+SQL_ID     VARCHAR2(100),<br>
+MODULE     VARCHAR2(100),<br>
+GMT_CREATE DATE,<br>
+SQLTEXT    VARCHAR2(2000)<br>
+);
+<p>------------------------<br>
 触发器</p>
-<p>create or replace trigger tr_test_xf<br />
-before insert or update or delete on tmp_xf_test<br />
-for each row<br />
-declare<br />
--- local variables here<br />
+<p>create or replace trigger tr_test_xf<br>
+before insert or update or delete on tmp_xf_test<br>
+for each row<br>
+declare<br>
+-- local variables here<br>
 begin</p>
-<p>insert into tmp_monitor<br />
-(username,<br />
-osuser,<br />
-machine,<br />
-terminal,<br />
-program,<br />
-sql_id,<br />
-module,<br />
-gmt_create,<br />
-sqltext)<br />
-select t1.username,<br />
-t1.osuser,<br />
-t1.machine,<br />
-t1.terminal,<br />
-t1.program,<br />
-t1.sql_id,<br />
-t1.module,<br />
-sysdate,<br />
-t2.SQL_TEXT<br />
-from v$session t1, v$sql t2<br />
-where t1.sid in (select sid from v$mystat where rownum = 1)<br />
-and t1.SQL_ID = t2.SQL_ID<br />
+<p>insert into tmp_monitor<br>
+(username,<br>
+osuser,<br>
+machine,<br>
+terminal,<br>
+program,<br>
+sql_id,<br>
+module,<br>
+gmt_create,<br>
+sqltext)<br>
+select t1.username,<br>
+t1.osuser,<br>
+t1.machine,<br>
+t1.terminal,<br>
+t1.program,<br>
+t1.sql_id,<br>
+t1.module,<br>
+sysdate,<br>
+t2.SQL_TEXT<br>
+from v$session t1, v$sql t2<br>
+where t1.sid in (select sid from v$mystat where rownum = 1)<br>
+and t1.SQL_ID = t2.SQL_ID<br>
 and rownum = 1;</p>
 <p>end tr_test_xf;</p>
 <p>--------</p>
-<p>如果需要IP可以加上<br />
+<p>如果需要IP可以加上<br>
 select sys_context('userenv', 'ip_address' ) INTO v_ipaddr from dual;</p>
-<p>##################################<br />
+<p>##################################<br>
 增加一个 如果需要让特定的应用不能去更改某张表的数据,那么可以用如此trigger</p>
-<p>CREATE OR REPLACE TRIGGER TR_TMP_XF_TEST_NOA<br />
-BEFORE INSERT OR UPDATE OR DELETE ON TMP_XF_1<br />
-FOR EACH ROW<br />
-DECLARE<br />
+<p>CREATE OR REPLACE TRIGGER TR_TMP_XF_TEST_NOA<br>
+BEFORE INSERT OR UPDATE OR DELETE ON TMP_XF_1<br>
+FOR EACH ROW<br>
+DECLARE<br>
 V_PROM VARCHAR(200);</p>
 <p>BEGIN</p>
-<p>SELECT T1.PROGRAM<br />
-INTO V_PROM<br />
-FROM V$SESSION T1, V$SQL T2<br />
-WHERE T1.SID IN (SELECT SID FROM V$MYSTAT WHERE ROWNUM &lt; 2)<br />
+<p>SELECT T1.PROGRAM<br>
+INTO V_PROM<br>
+FROM V$SESSION T1, V$SQL T2<br>
+WHERE T1.SID IN (SELECT SID FROM V$MYSTAT WHERE ROWNUM &lt; 2)<br>
 AND T1.SQL_ID = T2.SQL_ID;</p>
-<p>IF UPPER(V_PROM) = 'PLSQLDEV.EXE' THEN<br />
-RAISE_APPLICATION_ERROR(-20002,<br />
-'You can do the dml on the table tmp_xf_1 by plsqldev');<br />
-END IF;<br />
-EXCEPTION<br />
-WHEN OTHERS THEN<br />
-RAISE;<br />
+<p>IF UPPER(V_PROM) = 'PLSQLDEV.EXE' THEN<br>
+RAISE_APPLICATION_ERROR(-20002,<br>
+'You can do the dml on the table tmp_xf_1 by plsqldev');<br>
+END IF;<br>
+EXCEPTION<br>
+WHEN OTHERS THEN<br>
+RAISE;<br>
 END;</p>
 <p>--上面脚本的增强版,加个配置表</p>
-<p>CREATE OR REPLACE TRIGGER tr_tmp_xf_config<br />
-BEFORE INSERT OR UPDATE OR DELETE ON TMP_XF_TRI_CONF<br />
-FOR EACH ROW<br />
-DECLARE<br />
-V_PROM     VARCHAR(200);<br />
-V_TERMINAL VARCHAR2(200);<br />
-V_COUNT    NUMBER;<br />
+<p>CREATE OR REPLACE TRIGGER tr_tmp_xf_config<br>
+BEFORE INSERT OR UPDATE OR DELETE ON TMP_XF_TRI_CONF<br>
+FOR EACH ROW<br>
+DECLARE<br>
+V_PROM     VARCHAR(200);<br>
+V_TERMINAL VARCHAR2(200);<br>
+V_COUNT    NUMBER;<br>
 BEGIN</p>
-<p>SELECT T1.PROGRAM, T1.TERMINAL<br />
-INTO V_PROM, V_TERMINAL<br />
-FROM V$SESSION T1, V$SQL T2<br />
-WHERE T1.SID IN (SELECT SID FROM V$MYSTAT WHERE ROWNUM &lt; 2)<br />
+<p>SELECT T1.PROGRAM, T1.TERMINAL<br>
+INTO V_PROM, V_TERMINAL<br>
+FROM V$SESSION T1, V$SQL T2<br>
+WHERE T1.SID IN (SELECT SID FROM V$MYSTAT WHERE ROWNUM &lt; 2)<br>
 AND T1.SQL_ID = T2.SQL_ID and rownum &lt; 1;</p>
-<p>IF UPPER(V_TERMINAL) = 'T-XUANFENG 'THEN<br />
-IF UPPER(V_PROM) = 'PLSQLDEV.EXE'  THEN<br />
-RAISE_APPLICATION_ERROR(-20002,<br />
-'您没有权限修改该表，请联系***');<br />
-END IF;<br />
-END IF;<br />
-EXCEPTION<br />
-WHEN OTHERS THEN<br />
-RAISE;<br />
+<p>IF UPPER(V_TERMINAL) = 'T-XUANFENG 'THEN<br>
+IF UPPER(V_PROM) = 'PLSQLDEV.EXE'  THEN<br>
+RAISE_APPLICATION_ERROR(-20002,<br>
+'您没有权限修改该表，请联系***');<br>
+END IF;<br>
+END IF;<br>
+EXCEPTION<br>
+WHEN OTHERS THEN<br>
+RAISE;<br>
 END;</p>
-<p>--eof---</p></div>
+<p>--eof---</p>
+</div>
 
 
                 <hr>
@@ -231,12 +232,12 @@ END;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/thinking/roaring-sound.html" data-toggle="tooltip" data-placement="top" title="吼一声">&larr; Previous Post</a>
+                        <a href="/thinking/roaring-sound.html" data-toggle="tooltip" data-placement="top" title="吼一声">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/today-out-of-the-sun.html" data-toggle="tooltip" data-placement="top" title="今天出太阳了">Next Post &rarr;</a>
+                        <a href="/my%20life/today-out-of-the-sun.html" data-toggle="tooltip" data-placement="top" title="今天出太阳了">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -261,7 +262,7 @@ END;</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -390,7 +391,7 @@ END;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -398,13 +399,13 @@ END;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

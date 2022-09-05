@@ -10,7 +10,7 @@
 
     <title>ora-01031 sqlplus /as sysdba - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/ora-01031-sqlplus-as-sysdba.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/ora-01031-sqlplus-as-sysdba.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -126,11 +126,12 @@
 
                 <p>sqlplus "/as sysdba" 登入总是报错 ora-01031:insufficient privileges 。</p>
 <div>
-1、检查sqlnet.ora（WINDOWS下位于%ORACLE_HOME%NETWORKADMIN目录）是否包含这句：<br />
-SQLNET.AUTHENTICATION_SERVICES=(NTS)，没有的话加上；</p>
+1、检查sqlnet.ora（WINDOWS下位于%ORACLE_HOME%NETWORKADMIN目录）是否包含这句：<br>
+SQLNET.AUTHENTICATION_SERVICES=(NTS)，没有的话加上；
 <p>2、检查登陆windows的用户(administrator或安装oracle时候使用的用户)是不是在包含在ORA_DBA组中，域用户没有连上域服务器时就可能出现这种现象。</p>
 <p>3. 要保证 remote_login_passwordfile 参数 = EXCLUSIVE .</p>
-<p>4. 看看是否需要使用orapassw生成口令文件 .</p></div>
+<p>4. 看看是否需要使用orapassw生成口令文件 .</p>
+</div>
 
 
                 <hr>
@@ -143,12 +144,12 @@ SQLNET.AUTHENTICATION_SERVICES=(NTS)，没有的话加上；</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/table-space-management.html" data-toggle="tooltip" data-placement="top" title="表空间管理">&larr; Previous Post</a>
+                        <a href="/oracle/table-space-management.html" data-toggle="tooltip" data-placement="top" title="表空间管理">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/oracle-10-2-0-1-0-upgrade-10-2-0-4-0.html" data-toggle="tooltip" data-placement="top" title="Oracle 10.2.0.1.0 upgrade 10.2.0.4.0">Next Post &rarr;</a>
+                        <a href="/oracle/oracle-10-2-0-1-0-upgrade-10-2-0-4-0.html" data-toggle="tooltip" data-placement="top" title="Oracle 10.2.0.1.0 upgrade 10.2.0.4.0">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -173,7 +174,7 @@ SQLNET.AUTHENTICATION_SERVICES=(NTS)，没有的话加上；</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -302,7 +303,7 @@ SQLNET.AUTHENTICATION_SERVICES=(NTS)，没有的话加上；</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -310,13 +311,13 @@ SQLNET.AUTHENTICATION_SERVICES=(NTS)，没有的话加上；</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

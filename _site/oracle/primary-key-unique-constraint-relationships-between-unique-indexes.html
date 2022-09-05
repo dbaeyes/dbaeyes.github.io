@@ -10,7 +10,7 @@
 
     <title>主键 唯一约束 唯一索引 之间的关系 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/primary-key-unique-constraint-relationships-between-unique-indexes.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/primary-key-unique-constraint-relationships-between-unique-indexes.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,10 +125,11 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>1. 创建唯一约束，同时创建唯一索引，此时索引是无法删除的，在disable或者dorp唯一约束的适合同时删除掉了索引。</p>
-<div>2. 先创建索引，再创建该索引字段的唯一约束，此时索引也无法删除了。 但是再disable或者dorp唯一约束的时候，先创建的索引将继续存在生效。</p>
+<div>2. 先创建索引，再创建该索引字段的唯一约束，此时索引也无法删除了。 但是再disable或者dorp唯一约束的时候，先创建的索引将继续存在生效。
 <p>此规则同样适用于主键</p>
 <p>1. initially immediate（初始化立即执行）在每条语句执行结束时检验约束。</p>
-<p>2. initially deferred（初始化延迟执行） 直等到事务完成后（或者调用set constraint immediate语句时）才检验约束。</p></div>
+<p>2. initially deferred（初始化延迟执行） 直等到事务完成后（或者调用set constraint immediate语句时）才检验约束。</p>
+</div>
 
 
                 <hr>
@@ -141,12 +142,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/see-signs-of-alibaba-netease-jiangnan-avenue.html" data-toggle="tooltip" data-placement="top" title="看到阿里巴巴、网易的路牌 江南大道的变化">&larr; Previous Post</a>
+                        <a href="/my%20life/see-signs-of-alibaba-netease-jiangnan-avenue.html" data-toggle="tooltip" data-placement="top" title="看到阿里巴巴、网易的路牌 江南大道的变化">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/first-day-of-the-2009.html" data-toggle="tooltip" data-placement="top" title="2009年的第一天">Next Post &rarr;</a>
+                        <a href="/my%20life/first-day-of-the-2009.html" data-toggle="tooltip" data-placement="top" title="2009年的第一天">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -171,7 +172,7 @@
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -300,7 +301,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -308,13 +309,13 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

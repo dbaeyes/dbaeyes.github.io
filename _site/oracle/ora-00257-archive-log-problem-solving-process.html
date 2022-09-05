@@ -10,7 +10,7 @@
 
     <title>ORA-00257 archive log 故障解决过程 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/ora-00257-archive-log-problem-solving-process.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/ora-00257-archive-log-problem-solving-process.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -126,63 +126,63 @@
 <div>
 <p>提示归档错误，通过查找ORACLE错误代码，解释为硬盘空间不足，需要删除归档日志增加空间，但是磁盘明显还有3G的空闲空间。</p>
 <p>第一次的处理是这样的：</p>
-<p>startup mount<br />
-recover database until change 2025611<br />
+<p>startup mount<br>
+recover database until change 2025611<br>
 alter database open resetlogs</p>
 <p>--后来才知道这个是非常愚蠢的方法，虽然可以是数据库正常启动，并运行。但这根本就是牛头不对马嘴。运行不久又产生了相同的问题。</p>
 <p>后来发现oracle10g有FLASH_RECOVERY_AREA的参数，当前值为2G，也就是说只能产生2G的archive log文件，通过</p>
-<p>SQL&gt; alter system set DB_RECOVERY_FILE_DEST_SIZE=20g;<br />
-系统已更改。<br />
+<p>SQL&gt; alter system set DB_RECOVERY_FILE_DEST_SIZE=20g;<br>
+系统已更改。<br>
 SQL&gt; select * from v$recovery_file_dest;</p>
 <p>查询使用recovery_file</p>
 <p>这样就可以解决问题。</p>
 <p>网上看来提到有3种解决方法：</p>
 <p>方法一：增大闪回恢复区</p>
 <p><code>SQL&gt; show parameter db_recovery_file_dest_size</code></p>
-<p>NAME                                  TYPE         VALUE<br />
------------------------------------- ----------- ------------------------------<br />
+<p>NAME                                  TYPE         VALUE<br>
+------------------------------------ ----------- ------------------------------<br>
 db_recovery_file_dest_size            big integer 2G</p>
 <p>SQL&gt; alter SYSTEM SET db_recovery_file_dest_size=5g；</p>
 <p>System altered.</p>
 <p>方法二：删除闪回恢复区里的归档日志</p>
 <p><code>SQL&gt; show parameter db_recovery_file_dest_size;</code></p>
-<p>NAME                                  TYPE         VALUE<br />
------------------------------------- ----------- ------------------------------<br />
-db_recovery_file_dest_size            big integer 10G<br />
+<p>NAME                                  TYPE         VALUE<br>
+------------------------------------ ----------- ------------------------------<br>
+db_recovery_file_dest_size            big integer 10G<br>
 SQL&gt; select * from v$flash_recovery_area_usage;</p>
-<p>FILE_TYPE     PERCENT_SPACE_USED PERCENT_SPACE_RECLAIMABLE NUMBER_OF_FILES<br />
------------- ------------------ ------------------------- ---------------<br />
-CONTROLFILE                  .07                          0                1<br />
-ONLINELOG                   1.46                          0                3<br />
-ARCHIVELOG                 49.68                          0              126<br />
-BACKUPPIECE                    0                          0                0<br />
-IMAGECOPY                      0                          0                0<br />
+<p>FILE_TYPE     PERCENT_SPACE_USED PERCENT_SPACE_RECLAIMABLE NUMBER_OF_FILES<br>
+------------ ------------------ ------------------------- ---------------<br>
+CONTROLFILE                  .07                          0                1<br>
+ONLINELOG                   1.46                          0                3<br>
+ARCHIVELOG                 49.68                          0              126<br>
+BACKUPPIECE                    0                          0                0<br>
+IMAGECOPY                      0                          0                0<br>
 FLASHBACKLOG                   0                          0                0</p>
 <p>6 rows selected.</p>
-<p>登陆rman:<br />
-[oracle@localhost LMAIL]$ rman target / nocatalog<br />
-RMAN&gt;list archivelog all;<br />
-RMAN&gt;crosscheck archivelog all;<br />
+<p>登陆rman:<br>
+[oracle@localhost LMAIL]$ rman target / nocatalog<br>
+RMAN&gt;list archivelog all;<br>
+RMAN&gt;crosscheck archivelog all;<br>
 RMAN&gt;change archivelog until logseq=130 delete;</p>
 <p>--这个方法值得商榷，因为它把archive log file 下的文件都删除而来。</p>
-<p>use crosscheck to sync, when it finished, the status of those files would be "EXPIRED", then you can use the following commands to clean it.<br />
-"DELETE NOPROMPT EXPIRED BACKUP;<br />
+<p>use crosscheck to sync, when it finished, the status of those files would be "EXPIRED", then you can use the following commands to clean it.<br>
+"DELETE NOPROMPT EXPIRED BACKUP;<br>
 DELETE NOPROMPT EXPIRED COPY;"</p>
 <p>应该是值得推荐的，它把不存在的文件从统计信息里删除了。详细见下篇的例子</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>SQL&gt; <code>select * from v$flash_recovery_area_usage;</code></p>
-<p>FILE_TYPE     PERCENT_SPACE_USED PERCENT_SPACE_RECLAIMABLE NUMBER_OF_FILES<br />
------------- ------------------ ------------------------- ---------------<br />
-CONTROLFILE                  .07                          0                1<br />
-ONLINELOG                   1.46                          0                3<br />
-ARCHIVELOG                  1.26                          0                5<br />
-BACKUPPIECE                    0                          0                0<br />
-IMAGECOPY                      0                          0                0<br />
+<p>FILE_TYPE     PERCENT_SPACE_USED PERCENT_SPACE_RECLAIMABLE NUMBER_OF_FILES<br>
+------------ ------------------ ------------------------- ---------------<br>
+CONTROLFILE                  .07                          0                1<br>
+ONLINELOG                   1.46                          0                3<br>
+ARCHIVELOG                  1.26                          0                5<br>
+BACKUPPIECE                    0                          0                0<br>
+IMAGECOPY                      0                          0                0<br>
 FLASHBACKLOG                   0                          0                0</p>
 <p>6 rows selected.<!--more--></p>
-<p>其实解决方法有3种：<br />
-1.将归档设置到其他目录，修改alter system set log_archive_dest = 其他路径<br />
-2.转移或者删除闪回恢复区里的归档日志。<br />
+<p>其实解决方法有3种：<br>
+1.将归档设置到其他目录，修改alter system set log_archive_dest = 其他路径<br>
+2.转移或者删除闪回恢复区里的归档日志。<br>
 3.增大闪回恢复区。ALTER SYSTEM SET db_recovery_file_dest_size=3g</p>
 </div>
 
@@ -197,12 +197,12 @@ FLASHBACKLOG                   0               
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/oracle-undo.html" data-toggle="tooltip" data-placement="top" title="Oracle Undo的学习">&larr; Previous Post</a>
+                        <a href="/oracle/oracle-undo.html" data-toggle="tooltip" data-placement="top" title="Oracle Undo的学习">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/book-of-temptation.html" data-toggle="tooltip" data-placement="top" title="书的诱惑">Next Post &rarr;</a>
+                        <a href="/my%20life/book-of-temptation.html" data-toggle="tooltip" data-placement="top" title="书的诱惑">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -227,7 +227,7 @@ FLASHBACKLOG                   0               
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -356,7 +356,7 @@ FLASHBACKLOG                   0               
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -364,13 +364,13 @@ FLASHBACKLOG                   0               
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

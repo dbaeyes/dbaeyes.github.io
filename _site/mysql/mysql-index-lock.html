@@ -10,7 +10,7 @@
 
     <title>MYSQL index 锁的一点情况 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/mysql/mysql-index-lock.html">
+    <link rel="canonical" href="http://localhost:4000/mysql/mysql-index-lock.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,46 +125,46 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <h1></h1>
-<div>CREATE TABLE `actor` (<br />
-`actor_id` int(10) unsigned NOT NULL AUTO_INCREMENT,<br />
-`name` varchar(16) NOT NULL DEFAULT '',<br />
-`password` varchar(16) NOT NULL DEFAULT '',<br />
-PRIMARY KEY (`actor_id`),<br />
-KEY `name` (`name`)<br />
-) ENGINE=InnoDB  DEFAULT CHARSET=gbk;</p>
-<p>insert into actor(name,password) values('cat01','1234567');<br />
-insert into actor(name,password) values('cat02','1234567');<br />
-insert into actor(name,password) values('ddddd','1234567');<br />
-insert into actor(name,password) values('aaaaa','1234567');<br />
-insert into actor(name,password) values('zzz','1234567');<br />
+<div>CREATE TABLE `actor` (<br>
+`actor_id` int(10) unsigned NOT NULL AUTO_INCREMENT,<br>
+`name` varchar(16) NOT NULL DEFAULT '',<br>
+`password` varchar(16) NOT NULL DEFAULT '',<br>
+PRIMARY KEY (`actor_id`),<br>
+KEY `name` (`name`)<br>
+) ENGINE=InnoDB  DEFAULT CHARSET=gbk;
+<p>insert into actor(name,password) values('cat01','1234567');<br>
+insert into actor(name,password) values('cat02','1234567');<br>
+insert into actor(name,password) values('ddddd','1234567');<br>
+insert into actor(name,password) values('aaaaa','1234567');<br>
+insert into actor(name,password) values('zzz','1234567');<br>
 .....</p>
-<p>mysql&gt; select * from actor;<br />
-+----------+-------+----------+<br />
-| actor_id | name  | password |<br />
-+----------+-------+----------+<br />
-|        1 | cat01 | 1234567  |<br />
-|        2 | cat02 | 1234567  |<br />
-|        3 | ddddd | 1234567  |<br />
-|        4 | aaaaa | 1234567  |<br />
-|        5 | xfd   | 1234567  |<br />
-|        6 | cat02 | 1234567  |<br />
-|        7 | ddddd | 1234567  |<br />
-|        8 | aaaaa | 1234567  |<br />
-|        9 | xfd   | 1234567  |<br />
-|       10 | cat02 | 1234567  |<br />
-|       11 | ddddd | 1234567  |<br />
-|       12 | aaaaa | 1234567  |<br />
-|       13 | xfd   | 1234567  |<br />
-|       14 | zzz   | 1234567  |<br />
-+----------+-------+----------+<br />
+<p>mysql&gt; select * from actor;<br>
++----------+-------+----------+<br>
+| actor_id | name  | password |<br>
++----------+-------+----------+<br>
+|        1 | cat01 | 1234567  |<br>
+|        2 | cat02 | 1234567  |<br>
+|        3 | ddddd | 1234567  |<br>
+|        4 | aaaaa | 1234567  |<br>
+|        5 | xfd   | 1234567  |<br>
+|        6 | cat02 | 1234567  |<br>
+|        7 | ddddd | 1234567  |<br>
+|        8 | aaaaa | 1234567  |<br>
+|        9 | xfd   | 1234567  |<br>
+|       10 | cat02 | 1234567  |<br>
+|       11 | ddddd | 1234567  |<br>
+|       12 | aaaaa | 1234567  |<br>
+|       13 | xfd   | 1234567  |<br>
+|       14 | zzz   | 1234567  |<br>
++----------+-------+----------+<br>
 14 rows in set (0.00 sec)</p>
 <p>session1:</p>
-<p>SET AUTOCOMMIT=0;<br />
-BEGIN;<br />
-SELECT actor_id FROM actor WHERE actor_id &lt; 4<br />
+<p>SET AUTOCOMMIT=0;<br>
+BEGIN;<br>
+SELECT actor_id FROM actor WHERE actor_id &lt; 4<br>
 AND actor_id &lt;&gt; 1 FOR UPDATE;</p>
 <p>然后会把session 2的如下sql</p>
-<p>SET AUTOCOMMIT=0;<br />
+<p>SET AUTOCOMMIT=0;<br>
 BEGIN;</p>
 <p>SELECT actor_id FROM actor WHERE actor_id = 1 FOR UPDATE;  --wait</p>
 <p>SELECT actor_id FROM actor WHERE actor_id = 4 FOR UPDATE;  --wait</p>
@@ -174,23 +174,23 @@ BEGIN;</p>
 <p>delete from  actor WHERE actor_id = 5;   --good</p>
 <p>锁住的记录是 id = 1， 2， 3， 4</p>
 <p>##############</p>
-<p>另外一种情况比较极端：<br />
-当表里的数据是<br />
-mysql&gt; select * from actor;<br />
-+----------+-------+----------+<br />
-| actor_id | name  | password |<br />
-+----------+-------+----------+<br />
-|        1 | cat01 | 1234567  |<br />
-|        2 | cat02 | 1234567  |<br />
-|        3 | ddddd | 1234567  |<br />
-|        4 | aaaaa | 1234567  |<br />
-|        5 | zzz   | 1234567  |<br />
-|        6 | zzz   | 1234567  |<br />
+<p>另外一种情况比较极端：<br>
+当表里的数据是<br>
+mysql&gt; select * from actor;<br>
++----------+-------+----------+<br>
+| actor_id | name  | password |<br>
++----------+-------+----------+<br>
+|        1 | cat01 | 1234567  |<br>
+|        2 | cat02 | 1234567  |<br>
+|        3 | ddddd | 1234567  |<br>
+|        4 | aaaaa | 1234567  |<br>
+|        5 | zzz   | 1234567  |<br>
+|        6 | zzz   | 1234567  |<br>
 +----------+-------+----------+</p>
-<p>在session 1中执行<br />
-SET AUTOCOMMIT=0;<br />
-BEGIN;<br />
-SELECT * FROM actor WHERE actor_id &lt; 4<br />
+<p>在session 1中执行<br>
+SET AUTOCOMMIT=0;<br>
+BEGIN;<br>
+SELECT * FROM actor WHERE actor_id &lt; 4<br>
 AND actor_id &lt;&gt; 1 FOR UPDATE;</p>
 <p>session 2中下面sql都会wait</p>
 <p>SELECT actor_id FROM actor WHERE actor_id = 4 FOR UPDATE;</p>
@@ -198,32 +198,33 @@ AND actor_id &lt;&gt; 1 FOR UPDATE;</p>
 <p>SELECT actor_id FROM actor WHERE actor_id = 5 FOR UPDATE;</p>
 <p>ID从1-6都被锁住了</p>
 <p>Show innodb status\G</p>
-<p>mysql&gt; explain SELECT actor_id FROM actor WHERE actor_id &lt; 4<br />
--&gt; AND actor_id &lt;&gt; 1 FOR UPDATE\G<br />
-*************************** 1. row ***************************<br />
-id: 1<br />
-select_type: SIMPLE<br />
-table: actor<br />
-type: range<br />
-possible_keys: PRIMARY<br />
-key: PRIMARY<br />
-key_len: 4<br />
-ref: NULL<br />
-rows: 2<br />
-Extra: Using where; Using index<br />
+<p>mysql&gt; explain SELECT actor_id FROM actor WHERE actor_id &lt; 4<br>
+-&gt; AND actor_id &lt;&gt; 1 FOR UPDATE\G<br>
+*************************** 1. row ***************************<br>
+id: 1<br>
+select_type: SIMPLE<br>
+table: actor<br>
+type: range<br>
+possible_keys: PRIMARY<br>
+key: PRIMARY<br>
+key_len: 4<br>
+ref: NULL<br>
+rows: 2<br>
+Extra: Using where; Using index<br>
 1 row in set (0.01 sec)</p>
-<p>*************************** 1. row ***************************<br />
-id: 1<br />
-select_type: SIMPLE<br />
-table: actor<br />
-type: index                --全索引扫描<br />
-possible_keys: PRIMARY<br />
-key: PRIMARY<br />
-key_len: 4<br />
-ref: NULL<br />
-rows: 6<br />
-Extra: Using where; Using index<br />
-1 row in set (0.00 sec)</p></div>
+<p>*************************** 1. row ***************************<br>
+id: 1<br>
+select_type: SIMPLE<br>
+table: actor<br>
+type: index                --全索引扫描<br>
+possible_keys: PRIMARY<br>
+key: PRIMARY<br>
+key_len: 4<br>
+ref: NULL<br>
+rows: 6<br>
+Extra: Using where; Using index<br>
+1 row in set (0.00 sec)</p>
+</div>
 
 
                 <hr>
@@ -236,12 +237,12 @@ Extra: Using where; Using index<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/sql-page.html" data-toggle="tooltip" data-placement="top" title="sql 分页">&larr; Previous Post</a>
+                        <a href="/oracle/sql-page.html" data-toggle="tooltip" data-placement="top" title="sql 分页">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-limit-number-of-scan-lines-and-order-by-index.html" data-toggle="tooltip" data-placement="top" title="mysql limit 扫描行数 & order by 与索引关系">Next Post &rarr;</a>
+                        <a href="/mysql/mysql-limit-number-of-scan-lines-and-order-by-index.html" data-toggle="tooltip" data-placement="top" title="mysql limit 扫描行数 &amp; order by 与索引关系">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -266,7 +267,7 @@ Extra: Using where; Using index<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -395,7 +396,7 @@ Extra: Using where; Using index<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -403,13 +404,13 @@ Extra: Using where; Using index<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

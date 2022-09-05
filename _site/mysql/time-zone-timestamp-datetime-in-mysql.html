@@ -10,7 +10,7 @@
 
     <title>time_zone timestamp datetime in MySQL - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/mysql/time-zone-timestamp-datetime-in-mysql.html">
+    <link rel="canonical" href="http://localhost:4000/mysql/time-zone-timestamp-datetime-in-mysql.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -123,66 +123,66 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>MySQL上的time_zone时区设置对timestamp和datetime有什么样的影响，是否一样。</p>
-<p>先将系统时间改成美国洛杉矶时间<br />
-[cc lang='sql']<br />
+<p>先将系统时间改成美国洛杉矶时间<br>
+[cc lang='sql']<br>
 cp /usr/share/zoneinfo/America/Los_Angeles /etc/localtime</p>
-<p>$date<br />
+<p>$date<br>
 Mon Jul 14 23:47:30 PDT 2014</p>
-<p>root@(none) 11:49:44>show variables like '%time_zone%';<br />
-+------------------+--------+<br />
-| Variable_name    | Value  |<br />
-+------------------+--------+<br />
-| system_time_zone | PDT    |<br />
-| time_zone        | SYSTEM |<br />
-+------------------+--------+<br />
+<p>root@(none) 11:49:44&gt;show variables like '%time_zone%';<br>
++------------------+--------+<br>
+| Variable_name    | Value  |<br>
++------------------+--------+<br>
+| system_time_zone | PDT    |<br>
+| time_zone        | SYSTEM |<br>
++------------------+--------+<br>
 [/cc]</p>
-<p>创建一个有datetime和timestamp字段的表<br />
-[cc lang='sql'] CREATE TABLE `xf_time` (<br />
-  `id` int(11) NOT NULL DEFAULT '0',<br />
-  `gmt_c` datetime DEFAULT NULL,<br />
-  `gmt_m` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,<br />
-  PRIMARY KEY (`id`)<br />
+<p>创建一个有datetime和timestamp字段的表<br>
+[cc lang='sql'] CREATE TABLE `xf_time` (<br>
+  `id` int(11) NOT NULL DEFAULT '0',<br>
+  `gmt_c` datetime DEFAULT NULL,<br>
+  `gmt_m` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,<br>
+  PRIMARY KEY (`id`)<br>
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8</p>
-<p>root@test 11:52:54>insert into xf_time values(1,now(),now());<br />
+<p>root@test 11:52:54&gt;insert into xf_time values(1,now(),now());<br>
 Query OK, 1 row affected (0.00 sec)</p>
-<p>root@test 11:54:30>select * from xf_time;<br />
-+----+---------------------+---------------------+<br />
-| id | gmt_c               | gmt_m               |<br />
-+----+---------------------+---------------------+<br />
-|  1 | 2014-07-14 23:54:30 | 2014-07-14 23:54:30 |<br />
-+----+---------------------+---------------------+<br />
+<p>root@test 11:54:30&gt;select * from xf_time;<br>
++----+---------------------+---------------------+<br>
+| id | gmt_c               | gmt_m               |<br>
++----+---------------------+---------------------+<br>
+|  1 | 2014-07-14 23:54:30 | 2014-07-14 23:54:30 |<br>
++----+---------------------+---------------------+<br>
 1 row in set (0.00 sec)[/cc]</p>
-<p>更改MySQL的time_zone到北京时间所在东八区<br />
-[cc lang='sql']root@test 11:54:35>set time_zone = '+8:00';<br />
-Query OK, 0 rows affected (0.00 sec)<br />
-root@(none) 12:03:04>show variables like '%time_zone%';<br />
-+------------------+--------+<br />
-| Variable_name    | Value  |<br />
-+------------------+--------+<br />
-| system_time_zone | PDT    |<br />
-| time_zone        | +08:00 |<br />
-+------------------+--------+<br />
+<p>更改MySQL的time_zone到北京时间所在东八区<br>
+[cc lang='sql']root@test 11:54:35&gt;set time_zone = '+8:00';<br>
+Query OK, 0 rows affected (0.00 sec)<br>
+root@(none) 12:03:04&gt;show variables like '%time_zone%';<br>
++------------------+--------+<br>
+| Variable_name    | Value  |<br>
++------------------+--------+<br>
+| system_time_zone | PDT    |<br>
+| time_zone        | +08:00 |<br>
++------------------+--------+<br>
 2 rows in set (0.00 sec)[/cc]</p>
 <p>可以看到MySQL的time_zone已经改变，而且当前时间都已经发生变化。</p>
-<p>[cc lang='sql']root@test 12:00:58>select now();<br />
-+---------------------+<br />
-| now()               |<br />
-+---------------------+<br />
-| 2014-07-15 15:01:01 |<br />
-+---------------------+<br />
+<p>[cc lang='sql']root@test 12:00:58&gt;select now();<br>
++---------------------+<br>
+| now()               |<br>
++---------------------+<br>
+| 2014-07-15 15:01:01 |<br>
++---------------------+<br>
 1 row in set (0.00 sec)</p>
-<p>root@test 12:01:01>select * from xf_time;<br />
-+----+---------------------+---------------------+<br />
-| id | gmt_c               | gmt_m               |<br />
-+----+---------------------+---------------------+<br />
-|  1 | 2014-07-14 23:54:30 | 2014-07-15 14:54:30 |<br />
-+----+---------------------+---------------------+<br />
+<p>root@test 12:01:01&gt;select * from xf_time;<br>
++----+---------------------+---------------------+<br>
+| id | gmt_c               | gmt_m               |<br>
++----+---------------------+---------------------+<br>
+|  1 | 2014-07-14 23:54:30 | 2014-07-15 14:54:30 |<br>
++----+---------------------+---------------------+<br>
 1 row in set (0.00 sec)[/cc]</p>
-<p>datetime类型字段在time_zone发生变化后，没有变化。但timestamp类型是跟随时区发生了变化。故dateime类型跟时区无关，timestamp类型跟时区密切相关<br />
-所以说：<br />
+<p>datetime类型字段在time_zone发生变化后，没有变化。但timestamp类型是跟随时区发生了变化。故dateime类型跟时区无关，timestamp类型跟时区密切相关<br>
+所以说：<br>
 MySQL converts TIMESTAMP values from the current time zone to UTC for storage, and back from UTC to the current time zone for retrieval. (This does not occur for other types such as DATETIME.)</p>
-<p>小结：更改MySQL时区的方式有<br />
-1. 调整系统OS时区 cp /usr/share/zoneinfo/America/Los_Angeles /etc/localtime 将相应的时区文件覆盖<br />
+<p>小结：更改MySQL时区的方式有<br>
+1. 调整系统OS时区 cp /usr/share/zoneinfo/America/Los_Angeles /etc/localtime 将相应的时区文件覆盖<br>
 2. 调整MySQL的启动参数文件： 在[mysqld]下面加上  default-time-zone=timezone 比如 default-time-zone='+8:00' 。 通过登录后的set time-zone 是session级别的，不能做为全局使用，但也有其使用的场景</p>
 <p>--eof</p>
 
@@ -197,12 +197,12 @@ MySQL converts TIMESTAMP values from the current time zone to UTC for storage, a
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/world-cup-2014.html" data-toggle="tooltip" data-placement="top" title="世界杯 2014">&larr; Previous Post</a>
+                        <a href="/my%20life/world-cup-2014.html" data-toggle="tooltip" data-placement="top" title="世界杯 2014">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/thinking/time-change.html" data-toggle="tooltip" data-placement="top" title="时间 变化">Next Post &rarr;</a>
+                        <a href="/thinking/time-change.html" data-toggle="tooltip" data-placement="top" title="时间 变化">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -227,7 +227,7 @@ MySQL converts TIMESTAMP values from the current time zone to UTC for storage, a
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -356,7 +356,7 @@ MySQL converts TIMESTAMP values from the current time zone to UTC for storage, a
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -364,13 +364,13 @@ MySQL converts TIMESTAMP values from the current time zone to UTC for storage, a
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

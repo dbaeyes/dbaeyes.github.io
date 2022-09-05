@@ -10,7 +10,7 @@
 
     <title>通过bulk collect减少loop处理的开销 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/by-bulk-collect-reduce-loop-overhead.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/by-bulk-collect-reduce-loop-overhead.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -131,284 +131,289 @@
 <div>
 举几个简单的例子：</div>
 <div><span style="color: #339966;"><strong>--在select into语句中使用bulk collect</strong></span></div>
-<div>DECLARE<br />
-TYPE SalList IS TABLE OF emp.sal%TYPE;<br />
-sals SalList;<br />
-BEGIN<br />
--- Limit the number of rows to 100.<br />
-SELECT sal BULK COLLECT INTO sals FROM emp<br />
-WHERE ROWNUM &lt;= 100;<br />
--- Retrieve 10% (approximately) of the rows in the table.<br />
+<div>DECLARE<br>
+TYPE SalList IS TABLE OF emp.sal%TYPE;<br>
+sals SalList;<br>
+BEGIN<br>
+-- Limit the number of rows to 100.<br>
+SELECT sal BULK COLLECT INTO sals FROM emp<br>
+WHERE ROWNUM &lt;= 100;<br>
+-- Retrieve 10% (approximately) of the rows in the table.<br>
 SELECT sal BULK COLLECT INTO sals FROM emp SAMPLE 10;</div>
-<div>END;<br />
+<div>END;<br>
 /</div>
 <div><strong><span style="color: #339966;">--在fetch into中使用bulk collect</span></strong></div>
-<div>DECLARE<br />
-TYPE DeptRecTab IS TABLE OF dept%ROWTYPE;<br />
-dept_recs DeptRecTab;<br />
-CURSOR c1 IS<br />
-SELECT deptno, dname, loc FROM dept WHERE deptno &gt; 10;<br />
-BEGIN<br />
-OPEN c1;<br />
-FETCH c1 BULK COLLECT INTO dept_recs;<br />
-END;<br />
+<div>DECLARE<br>
+TYPE DeptRecTab IS TABLE OF dept%ROWTYPE;<br>
+dept_recs DeptRecTab;<br>
+CURSOR c1 IS<br>
+SELECT deptno, dname, loc FROM dept WHERE deptno &gt; 10;<br>
+BEGIN<br>
+OPEN c1;<br>
+FETCH c1 BULK COLLECT INTO dept_recs;<br>
+END;<br>
 /</div>
 <div><strong><span style="color: #339966;">--在returning into中使用bulk collect</span></strong></div>
-<div>CREATE TABLE emp2 AS SELECT * FROM employees;<br />
-DECLARE<br />
-TYPE NumList IS TABLE OF employees.employee_id%TYPE;<br />
-enums NumList;<br />
-TYPE NameList IS TABLE OF employees.last_name%TYPE;<br />
-names NameList;<br />
-BEGIN<br />
-DELETE FROM emp2 WHERE department_id = 30<br />
-RETURNING employee_id, last_name BULK COLLECT INTO enums, names;<br />
-dbms_output.put_line('Deleted ' || SQL%ROWCOUNT || ' rows:');<br />
-FOR i IN enums.FIRST .. enums.LAST<br />
-LOOP<br />
-dbms_output.put_line('Employee #' || enums(i) || ': ' || names(i));<br />
-END LOOP;<br />
-END;<br />
-/<br />
+<div>CREATE TABLE emp2 AS SELECT * FROM employees;<br>
+DECLARE<br>
+TYPE NumList IS TABLE OF employees.employee_id%TYPE;<br>
+enums NumList;<br>
+TYPE NameList IS TABLE OF employees.last_name%TYPE;<br>
+names NameList;<br>
+BEGIN<br>
+DELETE FROM emp2 WHERE department_id = 30<br>
+RETURNING employee_id, last_name BULK COLLECT INTO enums, names;<br>
+dbms_output.put_line('Deleted ' || SQL%ROWCOUNT || ' rows:');<br>
+FOR i IN enums.FIRST .. enums.LAST<br>
+LOOP<br>
+dbms_output.put_line('Employee #' || enums(i) || ': ' || names(i));<br>
+END LOOP;<br>
+END;<br>
+/<br>
 DROP TABLE emp2;</div>
 <div></div>
 <div></div>
 <h3>oracle批量绑定forall bulk collect</h3>
-<div>oracle批量绑定forall bulk collect <a href="http://otn.oracle.com/oramag/oracle...tech_plsql.html" target="_blank">http://otn.oracle.com/oramag/oracle...tech_plsql.html</a></div>
-<div>                                                           <a href="http://otn.oracle.com/docs/products...colls.htm#23723" target="_blank">http://otn.oracle.com/docs/products...colls.htm#23723</a></div>
-<div>关于Bulk Binds中LIMIT的使用，请看TOM的解说<br />
-<a href="http://asktom.oracle.com/pls/ask/f?...5918938803188,Y" target="_blank">http://asktom.oracle.com/pls/ask/f?...5918938803188,Y</a></div>
-<div>Oracle10g中对于forall的增强<br />
-<a href="http://www.itpub.net/showthread.php?s=&amp;threadid=184794" target="_blank">http://www.itpub.net/showthread.php?s=&amp;threadid=184794</a></div>
+<div>oracle批量绑定forall bulk collect <a href="http://otn.oracle.com/oramag/oracle...tech_plsql.html" target="_blank">http://otn.oracle.com/oramag/oracle...tech_plsql.html</a>
+</div>
+<div>                                                           <a href="http://otn.oracle.com/docs/products...colls.htm#23723" target="_blank">http://otn.oracle.com/docs/products...colls.htm#23723</a>
+</div>
+<div>关于Bulk Binds中LIMIT的使用，请看TOM的解说<br>
+<a href="http://asktom.oracle.com/pls/ask/f?...5918938803188,Y" target="_blank">http://asktom.oracle.com/pls/ask/f?...5918938803188,Y</a>
+</div>
+<div>Oracle10g中对于forall的增强<br>
+<a href="http://www.itpub.net/showthread.php?s=&amp;threadid=184794" target="_blank">http://www.itpub.net/showthread.php?s=&amp;threadid=184794</a>
+</div>
 <div></div>
 <div>批量绑定（Bulk binds）可以通过减少在PL/SQL和SQL引擎之间的上下文切换(context switches )提高了性能.</div>
 <div>
-批量绑定（Bulk binds）包括：<br />
-(i) Input collections, use the FORALL statement，用来改善DML（INSERT、UPDATE和DELETE) 操作的性能<br />
+批量绑定（Bulk binds）包括：<br>
+(i) Input collections, use the FORALL statement，用来改善DML（INSERT、UPDATE和DELETE) 操作的性能<br>
 (ii) Output collections, use BULK COLLECT clause，一般用来提高查询（SELECT）的性能</div>
 <div>
-10g开始forall语句可以使用三种方式：<br />
-i in low..up<br />
-i in indices of collection  取得集合元素下标的值<br />
-i in values of collection   取得集合元素的值<br />
+10g开始forall语句可以使用三种方式：<br>
+i in low..up<br>
+i in indices of collection  取得集合元素下标的值<br>
+i in values of collection   取得集合元素的值<br>
 forall语句还可以使用部分集合元素</div>
 <div>       sql%bulk_rowcount(i)表示forall语句第i元素所作用的行数</div>
-<div>CREATE TABLE parts1 (pnum INTEGER, pname VARCHAR2(15));<br />
-CREATE TABLE parts2 (pnum INTEGER, pname VARCHAR2(15));<br />
-CREATE TABLE parts3 (pnum INTEGER, pname VARCHAR2(15));<br />
+<div>CREATE TABLE parts1 (pnum INTEGER, pname VARCHAR2(15));<br>
+CREATE TABLE parts2 (pnum INTEGER, pname VARCHAR2(15));<br>
+CREATE TABLE parts3 (pnum INTEGER, pname VARCHAR2(15));<br>
 CREATE TABLE parts4 (pnum INTEGER, pname VARCHAR2(15));</div>
 <div>set   serveroutput   on   --把屏幕显示开关置上</div>
-<div>DECLARE<br />
-TYPE NumTab IS TABLE OF parts1.pnum%TYPE INDEX BY PLS_INTEGER;<br />
-TYPE NameTab IS TABLE OF parts1.pname%TYPE INDEX BY PLS_INTEGER;<br />
-pnums NumTab;<br />
-pnames NameTab;<br />
-iterations CONSTANT PLS_INTEGER := 50000;<br />
-t1 INTEGER; t2 INTEGER; t3 INTEGER; t4 INTEGER; t5 INTEGER;<br />
-stmt_str varchar2(255);table_name varchar2(255);<br />
-BEGIN<br />
-FOR j IN 1..iterations LOOP -- load index-by tables<br />
-pnums(j) := j;<br />
-pnames(j) := 'Part No. ' || TO_CHAR(j);<br />
+<div>DECLARE<br>
+TYPE NumTab IS TABLE OF parts1.pnum%TYPE INDEX BY PLS_INTEGER;<br>
+TYPE NameTab IS TABLE OF parts1.pname%TYPE INDEX BY PLS_INTEGER;<br>
+pnums NumTab;<br>
+pnames NameTab;<br>
+iterations CONSTANT PLS_INTEGER := 50000;<br>
+t1 INTEGER; t2 INTEGER; t3 INTEGER; t4 INTEGER; t5 INTEGER;<br>
+stmt_str varchar2(255);table_name varchar2(255);<br>
+BEGIN<br>
+FOR j IN 1..iterations LOOP -- load index-by tables<br>
+pnums(j) := j;<br>
+pnames(j) := 'Part No. ' || TO_CHAR(j);<br>
 END LOOP;</div>
-<div>     t1 := dbms_utility.get_time;<br />
-FOR i IN 1..iterations LOOP -- use FOR loop<br />
-INSERT INTO parts1 VALUES (pnums(i), pnames(i));<br />
+<div>     t1 := dbms_utility.get_time;<br>
+FOR i IN 1..iterations LOOP -- use FOR loop<br>
+INSERT INTO parts1 VALUES (pnums(i), pnames(i));<br>
 END LOOP;</div>
-<div>     t2 := dbms_utility.get_time;<br />
-FORALL i IN 1..iterations -- use FORALL statement<br />
-INSERT INTO parts2 VALUES (pnums(i), pnames(i));</p>
-<p>t3 := dbms_utility.get_time;<br />
-table_name:='parts3';<br />
-stmt_str := 'INSERT INTO ' || table_name || ' values (:num, :pname)';<br />
-FOR i IN 1..iterations LOOP -- use FORALL statement<br />
-EXECUTE IMMEDIATE stmt_str USING pnums(i), pnames(i);<br />
+<div>     t2 := dbms_utility.get_time;<br>
+FORALL i IN 1..iterations -- use FORALL statement<br>
+INSERT INTO parts2 VALUES (pnums(i), pnames(i));
+<p>t3 := dbms_utility.get_time;<br>
+table_name:='parts3';<br>
+stmt_str := 'INSERT INTO ' || table_name || ' values (:num, :pname)';<br>
+FOR i IN 1..iterations LOOP -- use FORALL statement<br>
+EXECUTE IMMEDIATE stmt_str USING pnums(i), pnames(i);<br>
 END LOOP;</p>
-<p>t4 := dbms_utility.get_time;<br />
-table_name:='parts4';<br />
-stmt_str := 'INSERT INTO ' || table_name || ' values (:num, :pname)';<br />
-FORALL i IN 1..iterations-- use FORALL statement<br />
-EXECUTE IMMEDIATE stmt_str USING pnums(i), pnames(i);</p></div>
-<div>     t5 := dbms_utility.get_time;<br />
-dbms_output.put_line('Execution Time (secs)');<br />
-dbms_output.put_line('---------------------');<br />
-dbms_output.put_line('FOR loop: ' || TO_CHAR((t2 - t1)/100));<br />
-dbms_output.put_line('FORALL: ' || TO_CHAR((t3 - t2)/100));<br />
-dbms_output.put_line('FOR loop: ' || TO_CHAR((t4 - t3)/100));<br />
+<p>t4 := dbms_utility.get_time;<br>
+table_name:='parts4';<br>
+stmt_str := 'INSERT INTO ' || table_name || ' values (:num, :pname)';<br>
+FORALL i IN 1..iterations-- use FORALL statement<br>
+EXECUTE IMMEDIATE stmt_str USING pnums(i), pnames(i);</p>
+</div>
+<div>     t5 := dbms_utility.get_time;<br>
+dbms_output.put_line('Execution Time (secs)');<br>
+dbms_output.put_line('---------------------');<br>
+dbms_output.put_line('FOR loop: ' || TO_CHAR((t2 - t1)/100));<br>
+dbms_output.put_line('FORALL: ' || TO_CHAR((t3 - t2)/100));<br>
+dbms_output.put_line('FOR loop: ' || TO_CHAR((t4 - t3)/100));<br>
 dbms_output.put_line('FORALL: ' || TO_CHAR((t5 - t4)/100));</div>
-<div>     COMMIT;<br />
-END;<br />
+<div>     COMMIT;<br>
+END;<br>
 /</div>
 <div>
-DROP TABLE parts1;<br />
-DROP TABLE parts2;<br />
+DROP TABLE parts1;<br>
+DROP TABLE parts2;<br>
 DROP TABLE parts3;</div>
 <div>DROP TABLE parts4;</div>
-<div>/*<br />
-bulk collect 语句：<br />
+<div>/*<br>
+bulk collect 语句：<br>
 用于取得批量数据，只适用于select into ,fetch into 及DML语句的返回子句</div>
-<div>     DECLARE<br />
-TYPE type_emp IS TABLE OF scott.emp%ROWTYPE INDEX BY BINARY_INTEGER;<br />
+<div>     DECLARE<br>
+TYPE type_emp IS TABLE OF scott.emp%ROWTYPE INDEX BY BINARY_INTEGER;<br>
 tab_emp type_emp;</div>
-<div>          TYPE type_ename IS TABLE OF scott.emp.ename%TYPE INDEX BY BINARY_INTEGER;<br />
-tab_ename type_ename;<br />
-CURSOR c IS<br />
-SELECT *<br />
+<div>          TYPE type_ename IS TABLE OF scott.emp.ename%TYPE INDEX BY BINARY_INTEGER;<br>
+tab_ename type_ename;<br>
+CURSOR c IS<br>
+SELECT *<br>
 FROM scott.emp;</div>
-<div>     BEGIN<br />
-SELECT * BULK COLLECT<br />
-INTO tab_emp<br />
+<div>     BEGIN<br>
+SELECT * BULK COLLECT<br>
+INTO tab_emp<br>
 FROM scott.emp;</div>
-<div>          FOR i IN 1 .. tab_emp.COUNT LOOP<br />
-dbms_output.put_line(tab_emp(i).ename);<br />
+<div>          FOR i IN 1 .. tab_emp.COUNT LOOP<br>
+dbms_output.put_line(tab_emp(i).ename);<br>
 END LOOP;</div>
-<div>          dbms_output.new_line;<br />
-DELETE scott.emp RETURNING ename BULK COLLECT INTO tab_ename;<br />
-FOR i IN 1 .. tab_emp.COUNT LOOP<br />
-dbms_output.put_line(tab_emp(i).ename);<br />
+<div>          dbms_output.new_line;<br>
+DELETE scott.emp RETURNING ename BULK COLLECT INTO tab_ename;<br>
+FOR i IN 1 .. tab_emp.COUNT LOOP<br>
+dbms_output.put_line(tab_emp(i).ename);<br>
 END LOOP;</div>
 <div>          ROLLBACK;</div>
 <div></div>
-<div>          OPEN c;<br />
-FETCH c BULK COLLECT<br />
-INTO tab_emp;<br />
-dbms_output.new_line;<br />
-FOR i IN 1 .. tab_emp.COUNT LOOP<br />
-dbms_output.put_line(tab_emp(i).sal);<br />
+<div>          OPEN c;<br>
+FETCH c BULK COLLECT<br>
+INTO tab_emp;<br>
+dbms_output.new_line;<br>
+FOR i IN 1 .. tab_emp.COUNT LOOP<br>
+dbms_output.put_line(tab_emp(i).sal);<br>
 END LOOP;</div>
-<div>          END;<br />
+<div>          END;<br>
 */</div>
 <div>
 <h3>使用Bulk Collect提高Oracle查询效率</h3>
 <p>Oracle8i中首次引入了Bulk Collect特性，该特性可以让我们在PL/SQL中能使用批查询，批查询在某些情况下能显著提高查询效率。现在，我们对该特性进行一些简单的测试和分析。</p>
-<p><strong>1． 首先，我们创建一个表，并插入100000条记录<br />
+<p><strong>1． 首先，我们创建一个表，并插入100000条记录<br>
 </strong>在SQL/Plus中执行下列脚本：</p>
-<p>drop table empl_tbl<br />
-/<br />
-create table empl_tbl(last_name varchar2(20),<br />
-first_name varchar2(10),<br />
-salary number(10))<br />
+<p>drop table empl_tbl<br>
+/<br>
+create table empl_tbl(last_name varchar2(20),<br>
+first_name varchar2(10),<br>
+salary number(10))<br>
 /</p>
-<p>begin<br />
-for i in 3000..102999 loop<br />
-insert into empl_tbl(last_name,first_name,salary) values('carl'||(i-3000),'wu'||(103000-i),i);<br />
-end loop;<br />
-end;<br />
-/<br />
-commit<br />
-/<br />
-select count(*) from empl_tbl;<br />
+<p>begin<br>
+for i in 3000..102999 loop<br>
+insert into empl_tbl(last_name,first_name,salary) values('carl'||(i-3000),'wu'||(103000-i),i);<br>
+end loop;<br>
+end;<br>
+/<br>
+commit<br>
+/<br>
+select count(*) from empl_tbl;<br>
 /</p>
 <p><strong>2． 使用三种方法计算表中某一字段含有多少个不重复值</strong></p>
 <p>2.1 使用常规的Distinct来实现</p>
 <p>SQL&gt; select count(distinct last_name) "Distinct Last Name" from empl_tbl;</p>
-<p>Distinct Last Name<br />
-------------------<br />
+<p>Distinct Last Name<br>
+------------------<br>
 100000</p>
 <p>Executed in 0.36 seconds</p>
 <p>我们可以看到，常规方法需要0.36秒查出该表中有100000个不重复的Last_name值。</p>
 <p>2.2 使用游标来实现</p>
 <p>我们执行下面语句来统计Last_name字段的不重复值个数：</p>
-<p>declare<br />
-all_rows number(10);<br />
-temp_last_name empl_tbl.last_name%type;<br />
-begin<br />
-all_rows:=0;<br />
-temp_last_name:=' ';<br />
+<p>declare<br>
+all_rows number(10);<br>
+temp_last_name empl_tbl.last_name%type;<br>
+begin<br>
+all_rows:=0;<br>
+temp_last_name:=' ';<br>
 <strong>for cur in (select last_name from empl_tbl order by last_name) loop</strong></p>
-<p>if cur.last_name!=temp_last_name then<br />
-all_rows:=all_rows+1;<br />
-end if;<br />
+<p>if cur.last_name!=temp_last_name then<br>
+all_rows:=all_rows+1;<br>
+end if;<br>
 temp_last_name:=cur.last_name;</p>
-<p>end loop;<br />
-dbms_output.put_line('all_rows are '||all_rows);<br />
+<p>end loop;<br>
+dbms_output.put_line('all_rows are '||all_rows);<br>
 end;</p>
 <p>请注意上面代码中的黑体部分使用了一个For Loop游标，为了提高程序可读性，我们没有显示定义游标变量。</p>
-<p>执行结果：<br />
-all_rows are 100000<br />
-PL/SQL procedure successfully completed<br />
+<p>执行结果：<br>
+all_rows are 100000<br>
+PL/SQL procedure successfully completed<br>
 Executed in 1.402 seconds</p>
 <p>游标需要1.4秒才能查出该表中有100000个不重复的Last_name值，所耗时间是Distinct查询的3倍多。</p>
 <p>2.3 使用Bulk Collect批查询来实现</p>
-<p>示例代码如下：<br />
-declare<br />
-all_rows number(10);<br />
---首先，定义一个Index-by表数据类型<br />
-type last_name_tab is table of empl_tbl.last_name%type index by binary_integer;<br />
-last_name_arr last_name_tab;<br />
---定义一个Index-by表集合变量<br />
+<p>示例代码如下：<br>
+declare<br>
+all_rows number(10);<br>
+--首先，定义一个Index-by表数据类型<br>
+type last_name_tab is table of empl_tbl.last_name%type index by binary_integer;<br>
+last_name_arr last_name_tab;<br>
+--定义一个Index-by表集合变量<br>
 temp_last_name empl_tbl.last_name%type;</p>
-<p>begin<br />
-all_rows:=0;<br />
-temp_last_name:=' ';<br />
---使用Bulk Collect批查询来充填集合变量<br />
+<p>begin<br>
+all_rows:=0;<br>
+temp_last_name:=' ';<br>
+--使用Bulk Collect批查询来充填集合变量<br>
 select last_name bulk collect into last_name_arr from empl_tbl;</p>
-<p>for i in 1..last_name_arr.count loop<br />
-if temp_last_name!=last_name_arr(i) then<br />
-all_rows:=all_rows+1;<br />
-end if;<br />
-temp_last_name:=last_name_arr(i);<br />
-end loop;<br />
-dbms_output.put_line('all_rows are '||all_rows);<br />
+<p>for i in 1..last_name_arr.count loop<br>
+if temp_last_name!=last_name_arr(i) then<br>
+all_rows:=all_rows+1;<br>
+end if;<br>
+temp_last_name:=last_name_arr(i);<br>
+end loop;<br>
+dbms_output.put_line('all_rows are '||all_rows);<br>
 end;</p>
 <p>请注意上面代码中，我们首先定义了一个Index-by表数据类型last_name_tab，然后定义了一个该集合数据类型的变量last_name_arr，最后我们使用Bulk Collect批查询来充填last_name_arr，请注意它的使用语法。</p>
-<p>执行结果：<br />
-all_rows are 100000<br />
-PL/SQL procedure successfully completed<br />
-Executed in 0.28 seconds<br />
+<p>执行结果：<br>
+all_rows are 100000<br>
+PL/SQL procedure successfully completed<br>
+Executed in 0.28 seconds<br>
 从上面执行结果，我们可以看到，Bulk Collect批查询只需要0.28秒就能查出该表中有100000个不重复的Last_name值，所耗时间只有游标查询的1/5，同时它比Distinct常规查询的速度也要快。</p>
-<p><strong>3． 测试结果分析<br />
+<p><strong>3． 测试结果分析<br>
 </strong>为 什么会出现上面的结果呢？我们可以使用Oracle的SQL_Trace来分析一下结果。在SQL命令行中，使用alter session set sql_trace=true语句打开Oracle的Trace，然后在命令行中执行上面三种查询并使用TKPROF工具生成Trace报告。</p>
-<p>3.1 常规Distinct查询结果分 析********************************************************************************select count(distinct last_name)<br />
-from<br />
-empl_tbl<br />
-call     count       cpu    elapsed       disk      query    current        rows<br />
-------- ------  -------- ---------- ---------- ---------- ----------  ----------<br />
-Parse        1      0.00       0.00          0          0          0           0<br />
-Execute      1      0.00       0.00          0          0          0           0<br />
-Fetch        1      0.28       0.32        198        425          4           1<br />
-------- ------  -------- ---------- ---------- ---------- ----------  ----------<br />
+<p>3.1 常规Distinct查询结果分 析********************************************************************************select count(distinct last_name)<br>
+from<br>
+empl_tbl<br>
+call     count       cpu    elapsed       disk      query    current        rows<br>
+------- ------  -------- ---------- ---------- ---------- ----------  ----------<br>
+Parse        1      0.00       0.00          0          0          0           0<br>
+Execute      1      0.00       0.00          0          0          0           0<br>
+Fetch        1      0.28       0.32        198        425          4           1<br>
+------- ------  -------- ---------- ---------- ---------- ----------  ----------<br>
 total        3      0.28       0.32        198        425          4           1</p>
-<p>Misses in library cache during parse: 1<br />
-Optimizer goal: CHOOSE<br />
+<p>Misses in library cache during parse: 1<br>
+Optimizer goal: CHOOSE<br>
 Parsing user id: 62</p>
-<p>Rows     Row Source Operation<br />
--------  ---------------------------------------------------<br />
-1  SORT GROUP BY<br />
+<p>Rows     Row Source Operation<br>
+-------  ---------------------------------------------------<br>
+1  SORT GROUP BY<br>
 100000   TABLE ACCESS FULL EMPL_TBL</p>
-<p>********************************************************************************<br />
+<p>********************************************************************************<br>
 上 述查询首先对empl_tbl进行全表扫描，然后分组排序得出结果。SQL解析、执行的时间都可忽略不计，主要时间花在读取数据上，因为当前SQL只是一 个查询，没有任何增、删改操作。在数据读取阶段，需要从磁盘读取198个Oracle数据块，一致性读取（query，consistent gets）数据块425块。因为磁盘物理读是非常耗时的，所以该查询执行起来不是特别快。</p>
-<p>3.2 游标查询效率分析********************************************************************************<br />
-SELECT LAST_NAME<br />
-FROM<br />
-EMPL_TBL ORDER BY LAST_NAME<br />
-call     count       cpu    elapsed       disk      query    current        rows<br />
-------- ------  -------- ---------- ---------- ---------- ----------  ----------<br />
-Parse        0      0.00       0.00          0          0          0           0<br />
-Execute      1      0.00       0.00          0          0          0           0<br />
-Fetch   100001      0.71       0.62        198        425          4      100000<br />
-------- ------  -------- ---------- ---------- ---------- ----------  ----------<br />
+<p>3.2 游标查询效率分析********************************************************************************<br>
+SELECT LAST_NAME<br>
+FROM<br>
+EMPL_TBL ORDER BY LAST_NAME<br>
+call     count       cpu    elapsed       disk      query    current        rows<br>
+------- ------  -------- ---------- ---------- ---------- ----------  ----------<br>
+Parse        0      0.00       0.00          0          0          0           0<br>
+Execute      1      0.00       0.00          0          0          0           0<br>
+Fetch   100001      0.71       0.62        198        425          4      100000<br>
+------- ------  -------- ---------- ---------- ---------- ----------  ----------<br>
 total   100002      0.71       0.62        198        425          4      100000</p>
-<p>Misses in library cache during parse: 0<br />
-Optimizer goal: CHOOSE<br />
+<p>Misses in library cache during parse: 0<br>
+Optimizer goal: CHOOSE<br>
 Parsing user id: 62     (recursive depth: 1)******************************************************************************** 该方法的主要耗时也是在数据读取阶段，虽然磁盘读取数据块和一致性读取数据块的数目同Distinct SQL查询相等，但是，因为该方法中的游标要循环100001次，所以上面的SQL的读取会发生100001次，总共读出了100000行数据，这就是为 什么使用游标需要1.4秒的原因。下面我们看看使用Bulk Collect会发生什么？</p>
-<p>3.3 Bulk Collect的查询效率分析********************************************************************************<br />
-SELECT LAST_NAME<br />
-FROM<br />
-EMPL_TBL<br />
-call     count       cpu    elapsed       disk      query    current        rows<br />
-------- ------  -------- ---------- ---------- ---------- ----------  ----------<br />
-Parse        0      0.00       0.00          0          0          0           0<br />
-Execute      1      0.00       0.00          0          0          0           0<br />
-Fetch        1      0.08       0.07          0        425          0      100000<br />
-------- ------  -------- ---------- ---------- ---------- ----------  ----------<br />
+<p>3.3 Bulk Collect的查询效率分析********************************************************************************<br>
+SELECT LAST_NAME<br>
+FROM<br>
+EMPL_TBL<br>
+call     count       cpu    elapsed       disk      query    current        rows<br>
+------- ------  -------- ---------- ---------- ---------- ----------  ----------<br>
+Parse        0      0.00       0.00          0          0          0           0<br>
+Execute      1      0.00       0.00          0          0          0           0<br>
+Fetch        1      0.08       0.07          0        425          0      100000<br>
+------- ------  -------- ---------- ---------- ---------- ----------  ----------<br>
 total        2      0.08       0.07          0        425          0      100000</p>
-<p>Misses in library cache during parse: 0<br />
-Optimizer goal: CHOOSE<br />
-Parsing user id: 62     (recursive depth: 1)<br />
-********************************************************************************<br />
+<p>Misses in library cache during parse: 0<br>
+Optimizer goal: CHOOSE<br>
+Parsing user id: 62     (recursive depth: 1)<br>
+********************************************************************************<br>
 虽然这种方法也要读取100000行数据，但是读取操作只发生了1次，并且Bulk Collect语句将所需数据一次性读入内存，所以该方法没有从磁盘读取数据块，所以这种方法比上述两种方法都具有优势，所以执行效率最高。</p>
-<p><strong>4． 结论<br />
+<p><strong>4． 结论<br>
 </strong>通过上面的测试和分析，我们可以看到Bulk Collect批查询在某种程度上可以提高查询效率，它首先将所需数据读入内存，然后再统计分析，这样就可以提高查询效率。但是，如果Oracle数据库 的内存较小，Shared Pool Size不足以保存Bulk Collect批查询结果，那么该方法需要将Bulk Collect的集合结果保存在磁盘上，在这种情况下，Bulk Collect方法的效率反而不如其他两种方法，有兴趣的读者可以进一步测试。</p>
 <p>另外，除了Bulk Collect批查询外，我们还可以使用FORALL语句来实现批插入、删除和更新，这在大批量数据操作时可以显著提高执行效率。</p>
 </div>
@@ -425,12 +430,12 @@ Parsing user id: 62     (recursive depth: 1)<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/thinking/my-2010.html" data-toggle="tooltip" data-placement="top" title="我的2010">&larr; Previous Post</a>
+                        <a href="/thinking/my-2010.html" data-toggle="tooltip" data-placement="top" title="我的2010">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/code/learning-notes-for-perl-zt.html" data-toggle="tooltip" data-placement="top" title="perl学习笔记 --zt">Next Post &rarr;</a>
+                        <a href="/code/learning-notes-for-perl-zt.html" data-toggle="tooltip" data-placement="top" title="perl学习笔记 --zt">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -455,7 +460,7 @@ Parsing user id: 62     (recursive depth: 1)<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -584,7 +589,7 @@ Parsing user id: 62     (recursive depth: 1)<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -592,13 +597,13 @@ Parsing user id: 62     (recursive depth: 1)<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

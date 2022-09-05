@@ -10,7 +10,7 @@
 
     <title>使用物化视图刷表 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/using-materialized-views-brush-table.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/using-materialized-views-brush-table.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -128,50 +128,50 @@
 <div>
 <p>原始数据表</p>
 <p>create table mv_test(i number);</p>
-<p>declare<br />
-i integer;<br />
-begin<br />
-for i in 1 .. 10000 loop<br />
-insert into mv_test values(i);<br />
-end loop;<br />
-commit;<br />
+<p>declare<br>
+i integer;<br>
+begin<br>
+for i in 1 .. 10000 loop<br>
+insert into mv_test values(i);<br>
+end loop;<br>
+commit;<br>
 end;</p>
 <p>1. 建表</p>
 <p>create table mv_test_2(i number); --不要使用create table.. as .. 会丢失默认值</p>
 <p>2. 建物化视图日志</p>
 <p>如果需要进行快速刷新，则需要建立物化视图日志。物化视图日志根据不同物化视图的快速刷新的需要，可以建立为ROWID或PRIMARY KEY类型的。还可以选择是否包括SEQUENCE、INCLUDING NEW VALUES以及指定列的列表。</p>
-<p>所以呢，在原来的表上需要一个主键<br />
-alter table mv_test<br />
+<p>所以呢，在原来的表上需要一个主键<br>
+alter table mv_test<br>
 add constraint pk_mv_test_i primary key (i)using index tablespace users;</p>
 <p>CREATE MATERIALIZED VIEW LOG ON mv_test;</p>
-<p>3. 创建物化视图<br />
-CREATE MATERIALIZED VIEW mv_test_2<br />
-ON PREBUILT TABLE<br />
-REFRESH FAST ON DEMAND<br />
-AS<br />
+<p>3. 创建物化视图<br>
+CREATE MATERIALIZED VIEW mv_test_2<br>
+ON PREBUILT TABLE<br>
+REFRESH FAST ON DEMAND<br>
+AS<br>
 SELECT * FROM mv_test;</p>
 <p>4. 全刷</p>
 <p>EXEC DBMS_MVIEW.REFRESH('mv_test_2', 'COMPLETE');5. 增量快刷</p>
 <p>EXEC DBMS_MVIEW.REFRESH('mv_test_2','FAST');</p>
 <p>**. 当然一般的增量快刷是放在数据库job或者crontab中滴</p>
-<p>CREATE OR REPLACE PROCEDURE SP_REFRESH_MV AS<br />
-BEGIN<br />
-DBMS_MVIEW.REFRESH('MV_TEST_2','FAST');<br />
-END;<br />
+<p>CREATE OR REPLACE PROCEDURE SP_REFRESH_MV AS<br>
+BEGIN<br>
+DBMS_MVIEW.REFRESH('MV_TEST_2','FAST');<br>
+END;<br>
 /</p>
 <p>建jobs，5分钟刷新一次</p>
-<p>variable jobno number;<br />
-variable instno number;<br />
-begin<br />
-select instance_number into :instno from v$instance;<br />
-dbms_job.submit(:jobno, 'SP_REFRESH_MV;', sysdate, 'sysdate+5/1440', TRUE, :instno);<br />
-commit;<br />
-end;<br />
+<p>variable jobno number;<br>
+variable instno number;<br>
+begin<br>
+select instance_number into :instno from v$instance;<br>
+dbms_job.submit(:jobno, 'SP_REFRESH_MV;', sysdate, 'sysdate+5/1440', TRUE, :instno);<br>
+commit;<br>
+end;<br>
 /</p>
-<p>接下来就是建索引等等的操作，就可以将新的表mv_test_2替换mv_test，并将相应的权限还原。<br />
+<p>接下来就是建索引等等的操作，就可以将新的表mv_test_2替换mv_test，并将相应的权限还原。<br>
 完成之后把job、存储过程删除</p>
 <p>记得分析表！！！</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>以前滴关于物化视图的文章</p>
 <p><a href="http://hi.baidu.com/dbaeyes/blog/item/9137e70a9535fe1d95ca6be6.html">http://hi.baidu.com/dbaeyes/blog/item/9137e70a9535fe1d95ca6be6.html</a></p>
 <p><a href="http://hi.baidu.com/dbaeyes/blog/item/47ded144f6f58580b2b7dcac.html">http://hi.baidu.com/dbaeyes/blog/item/47ded144f6f58580b2b7dcac.html</a></p>
@@ -194,12 +194,12 @@ end;<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/os/etchosts-file-under-linux-operating-system-configuration-method-zt.html" data-toggle="tooltip" data-placement="top" title="Linux操作系统下/etc/hosts文件配置方法 (zt)">&larr; Previous Post</a>
+                        <a href="/os/etchosts-file-under-linux-operating-system-configuration-method-zt.html" data-toggle="tooltip" data-placement="top" title="Linux操作系统下/etc/hosts文件配置方法 (zt)">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/statistical-information-management.html" data-toggle="tooltip" data-placement="top" title="统计信息的管理">Next Post &rarr;</a>
+                        <a href="/oracle/statistical-information-management.html" data-toggle="tooltip" data-placement="top" title="统计信息的管理">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -224,7 +224,7 @@ end;<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -353,7 +353,7 @@ end;<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -361,13 +361,13 @@ end;<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

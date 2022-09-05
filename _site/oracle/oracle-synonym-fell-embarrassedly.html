@@ -10,7 +10,7 @@
 
     <title>Oracle Synonym --- fell embarrassedly -_-!! - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/oracle-synonym-fell-embarrassedly.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/oracle-synonym-fell-embarrassedly.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -127,25 +127,25 @@
 <p>This is what I found in the Web.</p>
 <p>---------------------------------------------------------------------------------------------------------</p>
 <div>
-<p>问题描述：<br />
-有两个oralce数据库<br />
-SID分别为 A B<br />
-A中a用户下含有表objects<br />
-B中含有b用户<br />
-使在B中用b用户登录后执行<br />
-select * from objects<br />
+<p>问题描述：<br>
+有两个oralce数据库<br>
+SID分别为 A B<br>
+A中a用户下含有表objects<br>
+B中含有b用户<br>
+使在B中用b用户登录后执行<br>
+select * from objects<br>
 能显示出A中a.objects的全部内容</p>
-<p>问题解答：<br />
-用b用户登录到B中，执行：<br />
-create public synonym objects for a.objects@A<br />
+<p>问题解答：<br>
+用b用户登录到B中，执行：<br>
+create public synonym objects for a.objects@A<br>
 此时执行select * from objects 就能显示出a.objects的全部内容</p>
-<p>需要注意的一点：<br />
+<p>需要注意的一点：<br>
 B中不能含有table b.objects否则语句可以执行，但是执行select操作时显示的仍然为b.objects的内容，需要先把b.objects删除掉，重新建立synonym即可。</p>
 <p>-------------------------------------------------------------------------------------------------------------</p>
-<p>A synonym is an alias for a schema object. Synonyms can provide a level of ecurity by masking the name and owner of an object and by providing location transparency for remote objects of a distributed database. Also, they are convenient to use and reduce the complexity of SQL statements for database users.<br />
-Synonyms allow underlying objects to be renamed or moved, where only the synonym needs to be redefined and applications based on the synonym continue to function without modification.<br />
-You can create both public and private synonyms. A public synonym is owned by the special user group named PUBLIC and is accessible to every user in a database.<br />
-A private synonym is contained in the schema of a specific user and available only<br />
+<p>A synonym is an alias for a schema object. Synonyms can provide a level of ecurity by masking the name and owner of an object and by providing location transparency for remote objects of a distributed database. Also, they are convenient to use and reduce the complexity of SQL statements for database users.<br>
+Synonyms allow underlying objects to be renamed or moved, where only the synonym needs to be redefined and applications based on the synonym continue to function without modification.<br>
+You can create both public and private synonyms. A public synonym is owned by the special user group named PUBLIC and is accessible to every user in a database.<br>
+A private synonym is contained in the schema of a specific user and available only<br>
 to the user and the user’s grantees.</p>
 </div>
 </div>
@@ -161,12 +161,12 @@ to the user and the user’s grantees.</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/start-the-oracle-10g-student-guide-i.html" data-toggle="tooltip" data-placement="top" title="Start the Oracle 10g Student Guide I">&larr; Previous Post</a>
+                        <a href="/oracle/start-the-oracle-10g-student-guide-i.html" data-toggle="tooltip" data-placement="top" title="Start the Oracle 10g Student Guide I">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/being-harassed.html" data-toggle="tooltip" data-placement="top" title="又被骚扰了">Next Post &rarr;</a>
+                        <a href="/my%20life/being-harassed.html" data-toggle="tooltip" data-placement="top" title="又被骚扰了">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -191,7 +191,7 @@ to the user and the user’s grantees.</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -320,7 +320,7 @@ to the user and the user’s grantees.</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -328,13 +328,13 @@ to the user and the user’s grantees.</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

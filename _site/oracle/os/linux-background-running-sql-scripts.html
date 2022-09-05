@@ -10,7 +10,7 @@
 
     <title>linux 后台运行sql脚本 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/os/linux-background-running-sql-scripts.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/os/linux-background-running-sql-scripts.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -124,38 +124,38 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>tmp_xf_fb.sql<br />
-call fbadmin.SP_FEEDBACK_ALLSUM_DB1(&1);</p>
+                <p>tmp_xf_fb.sql<br>
+call fbadmin.SP_FEEDBACK_ALLSUM_DB1(&amp;1);</p>
 <p>-----------------</p>
-<p><code>cat tmp_xf_fb.sh<br />
-#!/bin/sh</p>
-<p>export ORACLE_SID=newcrm<br />
-export ORACLE_BASE=/opt/oracle<br />
-export ORACLE_HOME=$ORACLE_BASE/product/10.2<br />
-export PATH=$HOME/bin:$ORACLE_HOME/bin:/sbin:/bin:/usr/sbin:$PATH<br />
-export ORACLE_TERM=xterm<br />
-export NLS_LANG="AMERICAN_AMERICA.zhs16gbk"<br />
-export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data<br />
-export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib:/usr/local/lib<br />
-export LD_ASSUME_KERNEL=2.4.19<br />
+<p><code>cat tmp_xf_fb.sh<br>
+#!/bin/sh</code></p>
+<p>export ORACLE_SID=newcrm<br>
+export ORACLE_BASE=/opt/oracle<br>
+export ORACLE_HOME=$ORACLE_BASE/product/10.2<br>
+export PATH=$HOME/bin:$ORACLE_HOME/bin:/sbin:/bin:/usr/sbin:$PATH<br>
+export ORACLE_TERM=xterm<br>
+export NLS_LANG="AMERICAN_AMERICA.zhs16gbk"<br>
+export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data<br>
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib:/usr/local/lib<br>
+export LD_ASSUME_KERNEL=2.4.19<br>
 #. /home/oracle/.bashrc</p>
-<p>date<br />
-$ORACLE_HOME/bin/sqlplus -S fbadmin/fbadmin <<EOF<br />
-@/home/oracle/worksh/tmp_xf_fb.sql $1<br />
-exit;<br />
-EOF<br />
-date</code></p>
+<p>date<br>
+$ORACLE_HOME/bin/sqlplus -S fbadmin/fbadmin &lt;<eof></eof>
+@/home/oracle/worksh/tmp_xf_fb.sql $1<br>
+exit;<br>
+EOF<br>
+date</p>
 <p>------------------</p>
-<p>[oracle@crmtest worksh]$ nohup ./tmp_xf_fb.sh 0 &<br />
-[1] 10683<br />
+<p>[oracle@crmtest worksh]$ nohup ./tmp_xf_fb.sh 0 &amp;<br>
+[1] 10683<br>
 [oracle@crmtest worksh]$ nohup: appending output to `nohup.out'</p>
-<p>[oracle@crmtest worksh]$ jobs<br />
-[1]+ Running                 nohup ./tmp_xf_fb.sh 0 &<br />
-[oracle@crmtest worksh]$ jobs<br />
+<p>[oracle@crmtest worksh]$ jobs<br>
+[1]+ Running                 nohup ./tmp_xf_fb.sh 0 &amp;<br>
+[oracle@crmtest worksh]$ jobs<br>
 [1]+ Done                    nohup ./tmp_xf_fb.sh 0</p>
 <p>------nohup.out</p>
-<p>Wed Sep 24 10:12:59 CST 2008<br />
-old   1: call fbadmin.SP_FEEDBACK_ALLSUM_DB1(&1)<br />
+<p>Wed Sep 24 10:12:59 CST 2008<br>
+old   1: call fbadmin.SP_FEEDBACK_ALLSUM_DB1(&amp;1)<br>
 new   1: call fbadmin.SP_FEEDBACK_ALLSUM_DB1(0)</p>
 <p>Call completed.</p>
 <p>Wed Sep 24 10:13:07 CST 2008</p>
@@ -174,12 +174,12 @@ new   1: call fbadmin.SP_FEEDBACK_ALLSUM_DB1(0)</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/exp-imp-orders.html" data-toggle="tooltip" data-placement="top" title="EXP IMP 顺序">&larr; Previous Post</a>
+                        <a href="/oracle/exp-imp-orders.html" data-toggle="tooltip" data-placement="top" title="EXP IMP 顺序">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/11-holiday-is-over-hard-drops.html" data-toggle="tooltip" data-placement="top" title="十一长假结束了 辛苦滴">Next Post &rarr;</a>
+                        <a href="/my%20life/11-holiday-is-over-hard-drops.html" data-toggle="tooltip" data-placement="top" title="十一长假结束了 辛苦滴">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -204,7 +204,7 @@ new   1: call fbadmin.SP_FEEDBACK_ALLSUM_DB1(0)</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -333,7 +333,7 @@ new   1: call fbadmin.SP_FEEDBACK_ALLSUM_DB1(0)</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -341,13 +341,13 @@ new   1: call fbadmin.SP_FEEDBACK_ALLSUM_DB1(0)</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

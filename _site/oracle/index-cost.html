@@ -10,7 +10,7 @@
 
     <title>索引成本计算 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/index-cost.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/index-cost.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -127,20 +127,21 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>典型索引访问路径的工作流程：</p>
-<div>*为定义索引的列准备相关谓词<br />
-*定位索引的根块<br />
-*沿着索引的分支层（branch level）往下走，一直到叶块<br />
-*遍历整个叶块的链表，一直到最后一个能够与谓词相匹配的索引项<br />
-*对于每个索引项，确定是否访问一个表块（table block）</p>
-<p>cost=<br />
-blevel(降序遍历索引所需块访问的数目） +<br />
-ceiling(leaf_block * effective index selectivity) 遍历叶块的数目 +<br />
+<div>*为定义索引的列准备相关谓词<br>
+*定位索引的根块<br>
+*沿着索引的分支层（branch level）往下走，一直到叶块<br>
+*遍历整个叶块的链表，一直到最后一个能够与谓词相匹配的索引项<br>
+*对于每个索引项，确定是否访问一个表块（table block）
+<p>cost=<br>
+blevel(降序遍历索引所需块访问的数目） +<br>
+ceiling(leaf_block * effective index selectivity) 遍历叶块的数目 +<br>
 ceiling(clustering_factor * effective table selectivity)</p>
 <p>在收集统计信息后，视图 User_index中，存在 blevel, leaf_blocks, clustering_factor信息</p>
 <p>-- from Cost-Base Oracle Fundamentals</p>
-<p>因为时间和水平的问题，打算先看 选择率，查询变换、连接基数、嵌套循环、排序与归并连接这几个章节。<br />
+<p>因为时间和水平的问题，打算先看 选择率，查询变换、连接基数、嵌套循环、排序与归并连接这几个章节。<br>
 这个书确实是好书，但有些地方比较深，不是一下子能够理解的，估计得回过头来再看好几遍才行，现在知道的概念先。 打算把上面几个章节结束后快速的在不expert oracle database architecture 再来一遍，那个好懂，不过有些概念需要再次清晰一下。</p>
-<p>-- EOF --</p></div>
+<p>-- EOF --</p>
+</div>
 
 
                 <hr>
@@ -153,12 +154,12 @@ ceiling(clustering_factor * effective table selectivity)</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/check-employment-letter-of-intent.html" data-toggle="tooltip" data-placement="top" title="签了聘用意向书">&larr; Previous Post</a>
+                        <a href="/my%20life/check-employment-letter-of-intent.html" data-toggle="tooltip" data-placement="top" title="签了聘用意向书">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/track-optimizing-sql.html" data-toggle="tooltip" data-placement="top" title="跟踪 优化 SQL">Next Post &rarr;</a>
+                        <a href="/oracle/track-optimizing-sql.html" data-toggle="tooltip" data-placement="top" title="跟踪 优化 SQL">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -183,7 +184,7 @@ ceiling(clustering_factor * effective table selectivity)</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -312,7 +313,7 @@ ceiling(clustering_factor * effective table selectivity)</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -320,13 +321,13 @@ ceiling(clustering_factor * effective table selectivity)</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

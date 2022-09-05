@@ -10,7 +10,7 @@
 
     <title>Oracle 10g的闪回查询概述 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/oracle-flashback-query-overview-10g.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/oracle-flashback-query-overview-10g.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -127,7 +127,8 @@
 <p>1、Flashback Database</p>
 <p>Oracle Flashback Database特性允许通过SQL语句Flashback Database语句，让数据库前滚到当前的前一个时间点或者SCN，而不需要做时间点的恢复。闪回数据库可以迅速将数据库回到误操作或人为错误的前一个 时间点，如Word中的"撤消"操作，可以不利用备份就快速的实现基于时间点的恢复。Oracle通过创建新的Flashback Logs（闪回日志），记录数据库的闪回操作。如果希望能闪回数据库，需要设置如下参数：DB_RECOVER_FILE_DEST日志的存放位置， DB_RECOVER_FILE_DEST_SIZE恢复区的大小。在创建数据库的时候，Oracle将自动创建恢复区，但默认是关闭的，需要执行 alter database flashback on命令。</p>
 <p>例：执行Flashback Database命令格式。</p>
-<p><center></p>
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -138,10 +139,12 @@ SQL&gt;flashback database to scn xxx</pre>
 </tr>
 </tbody>
 </table>
-<p></center>2、Flashback Table</p>
+<p></p>
+</center>2、Flashback Table
 <p>Oracle Flashback Table特性允许利用Flashback Table语句，确保闪回到表的前一个时间点。与Oracle 9i中的Flashback Query相似，利用回滚段信息来恢复一个或一些表到以前的一个时间点（一个快照）。要注意的是，Flashback Table不等于Flashback Query，Flashback Query仅仅是查询以前的一个快照点而已，并不改变当前表的状态，而Flashback Table将改变当前表及附属对象一起回到以前的时间点。</p>
 <p>语法：</p>
-<p><center></p>
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -152,12 +155,14 @@ flashback table tablename to scn xxx</pre>
 </tr>
 </tbody>
 </table>
-<p></center>注意：如果需要闪回一个表，需要以下条件：</p>
+<p></p>
+</center>注意：如果需要闪回一个表，需要以下条件：
 <p>·需要有flashback any table的系统权限或者是该表的flashback对象权限；</p>
 <p>·需要有该表的select,insert,delete,alter权限；</p>
 <p>·必须保证该表row movement。</p>
 <p>例：执行将test表闪回到2005年5月7日下午3点。</p>
-<p><center></p>
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -167,11 +172,13 @@ flashback table tablename to scn xxx</pre>
 </tr>
 </tbody>
 </table>
-<p></center>3、Flashback Drop</p>
+<p></p>
+</center>3、Flashback Drop
 <p>Oracle Flashback Drop特性提供一个类似回收站的功能，用来恢复不小心被删除的表。当删除表时，Oracle 10g并不立刻释放被删除的表所占用的空间，而是将这个被删除的表进行自动重命名（为了避免同类对象名称的重复）并放进回收站中。所谓的回收站类似于 Windows系统中的回收站，是一个虚拟的容器，用于存放所有被删除的对象，在回收站中被删除的对象将占用创建时的同样的空间。如果这个被删除的表需要 进行恢复，就可利用Flashback Drop功能。</p>
 <p>例：进行一个删除表后恢复的简单测试。</p>
 <p>（1）显示回收站信息</p>
-<p><center></p>
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -181,9 +188,11 @@ flashback table tablename to scn xxx</pre>
 </tr>
 </tbody>
 </table>
-<p></center>可以看到，回收站中是没有任何结果的，表示没有任何表在回收站中。</p>
+<p></p>
+</center>可以看到，回收站中是没有任何结果的，表示没有任何表在回收站中。
 <p>（2）创建一个表，并删除，再次显示回收站信息</p>
-<p><center></p>
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -197,8 +206,10 @@ TEST_DROP BIN$b+XkkO1RS5K10uKo9BfmuA==$0 TABLE 2005-05-07:14:30:47</pre>
 </tr>
 </tbody>
 </table>
-<p></center>（3）对被删除的表进行恢复</p>
-<p><center></p>
+<p></p>
+</center>（3）对被删除的表进行恢复
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -209,12 +220,14 @@ SQL&gt;flashback table "BIN$b+XkkO1RS5K10uKo9BfmuA==$0" to before drop;</pre>
 </tr>
 </tbody>
 </table>
-<p></center>（4）管理回收站</p>
+<p></p>
+</center>（4）管理回收站
 <p>清除回收站中的单个表：purge table test_drop</p>
 <p>清除整个回收站：purge recyclebin</p>
 <p>清除不同的对象回收站：purge user_recyclebin或purge dba_recyclebin</p>
 <p>（5）确认删除一个表</p>
-<p><center></p>
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -224,13 +237,15 @@ SQL&gt;flashback table "BIN$b+XkkO1RS5K10uKo9BfmuA==$0" to before drop;</pre>
 </tr>
 </tbody>
 </table>
-<p></center>如果删除一个表且不放到回收站中不能进行恢复，在drop语句中可以利用purge选项。</p>
+<p></p>
+</center>如果删除一个表且不放到回收站中不能进行恢复，在drop语句中可以利用purge选项。
 <p>4、Flash Version Query</p>
 <p>Oracle Flashback Version Query特性，利用保存的回滚信息，可以看到特定的表在时间段内的任何修改，如电影的回放一样，可以了解表在该期间的任何变化。Flashback version query一样依赖于AUM，提供了一个查看行改变的功能，能找到所有已经提交了的行的记录，分析出过去时间都执行了什么操作。Flashback version query采用VERSIONS BETWEEN语句来进行查询，常用的方法：</p>
 <p>·VERSIONS_SCN - 系统改变号</p>
 <p>·VERSIONS_TIMESTAMP - 时间</p>
 <p>例如：在test表中，时间1插入一条记录，时间2删除了这条记录，对于时间3执行 select * from test当然查询不到这条记录，只能看到该表最后的提交记录。这时如果利用Flash Table或者是Flash Query，只能看到过去的某一时间点的一个快照，而利用Flashback Version Query，能够把时间1、时间2的操作给记录下来，并详细的查询出对表进行的任何操作。</p>
-<p><center></p>
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -243,9 +258,11 @@ order by versions_starttime;</pre>
 </tr>
 </tbody>
 </table>
-<p></center>在上述查询中，列 versions_starttime、versions_endtime、versions_xid、versions_operation是伪列，还 有一些伪列，如versions_startscn和versions_endscn显示了该时刻的系统更改号。列versions_xid显示了更改该 行的事务标识符。</p>
+<p></p>
+</center>在上述查询中，列 versions_starttime、versions_endtime、versions_xid、versions_operation是伪列，还 有一些伪列，如versions_startscn和versions_endscn显示了该时刻的系统更改号。列versions_xid显示了更改该 行的事务标识符。
 <p>当然，除了分析以上所有的变更之外，可以根据需要指定时间段，如显示在2005-05-07时间在15:30到16:30之间test表的所有变更。</p>
-<p><center></p>
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -258,11 +275,13 @@ yyyy-mm-dd hh24:mi:ss’)</pre>
 </tr>
 </tbody>
 </table>
-<p></center>5、Flashback Transaction Query</p>
+<p></p>
+</center>5、Flashback Transaction Query
 <p>Oracle Flashback Transaction Query特性确保检查数据库的任何改变在一个事务级别，可以利用此功能进行诊断问题、性能分析和审计事务。它其实是Flashback Version Query查询的一个扩充，Flashback Version Query说明了可以审计一段时间内表的所有改变，但是也仅仅是能发现问题，对于错误的事务，没有好的处理办法。而Flashback Transaction Query提供了从FLASHBACK_TRANSACTION_QUERY视图中获得事务的历史以及Undo_sql（回滚事务对应的sql语句），也 就是说审计一个事务到底做了什么，甚至可以回滚一个已经提交的事务。</p>
 <p>例：Flashback Transaction Query的操作实例。</p>
 <p>（1）在test表中删除记录，获得事务的标识XID，然后提交。</p>
-<p><center></p>
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -277,9 +296,11 @@ SQL&gt;commit;</pre>
 </tr>
 </tbody>
 </table>
-<p></center>在测试中方便起见，在事务没有提交的时候，获得事务的XID为04001F0035000000。实际情况下，不可能去跟踪每个事务，想要获得已提交事务的XID，就必须通过上面的Flashback Version Query。</p>
+<p></p>
+</center>在测试中方便起见，在事务没有提交的时候，获得事务的XID为04001F0035000000。实际情况下，不可能去跟踪每个事务，想要获得已提交事务的XID，就必须通过上面的Flashback Version Query。
 <p>（2）进行Flashback Transaction Query</p>
-<p><center></p>
+<p></p>
+<center>
 <table width="400" border="1" cellspacing="0" cellpadding="2" align="center">
 <tbody>
 <tr>
@@ -292,7 +313,8 @@ insert into "FLASHTEST"."TEST"("ID") values (’2’);</pre>
 </tr>
 </tbody>
 </table>
-<p></center>注意：这个删除语句对应的是1个Insert语句，如果想回滚这个事务，执行这个Insert语句即可。</p>
+<p></p>
+</center>注意：这个删除语句对应的是1个Insert语句，如果想回滚这个事务，执行这个Insert语句即可。
 <p>可以看到，Flashback Transaction Query主要用于审计一个事务，并可以回滚一个已经提交的事务。如果确定出错的事务是最后一个事务，我们利用Flashback Table或者Flashback Query就可以解决问题。但是，如果执行了一个错误的事务之后，又执行了一系列正确的事务，那么上面的方法就无能为力，利用Flashback Transaction Query可以查看或回滚这个错误的事务。</p>
 </div>
 
@@ -307,12 +329,12 @@ insert into "FLASHTEST"."TEST"("ID") values (’2’);</pre>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/mysql-uses-a-temporary-table-stored-procedure-to-delete-large-amounts-of-data-in-table.html" data-toggle="tooltip" data-placement="top" title="mysql 使用临时表+存储过程删除大表中的大量数据">&larr; Previous Post</a>
+                        <a href="/mysql/mysql-uses-a-temporary-table-stored-procedure-to-delete-large-amounts-of-data-in-table.html" data-toggle="tooltip" data-placement="top" title="mysql 使用临时表+存储过程删除大表中的大量数据">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/break-mysql-table-using-a-stored-procedure.html" data-toggle="tooltip" data-placement="top" title="MYSQL拆表用存储过程">Next Post &rarr;</a>
+                        <a href="/mysql/break-mysql-table-using-a-stored-procedure.html" data-toggle="tooltip" data-placement="top" title="MYSQL拆表用存储过程">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -337,7 +359,7 @@ insert into "FLASHTEST"."TEST"("ID") values (’2’);</pre>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -466,7 +488,7 @@ insert into "FLASHTEST"."TEST"("ID") values (’2’);</pre>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -474,13 +496,13 @@ insert into "FLASHTEST"."TEST"("ID") values (’2’);</pre>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

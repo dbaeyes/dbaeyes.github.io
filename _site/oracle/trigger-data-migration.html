@@ -10,7 +10,7 @@
 
     <title>触发器 迁移数据 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/trigger-data-migration.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/trigger-data-migration.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -126,161 +126,162 @@
 
                 <p>这种方法可以用于业务比较频繁而且不能停机迁移的情况！</p>
 <div>
-----------------------------------<br />
---源表<br />
-create table test_sync_a<br />
-(id number,<br />
-name varchar2(32),<br />
-mono varchar2(32),<br />
-gmt_create date,<br />
-price number);</p>
-<p>alter table TEST_SYNC_A<br />
+----------------------------------<br>
+--源表<br>
+create table test_sync_a<br>
+(id number,<br>
+name varchar2(32),<br>
+mono varchar2(32),<br>
+gmt_create date,<br>
+price number);
+<p>alter table TEST_SYNC_A<br>
 add constraint pk_test_sync_a_id primary key (ID);</p>
-<p>--目标表<br />
-create table test_sync_b<br />
-(id number,<br />
-name varchar2(32),<br />
-mono varchar2(32),<br />
-gmt_create date,<br />
+<p>--目标表<br>
+create table test_sync_b<br>
+(id number,<br>
+name varchar2(32),<br>
+mono varchar2(32),<br>
+gmt_create date,<br>
 price number);</p>
-<p>alter table TEST_SYNC_B<br />
+<p>alter table TEST_SYNC_B<br>
 add constraint pk_test_sync_b_id primary key (ID);</p>
-<p>--触发器生成的日志表<br />
-create table tri_test_sync_log<br />
-(id number,<br />
-dml_type varchar2(1),<br />
-gmt_create date,<br />
+<p>--触发器生成的日志表<br>
+create table tri_test_sync_log<br>
+(id number,<br>
+dml_type varchar2(1),<br>
+gmt_create date,<br>
 status number);</p>
 <p>create index idx_tri_sync_log_id on TRI_TEST_SYNC_LOG (id);</p>
-<p>--计数和时间表<br />
-create table TMP_TIME<br />
-(<br />
-ELAPSE_TIME NUMBER,<br />
-EXEC_TIME   DATE,<br />
-EXEC_PROC   VARCHAR2(20),<br />
-EXEC_CNT    NUMBER<br />
+<p>--计数和时间表<br>
+create table TMP_TIME<br>
+(<br>
+ELAPSE_TIME NUMBER,<br>
+EXEC_TIME   DATE,<br>
+EXEC_PROC   VARCHAR2(20),<br>
+EXEC_CNT    NUMBER<br>
 );</p>
-<p>--错误日志表<br />
-create table TMP_DEBUG<br />
-(<br />
-DEBUG_ID   VARCHAR2(32),<br />
-ERROR_MSG VARCHAR2(2000),<br />
-ERROR_TIME DATE default sysdate<br />
+<p>--错误日志表<br>
+create table TMP_DEBUG<br>
+(<br>
+DEBUG_ID   VARCHAR2(32),<br>
+ERROR_MSG VARCHAR2(2000),<br>
+ERROR_TIME DATE default sysdate<br>
 );</p>
-<p>--源表上的触发器<br />
-create or replace trigger tri_test_sync<br />
-before insert or delete or update on test_sync_a<br />
-for each row<br />
-declare<br />
-/*<br />
-创建: 玄风<br />
-日期: 2008-02-14<br />
-目的: 测试用触发器同步数据<br />
-*/<br />
-begin<br />
-if inserting then<br />
-insert into tri_test_sync_log(id, dml_type, gmt_create, status)<br />
-values(:new.id, 'I', sysdate, 0);<br />
-elsif updating then<br />
-insert into tri_test_sync_log(id, dml_type, gmt_create, status)<br />
-values(:new.id, 'U', sysdate, 0);<br />
-elsif deleting then<br />
-insert into tri_test_sync_log(id, dml_type, gmt_create, status)<br />
-values(:old.id, 'D', sysdate, 0);<br />
-end if;<br />
+<p>--源表上的触发器<br>
+create or replace trigger tri_test_sync<br>
+before insert or delete or update on test_sync_a<br>
+for each row<br>
+declare<br>
+/*<br>
+创建: 玄风<br>
+日期: 2008-02-14<br>
+目的: 测试用触发器同步数据<br>
+*/<br>
+begin<br>
+if inserting then<br>
+insert into tri_test_sync_log(id, dml_type, gmt_create, status)<br>
+values(:new.id, 'I', sysdate, 0);<br>
+elsif updating then<br>
+insert into tri_test_sync_log(id, dml_type, gmt_create, status)<br>
+values(:new.id, 'U', sysdate, 0);<br>
+elsif deleting then<br>
+insert into tri_test_sync_log(id, dml_type, gmt_create, status)<br>
+values(:old.id, 'D', sysdate, 0);<br>
+end if;<br>
 end tri_test_syns;</p>
 <p>---用于同步数据的存储过程</p>
-<p>create or replace procedure SP_SYNC_TEST is<br />
-/*<br />
-创建: xuanfeng<br />
-目的: 同步数据<br />
-日期：2009-2-14<br />
-*/<br />
-v_count     number := 0;<br />
-start_time number;<br />
-end_time    number;<br />
-elapse_time number;<br />
-v_spname    varchar2(20) := 'SP_SYNC_TEST';<br />
+<p>create or replace procedure SP_SYNC_TEST is<br>
+/*<br>
+创建: xuanfeng<br>
+目的: 同步数据<br>
+日期：2009-2-14<br>
+*/<br>
+v_count     number := 0;<br>
+start_time number;<br>
+end_time    number;<br>
+elapse_time number;<br>
+v_spname    varchar2(20) := 'SP_SYNC_TEST';<br>
 errormsg    varchar2(2000);</p>
-<p>begin<br />
-execute immediate 'alter session set nls_date_format =''YYYY-MM-DD HH24:MI:SS''';<br />
---删除上次已经迁移过的脚本(数据量太大，每次只删除50000条)<br />
-delete from tri_test_sync_log<br />
-where status = 1<br />
-and rownum &lt; 50000;<br />
-commit;<br />
+<p>begin<br>
+execute immediate 'alter session set nls_date_format =''YYYY-MM-DD HH24:MI:SS''';<br>
+--删除上次已经迁移过的脚本(数据量太大，每次只删除50000条)<br>
+delete from tri_test_sync_log<br>
+where status = 1<br>
+and rownum &lt; 50000;<br>
+commit;<br>
 for i in (select id, dml_type from tri_test_sync_log where status = 0) loop</p>
 <p>start_time := dbms_utility.get_time;</p>
-<p>if i.dml_type in ('I', 'U') then<br />
-delete from test_sync_b t where t.id = i.id;<br />
-insert into test_sync_b<br />
-(ID, NAME, MONO, GMT_CREATE, PRICE)<br />
-select ID, NAME, MONO, GMT_CREATE, PRICE<br />
-from test_sync_a t<br />
+<p>if i.dml_type in ('I', 'U') then<br>
+delete from test_sync_b t where t.id = i.id;<br>
+insert into test_sync_b<br>
+(ID, NAME, MONO, GMT_CREATE, PRICE)<br>
+select ID, NAME, MONO, GMT_CREATE, PRICE<br>
+from test_sync_a t<br>
 where t.id = i.id;</p>
-<p>elsif i.dml_type = 'D' then<br />
-delete from test_sync_b t where t.id = i.id;<br />
+<p>elsif i.dml_type = 'D' then<br>
+delete from test_sync_b t where t.id = i.id;<br>
 end if;</p>
-<p>--更新迁移的状态<br />
+<p>--更新迁移的状态<br>
 update tri_test_sync_log t set status = 1 where t.id = i.id;</p>
-<p>v_count := v_count + 1;<br />
-if mod(v_count, 100) = 0 then<br />
---提交<br />
-end_time    := dbms_utility.get_time;<br />
-elapse_time := (end_time - start_time) / 100;<br />
-insert into tmp_time<br />
-(elapse_time, exec_time, exec_proc, exec_cnt)<br />
-values<br />
+<p>v_count := v_count + 1;<br>
+if mod(v_count, 100) = 0 then<br>
+--提交<br>
+end_time    := dbms_utility.get_time;<br>
+elapse_time := (end_time - start_time) / 100;<br>
+insert into tmp_time<br>
+(elapse_time, exec_time, exec_proc, exec_cnt)<br>
+values<br>
 (elapse_time, sysdate, v_spname, v_count);</p>
-<p>commit;<br />
-end if;<br />
-end loop;<br />
-commit;<br />
-exception<br />
-when others then<br />
-rollback;<br />
-errormsg := sqlerrm;<br />
-insert into tmp_debug<br />
-(debug_id, error_msg)<br />
-values<br />
-(v_spname, errormsg);<br />
-commit;<br />
-end SP_SYNC_TEST;<br />
+<p>commit;<br>
+end if;<br>
+end loop;<br>
+commit;<br>
+exception<br>
+when others then<br>
+rollback;<br>
+errormsg := sqlerrm;<br>
+insert into tmp_debug<br>
+(debug_id, error_msg)<br>
+values<br>
+(v_spname, errormsg);<br>
+commit;<br>
+end SP_SYNC_TEST;<br>
 /</p>
-<p>----<br />
-insert into test_sync_a<br />
-(id, name, gmt_create)<br />
-values<br />
+<p>----<br>
+insert into test_sync_a<br>
+(id, name, gmt_create)<br>
+values<br>
 (1, 'orphean', sysdate);</p>
-<p>--初始化数据<br />
-declare<br />
--- Local variables here<br />
+<p>--初始化数据<br>
+declare<br>
+-- Local variables here<br>
 i number;</p>
-<p>begin<br />
-select max(id) into i from test_sync_a;<br />
-i := i + 1;<br />
-for c in 1 .. 1000 loop<br />
-insert into test_sync_a<br />
-(id, name, gmt_create)<br />
-values<br />
-(i, 'orphean', sysdate);<br />
-i := i + 1;<br />
-end loop;<br />
-commit;<br />
-end;<br />
+<p>begin<br>
+select max(id) into i from test_sync_a;<br>
+i := i + 1;<br>
+for c in 1 .. 1000 loop<br>
+insert into test_sync_a<br>
+(id, name, gmt_create)<br>
+values<br>
+(i, 'orphean', sysdate);<br>
+i := i + 1;<br>
+end loop;<br>
+commit;<br>
+end;<br>
 /</p>
-<p>--初始化(test_sync_a)<br />
-insert into tri_test_sync_log(id,DML_TYPE,STATUS) select id,'I',0 from test_sync_a;<br />
+<p>--初始化(test_sync_a)<br>
+insert into tri_test_sync_log(id,DML_TYPE,STATUS) select id,'I',0 from test_sync_a;<br>
 commit;</p>
 <p>--编译存储过程(tbshop)</p>
-<p>variable jobno number;<br />
-variable instno number;<br />
-begin<br />
-select instance_number into :instno from v$instance;<br />
-dbms_job.submit(:jobno, 'SP_SYNC_TEST;', sysdate, 'sysdate+20/1440', TRUE, :instno);<br />
-commit;<br />
-end;<br />
-/</p></div>
+<p>variable jobno number;<br>
+variable instno number;<br>
+begin<br>
+select instance_number into :instno from v$instance;<br>
+dbms_job.submit(:jobno, 'SP_SYNC_TEST;', sysdate, 'sysdate+20/1440', TRUE, :instno);<br>
+commit;<br>
+end;<br>
+/</p>
+</div>
 
 
                 <hr>
@@ -293,12 +294,12 @@ end;<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/according-to-extend-to-initialize-the-data.html" data-toggle="tooltip" data-placement="top" title="根据extend初始化数据">&larr; Previous Post</a>
+                        <a href="/oracle/according-to-extend-to-initialize-the-data.html" data-toggle="tooltip" data-placement="top" title="根据extend初始化数据">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/thinking/the-most-recent.html" data-toggle="tooltip" data-placement="top" title="最近">Next Post &rarr;</a>
+                        <a href="/thinking/the-most-recent.html" data-toggle="tooltip" data-placement="top" title="最近">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -323,7 +324,7 @@ end;<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -452,7 +453,7 @@ end;<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -460,13 +461,13 @@ end;<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

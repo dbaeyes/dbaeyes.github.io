@@ -10,7 +10,7 @@
 
     <title>mk-query-digest - a mysql log analysis tool - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/mysql/mk-query-digest-a-mysql-log-analysis-tool.html">
+    <link rel="canonical" href="http://localhost:4000/mysql/mk-query-digest-a-mysql-log-analysis-tool.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -130,17 +130,17 @@
 <div>
 <p>--如此简单就可以分析mysql的慢日志，当然如果slow log很大时，这么做会消耗很大的性能。</p>
 <p>主要参数：</p>
-<p>--limit: default: 95%:20  Limit output to the given percentage or count.<br />
---select: Compute aggregate statistics for these attributes.  (Query_time,Lock_time,Rows_sent,Rows_examined,user,db:Schema,ts)<br />
---type:The type of input to parse (default slowlog). YYMMDD [HH:MM:SS]<br />
---since: Parse only queries newer than this value (parse queries since this date).<br />
---until: ...<br />
+<p>--limit: default: 95%:20  Limit output to the given percentage or count.<br>
+--select: Compute aggregate statistics for these attributes.  (Query_time,Lock_time,Rows_sent,Rows_examined,user,db:Schema,ts)<br>
+--type:The type of input to parse (default slowlog). YYMMDD [HH:MM:SS]<br>
+--since: Parse only queries newer than this value (parse queries since this date).<br>
+--until: ...<br>
 --order-by:  Sort events by this attribute and aggregate function.default: Query_time:sum</p>
 <p>Aggregate Meaning</p>
 <p>========= ============================</p>
-<p>sum       Sum/total attribute value<br />
-min       Minimum attribute value<br />
-max       Maximum attribute value<br />
+<p>sum       Sum/total attribute value<br>
+min       Minimum attribute value<br>
+max       Maximum attribute value<br>
 cnt       Frequency/count of the query</p>
 <div>-----------------------------------------------------------------------------------------------------</div>
 <p>./mk-query-digest --limit 2 --select Query_time,Lock_time,Rows_sent,Rows_examined,ts slow.log</p>
@@ -148,14 +148,14 @@ cnt       Frequency/count of the query</p>
 <p><strong>也可以通过tcpdump获取实时数据</strong></p>
 <p>tcpdump -i bond0 port 3306 -s 65535 -x -n -q -tttt -c 10000 |./mk-query-digest --type tcpdump  --limit 5</p>
 <p>关于mk-query-digest</p>
-<p>http://www.maatkit.org/doc/mk-query-digest.html<br />
+<p>http://www.maatkit.org/doc/mk-query-digest.html<br>
 --</p>
 <p>http://hi.baidu.com/liheng_2009/blog/item/5973c3896f57d06f9f2fb46c.html</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>关于tcpdump</p>
 <p>http://www.xfocus.net/articles/200105/172.html</p>
 <div></div>
-<p>&nbsp;</p>
+<p> </p>
 </div>
 
 
@@ -169,12 +169,12 @@ cnt       Frequency/count of the query</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/little-june-june-grow-logs.html" data-toggle="tooltip" data-placement="top" title="小隽隽的成长日志">&larr; Previous Post</a>
+                        <a href="/my%20life/little-june-june-grow-logs.html" data-toggle="tooltip" data-placement="top" title="小隽隽的成长日志">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-lock-tables-and-unlock-tables.html" data-toggle="tooltip" data-placement="top" title="mysql LOCK TABLES and UNLOCK TABLES">Next Post &rarr;</a>
+                        <a href="/mysql/mysql-lock-tables-and-unlock-tables.html" data-toggle="tooltip" data-placement="top" title="mysql LOCK TABLES and UNLOCK TABLES">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -199,7 +199,7 @@ cnt       Frequency/count of the query</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -328,7 +328,7 @@ cnt       Frequency/count of the query</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -336,13 +336,13 @@ cnt       Frequency/count of the query</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

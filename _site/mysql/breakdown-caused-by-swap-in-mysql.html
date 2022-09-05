@@ -10,7 +10,7 @@
 
     <title>breakdown caused by swap in MySQL - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/mysql/breakdown-caused-by-swap-in-mysql.html">
+    <link rel="canonical" href="http://localhost:4000/mysql/breakdown-caused-by-swap-in-mysql.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -124,55 +124,55 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>One case about breakdown caused by swap in MySQL.<br />
-一个因为swap导致故障解决案例。<br />
-MySQL version: 5.1.60<br />
-A lot of queries( more then 500) were blocked, the applations could not get more connections.<br />
-The old connections could not be released, and the new connections could not be established.<br />
-大量连接被阻塞，sql的状态都是openging tables/closing tables。应用的端的直接反馈就是连接数不够，老的连接没释放，新的连接无法创建。<br />
-[cc lang='sql']<br />
-Query   246     Opening tables  DELETE FROM XXXXXXX_DRAFT WHERE id=645643<br />
-Query   234     Opening tables  DELETE FROM XXXXXXX_DRAFT WHERE id=645643<br />
-Query   222     Opening tables  DELETE FROM XXXXXXX_DRAFT WHERE id=645643<br />
-Query   282     closing tables  update xdual set x=now() where id = 5<br />
-Query   282     closing tables  update xdual set x=now() where id = 5<br />
-Query   282     closing tables  update xdual set x=now() where id = 5<br />
+                <p>One case about breakdown caused by swap in MySQL.<br>
+一个因为swap导致故障解决案例。<br>
+MySQL version: 5.1.60<br>
+A lot of queries( more then 500) were blocked, the applations could not get more connections.<br>
+The old connections could not be released, and the new connections could not be established.<br>
+大量连接被阻塞，sql的状态都是openging tables/closing tables。应用的端的直接反馈就是连接数不够，老的连接没释放，新的连接无法创建。<br>
+[cc lang='sql']<br>
+Query   246     Opening tables  DELETE FROM XXXXXXX_DRAFT WHERE id=645643<br>
+Query   234     Opening tables  DELETE FROM XXXXXXX_DRAFT WHERE id=645643<br>
+Query   222     Opening tables  DELETE FROM XXXXXXX_DRAFT WHERE id=645643<br>
+Query   282     closing tables  update xdual set x=now() where id = 5<br>
+Query   282     closing tables  update xdual set x=now() where id = 5<br>
+Query   282     closing tables  update xdual set x=now() where id = 5<br>
 ....[/cc]</p>
-<p>The load of DB rise instant, and the phenomenon was last 4 minutes.<br />
+<p>The load of DB rise instant, and the phenomenon was last 4 minutes.<br>
 数据库的load出现瞬间上涨，现象持续3-4分钟</p>
-<p>In consideration of the phenomenon, opening of closing the tables. So I adjust the parameter about the "open", but it not take effect.<br />
-考虑到看到的sql都在打开或者关闭表，调整了如下参数，但是收效甚微<br />
-<a href="http://dev.mysql.com/doc/refman/5.1/en/server-system-variables.html#sysvar_table_cache" target="_blank">table_cache</a>=2048   (old 1024)<br />
-<a href="http://dev.mysql.com/doc/refman/5.1/en/server-system-variables.html#sysvar_table_definition_cache" target="_blank">table_definition_cache</a>=2048   (300)<br />
+<p>In consideration of the phenomenon, opening of closing the tables. So I adjust the parameter about the "open", but it not take effect.<br>
+考虑到看到的sql都在打开或者关闭表，调整了如下参数，但是收效甚微<br>
+<a href="http://dev.mysql.com/doc/refman/5.1/en/server-system-variables.html#sysvar_table_cache" target="_blank">table_cache</a>=2048   (old 1024)<br>
+<a href="http://dev.mysql.com/doc/refman/5.1/en/server-system-variables.html#sysvar_table_definition_cache" target="_blank">table_definition_cache</a>=2048   (300)<br>
 <a href="http://dev.mysql.com/doc/refman/5.1/en/innodb-parameters.html#sysvar_innodb_open_files" target="_blank">innodb_open_files</a>=65536   (2000)</p>
-<p>Then I used the MySQL monitor tool '<a href="http://code.taobao.org/p/orzdba/src/trunk/" target="_blank">orzdba</a>' for a long time survey.<br />
-后来使用<a href="http://code.taobao.org/p/orzdba/src/trunk/" target="_blank">orzdba</a>  进行持续关注，发现了如下现象<br />
-<a href="http://www.dbathink.com/wp-content/uploads/2012/10/swap1.jpg"><img src="http://www.dbathink.com/wp-content/uploads/2012/10/swap1.jpg" alt="" title="swap_case" width="1040" height="314" class="alignnone size-full wp-image-1518" /></a></p>
-<p>When the load rised up, the os <a href="http://www.softpanorama.org/Internals/Unix_filesystems/linux_swap_filesystem.shtml" target="_blank">swap </a>is serious. When swap out, the qps fall down from 2000 to 100, the thread running rised from 5 to 700. I considered the phenomenon was caused by swap.<br />
+<p>Then I used the MySQL monitor tool '<a href="http://code.taobao.org/p/orzdba/src/trunk/" target="_blank">orzdba</a>' for a long time survey.<br>
+后来使用<a href="http://code.taobao.org/p/orzdba/src/trunk/" target="_blank">orzdba</a>  进行持续关注，发现了如下现象<br>
+<a href="http://www.dbathink.com/wp-content/uploads/2012/10/swap1.jpg"><img src="http://www.dbathink.com/wp-content/uploads/2012/10/swap1.jpg" alt="" title="swap_case" width="1040" height="314" class="alignnone size-full wp-image-1518"></a></p>
+<p>When the load rised up, the os <a href="http://www.softpanorama.org/Internals/Unix_filesystems/linux_swap_filesystem.shtml" target="_blank">swap </a>is serious. When swap out, the qps fall down from 2000 to 100, the thread running rised from 5 to 700. I considered the phenomenon was caused by swap.<br>
 在发生load上涨时，发生了严重的<a href="http://www.softpanorama.org/Internals/Unix_filesystems/linux_swap_filesystem.shtml" target="_blank">swap</a>。swap out发生时，qps急剧下降（从2000详见到100以内），thread runing从5上涨到700. 所以基本可以认为是swap导致的</p>
-<p>Check the Memory Info.<br />
-查看内存情况<br />
-[cc lang='sql']$free -m<br />
-             total       used       free<br />
-Mem:         48289      47737        551<br />
--/+ buffers/cache:      44670       3618<br />
+<p>Check the Memory Info.<br>
+查看内存情况<br>
+[cc lang='sql']$free -m<br>
+             total       used       free<br>
+Mem:         48289      47737        551<br>
+-/+ buffers/cache:      44670       3618<br>
 Swap:        15633       2905      12727[/cc]</p>
-<p>I got the information that the volume of business was growth 5 times from the developers. I check the MySQL parameters which related the memory, these values were too high and the OS had been set the Hugepages.<br />
+<p>I got the information that the volume of business was growth 5 times from the developers. I check the MySQL parameters which related the memory, these values were too high and the OS had been set the Hugepages.<br>
 和开发沟通，知道最近业务量异常增长5倍以上，大量的查询导致了swap，同时我在检查mysql参数时，几个消耗os内存的参数设置的比较高，而且系统设置了大页内存。</p>
-<p>Adjust the parameter in MySQL,<br />
-在数据库段进行了如下调整<br />
-[cc lang='sql']vi my.cnf<br />
-sort_buffer_size=256K  (old:2M)<br />
-join_buffer_size=2M    (old:4M)<br />
+<p>Adjust the parameter in MySQL,<br>
+在数据库段进行了如下调整<br>
+[cc lang='sql']vi my.cnf<br>
+sort_buffer_size=256K  (old:2M)<br>
+join_buffer_size=2M    (old:4M)<br>
 read_buffer_size=1M    (old:2M)[/cc]</p>
-<p>Close the hugepages,<br />
-关闭大页<br />
-[cc lang='sql']vi sysctl.conf<br />
-#vm.nr_hugepages = 8704<br />
+<p>Close the hugepages,<br>
+关闭大页<br>
+[cc lang='sql']vi sysctl.conf<br>
+#vm.nr_hugepages = 8704<br>
 #vm.hugetlb_shm_group = 601</p>
-<p>--do it in mysql my.cnf<br />
+<p>--do it in mysql my.cnf<br>
 #large-pages[/cc]</p>
-<p>We also checked the applications, adjust the unconscionable query from database. It is very important in dbatabase's tuning!<br />
+<p>We also checked the applications, adjust the unconscionable query from database. It is very important in dbatabase's tuning!<br>
 应用调用量的不合理增长也进行了细致排查，将不合理的调用取消掉。应用的配合优化在db优化中非常重要。</p>
 <p>The database was well from then on.</p>
 <p>--eof</p>
@@ -188,12 +188,12 @@ read_buffer_size=1M    (old:2M)[/cc]</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/trouble-shooting-the-high-sys-cpu-in-mysql-server.html" data-toggle="tooltip" data-placement="top" title="Trouble shooting the high SYS CPU in MySQL server">&larr; Previous Post</a>
+                        <a href="/mysql/trouble-shooting-the-high-sys-cpu-in-mysql-server.html" data-toggle="tooltip" data-placement="top" title="Trouble shooting the high SYS CPU in MySQL server">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/os/iterm2-auto-automatic-login-log-on-script.html" data-toggle="tooltip" data-placement="top" title="Iterm2 auto login 自动登录脚本">Next Post &rarr;</a>
+                        <a href="/os/iterm2-auto-automatic-login-log-on-script.html" data-toggle="tooltip" data-placement="top" title="Iterm2 auto login 自动登录脚本">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -218,7 +218,7 @@ read_buffer_size=1M    (old:2M)[/cc]</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -347,7 +347,7 @@ read_buffer_size=1M    (old:2M)[/cc]</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -355,13 +355,13 @@ read_buffer_size=1M    (old:2M)[/cc]</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

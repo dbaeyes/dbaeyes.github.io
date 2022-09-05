@@ -10,7 +10,7 @@
 
     <title>EXP IMP 顺序 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/exp-imp-orders.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/exp-imp-orders.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -126,61 +126,61 @@
 
                 <p>EXPORT/IMPORT过程</p>
 <div>
-EXPORT导出的DUMP文件包含两种基本类型的数据<br />
-- DDL (Data Dictionary Language)<br />
-- Data</p>
+EXPORT导出的DUMP文件包含两种基本类型的数据<br>
+- DDL (Data Dictionary Language)<br>
+- Data
 <p>DUMP文件包含所有重新创建Data Dictionary的DDL语句，基本上是可以读的格式。</p>
 <p>但是应该注意的是，千万不要用文本编辑器编辑之，oracle说不支持这样做的。</p>
 <p>下面列出的是DUMP文件中包括的ORACLE对象，分为TABLE/USER/FULL方式，有些对象</p>
 <p>只是在FULL方式下才有（比如public synonyms, users, roles, rollback segments等）</p>
-<p>Table mode　　　　　　　User Mode　　　　　　　 Full Database Mode<br />
-----------------------　----------------------　----------------------<br />
----<br />
-Table definitions　　　 Table definitions　　　 Table definitions<br />
-Table data　　　　　　　Table data　　　　　　　Table data<br />
-Owner's table grants　　Owner's grants　　　　　Grants<br />
-Owner's table indexes　 Owner's indexes　　　　 Indexes<br />
-Table constraints　　　 Table constraints　　　 Table constraints<br />
-Table triggers　　　　　Table triggers　　　　　All triggers<br />
-Clusters　　　　　　　　Clusters<br />
-Database links　　　　　Database links<br />
-Job queues　　　　　　　Job queues<br />
-Refresh groups　　　　　Refresh groups<br />
-Sequences　　　　　　　 Sequences<br />
-Snapshots　　　　　　　 Snapshots<br />
-Snapshot logs　　　　　 Snapshot logs<br />
-Stored procedures　　　 Stored procedures<br />
-Private synonyms　　　　All synonyms<br />
-Views　　　　　　　　　 Views<br />
-Profiles<br />
-Replication catalog<br />
-Resource cost<br />
-Roles<br />
-Rollback segments<br />
-System audit options<br />
-System privileges<br />
+<p>Table mode　　　　　　　User Mode　　　　　　　 Full Database Mode<br>
+----------------------　----------------------　----------------------<br>
+---<br>
+Table definitions　　　 Table definitions　　　 Table definitions<br>
+Table data　　　　　　　Table data　　　　　　　Table data<br>
+Owner's table grants　　Owner's grants　　　　　Grants<br>
+Owner's table indexes　 Owner's indexes　　　　 Indexes<br>
+Table constraints　　　 Table constraints　　　 Table constraints<br>
+Table triggers　　　　　Table triggers　　　　　All triggers<br>
+Clusters　　　　　　　　Clusters<br>
+Database links　　　　　Database links<br>
+Job queues　　　　　　　Job queues<br>
+Refresh groups　　　　　Refresh groups<br>
+Sequences　　　　　　　 Sequences<br>
+Snapshots　　　　　　　 Snapshots<br>
+Snapshot logs　　　　　 Snapshot logs<br>
+Stored procedures　　　 Stored procedures<br>
+Private synonyms　　　　All synonyms<br>
+Views　　　　　　　　　 Views<br>
+Profiles<br>
+Replication catalog<br>
+Resource cost<br>
+Roles<br>
+Rollback segments<br>
+System audit options<br>
+System privileges<br>
 Tablespace definitions</p>
-<p>Tablespace quotas<br />
+<p>Tablespace quotas<br>
 User definitions</p>
 <p>4、IMPORT时的对象倒入顺序</p>
 <p>在倒入数据时，ORACLE有一个特定的顺序，可能随数据库版本不同而有所变化，</p>
 <p>但是</p>
 <p>现在是这样的。</p>
-<p>1. Tablespaces　　　　　　　　　　　　 14. Snapshot Logs<br />
-2. Profiles　　　　　　　　　　　　　　15. Job Queues<br />
-3. Users　　　　　　　　　　　　　　　 16. Refresh Groups<br />
-4. Roles　　　　　　　　　　　　　　　 17. Cluster Definitions<br />
-5. System Privilege Grants　　　　　　 18. Tables (also grants,commen<br />
-ts,<br />
-6. Role Grants　　　　　　　　　　　　　　 indexes, constraints, audi<br />
-ting)<br />
+<p>1. Tablespaces　　　　　　　　　　　　 14. Snapshot Logs<br>
+2. Profiles　　　　　　　　　　　　　　15. Job Queues<br>
+3. Users　　　　　　　　　　　　　　　 16. Refresh Groups<br>
+4. Roles　　　　　　　　　　　　　　　 17. Cluster Definitions<br>
+5. System Privilege Grants　　　　　　 18. Tables (also grants,commen<br>
+ts,<br>
+6. Role Grants　　　　　　　　　　　　　　 indexes, constraints, audi<br>
+ting)<br>
 7. Default Roles　　　　　　　　　　　 19. Referential Integrity</p>
 <p>8. Tablespace Quotas　　　　　　　　　 20.　POSTTABLES actions</p>
-<p>9. Resource Costs　　　　　　　　　　　21. Synonyms<br />
-10. Rollback Segments　　　　 22. Views<br />
-11. Database Links　　　　　　　　　　　23. Stored Procedures<br />
-12. Sequences　　　　　　　　　　　　　 24. Triggers, Defaults and Aud<br />
-iting<br />
+<p>9. Resource Costs　　　　　　　　　　　21. Synonyms<br>
+10. Rollback Segments　　　　 22. Views<br>
+11. Database Links　　　　　　　　　　　23. Stored Procedures<br>
+12. Sequences　　　　　　　　　　　　　 24. Triggers, Defaults and Aud<br>
+iting<br>
 13. Snapshots</p>
 <p>from: <a href="http://www.hackhome.com/InfoView/Article_164423.html">http://www.hackhome.com/InfoView/Article_164423.html</a></p>
 </div>
@@ -196,12 +196,12 @@ iting<br />
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/use-bulk-collect-limit-handling-large-amounts-of-data.html" data-toggle="tooltip" data-placement="top" title="使用bulk collect limit处理大量数据">&larr; Previous Post</a>
+                        <a href="/oracle/use-bulk-collect-limit-handling-large-amounts-of-data.html" data-toggle="tooltip" data-placement="top" title="使用bulk collect limit处理大量数据">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/os/linux-background-running-sql-scripts.html" data-toggle="tooltip" data-placement="top" title="linux 后台运行sql脚本">Next Post &rarr;</a>
+                        <a href="/oracle/os/linux-background-running-sql-scripts.html" data-toggle="tooltip" data-placement="top" title="linux 后台运行sql脚本">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -226,7 +226,7 @@ iting<br />
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -355,7 +355,7 @@ iting<br />
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -363,13 +363,13 @@ iting<br />
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

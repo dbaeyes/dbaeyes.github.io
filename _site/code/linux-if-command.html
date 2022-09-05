@@ -10,7 +10,7 @@
 
     <title>linux if命令 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/code/linux-if-command.html">
+    <link rel="canonical" href="http://localhost:4000/code/linux-if-command.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,52 +125,52 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <h1></h1>
-<div>   无论什么编程语言都离不开条件判断。SHELL也不例外。<strong>      if list then<br />
-do something here<br />
-elif list then<br />
-do another thing here<br />
-else<br />
-do something else here<br />
-fi </strong></p>
+<div>   无论什么编程语言都离不开条件判断。SHELL也不例外。<strong>      if list then<br>
+do something here<br>
+elif list then<br>
+do another thing here<br>
+else<br>
+do something else here<br>
+fi </strong>
 <p><strong>EX1:</strong></p>
 <p>#!/bin/sh</p>
 <p>SYSTEM=`uname -s`    #获取操作系统类型，我本地是linux</p>
-<p>if [ $SYSTEM = "Linux" ] ; then     #如果是linux的话打印linux字符串<br />
-echo "Linux"<br />
-elif [ $SYSTEM = "FreeBSD" ] ; then<br />
-echo "FreeBSD"<br />
-elif [ $SYSTEM = "Solaris" ] ; then<br />
-echo "Solaris"<br />
-else<br />
-echo "What?"<br />
+<p>if [ $SYSTEM = "Linux" ] ; then     #如果是linux的话打印linux字符串<br>
+echo "Linux"<br>
+elif [ $SYSTEM = "FreeBSD" ] ; then<br>
+echo "FreeBSD"<br>
+elif [ $SYSTEM = "Solaris" ] ; then<br>
+echo "Solaris"<br>
+else<br>
+echo "What?"<br>
 fi     #ifend</p>
 <p>基本上和其他脚本语言一样。没有太大区别。不过值得注意的是。[]里面的条件判断。</p>
 <p><strong>1 字符串判断</strong></p>
-<p>str1 = str2　　　　　　当两个串有相同内容、长度时为真<br />
-str1 != str2　　　　　 当串str1和str2不等时为真<br />
--n str1　　　　　　　 当串的长度大于0时为真(串非空)<br />
--z str1　　　　　　　 当串的长度为0时为真(空串)<br />
+<p>str1 = str2　　　　　　当两个串有相同内容、长度时为真<br>
+str1 != str2　　　　　 当串str1和str2不等时为真<br>
+-n str1　　　　　　　 当串的长度大于0时为真(串非空)<br>
+-z str1　　　　　　　 当串的长度为0时为真(空串)<br>
 str1　　　　　　　　   当串str1为非空时为真</p>
 <p><strong>2 数字的判断</strong></p>
-<p>int1 -eq int2　　　　两数相等为真<br />
-int1 -ne int2　　　　两数不等为真<br />
-int1 -gt int2　　　　int1大于int2为真<br />
-int1 -ge int2　　　　int1大于等于int2为真<br />
-int1 -lt int2　　　　int1小于int2为真<br />
+<p>int1 -eq int2　　　　两数相等为真<br>
+int1 -ne int2　　　　两数不等为真<br>
+int1 -gt int2　　　　int1大于int2为真<br>
+int1 -ge int2　　　　int1大于等于int2为真<br>
+int1 -lt int2　　　　int1小于int2为真<br>
 int1 -le int2　　　　int1小于等于int2为真</p>
 <p><strong>3 文件的判断</strong></p>
-<p>-r file　　　　　用户可读为真<br />
--w file　　　　　用户可写为真<br />
--x file　　　　　用户可执行为真<br />
--f file　　　　　文件为正规文件为真<br />
--d file　　　　　文件为目录为真<br />
--c file　　　　　文件为字符特殊文件为真<br />
--b file　　　　　文件为块特殊文件为真<br />
--s file　　　　　文件大小非0时为真<br />
+<p>-r file　　　　　用户可读为真<br>
+-w file　　　　　用户可写为真<br>
+-x file　　　　　用户可执行为真<br>
+-f file　　　　　文件为正规文件为真<br>
+-d file　　　　　文件为目录为真<br>
+-c file　　　　　文件为字符特殊文件为真<br>
+-b file　　　　　文件为块特殊文件为真<br>
+-s file　　　　　文件大小非0时为真<br>
 -t file　　　　　当文件描述符(默认为1)指定的设备为终端时为真</p>
 <p><strong>3 复杂逻辑判断</strong></p>
-<p>-a 　 　　　　　 与<br />
--o　　　　　　　 或<br />
+<p>-a 　 　　　　　 与<br>
+-o　　　　　　　 或<br>
 !　　　　　　　　非</p>
 <p><strong>结尾</strong></p>
 <p>语法虽然简单，但是在SHELL里使用的时候，他的功能变得强大了。</p>
@@ -187,12 +187,12 @@ int1 -le int2　　　　int1小于等于int2为真</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/os/win7-cleaner-recently-opened-records.html" data-toggle="tooltip" data-placement="top" title="Win7清除程序的最近打开记录">&larr; Previous Post</a>
+                        <a href="/os/win7-cleaner-recently-opened-records.html" data-toggle="tooltip" data-placement="top" title="Win7清除程序的最近打开记录">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/recently-very-little-bo.html" data-toggle="tooltip" data-placement="top" title="最近很少发博">Next Post &rarr;</a>
+                        <a href="/my%20life/recently-very-little-bo.html" data-toggle="tooltip" data-placement="top" title="最近很少发博">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -217,7 +217,7 @@ int1 -le int2　　　　int1小于等于int2为真</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -346,7 +346,7 @@ int1 -le int2　　　　int1小于等于int2为真</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -354,13 +354,13 @@ int1 -le int2　　　　int1小于等于int2为真</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

@@ -10,7 +10,7 @@
 
     <title>10g Admin Workshop II - 5 - Database Recovery - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/10g-admin-workshop-ii-5-database-recovery.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/10g-admin-workshop-ii-5-database-recovery.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -126,142 +126,142 @@
 
                 <p><strong><span style="color: #ff6600;">Recovery Methods</span></strong></p>
 <div>
-<p>There are two methods for performing recovery:<br />
-<span style="color: #0000ff;">• User-managed recovery</span><br />
-– Files must be maintained and moved into place manually.<br />
-– Use SQL*Plus commands.<br />
-<span style="color: #0000ff;">• RMAN recovery</span><br />
-– Files are managed automatically.<br />
-– Use RMAN functionality including all repository maintenance and reporting capabilities.<br />
-– This can be done by using Enterprise Manager.<br />
+<p>There are two methods for performing recovery:<br>
+<span style="color: #0000ff;">• User-managed recovery</span><br>
+– Files must be maintained and moved into place manually.<br>
+– Use SQL*Plus commands.<br>
+<span style="color: #0000ff;">• RMAN recovery</span><br>
+– Files are managed automatically.<br>
+– Use RMAN functionality including all repository maintenance and reporting capabilities.<br>
+– This can be done by using Enterprise Manager.<br>
 – Oracle Corporation recommends using this method.</p>
-<p><strong><span style="color: #ff6600;">User-Managed Recovery: RECOVER Command</span></strong><br />
-The first step in performing user-managed media recovery is to manually restore the data files by copying them from a backup. If you do not restore a data file to its original location, you must update the control file with the new location by using an <span style="color: #3366ff;">ALTER DATABASE RENAME</span> FILE command. You must also restore any archived logs files needed to recover the restored data files. For RMAN restorations, you would use the SET NEWNAME command to specify the new location for that file.<br />
-You can use one of the following commands to recover the database or data file:<br />
-• RECOVER [AUTOMATIC] <span style="color: #ff6600;">DATABASE</span><br />
-This command can be used only for <span style="color: #3366ff;">a closed database recovery</span>.<br />
-• RECOVER [AUTOMATIC] <span style="color: #ff6600;">TABLESPACE</span> &lt;NUMBER&gt; | &lt;NAME&gt;<br />
-This command can be used only for <span style="color: #3366ff;">an open database recovery</span>.<br />
-• RECOVER [AUTOMATIC] <span style="color: #ff6600;">DATAFILE</span> &lt;'filename'&gt; | &lt;NAME&gt;<br />
-This command can be used for <span style="color: #3366ff;">both an open and a closed database recovery</span>.<br />
+<p><strong><span style="color: #ff6600;">User-Managed Recovery: RECOVER Command</span></strong><br>
+The first step in performing user-managed media recovery is to manually restore the data files by copying them from a backup. If you do not restore a data file to its original location, you must update the control file with the new location by using an <span style="color: #3366ff;">ALTER DATABASE RENAME</span> FILE command. You must also restore any archived logs files needed to recover the restored data files. For RMAN restorations, you would use the SET NEWNAME command to specify the new location for that file.<br>
+You can use one of the following commands to recover the database or data file:<br>
+• RECOVER [AUTOMATIC] <span style="color: #ff6600;">DATABASE</span><br>
+This command can be used only for <span style="color: #3366ff;">a closed database recovery</span>.<br>
+• RECOVER [AUTOMATIC] <span style="color: #ff6600;">TABLESPACE</span> &lt;NUMBER&gt; | &lt;NAME&gt;<br>
+This command can be used only for <span style="color: #3366ff;">an open database recovery</span>.<br>
+• RECOVER [AUTOMATIC] <span style="color: #ff6600;">DATAFILE</span> &lt;'filename'&gt; | &lt;NAME&gt;<br>
+This command can be used for <span style="color: #3366ff;">both an open and a closed database recovery</span>.<br>
 The AUTOMATIC keyword instructs the Oracle database to automatically generate the name of the next archived redo log file needed to continue the recovery operation. Otherwise, you are prompted for these names.</p>
-<p><strong><span style="color: #ff6600;">Complete Recovery</span></strong><br />
-These are the steps that take place during complete recovery:<br />
-1. Damaged or missing files are restored from a backup.<br />
-2. Changes from incremental backups, archived redo log files, and online redo log files are applied as necessary. The redo log changes are applied to the data files until the current online log is reached and the most recent transactions have been reentered. Undo blocks are generated during this entire process. This is referred to as rolling forward or cache recovery.<br />
-3. The restored data files may now contain committed and uncommitted changes.<br />
-4. The database is opened before undo is applied. This is to provide higher availability.<br />
-5. The undo blocks are used to roll back any uncommitted changes. This is sometimes referred to as transaction recovery.<br />
+<p><strong><span style="color: #ff6600;">Complete Recovery</span></strong><br>
+These are the steps that take place during complete recovery:<br>
+1. Damaged or missing files are restored from a backup.<br>
+2. Changes from incremental backups, archived redo log files, and online redo log files are applied as necessary. The redo log changes are applied to the data files until the current online log is reached and the most recent transactions have been reentered. Undo blocks are generated during this entire process. This is referred to as rolling forward or cache recovery.<br>
+3. The restored data files may now contain committed and uncommitted changes.<br>
+4. The database is opened before undo is applied. This is to provide higher availability.<br>
+5. The undo blocks are used to roll back any uncommitted changes. This is sometimes referred to as transaction recovery.<br>
 6. The data files are now in a recovered state and are consistent with the other data files in the database.</p>
-<p><strong><span style="color: #ff6600;">Incomplete Recovery</span></strong><br />
-Incomplete recovery, or database point-in-time recovery, uses a backup to produce a noncurrent version of the database. That is, you do not apply all of the redo records generated after the most recent backup. Perform this type of recovery only when absolutely necessary.<br />
-To perform incomplete recovery, you need:<br />
-• A valid offline or online <span style="color: #3366ff;">backup of all the data files made before the recovery point<br />
+<p><strong><span style="color: #ff6600;">Incomplete Recovery</span></strong><br>
+Incomplete recovery, or database point-in-time recovery, uses a backup to produce a noncurrent version of the database. That is, you do not apply all of the redo records generated after the most recent backup. Perform this type of recovery only when absolutely necessary.<br>
+To perform incomplete recovery, you need:<br>
+• A valid offline or online <span style="color: #3366ff;">backup of all the data files made before the recovery point<br>
 </span>• All archived logs from the time of the backup until the specified time of recovery</p>
-<p>The progression taken to perform an incomplete recovery is listed below:<br />
-1. Restore data files from backup. The backup that is used may not be the most recent one, if your restore point destination is to be not very recent.<br />
-2. Apply redo from the archived redo log files, including as many as necessary to reach the restore point destination.<br />
-3. Now the data files contain some committed and some uncommitted transactions because the redo can contain uncommitted data.<br />
-4. The database is opened before undo is applied. This is to provide higher availability.<br />
-5. While the redo was being applied, redo supporting the undo data files was also applied. So, the undo is available to be applied to the data files in order to undo any uncommitted transactions. That is done next.<br />
+<p>The progression taken to perform an incomplete recovery is listed below:<br>
+1. Restore data files from backup. The backup that is used may not be the most recent one, if your restore point destination is to be not very recent.<br>
+2. Apply redo from the archived redo log files, including as many as necessary to reach the restore point destination.<br>
+3. Now the data files contain some committed and some uncommitted transactions because the redo can contain uncommitted data.<br>
+4. The database is opened before undo is applied. This is to provide higher availability.<br>
+5. While the redo was being applied, redo supporting the undo data files was also applied. So, the undo is available to be applied to the data files in order to undo any uncommitted transactions. That is done next.<br>
 6. The data files are now recovered to the point in time that you chose.</p>
-<p><span style="color: #ff6600;">Situations Requiring Incomplete Recovery</span><br />
-• Complete recovery fails because of a missing archived log file.<br />
-• One or more unarchived redo log files and a data file are lost.<br />
+<p><span style="color: #ff6600;">Situations Requiring Incomplete Recovery</span><br>
+• Complete recovery fails because of a missing archived log file.<br>
+• One or more unarchived redo log files and a data file are lost.<br>
 • A backup of the control file is used to open or recover the database.</p>
-<p><strong><span style="color: #ff6600;">Types of Incomplete Recovery</span></strong><br />
-There are four types of incomplete recovery:<br />
-• Time-based recovery<br />
-• Cancel-based recovery<br />
-• Change-based recovery<br />
+<p><strong><span style="color: #ff6600;">Types of Incomplete Recovery</span></strong><br>
+There are four types of incomplete recovery:<br>
+• Time-based recovery<br>
+• Cancel-based recovery<br>
+• Change-based recovery<br>
 • Log sequence recovery</p>
-<p><strong><span style="color: #ff6600;">Performing User-Managed Incomplete Recovery</span></strong><br />
-The following command is used to perform incomplete recovery:<br />
-<span>RECOVER [AUTOMATIC] DATABASE option</span><br />
-Here:<br />
-• AUTOMATIC: Automatically applies archived and redo log files<br />
-• option: UNTIL TIME 'YYYY-MM-DD:HH24:MI:SS'<br />
-UNTIL CANCEL<br />
-UNTIL CHANGE &lt;integer&gt;<br />
+<p><strong><span style="color: #ff6600;">Performing User-Managed Incomplete Recovery</span></strong><br>
+The following command is used to perform incomplete recovery:<br>
+<span>RECOVER [AUTOMATIC] DATABASE option</span><br>
+Here:<br>
+• AUTOMATIC: Automatically applies archived and redo log files<br>
+• option: UNTIL TIME 'YYYY-MM-DD:HH24:MI:SS'<br>
+UNTIL CANCEL<br>
+UNTIL CHANGE &lt;integer&gt;<br>
 USING BACKUP CONTROLFILE</p>
-<p><strong><span style="color: #ff6600;">Performing User-Managed Incomplete Recovery</span></strong><br />
-To perform user-managed incomplete recovery, follow these steps:<br />
-1. Shut down the database.<br />
-2. Restore data files. If there is enough space available, restore to the LOG_ARCHIVE_DEST location or use the ALTER SYSTEM ARCHIVE LOG START TO &lt;LOCATION&gt; command or the SET LOGSOURCE &lt;LOCATION&gt; command to change the location.<br />
-3. Mount the database.<br />
-4. Recover the database.<br />
+<p><strong><span style="color: #ff6600;">Performing User-Managed Incomplete Recovery</span></strong><br>
+To perform user-managed incomplete recovery, follow these steps:<br>
+1. Shut down the database.<br>
+2. Restore data files. If there is enough space available, restore to the LOG_ARCHIVE_DEST location or use the ALTER SYSTEM ARCHIVE LOG START TO &lt;LOCATION&gt; command or the SET LOGSOURCE &lt;LOCATION&gt; command to change the location.<br>
+3. Mount the database.<br>
+4. Recover the database.<br>
 5. Open the database with the <span style="color: #3366ff;">RESETLOGS</span> option. To synchronize data files with control files and redo logs.</p>
-<p>&nbsp;</p>
-<p><span style="color: #ff6600;">User-Managed Time-Based Recovery:</span><br />
-<span>SQL&gt; SHUTDOWN IMMEDIATE<br />
-$ cp /BACKUP/* /u01/db01/ORADATA<br />
-SQL&gt; STARTUP MOUNT<br />
-SQL&gt; RECOVER DATABASE UNTIL TIME '2005-11-28:11:44:00';<br />
+<p> </p>
+<p><span style="color: #ff6600;">User-Managed Time-Based Recovery:</span><br>
+<span>SQL&gt; SHUTDOWN IMMEDIATE<br>
+$ cp /BACKUP/* /u01/db01/ORADATA<br>
+SQL&gt; STARTUP MOUNT<br>
+SQL&gt; RECOVER DATABASE UNTIL TIME '2005-11-28:11:44:00';<br>
 SQL&gt; ALTER DATABASE OPEN RESETLOGS;</span></p>
-<p><span style="color: #ff6600;">User-Managed Cancel-Based Recovery:</span><br />
-Recover the database as follows:<br />
-<span>1. Shut down the database.<br />
-2. Restore all data files from the most recent backup.<br />
-3. You already have a valid backup, so mount the database.<br />
-4. Execute RECOVER DATABASE UNTIL CANCEL.<br />
-5. Execute ALTER DATABASE OPEN RESETLOGS to open the database.<br />
-</span><span><span>When the RECOVER DATABASE UNTIL CANCEL command is executed, it recovers the database until it cannot find a log file.</span><br />
+<p><span style="color: #ff6600;">User-Managed Cancel-Based Recovery:</span><br>
+Recover the database as follows:<br>
+<span>1. Shut down the database.<br>
+2. Restore all data files from the most recent backup.<br>
+3. You already have a valid backup, so mount the database.<br>
+4. Execute RECOVER DATABASE UNTIL CANCEL.<br>
+5. Execute ALTER DATABASE OPEN RESETLOGS to open the database.<br>
+</span><span><span>When the RECOVER DATABASE UNTIL CANCEL command is executed, it recovers the database until it cannot find a log file.</span><br>
 </span></p>
-<p><strong><span style="color: #ff6600;">Performing Incomplete Recovery by Using RMAN</span></strong><br />
-1. Mount the database.<br />
-2. Allocate multiple channels for parallelization.<br />
-3. Restore all data files.<br />
-4. Recover the database by using UNTIL TIME, UNTIL SEQUENCE, or UNTIL SCN.<br />
+<p><strong><span style="color: #ff6600;">Performing Incomplete Recovery by Using RMAN</span></strong><br>
+1. Mount the database.<br>
+2. Allocate multiple channels for parallelization.<br>
+3. Restore all data files.<br>
+4. Recover the database by using UNTIL TIME, UNTIL SEQUENCE, or UNTIL SCN.<br>
 5. Open the database by using RESETLOGS.</p>
-<p><span style="color: #ff6600;">Time-Based Recovery Using RMAN<br />
-</span>1. If the target database is open, perform a clean shutdown.<br />
-2. Mount the target database. Do not back up the database during the recovery.<br />
-3. Ensure that NLS_LANG and NLS_DATE_FORMAT environment variables are set appropriately:<br />
-<span style="color: #3366ff;">    $ NLS_LANG=american_america.we8iso8859p15<br />
-$ NLS_DATE_FORMAT='YYYY-MM-DD:HH24:MI:SS'</span><br />
-4. Start Recovery Manager and connect to the target database.<br />
-<span style="color: #3366ff;"> $ rman target </span><a href="mailto:rman/rman@ORCL"><span style="color: #3366ff;">rman/rman@ORCL</span></a><br />
-5. You can allocate multiple channels to improve the performance:<br />
-RMAN&gt; run {allocate channel c1 type DISK;<br />
-2&gt; allocate channel c2 type DISK;<br />
-6. RMAN&gt; RUN {<br />
-2&gt; SET UNTIL TIME = '2005-11-28:11:44:00';<br />
-3&gt; RESTORE DATABASE;<br />
-4&gt; RECOVER DATABASE;<br />
+<p><span style="color: #ff6600;">Time-Based Recovery Using RMAN<br>
+</span>1. If the target database is open, perform a clean shutdown.<br>
+2. Mount the target database. Do not back up the database during the recovery.<br>
+3. Ensure that NLS_LANG and NLS_DATE_FORMAT environment variables are set appropriately:<br>
+<span style="color: #3366ff;">    $ NLS_LANG=american_america.we8iso8859p15<br>
+$ NLS_DATE_FORMAT='YYYY-MM-DD:HH24:MI:SS'</span><br>
+4. Start Recovery Manager and connect to the target database.<br>
+<span style="color: #3366ff;"> $ rman target </span><a href="mailto:rman/rman@ORCL"><span style="color: #3366ff;">rman/rman@ORCL</span></a><br>
+5. You can allocate multiple channels to improve the performance:<br>
+RMAN&gt; run {allocate channel c1 type DISK;<br>
+2&gt; allocate channel c2 type DISK;<br>
+6. RMAN&gt; RUN {<br>
+2&gt; SET UNTIL TIME = '2005-11-28:11:44:00';<br>
+3&gt; RESTORE DATABASE;<br>
+4&gt; RECOVER DATABASE;<br>
 5&gt; ALTER DATABASE OPEN RESETLOGS; }</p>
-<p><span style="color: #ff6600;">Log Sequence Recovery Using RMAN</span><br />
-RMAN&gt; RUN {<br />
-2&gt; SET UNTIL SEQUENCE 120 THREAD 1;<br />
-3&gt; ALTER DATABASE MOUNT;<br />
-4&gt; RESTORE DATABASE;<br />
-5&gt; RECOVER DATABASE; # recovers through log 119<br />
-6&gt; ALTER DATABASE OPEN RESETLOGS;<br />
+<p><span style="color: #ff6600;">Log Sequence Recovery Using RMAN</span><br>
+RMAN&gt; RUN {<br>
+2&gt; SET UNTIL SEQUENCE 120 THREAD 1;<br>
+3&gt; ALTER DATABASE MOUNT;<br>
+4&gt; RESTORE DATABASE;<br>
+5&gt; RECOVER DATABASE; # recovers through log 119<br>
+6&gt; ALTER DATABASE OPEN RESETLOGS;<br>
 7&gt; }</p>
-<p><span style="color: #ff6600;">Incomplete Recovery and the Alert Log</span><br />
+<p><span style="color: #ff6600;">Incomplete Recovery and the Alert Log</span><br>
 During recovery, progress information is stored in the alert log. This file should always be checked before and after recovery.</p>
-<p><strong><span style="color: #ff6600;">Restore point:</span></strong><br />
-• Serves as an alias for an SCN or a specific point in time<br />
-• Is stored in the control file<br />
-• Can be used with:<br />
-– RECOVER DATABASE<br />
-– FLASHBACK DATABASE<br />
+<p><strong><span style="color: #ff6600;">Restore point:</span></strong><br>
+• Serves as an alias for an SCN or a specific point in time<br>
+• Is stored in the control file<br>
+• Can be used with:<br>
+– RECOVER DATABASE<br>
+– FLASHBACK DATABASE<br>
 – FLASHBACK TABLE</p>
-<p>Incomplete Recovery: Best Practices<br />
-• It is important to follow all recovery steps carefully because most incomplete recovery<br />
-problems are caused by a DBA error during the recovery process.<br />
-• Before starting incomplete recovery, perform a whole closed database backup<br />
-If a whole backup is not performed, at least archive the current redo log:<br />
-<span>SQL&gt; ALTER SYSTEM ARCHIVE LOG CURRENT</span><br />
-and back up the control file:<br />
+<p>Incomplete Recovery: Best Practices<br>
+• It is important to follow all recovery steps carefully because most incomplete recovery<br>
+problems are caused by a DBA error during the recovery process.<br>
+• Before starting incomplete recovery, perform a whole closed database backup<br>
+If a whole backup is not performed, at least archive the current redo log:<br>
+<span>SQL&gt; ALTER SYSTEM ARCHIVE LOG CURRENT</span><br>
+and back up the control file:<br>
 <span>SQL&gt; ALTER DATABASE BACKUP CONTROLFILE TO '/u01/data/backup.ctl';</span></p>
-<p>&nbsp;</p>
-<p><span style="color: #ff6600;">RESTORE CONTROLFILE FROM AUTOBACKUP command:</span><br />
-<span>RMAN&gt; SHUTDOWN IMMEDIATE;<br />
-RMAN&gt; STARTUP NOMOUNT;<br />
+<p> </p>
+<p><span style="color: #ff6600;">RESTORE CONTROLFILE FROM AUTOBACKUP command:</span><br>
+<span>RMAN&gt; SHUTDOWN IMMEDIATE;<br>
+RMAN&gt; STARTUP NOMOUNT;<br>
 RMAN&gt; RESTORE CONTROLFILE FROM AUTOBACKUP;</span></p>
 <p>The instance must be in the NOMOUNT state</p>
-<p><span style="color: #ff6600;">Restore spfile from the autobackup</span><br />
-must first set the DBID for your database, and then use command:<br />
+<p><span style="color: #ff6600;">Restore spfile from the autobackup</span><br>
+must first set the DBID for your database, and then use command:<br>
 RESTORE SPFILE FROM AUTOBACKUP;</p>
 <p>After you have started the instance with the restored <span style="color: #3366ff;">server parameter</span> file, RMAN can restore the control file from the autobackup.</p>
 <p>After restoring the control files of your database from backup, you must perform complete media recovery and then open your database with the RESETLOGS option.</p>
@@ -279,12 +279,12 @@ RESTORE SPFILE FROM AUTOBACKUP;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/thinking/you-need-to-remember-some-details.html" data-toggle="tooltip" data-placement="top" title="你需要记住一些细节">&larr; Previous Post</a>
+                        <a href="/thinking/you-need-to-remember-some-details.html" data-toggle="tooltip" data-placement="top" title="你需要记住一些细节">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/10g-admin-workshop-ii-2-configuring-recovery-manager.html" data-toggle="tooltip" data-placement="top" title="10g Admin Workshop II - 2 - Configuring Recovery Manager">Next Post &rarr;</a>
+                        <a href="/oracle/10g-admin-workshop-ii-2-configuring-recovery-manager.html" data-toggle="tooltip" data-placement="top" title="10g Admin Workshop II - 2 - Configuring Recovery Manager">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -309,7 +309,7 @@ RESTORE SPFILE FROM AUTOBACKUP;</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -438,7 +438,7 @@ RESTORE SPFILE FROM AUTOBACKUP;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -446,13 +446,13 @@ RESTORE SPFILE FROM AUTOBACKUP;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

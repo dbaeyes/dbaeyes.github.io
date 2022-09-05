@@ -10,7 +10,7 @@
 
     <title>The sequence of updated value in MySQL - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/mysql/the-sequence-of-updated-value-in-mysql.html">
+    <link rel="canonical" href="http://localhost:4000/mysql/the-sequence-of-updated-value-in-mysql.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -124,44 +124,44 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>It was a confused phenomenon when I found it.<br />
-[cc lang="sql"]CREATE TABLE `tmp_xf` (<br />
-  `id` int(11) NOT NULL AUTO_INCREMENT,<br />
-   name varchar(32) not null,<br />
-  `status` tinyint(4) NOT NULL,<br />
-  PRIMARY KEY (`id`)<br />
+                <p>It was a confused phenomenon when I found it.<br>
+[cc lang="sql"]CREATE TABLE `tmp_xf` (<br>
+  `id` int(11) NOT NULL AUTO_INCREMENT,<br>
+   name varchar(32) not null,<br>
+  `status` tinyint(4) NOT NULL,<br>
+  PRIMARY KEY (`id`)<br>
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;</p>
 <p>insert into tmp_xf(name,status) values ('dbaeyes',1);</p>
-<p>select * from tmp_xf;<br />
-+----+---------+--------+<br />
-| id | name    | status |<br />
-+----+---------+--------+<br />
-|  1 | dbaeyes |      1 |<br />
+<p>select * from tmp_xf;<br>
++----+---------+--------+<br>
+| id | name    | status |<br>
++----+---------+--------+<br>
+|  1 | dbaeyes |      1 |<br>
 +----+---------+--------+[/cc]</p>
-<p>Phase 1:<br />
-[cc lang="sql"]update tmp_xf<br />
-set status= if(name='dbaeyes',8,status),<br />
-name = 'toby'<br />
+<p>Phase 1:<br>
+[cc lang="sql"]update tmp_xf<br>
+set status= if(name='dbaeyes',8,status),<br>
+name = 'toby'<br>
 where id =1;</p>
-<p>+----+------+--------+<br />
-| id | name | status |<br />
-+----+------+--------+<br />
-|  1 | toby |      8 |<br />
+<p>+----+------+--------+<br>
+| id | name | status |<br>
++----+------+--------+<br>
+|  1 | toby |      8 |<br>
 +----+------+--------+[/cc]</p>
-<p>--restore data<br />
+<p>--restore data<br>
 update tmp_xf set status=1,name='dbaeyes' where id = 1;</p>
-<p>[cc lang="sql"]update tmp_xf<br />
-set name = 'toby',<br />
-status= if(name='dbaeyes',8,status)<br />
+<p>[cc lang="sql"]update tmp_xf<br>
+set name = 'toby',<br>
+status= if(name='dbaeyes',8,status)<br>
 where id =1;</p>
-<p>+----+------+--------+<br />
-| id | name | status |<br />
-+----+------+--------+<br />
-|  1 | toby |      1 |<br />
+<p>+----+------+--------+<br>
+| id | name | status |<br>
++----+------+--------+<br>
+|  1 | toby |      1 |<br>
 +----+------+--------+[/cc]</p>
-<p>The deifference is the seq of "set values".<br />
-It can be considered that MySQL use the updated value for the next action, then the result is different.<br />
-It just like<br />
+<p>The deifference is the seq of "set values".<br>
+It can be considered that MySQL use the updated value for the next action, then the result is different.<br>
+It just like<br>
 i++ and i=i+1</p>
 <p>You can find the detail info by the source code.</p>
 
@@ -176,12 +176,12 @@ i++ and i=i+1</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/test-pic.html" data-toggle="tooltip" data-placement="top" title="Holiday">&larr; Previous Post</a>
+                        <a href="/my%20life/test-pic.html" data-toggle="tooltip" data-placement="top" title="Holiday">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/hangzhou-west-lake-expo-international-fireworks-festival.html" data-toggle="tooltip" data-placement="top" title="杭州西湖博览会国际烟花节">Next Post &rarr;</a>
+                        <a href="/my%20life/hangzhou-west-lake-expo-international-fireworks-festival.html" data-toggle="tooltip" data-placement="top" title="杭州西湖博览会国际烟花节">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -206,7 +206,7 @@ i++ and i=i+1</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -335,7 +335,7 @@ i++ and i=i+1</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -343,13 +343,13 @@ i++ and i=i+1</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

@@ -10,7 +10,7 @@
 
     <title>oracle 索引和逻辑读小测 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/oracle/oracle-index-and-logical-reading-quiz.html">
+    <link rel="canonical" href="http://localhost:4000/oracle/oracle-index-and-logical-reading-quiz.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -125,8 +125,8 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>create table T1(</p>
-<p>ID   NUMBER not null,<br />
-NAME VARCHAR2(30) not null<br />
+<p>ID   NUMBER not null,<br>
+NAME VARCHAR2(30) not null<br>
 );</p>
 <p>create index D on T1 (name);</p>
 <p>alter table T1 add constraint PK_T1_ID primary key (ID) ;</p>
@@ -135,257 +135,257 @@ NAME VARCHAR2(30) not null<br />
 <p>----------------------------------------------</p>
 <p>测试逻辑读</p>
 <p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt; select * from t1 where id = '15238';</p>
-<p>ID NAME<br />
----------- ------------------------------<br />
-15238 /3fae2b85_BasicOptionPaneUI1<br />
-执行计划<br />
-----------------------------------------------------------<br />
+<p>ID NAME<br>
+---------- ------------------------------<br>
+15238 /3fae2b85_BasicOptionPaneUI1<br>
+执行计划<br>
+----------------------------------------------------------<br>
 Plan hash value: 190799060</p>
-<p>-----------------------------------------------------------------------------------------<br />
-| Id | Operation                   | Name      | Rows | Bytes | Cost (%CPU)| Time     |<br />
------------------------------------------------------------------------------------------<br />
-|   0 | SELECT STATEMENT            |           |     1 |    28 |     2   (0)| 00:00:01 |<br />
-|   1 | TABLE ACCESS BY INDEX ROWID| T1        |     1 |    28 |     2   (0)| 00:00:01 |<br />
-|* 2 |   <span style="color: #ff6600;"><strong>INDEX RANGE SCAN</strong></span>          | IDX_T1_ID |     1 |       |     1   (0)| 00:00:01 |<br />
+<p>-----------------------------------------------------------------------------------------<br>
+| Id | Operation                   | Name      | Rows | Bytes | Cost (%CPU)| Time     |<br>
+-----------------------------------------------------------------------------------------<br>
+|   0 | SELECT STATEMENT            |           |     1 |    28 |     2   (0)| 00:00:01 |<br>
+|   1 | TABLE ACCESS BY INDEX ROWID| T1        |     1 |    28 |     2   (0)| 00:00:01 |<br>
+|* 2 |   <span style="color: #ff6600;"><strong>INDEX RANGE SCAN</strong></span>          | IDX_T1_ID |     1 |       |     1   (0)| 00:00:01 |<br>
 -----------------------------------------------------------------------------------------</p>
-<p>Predicate Information (identified by operation id):<br />
+<p>Predicate Information (identified by operation id):<br>
 ---------------------------------------------------</p>
-<p>2 - access("ID"=15238)<br />
-统计信息<br />
-----------------------------------------------------------<br />
-0 recursive calls<br />
-0 db block gets<br />
-<span style="color: #ff0000;"><strong>4 consistent gets<br />
-</strong></span>          0 physical reads<br />
-0 redo size<br />
-491 bytes sent via SQL*Net to client<br />
-385 bytes received via SQL*Net from client<br />
-2 SQL*Net roundtrips to/from client<br />
-0 sorts (memory)<br />
-0 sorts (disk)<br />
+<p>2 - access("ID"=15238)<br>
+统计信息<br>
+----------------------------------------------------------<br>
+0 recursive calls<br>
+0 db block gets<br>
+<span style="color: #ff0000;"><strong>4 consistent gets<br>
+</strong></span>          0 physical reads<br>
+0 redo size<br>
+491 bytes sent via SQL*Net to client<br>
+385 bytes received via SQL*Net from client<br>
+2 SQL*Net roundtrips to/from client<br>
+0 sorts (memory)<br>
+0 sorts (disk)<br>
 1 rows processed</p>
-<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br />
+<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br>
 <a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt; select name from t1 where id = '15238';</p>
-<p>NAME<br />
-------------------------------<br />
-/3fae2b85_BasicOptionPaneUI1<br />
-执行计划<br />
-----------------------------------------------------------<br />
+<p>NAME<br>
+------------------------------<br>
+/3fae2b85_BasicOptionPaneUI1<br>
+执行计划<br>
+----------------------------------------------------------<br>
 Plan hash value: 190799060</p>
-<p>-----------------------------------------------------------------------------------------<br />
-| Id | Operation                   | Name      | Rows | Bytes | Cost (%CPU)| Time     |<br />
------------------------------------------------------------------------------------------<br />
-|   0 | SELECT STATEMENT            |           |     1 |    28 |     2   (0)| 00:00:01 |<br />
-|   1 | TABLE ACCESS BY INDEX ROWID| T1        |     1 |    28 |     2   (0)| 00:00:01 |<br />
-|* 2 |   INDEX RANGE SCAN          | IDX_T1_ID |     1 |       |     1   (0)| 00:00:01 |<br />
+<p>-----------------------------------------------------------------------------------------<br>
+| Id | Operation                   | Name      | Rows | Bytes | Cost (%CPU)| Time     |<br>
+-----------------------------------------------------------------------------------------<br>
+|   0 | SELECT STATEMENT            |           |     1 |    28 |     2   (0)| 00:00:01 |<br>
+|   1 | TABLE ACCESS BY INDEX ROWID| T1        |     1 |    28 |     2   (0)| 00:00:01 |<br>
+|* 2 |   INDEX RANGE SCAN          | IDX_T1_ID |     1 |       |     1   (0)| 00:00:01 |<br>
 -----------------------------------------------------------------------------------------</p>
-<p>Predicate Information (identified by operation id):<br />
+<p>Predicate Information (identified by operation id):<br>
 ---------------------------------------------------</p>
-<p>2 - access("ID"=15238)<br />
-统计信息<br />
-----------------------------------------------------------<br />
-0 recursive calls<br />
-0 db block gets<br />
-<strong><span style="color: #ff0000;">4 consistent gets<br />
-</span></strong>          0 physical reads<br />
-0 redo size<br />
-439 bytes sent via SQL*Net to client<br />
-385 bytes received via SQL*Net from client<br />
-2 SQL*Net roundtrips to/from client<br />
-0 sorts (memory)<br />
-0 sorts (disk)<br />
+<p>2 - access("ID"=15238)<br>
+统计信息<br>
+----------------------------------------------------------<br>
+0 recursive calls<br>
+0 db block gets<br>
+<strong><span style="color: #ff0000;">4 consistent gets<br>
+</span></strong>          0 physical reads<br>
+0 redo size<br>
+439 bytes sent via SQL*Net to client<br>
+385 bytes received via SQL*Net from client<br>
+2 SQL*Net roundtrips to/from client<br>
+0 sorts (memory)<br>
+0 sorts (disk)<br>
 1 rows processed</p>
 <p><span style="color: #ff6600;">-- 可以看到查询通过索引获取，因为需要回表，索引逻辑读是4</span></p>
-<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br />
+<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br>
 <a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt; select id from t1 where id = '15238';</p>
-<p>ID<br />
-----------<br />
-15238<br />
-执行计划<br />
-----------------------------------------------------------<br />
+<p>ID<br>
+----------<br>
+15238<br>
+执行计划<br>
+----------------------------------------------------------<br>
 Plan hash value: 3653646128</p>
-<p>------------------------------------------------------------------------------<br />
-| Id | Operation        | Name      | Rows | Bytes | Cost (%CPU)| Time     |<br />
-------------------------------------------------------------------------------<br />
-|   0 | SELECT STATEMENT |           |     1 |     5 |     1   (0)| 00:00:01 |<br />
-|* 1 | INDEX RANGE SCAN| IDX_T1_ID |     1 |     5 |     1   (0)| 00:00:01 |<br />
+<p>------------------------------------------------------------------------------<br>
+| Id | Operation        | Name      | Rows | Bytes | Cost (%CPU)| Time     |<br>
+------------------------------------------------------------------------------<br>
+|   0 | SELECT STATEMENT |           |     1 |     5 |     1   (0)| 00:00:01 |<br>
+|* 1 | INDEX RANGE SCAN| IDX_T1_ID |     1 |     5 |     1   (0)| 00:00:01 |<br>
 ------------------------------------------------------------------------------</p>
-<p>Predicate Information (identified by operation id):<br />
+<p>Predicate Information (identified by operation id):<br>
 ---------------------------------------------------</p>
-<p>1 - access("ID"=15238)<br />
-统计信息<br />
-----------------------------------------------------------<br />
-0 recursive calls<br />
-0 db block gets<br />
-<span style="color: #ff0000;"><strong> 3 consistent gets<br />
-</strong></span>          0 physical reads<br />
-0 redo size<br />
-404 bytes sent via SQL*Net to client<br />
-385 bytes received via SQL*Net from client<br />
-2 SQL*Net roundtrips to/from client<br />
-0 sorts (memory)<br />
-0 sorts (disk)<br />
+<p>1 - access("ID"=15238)<br>
+统计信息<br>
+----------------------------------------------------------<br>
+0 recursive calls<br>
+0 db block gets<br>
+<span style="color: #ff0000;"><strong> 3 consistent gets<br>
+</strong></span>          0 physical reads<br>
+0 redo size<br>
+404 bytes sent via SQL*Net to client<br>
+385 bytes received via SQL*Net from client<br>
+2 SQL*Net roundtrips to/from client<br>
+0 sorts (memory)<br>
+0 sorts (disk)<br>
 1 rows processed</p>
-<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br />
+<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br>
 <a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt; select count(*) from t1 where id = '15238';</p>
-<p>COUNT(*)<br />
-----------<br />
-1<br />
-执行计划<br />
-----------------------------------------------------------<br />
+<p>COUNT(*)<br>
+----------<br>
+1<br>
+执行计划<br>
+----------------------------------------------------------<br>
 Plan hash value: 3689344262</p>
-<p>-------------------------------------------------------------------------------<br />
-| Id | Operation         | Name      | Rows | Bytes | Cost (%CPU)| Time     |<br />
--------------------------------------------------------------------------------<br />
-|   0 | SELECT STATEMENT |           |     1 |     5 |     1   (0)| 00:00:01 |<br />
-|   1 | SORT AGGREGATE   |           |     1 |     5 |            |          |<br />
-|* 2 |   INDEX RANGE SCAN| IDX_T1_ID |     1 |     5 |     1   (0)| 00:00:01 |<br />
+<p>-------------------------------------------------------------------------------<br>
+| Id | Operation         | Name      | Rows | Bytes | Cost (%CPU)| Time     |<br>
+-------------------------------------------------------------------------------<br>
+|   0 | SELECT STATEMENT |           |     1 |     5 |     1   (0)| 00:00:01 |<br>
+|   1 | SORT AGGREGATE   |           |     1 |     5 |            |          |<br>
+|* 2 |   INDEX RANGE SCAN| IDX_T1_ID |     1 |     5 |     1   (0)| 00:00:01 |<br>
 -------------------------------------------------------------------------------</p>
-<p>Predicate Information (identified by operation id):<br />
+<p>Predicate Information (identified by operation id):<br>
 ---------------------------------------------------</p>
-<p>2 - access("ID"=15238)<br />
-统计信息<br />
-----------------------------------------------------------<br />
-0 recursive calls<br />
-0 db block gets<br />
-<strong><span style="color: #ff0000;">2 consistent gets<br />
-</span></strong>          0 physical reads<br />
-0 redo size<br />
-408 bytes sent via SQL*Net to client<br />
-385 bytes received via SQL*Net from client<br />
-2 SQL*Net roundtrips to/from client<br />
-0 sorts (memory)<br />
-0 sorts (disk)<br />
+<p>2 - access("ID"=15238)<br>
+统计信息<br>
+----------------------------------------------------------<br>
+0 recursive calls<br>
+0 db block gets<br>
+<strong><span style="color: #ff0000;">2 consistent gets<br>
+</span></strong>          0 physical reads<br>
+0 redo size<br>
+408 bytes sent via SQL*Net to client<br>
+385 bytes received via SQL*Net from client<br>
+2 SQL*Net roundtrips to/from client<br>
+0 sorts (memory)<br>
+0 sorts (disk)<br>
 1 rows processed</p>
 <p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;</p>
-<p>&nbsp;</p>
+<p> </p>
 <p>################</p>
 <p>主键索引unique指定</p>
-<p>alter table T1<br />
-add constraint PK_T1_ID primary key (ID)<br />
+<p>alter table T1<br>
+add constraint PK_T1_ID primary key (ID)<br>
 using index</p>
 <p>-----------------------</p>
 <p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt; select * from t1 where id = '15238';</p>
-<p>ID NAME<br />
----------- ------------------------------<br />
-15238 /3fae2b85_BasicOptionPaneUI1<br />
-执行计划<br />
-----------------------------------------------------------<br />
+<p>ID NAME<br>
+---------- ------------------------------<br>
+15238 /3fae2b85_BasicOptionPaneUI1<br>
+执行计划<br>
+----------------------------------------------------------<br>
 Plan hash value: 3736029472</p>
-<p>----------------------------------------------------------------------------------------<br />
-| Id | Operation                   | Name     | Rows | Bytes | Cost (%CPU)| Time     |<br />
-----------------------------------------------------------------------------------------<br />
-|   0 | SELECT STATEMENT            |          |     1 |    28 |     2   (0)| 00:00:01 |<br />
-|   1 | TABLE ACCESS BY INDEX ROWID| T1       |     1 |    28 |     2   (0)| 00:00:01 |<br />
-|* 2 |   <strong><span style="color: #ff6600;">INDEX UNIQUE SCAN</span></strong>         | PK_T1_ID |     1 |       |     1   (0)| 00:00:01 |<br />
+<p>----------------------------------------------------------------------------------------<br>
+| Id | Operation                   | Name     | Rows | Bytes | Cost (%CPU)| Time     |<br>
+----------------------------------------------------------------------------------------<br>
+|   0 | SELECT STATEMENT            |          |     1 |    28 |     2   (0)| 00:00:01 |<br>
+|   1 | TABLE ACCESS BY INDEX ROWID| T1       |     1 |    28 |     2   (0)| 00:00:01 |<br>
+|* 2 |   <strong><span style="color: #ff6600;">INDEX UNIQUE SCAN</span></strong>         | PK_T1_ID |     1 |       |     1   (0)| 00:00:01 |<br>
 ----------------------------------------------------------------------------------------</p>
-<p>Predicate Information (identified by operation id):<br />
+<p>Predicate Information (identified by operation id):<br>
 ---------------------------------------------------</p>
-<p>2 - access("ID"=15238)<br />
-统计信息<br />
-----------------------------------------------------------<br />
-0 recursive calls<br />
-0 db block gets<br />
-<strong><span style="color: #ff0000;">3 consistent gets</span></strong><br />
-0 physical reads<br />
-0 redo size<br />
-395 bytes sent via SQL*Net to client<br />
-374 bytes received via SQL*Net from client<br />
-1 SQL*Net roundtrips to/from client<br />
-0 sorts (memory)<br />
-0 sorts (disk)<br />
+<p>2 - access("ID"=15238)<br>
+统计信息<br>
+----------------------------------------------------------<br>
+0 recursive calls<br>
+0 db block gets<br>
+<strong><span style="color: #ff0000;">3 consistent gets</span></strong><br>
+0 physical reads<br>
+0 redo size<br>
+395 bytes sent via SQL*Net to client<br>
+374 bytes received via SQL*Net from client<br>
+1 SQL*Net roundtrips to/from client<br>
+0 sorts (memory)<br>
+0 sorts (disk)<br>
 1 rows processed</p>
-<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br />
+<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br>
 <a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt; select name from t1 where id = '15237';</p>
-<p>NAME<br />
-------------------------------<br />
-javax/swing/text/PasswordView<br />
-执行计划<br />
-----------------------------------------------------------<br />
+<p>NAME<br>
+------------------------------<br>
+javax/swing/text/PasswordView<br>
+执行计划<br>
+----------------------------------------------------------<br>
 Plan hash value: 3736029472</p>
-<p>----------------------------------------------------------------------------------------<br />
-| Id | Operation                   | Name     | Rows | Bytes | Cost (%CPU)| Time     |<br />
-----------------------------------------------------------------------------------------<br />
-|   0 | SELECT STATEMENT            |          |     1 |    28 |     2   (0)| 00:00:01 |<br />
-|   1 | TABLE ACCESS BY INDEX ROWID| T1       |     1 |    28 |     2   (0)| 00:00:01 |<br />
-|* 2 |   INDEX UNIQUE SCAN         | PK_T1_ID |     1 |       |     1   (0)| 00:00:01 |<br />
+<p>----------------------------------------------------------------------------------------<br>
+| Id | Operation                   | Name     | Rows | Bytes | Cost (%CPU)| Time     |<br>
+----------------------------------------------------------------------------------------<br>
+|   0 | SELECT STATEMENT            |          |     1 |    28 |     2   (0)| 00:00:01 |<br>
+|   1 | TABLE ACCESS BY INDEX ROWID| T1       |     1 |    28 |     2   (0)| 00:00:01 |<br>
+|* 2 |   INDEX UNIQUE SCAN         | PK_T1_ID |     1 |       |     1   (0)| 00:00:01 |<br>
 ----------------------------------------------------------------------------------------</p>
-<p>Predicate Information (identified by operation id):<br />
+<p>Predicate Information (identified by operation id):<br>
 ---------------------------------------------------</p>
-<p>2 - access("ID"=15237)<br />
-统计信息<br />
-----------------------------------------------------------<br />
-0 recursive calls<br />
-0 db block gets<br />
-3 consistent gets<br />
-0 physical reads<br />
-0 redo size<br />
-344 bytes sent via SQL*Net to client<br />
-374 bytes received via SQL*Net from client<br />
-1 SQL*Net roundtrips to/from client<br />
-0 sorts (memory)<br />
-0 sorts (disk)<br />
+<p>2 - access("ID"=15237)<br>
+统计信息<br>
+----------------------------------------------------------<br>
+0 recursive calls<br>
+0 db block gets<br>
+3 consistent gets<br>
+0 physical reads<br>
+0 redo size<br>
+344 bytes sent via SQL*Net to client<br>
+374 bytes received via SQL*Net from client<br>
+1 SQL*Net roundtrips to/from client<br>
+0 sorts (memory)<br>
+0 sorts (disk)<br>
 1 rows processed</p>
-<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br />
+<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br>
 <a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt; select id from t1 where id = '15237';</p>
-<p>ID<br />
-----------<br />
-15237<br />
-执行计划<br />
-----------------------------------------------------------<br />
+<p>ID<br>
+----------<br>
+15237<br>
+执行计划<br>
+----------------------------------------------------------<br>
 Plan hash value: 2381392525</p>
-<p>------------------------------------------------------------------------------<br />
-| Id | Operation         | Name     | Rows | Bytes | Cost (%CPU)| Time     |<br />
-------------------------------------------------------------------------------<br />
-|   0 | SELECT STATEMENT |          |     1 |     5 |     1   (0)| 00:00:01 |<br />
-|* 1 | INDEX UNIQUE SCAN| PK_T1_ID |     1 |     5 |     1   (0)| 00:00:01 |<br />
+<p>------------------------------------------------------------------------------<br>
+| Id | Operation         | Name     | Rows | Bytes | Cost (%CPU)| Time     |<br>
+------------------------------------------------------------------------------<br>
+|   0 | SELECT STATEMENT |          |     1 |     5 |     1   (0)| 00:00:01 |<br>
+|* 1 | INDEX UNIQUE SCAN| PK_T1_ID |     1 |     5 |     1   (0)| 00:00:01 |<br>
 ------------------------------------------------------------------------------</p>
-<p>Predicate Information (identified by operation id):<br />
+<p>Predicate Information (identified by operation id):<br>
 ---------------------------------------------------</p>
-<p>1 - access("ID"=15237)<br />
-统计信息<br />
-----------------------------------------------------------<br />
-0 recursive calls<br />
-0 db block gets<br />
-2 consistent gets<br />
-0 physical reads<br />
-0 redo size<br />
-404 bytes sent via SQL*Net to client<br />
-385 bytes received via SQL*Net from client<br />
-2 SQL*Net roundtrips to/from client<br />
-0 sorts (memory)<br />
-0 sorts (disk)<br />
+<p>1 - access("ID"=15237)<br>
+统计信息<br>
+----------------------------------------------------------<br>
+0 recursive calls<br>
+0 db block gets<br>
+2 consistent gets<br>
+0 physical reads<br>
+0 redo size<br>
+404 bytes sent via SQL*Net to client<br>
+385 bytes received via SQL*Net from client<br>
+2 SQL*Net roundtrips to/from client<br>
+0 sorts (memory)<br>
+0 sorts (disk)<br>
 1 rows processed</p>
-<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br />
+<p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;<br>
 <a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt; select count(*) from t1 where id = '15237';</p>
-<p>COUNT(*)<br />
-----------<br />
-1<br />
-执行计划<br />
-----------------------------------------------------------<br />
+<p>COUNT(*)<br>
+----------<br>
+1<br>
+执行计划<br>
+----------------------------------------------------------<br>
 Plan hash value: 3140672401</p>
-<p>-------------------------------------------------------------------------------<br />
-| Id | Operation          | Name     | Rows | Bytes | Cost (%CPU)| Time     |<br />
--------------------------------------------------------------------------------<br />
-|   0 | SELECT STATEMENT   |          |     1 |     5 |     1   (0)| 00:00:01 |<br />
-|   1 | SORT AGGREGATE    |          |     1 |     5 |            |          |<br />
-|* 2 |   INDEX UNIQUE SCAN| PK_T1_ID |     1 |     5 |     1   (0)| 00:00:01 |<br />
+<p>-------------------------------------------------------------------------------<br>
+| Id | Operation          | Name     | Rows | Bytes | Cost (%CPU)| Time     |<br>
+-------------------------------------------------------------------------------<br>
+|   0 | SELECT STATEMENT   |          |     1 |     5 |     1   (0)| 00:00:01 |<br>
+|   1 | SORT AGGREGATE    |          |     1 |     5 |            |          |<br>
+|* 2 |   INDEX UNIQUE SCAN| PK_T1_ID |     1 |     5 |     1   (0)| 00:00:01 |<br>
 -------------------------------------------------------------------------------</p>
-<p>Predicate Information (identified by operation id):<br />
+<p>Predicate Information (identified by operation id):<br>
 ---------------------------------------------------</p>
-<p>2 - access("ID"=15237)<br />
-统计信息<br />
-----------------------------------------------------------<br />
-0 recursive calls<br />
-0 db block gets<br />
-2 consistent gets<br />
-0 physical reads<br />
-0 redo size<br />
-408 bytes sent via SQL*Net to client<br />
-385 bytes received via SQL*Net from client<br />
-2 SQL*Net roundtrips to/from client<br />
-0 sorts (memory)<br />
-0 sorts (disk)<br />
+<p>2 - access("ID"=15237)<br>
+统计信息<br>
+----------------------------------------------------------<br>
+0 recursive calls<br>
+0 db block gets<br>
+2 consistent gets<br>
+0 physical reads<br>
+0 redo size<br>
+408 bytes sent via SQL*Net to client<br>
+385 bytes received via SQL*Net from client<br>
+2 SQL*Net roundtrips to/from client<br>
+0 sorts (memory)<br>
+0 sorts (disk)<br>
 1 rows processed</p>
 <p><a href="mailto:orphean@ORCL">orphean@ORCL</a>&gt;</p>
 <p>--EOF</p>
@@ -401,12 +401,12 @@ Plan hash value: 3140672401</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/a-century-of-taobao.html" data-toggle="tooltip" data-placement="top" title="百年淘宝">&larr; Previous Post</a>
+                        <a href="/my%20life/a-century-of-taobao.html" data-toggle="tooltip" data-placement="top" title="百年淘宝">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/database-experience.html" data-toggle="tooltip" data-placement="top" title="数据库一些经验">Next Post &rarr;</a>
+                        <a href="/oracle/database-experience.html" data-toggle="tooltip" data-placement="top" title="数据库一些经验">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -431,7 +431,7 @@ Plan hash value: 3140672401</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -560,7 +560,7 @@ Plan hash value: 3140672401</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -568,13 +568,13 @@ Plan hash value: 3140672401</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 

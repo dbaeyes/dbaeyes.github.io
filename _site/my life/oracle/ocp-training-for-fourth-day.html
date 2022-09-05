@@ -10,7 +10,7 @@
 
     <title>OCP 培训第四天 - DBAeyes</title>
 
-    <link rel="canonical" href="http://dbaeyes.me/my%20life/oracle/ocp-training-for-fourth-day.html">
+    <link rel="canonical" href="http://localhost:4000/my%20life/oracle/ocp-training-for-fourth-day.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -63,7 +63,7 @@
                 </li>
                 
                 <li>
-                    <a href="/About.html">About</a>
+                    <a href="/about.html">About</a>
                 </li>
                 
                 <li>
@@ -97,7 +97,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header" >
+<header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -129,38 +129,38 @@
                 <p>昨晚看球了，德国Vs克罗地亚，相当的精彩！ 克罗地亚的全场的精妙传球和优秀的个人技术，不得不感叹这才是我喜欢的足球，最终克罗地亚以2：1胜了德国。德国的表现有点失常，可能是克罗地亚表现的太出色了。很难说克罗地亚在这次欧洲杯上走到多远，但一点可以肯定这是一只我喜欢的球队。感觉上有点像阿根廷，不过克罗地亚人的身体要比阿根廷的强，这个也是他们的优势，技术+身体！ 呵呵，还好今天白天的精神还不错，没受到太多影响。</p>
 <div>
 <p>回到OCP的培训！</p>
-<p><strong><em>ASM</em></strong><br />
+<p><strong><em>ASM</em></strong><br>
 只支持Oracle文件</p>
-<p>ASM Instance '+ASM'<br />
-RBAL: relance 决定如何在磁盘上的数据<br />
-ARB : 真正去执行数据的平衡工作<br />
-ASM_POWER_LIMIT: 决定了磁盘数据的平衡速度<br />
+<p>ASM Instance '+ASM'<br>
+RBAL: relance 决定如何在磁盘上的数据<br>
+ARB : 真正去执行数据的平衡工作<br>
+ASM_POWER_LIMIT: 决定了磁盘数据的平衡速度<br>
 LARGE_POOL: 用于分配unit maps for ASM files. 至少8M，一般推荐64M</p>
-<p>DB Instance<br />
-ASMB: 执行和ASM Instance的通信<br />
+<p>DB Instance<br>
+ASMB: 执行和ASM Instance的通信<br>
 RBAL: 写ASM磁盘写数据，相当于原来的DBW进程</p>
 <p>当数据库实例开启的情况下，是无法正常的关闭ASM实例的，必须先关闭数据库实例。 shutdown abort 会产生问题滴</p>
 <p>备份ASM文件必须使用RMAN</p>
 <p>在ASM文件下的操作命令： asmcmd</p>
-<p>create tablespace tbs_name datafile '+d1\tbs_alias.dbf' size 100m;<br />
-将表空间从普通磁盘移至ASM磁盘<br />
-1.将表空间offline<br />
-2.RMAN&gt; backup as copy tablespace tbs_name format '+d1/alias'<br />
-3.switch tablespace tbsname to copy;<br />
-4.alter tablespace tbs_name online<br />
+<p>create tablespace tbs_name datafile '+d1\tbs_alias.dbf' size 100m;<br>
+将表空间从普通磁盘移至ASM磁盘<br>
+1.将表空间offline<br>
+2.RMAN&gt; backup as copy tablespace tbs_name format '+d1/alias'<br>
+3.switch tablespace tbsname to copy;<br>
+4.alter tablespace tbs_name online<br>
 5. OK --切换整个数据库类似，最后需要alter database open resetlogs;</p>
-<p><strong><em>Resource Manager</em></strong><br />
+<p><strong><em>Resource Manager</em></strong><br>
 同一个时间只能有一个活动的资源计划（其实是废话，有多个不是乱套了）</p>
-<p>Consumer Group -- Scheduing Policy<br />
-Round Robin -- 组里的用户资源公平分配<br />
-Run to Completion -- 大家争夺，先来先抢<br />
+<p>Consumer Group -- Scheduing Policy<br>
+Round Robin -- 组里的用户资源公平分配<br>
+Run to Completion -- 大家争夺，先来先抢<br>
 Admin Option -- 用户是否可以自己切换资源组</p>
-<p>CPU_MTH:<br />
-Emphasis 资源按层次分配<br />
+<p>CPU_MTH:<br>
+Emphasis 资源按层次分配<br>
 Ratio 同一层按比例分配</p>
 <p>Resource Plan -- Idle Time 可以解决部分死锁情况</p>
 <p>针对ERP系统月末报表数据量巨大，导致其他用户无法正常使用，考虑使用resource group来解决争用CPU。</p>
-<p><strong><em>Scheduler<br />
+<p><strong><em>Scheduler<br>
 </em></strong>简单的job很好用</p>
 <p>program (what) + schedule (when) --&gt; Job</p>
 <p>查看job状况： USER_SCHEDULER_JOB_RUN_DETAILS;</p>
@@ -178,12 +178,12 @@ Ratio 同一层按比例分配</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/third-day-ocp-training.html" data-toggle="tooltip" data-placement="top" title="OCP 培训第三天">&larr; Previous Post</a>
+                        <a href="/oracle/third-day-ocp-training.html" data-toggle="tooltip" data-placement="top" title="OCP 培训第三天">← Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/oracle/ocp-training-fifth-day.html" data-toggle="tooltip" data-placement="top" title="OCP 培训第五天">Next Post &rarr;</a>
+                        <a href="/my%20life/oracle/ocp-training-fifth-day.html" data-toggle="tooltip" data-placement="top" title="OCP 培训第五天">Next Post →</a>
                     </li>
                     
                 </ul>
@@ -208,7 +208,7 @@ Ratio 同一层按比例分配</p>
 
 
 
-</script>
+
 
 <!-- async load function -->
 <script>
@@ -337,7 +337,7 @@ Ratio 同一层按比例分配</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2022 David ♪ Powered by Jekyll.
+                © 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -345,13 +345,13 @@ Ratio 同一层按比例分配</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js "></script>
+<script src="/js/jquery.min.js%20"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js "></script>
+<script src="/js/bootstrap.min.js%20"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js "></script>
+<script src="/js/clean-blog.min.js%20"></script>
 
 
 
