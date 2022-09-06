@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/increasing-script.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -113,7 +109,7 @@
                     </div>
                     <h1>不断增加的脚本</h1>
                     
-                    <span class="meta">Posted by David on September 19, 2007</span>
+                    <span class="meta">Posted by Vincent on September 19, 2007</span>
                 </div>
             </div>
         </div>
@@ -128,97 +124,97 @@
 
                 <h1></h1>
 <div>
-<p><span style="color: #0000ff;"><strong><em>表分析：</em></strong></span><br>
-BEGIN<br>
-DBMS_STATS.gather_table_stats (ownname       =&gt; 'ORPHEN',<br>
-tabname       =&gt; 'DEPT',<br>
-partname      =&gt; NULL<br>
-);<br>
-END;<br>
+<p><span style="color: #0000ff;"><strong><em>表分析：</em></strong></span><br />
+BEGIN<br />
+DBMS_STATS.gather_table_stats (ownname       =&gt; 'ORPHEN',<br />
+tabname       =&gt; 'DEPT',<br />
+partname      =&gt; NULL<br />
+);<br />
+END;<br />
 -----------------------------------------------------------------------------------------</p>
-<p>BEGIN<br>
-DBMS_STATS.gather_table_stats (ownname               =&gt; 'ORPHEN',<br>
-tabname               =&gt; 'DEPT',<br>
-partname              =&gt; NULL,<br>
-estimate_percent      =&gt; 33<br>
-);<br>
-END;<br>
+<p>BEGIN<br />
+DBMS_STATS.gather_table_stats (ownname               =&gt; 'ORPHEN',<br />
+tabname               =&gt; 'DEPT',<br />
+partname              =&gt; NULL,<br />
+estimate_percent      =&gt; 33<br />
+);<br />
+END;<br />
 -----------------------------------------------------------------------------------------</p>
-<p>BEGIN<br>
-DBMS_STATS.delete_table_stats (ownname =&gt; 'ORPHEN', tabname =&gt; 'DEPT');<br>
-END;<br>
+<p>BEGIN<br />
+DBMS_STATS.delete_table_stats (ownname =&gt; 'ORPHEN', tabname =&gt; 'DEPT');<br />
+END;<br />
 -----------------------------------------------------------------------------------------</p>
-<p>Analyze Table ORPHEN.BIG_TABLE      --TOAD 分析表的方法<br>
-Estimate Statistics<br>
+<p>Analyze Table ORPHEN.BIG_TABLE      --TOAD 分析表的方法<br />
+Estimate Statistics<br />
 Sample 33 Percent;</p>
-<p><span style="color: #ff9900;">2007-9-22</span><br>
-<em><strong>刷新shared_pool,buffer_cache</strong></em><br>
-<span style="font-family: 宋体;">一、oracle9i<br>
-1、刷新shared_pool<br>
-alter system flush shared_pool;<br>
-2、刷新buffer_cache<br>
-会话级：<br>
-alter session set events 'immediate trace name flush_cache level 1';<br>
-alter session set events = 'immediate trace name flush_cache';<br>
-系统级：<br>
-alter system set events = 'immediate trace name flush_cache';<br>
-二、oracle10g<br>
-1、刷新shared_pool<br>
-alter system flush shared_pool;<br>
-2、刷新buffer_cache<br>
-alter system flush buffer_cache;</span></p>
-<p><span style="color: #0000ff;"><em><strong>Lock Table</strong></em></span><br>
-SQL&gt; LOCK TABLE hr.employees IN EXCLUSIVE MODE;<br>
+<p><span style="color: #ff9900;">2007-9-22</span><br />
+<em><strong>刷新shared_pool,buffer_cache</strong></em><br />
+<span style="font-family: 宋体;">一、oracle9i<br />
+1、刷新shared_pool<br />
+alter system flush shared_pool;<br />
+2、刷新buffer_cache<br />
+会话级：<br />
+alter session set events 'immediate trace name flush_cache level 1';<br />
+alter session set events = 'immediate trace name flush_cache';<br />
+系统级：<br />
+alter system set events = 'immediate trace name flush_cache';<br />
+二、oracle10g<br />
+1、刷新shared_pool<br />
+alter system flush shared_pool;<br />
+2、刷新buffer_cache<br />
+alter system flush buffer_cache;</p>
+<p><span style="color: #0000ff;"><em><strong>Lock Table</strong></em></span><br />
+SQL&gt; LOCK TABLE hr.employees IN EXCLUSIVE MODE;<br />
 Table(s) Locked.</p>
-<p><span style="color: #ff9900;">2007-9-23</span><br>
-<span style="color: #0000ff;"><strong><em>Flashback queries</em></strong></span><br>
-SQL&gt; SELECT salary FROM employees WHERE employee_id=100;<br>
-SALARY<br>
-------<br>
-25<br>
-SQL&gt; SELECT salary FROM employees<br>
-2    AS OF TIMESTAMP(SYSTIMESTAMP-INTERVAL°10° minute)<br>
-3    WHERE employee_id=100;<br>
-SALARY<br>
-------<br>
+<p><span style="color: #ff9900;">2007-9-23</span><br />
+<span style="color: #0000ff;"><strong><em>Flashback queries</em></strong></span><br />
+SQL&gt; SELECT salary FROM employees WHERE employee_id=100;<br />
+SALARY<br />
+------<br />
+25<br />
+SQL&gt; SELECT salary FROM employees<br />
+2    AS OF TIMESTAMP(SYSTIMESTAMP-INTERVAL°10° minute)<br />
+3    WHERE employee_id=100;<br />
+SALARY<br />
+------<br />
 24000</p>
-<p>--Flashbback droped table<br>
-SQL&gt; FLASHBACK TABLE hr.job_history TO BEFORE DROP;<br>
-Flashback complete.</p>
+<p>--Flashbback droped table<br />
+SQL&gt; FLASHBACK TABLE hr.job_history TO BEFORE DROP;<br />
+Flashback complete.</span></p>
 <p><span style="font-family: 宋体;">select x from table for update nowait -- 直接判断,不等待进程结束</span></p>
-<p><span style="font-family: 宋体;">1. 查找全表扫描的SQL<br>
-SELECT   sql_text<br>
-FROM v$sqltext t, v$sql_plan p<br>
-WHERE t.hash_value = p.hash_value<br>
-AND p.operation = 'TABLE ACCESS'<br>
-AND p.options = 'FULL'<br>
-ORDER BY p.hash_value, t.piece;</span></p>
-<p>2. 查找Fast Full Index 扫描 的SQL<br>
-SELECT   sql_text<br>
-FROM v$sqltext t, v$sql_plan p<br>
-WHERE t.hash_value = p.hash_value<br>
-AND p.operation = 'INDEX'<br>
-AND p.options = 'FULL SCAN'<br>
+<p><span style="font-family: 宋体;">1. 查找全表扫描的SQL<br />
+SELECT   sql_text<br />
+FROM v$sqltext t, v$sql_plan p<br />
+WHERE t.hash_value = p.hash_value<br />
+AND p.operation = 'TABLE ACCESS'<br />
+AND p.options = 'FULL'<br />
 ORDER BY p.hash_value, t.piece;</p>
+<p>2. 查找Fast Full Index 扫描 的SQL<br />
+SELECT   sql_text<br />
+FROM v$sqltext t, v$sql_plan p<br />
+WHERE t.hash_value = p.hash_value<br />
+AND p.operation = 'INDEX'<br />
+AND p.options = 'FULL SCAN'<br />
+ORDER BY p.hash_value, t.piece;</span></p>
 <p>当前用户的session</p>
 <p>select sid,serial# from v$session where sid =(select sid from v$mystat where rownum =1)</p>
 <p><strong><em>循环更新</em></strong></p>
-<p>declare<br>
-row_num number := 0;<br>
-begin<br>
-for c_usr in (select login_id from im_user t where id is null) loop<br>
-update im_user i set i.id =<br>
-(select id from bmw_users u where i.login_id = u.nick)<br>
-where login_id = c_usr.login_id;<br>
-row_num := row_num + 1;<br>
-if mod(row_num,1000) =0 then<br>
-commit;<br>
-end if;<br>
-end loop;<br>
-commit;<br>
+<p>declare<br />
+row_num number := 0;<br />
+begin<br />
+for c_usr in (select login_id from im_user t where id is null) loop<br />
+update im_user i set i.id =<br />
+(select id from bmw_users u where i.login_id = u.nick)<br />
+where login_id = c_usr.login_id;<br />
+row_num := row_num + 1;<br />
+if mod(row_num,1000) =0 then<br />
+commit;<br />
+end if;<br />
+end loop;<br />
+commit;<br />
 end;</p>
 <p><span style="font-family: 'Times New Roman';">/</span></p>
-<p> </p>
+<p>&nbsp;</p>
 <p><span style="font-family: 'Times New Roman';"><span style="font-size: x-large;">showlock.sql</span></span></p>
 <p>第一个脚本<span style="font-family: 'Times New Roman';">showlock.sql</span>，该脚本通过连接<span style="font-family: 'Times New Roman';">v$locked_object</span>与<span style="font-family: 'Times New Roman';">all_objects</span>两视图，显示哪些对象被哪些会话锁住：</p>
 <p><span style="font-family: 'Times New Roman';">/* showlock.sql */</span></p>
@@ -231,7 +227,7 @@ end;</p>
 <p><span style="font-family: 'Times New Roman';">       object_name ,xidusn,xidslot,xidsqn</span></p>
 <p><span style="font-family: 'Times New Roman';">from v$locked_object,all_objects</span></p>
 <p><span style="font-family: 'Times New Roman';">where v$locked_object.object_id=all_objects.object_id;</span></p>
-<p> </p>
+<p>&nbsp;</p>
 <p><span style="font-family: 'Times New Roman';"><span style="font-size: x-large;">showalllock.sql</span></span></p>
 <p>第二个脚本<span style="font-family: 'Times New Roman';">showalllock.sql</span>，该脚本主要显示当前所有<span style="font-family: 'Times New Roman';">TM</span>、<span style="font-family: 'Times New Roman';">TX</span>锁的信息；</p>
 <p><span style="font-family: 'Times New Roman';">/* showalllock.sql */</span></p>
@@ -241,253 +237,253 @@ end;</p>
 <p><span style="font-family: 'Times New Roman';">        lock_type,request,ctime,block</span></p>
 <p><span style="font-family: 'Times New Roman';">from v$lock</span></p>
 <p><span style="font-family: 'Times New Roman';">where TYPE IN('TX','TM');</span></p>
-<p> </p>
-<p> </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>----------查询锁住-------------</p>
-<p>column sid format 999;<br>
-column b format 9;<br>
-column object_name format a30;<br>
-select v$lock.sid,<br>
-decode(v$lock.type,<br>
-'MR', 'Media Recovery',<br>
-'RT','Redo Thread',<br>
-'UN','User Name',<br>
-'TX', 'Transaction',<br>
-'TM', 'DML',<br>
-'UL', 'PL/SQL User Lock',<br>
-'DX', 'Distributed Xaction',<br>
-'CF', 'Control File',<br>
-'IS', 'Instance State',<br>
-'FS', 'File Set',<br>
-'IR', 'Instance Recovery',<br>
-'ST', 'Disk Space Transaction',<br>
-'TS', 'Temp Segment',<br>
-'IV', 'Library Cache Invalida-tion',<br>
-'LS', 'Log Start or Switch',<br>
-'RW', 'Row Wait',<br>
-'SQ', 'Sequence Number',<br>
-'TE', 'Extend Table',<br>
-'TT', 'Temp Table',<br>
-'Unknown') LockType,<br>
-rtrim(object_type) || ' ' || rtrim(owner) || '.' || object_name object_name,<br>
-decode(lmode, 0, 'None',<br>
-1, 'Null',<br>
-2, 'Row-S',<br>
-3, 'Row-X',<br>
-4, 'Share',<br>
-5, 'S/Row-X',<br>
-6, 'Exclusive', 'Unknown') LockMode,<br>
-decode(request, 0, 'None',<br>
-1, 'Null',<br>
-2, 'Row-S',<br>
-3, 'Row-X',<br>
-4, 'Share',<br>
-5, 'S/Row-X',<br>
-6, 'Exclusive', 'Unknown') RequestMode,<br>
-ctime, block b<br>
-from v$lock, all_objects<br>
-where sid &gt; 6<br>
+<p>column sid format 999;<br />
+column b format 9;<br />
+column object_name format a30;<br />
+select v$lock.sid,<br />
+decode(v$lock.type,<br />
+'MR', 'Media Recovery',<br />
+'RT','Redo Thread',<br />
+'UN','User Name',<br />
+'TX', 'Transaction',<br />
+'TM', 'DML',<br />
+'UL', 'PL/SQL User Lock',<br />
+'DX', 'Distributed Xaction',<br />
+'CF', 'Control File',<br />
+'IS', 'Instance State',<br />
+'FS', 'File Set',<br />
+'IR', 'Instance Recovery',<br />
+'ST', 'Disk Space Transaction',<br />
+'TS', 'Temp Segment',<br />
+'IV', 'Library Cache Invalida-tion',<br />
+'LS', 'Log Start or Switch',<br />
+'RW', 'Row Wait',<br />
+'SQ', 'Sequence Number',<br />
+'TE', 'Extend Table',<br />
+'TT', 'Temp Table',<br />
+'Unknown') LockType,<br />
+rtrim(object_type) || ' ' || rtrim(owner) || '.' || object_name object_name,<br />
+decode(lmode, 0, 'None',<br />
+1, 'Null',<br />
+2, 'Row-S',<br />
+3, 'Row-X',<br />
+4, 'Share',<br />
+5, 'S/Row-X',<br />
+6, 'Exclusive', 'Unknown') LockMode,<br />
+decode(request, 0, 'None',<br />
+1, 'Null',<br />
+2, 'Row-S',<br />
+3, 'Row-X',<br />
+4, 'Share',<br />
+5, 'S/Row-X',<br />
+6, 'Exclusive', 'Unknown') RequestMode,<br />
+ctime, block b<br />
+from v$lock, all_objects<br />
+where sid &gt; 6<br />
 and v$lock.id1 = all_objects.object_id;</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>------------</p>
 <p><span style="font-family: 'Times New Roman';">------------查询表空间使用情况-------------------------</span></p>
-<p> </p>
-<p>SELECT UPPER(F.TABLESPACE_NAME) "表空间名",<br>
-D.TOT_GROOTTE_MB "表空间大小(M)",<br>
-D.TOT_GROOTTE_MB - F.TOTAL_BYTES "已使用空间(M)",<br>
-TO_CHAR(ROUND((D.TOT_GROOTTE_MB - F.TOTAL_BYTES) / D.TOT_GROOTTE_MB * 100,<br>
-2),<br>
-'990.99') "使用比",<br>
-F.TOTAL_BYTES "空闲空间(M)",<br>
-F.MAX_BYTES "最大块(M)"<br>
-FROM (SELECT TABLESPACE_NAME,<br>
-ROUND(SUM(BYTES) / (1024 * 1024), 2) TOTAL_BYTES,<br>
-ROUND(MAX(BYTES) / (1024 * 1024), 2) MAX_BYTES<br>
-FROM SYS.DBA_FREE_SPACE<br>
-GROUP BY TABLESPACE_NAME) F,<br>
-(SELECT DD.TABLESPACE_NAME,<br>
-ROUND(SUM(DD.BYTES) / (1024 * 1024), 2) TOT_GROOTTE_MB<br>
-FROM SYS.DBA_DATA_FILES DD<br>
-GROUP BY DD.TABLESPACE_NAME) D<br>
-WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME<br>
+<p>&nbsp;</p>
+<p>SELECT UPPER(F.TABLESPACE_NAME) "表空间名",<br />
+D.TOT_GROOTTE_MB "表空间大小(M)",<br />
+D.TOT_GROOTTE_MB - F.TOTAL_BYTES "已使用空间(M)",<br />
+TO_CHAR(ROUND((D.TOT_GROOTTE_MB - F.TOTAL_BYTES) / D.TOT_GROOTTE_MB * 100,<br />
+2),<br />
+'990.99') "使用比",<br />
+F.TOTAL_BYTES "空闲空间(M)",<br />
+F.MAX_BYTES "最大块(M)"<br />
+FROM (SELECT TABLESPACE_NAME,<br />
+ROUND(SUM(BYTES) / (1024 * 1024), 2) TOTAL_BYTES,<br />
+ROUND(MAX(BYTES) / (1024 * 1024), 2) MAX_BYTES<br />
+FROM SYS.DBA_FREE_SPACE<br />
+GROUP BY TABLESPACE_NAME) F,<br />
+(SELECT DD.TABLESPACE_NAME,<br />
+ROUND(SUM(DD.BYTES) / (1024 * 1024), 2) TOT_GROOTTE_MB<br />
+FROM SYS.DBA_DATA_FILES DD<br />
+GROUP BY DD.TABLESPACE_NAME) D<br />
+WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME<br />
 ORDER BY 4 DESC</p>
 <p>--------------------------------------</p>
-<p>如何查询做比较大的排序的进程？<br>
-SELECT b.tablespace, b.segfile#, b.segblk#, b.blocks, a.sid, a.serial#,<br>
-a.username, a.osuser, a.status<br>
-FROM v$session a,v$sort_usage b<br>
-WHERE a.saddr = b.session_addr<br>
+<p>如何查询做比较大的排序的进程？<br />
+SELECT b.tablespace, b.segfile#, b.segblk#, b.blocks, a.sid, a.serial#,<br />
+a.username, a.osuser, a.status<br />
+FROM v$session a,v$sort_usage b<br />
+WHERE a.saddr = b.session_addr<br />
 ORDER BY b.tablespace, b.segfile#, b.segblk#, b.blocks ;</p>
-<p>如何查询做比较大的排序的进程的SQL语句？<br>
-select /*+ ORDERED */ sql_text from v$sqltext a<br>
-where a.hash_value = (<br>
-select sql_hash_value from v$session b<br>
-where b.sid = &amp;sid and b.serial# = &amp;serial)<br>
+<p>如何查询做比较大的排序的进程的SQL语句？<br />
+select /*+ ORDERED */ sql_text from v$sqltext a<br />
+where a.hash_value = (<br />
+select sql_hash_value from v$session b<br />
+where b.sid = &amp;sid and b.serial# = &amp;serial)<br />
 order by piece asc ;</p>
-<p>如何查找重复记录？<br>
-SELECT * FROM TABLE_NAME<br>
-WHERE ROWID!=(SELECT MAX(ROWID) FROM TABLE_NAME D<br>
+<p>如何查找重复记录？<br />
+SELECT * FROM TABLE_NAME<br />
+WHERE ROWID!=(SELECT MAX(ROWID) FROM TABLE_NAME D<br />
 WHERE TABLE_NAME.COL1=D.COL1 AND TABLE_NAME.COL2=D.COL2);</p>
-<p>如何删除重复记录？<br>
-DELETE FROM TABLE_NAME<br>
-WHERE ROWID!=(SELECT MAX(ROWID) FROM TABLE_NAME D<br>
+<p>如何删除重复记录？<br />
+DELETE FROM TABLE_NAME<br />
+WHERE ROWID!=(SELECT MAX(ROWID) FROM TABLE_NAME D<br />
 WHERE TABLE_NAME.COL1=D.COL1 AND TABLE_NAME.COL2=D.COL2);</p>
 <p>分析表：</p>
 <p>analyze table TABLE_NAME compute statistics for table for all indexes for all indexed columns;</p>
 <p>sqlplus查看存储过程脚本：</p>
 <p>select text from all_source where owner='ARK' AND type = 'PROCEDURE' and name ='CHECK_INDEXES';</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>重建索引</p>
-<p>alter index IDX_NAME rebuild tablespace TBS_NAME parallel 5 online compute statistics;<br>
+<p>alter index IDX_NAME rebuild tablespace TBS_NAME parallel 5 online compute statistics;<br />
 alter index IDX_NAME noparallel;</p>
-<p> </p>
-<p>每天 8/9/10/15/16/17/23   7个整点执行的报告<br>
+<p>&nbsp;</p>
+<p>每天 8/9/10/15/16/17/23   7个整点执行的报告<br />
 job   interval</p>
 <p>trunc(sysdate) +   decode(to_char(sysdate,'hh24'),8,9,9,10,10,15,15,16,16,17,17,23,32)/24</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>很狠的杀进程招数：</p>
-<p>select 'alter system kill session '||''''||se.sid||','||se.SERIAL#||''''||' ;'<br>
-from v$session se<br>
-where se.SID in (<br>
-select sid<br>
-from v$lock t<br>
+<p>select 'alter system kill session '||''''||se.sid||','||se.SERIAL#||''''||' ;'<br />
+from v$session se<br />
+where se.SID in (<br />
+select sid<br />
+from v$lock t<br />
 where block &gt;0 );</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>---------------------------</p>
 <p align="left">当我们使用sql_trace/10046等事件进行进程跟踪时，会生成跟踪文件.跟踪文件名称由以下几部分组成:</p>
 <p align="left">&lt;sid&gt;_ora_&lt;pid&gt;.trc</p>
 <p align="left">以下脚本用户获得跟踪文件名称:</p>
-<p>SELECT    a.VALUE<br>
-|| b.symbol<br>
-|| c.instance_name<br>
-|| '_ora_'<br>
-|| d.spid<br>
-|| '.trc' trace_file<br>
-FROM (SELECT VALUE<br>
-FROM v$parameter<br>
-WHERE NAME = 'user_dump_dest') a,<br>
-(SELECT SUBSTR (VALUE, -6, 1) symbol<br>
-FROM v$parameter<br>
-WHERE NAME = 'user_dump_dest') b,<br>
-(SELECT instance_name<br>
-FROM v$instance) c,<br>
-(SELECT spid<br>
-FROM v$session s, v$process p, v$mystat m<br>
-WHERE s.paddr = p.addr AND s.SID = m.SID AND m.statistic# = 0) d<br>
+<p>SELECT    a.VALUE<br />
+|| b.symbol<br />
+|| c.instance_name<br />
+|| '_ora_'<br />
+|| d.spid<br />
+|| '.trc' trace_file<br />
+FROM (SELECT VALUE<br />
+FROM v$parameter<br />
+WHERE NAME = 'user_dump_dest') a,<br />
+(SELECT SUBSTR (VALUE, -6, 1) symbol<br />
+FROM v$parameter<br />
+WHERE NAME = 'user_dump_dest') b,<br />
+(SELECT instance_name<br />
+FROM v$instance) c,<br />
+(SELECT spid<br />
+FROM v$session s, v$process p, v$mystat m<br />
+WHERE s.paddr = p.addr AND s.SID = m.SID AND m.statistic# = 0) d<br />
 /</p>
 <p>---------------</p>
 <p>查看统计undo大小的脚本:</p>
-<p>select t.*<br>
-from (SELECT D.TABLESPACE_NAME,<br>
-SPACE “SUM_SPACE(M)”,<br>
-BLOCKS SUM_BLOCKS,<br>
-SPACE - NVL(FREE_SPACE, 0) “USED_SPACE(M)”,<br>
-ROUND((1 - NVL(FREE_SPACE, 0) / SPACE) * 100, 2) “USED_RATE(%)”,<br>
-FREE_SPACE “FREE_SPACE(M)”<br>
-FROM (SELECT TABLESPACE_NAME,<br>
-ROUND(SUM(BYTES) / (1024 * 1024), 2) SPACE,<br>
-SUM(BLOCKS) BLOCKS<br>
-FROM DBA_DATA_FILES<br>
-GROUP BY TABLESPACE_NAME) D,<br>
-(SELECT TABLESPACE_NAME,<br>
-ROUND(SUM(BYTES) / (1024 * 1024), 2) FREE_SPACE<br>
-FROM DBA_FREE_SPACE<br>
-GROUP BY TABLESPACE_NAME) F<br>
-WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME(+)) t<br>
+<p>select t.*<br />
+from (SELECT D.TABLESPACE_NAME,<br />
+SPACE “SUM_SPACE(M)”,<br />
+BLOCKS SUM_BLOCKS,<br />
+SPACE - NVL(FREE_SPACE, 0) “USED_SPACE(M)”,<br />
+ROUND((1 - NVL(FREE_SPACE, 0) / SPACE) * 100, 2) “USED_RATE(%)”,<br />
+FREE_SPACE “FREE_SPACE(M)”<br />
+FROM (SELECT TABLESPACE_NAME,<br />
+ROUND(SUM(BYTES) / (1024 * 1024), 2) SPACE,<br />
+SUM(BLOCKS) BLOCKS<br />
+FROM DBA_DATA_FILES<br />
+GROUP BY TABLESPACE_NAME) D,<br />
+(SELECT TABLESPACE_NAME,<br />
+ROUND(SUM(BYTES) / (1024 * 1024), 2) FREE_SPACE<br />
+FROM DBA_FREE_SPACE<br />
+GROUP BY TABLESPACE_NAME) F<br />
+WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME(+)) t<br />
 order by “USED_RATE(%)” desc;</p>
 <p>----</p>
-<p>select name, used_rate || ‘%’ as used_rate, ‘Free:’ || free<br>
-from (select ts.name,<br>
-round((t.space - (us.free + f.free)) / t.space * 100, 2) as used_rate,<br>
-to_char(us.free + f.free) as free<br>
-from (select undotsn, expiredblks * 8 / 1024 as free<br>
-from v$undostat<br>
-where rownum = 1) us,<br>
-v$tablespace ts,<br>
-(select tablespace_name,<br>
-round(sum(bytes) / (1024 * 1024), 2) free<br>
-from dba_free_space<br>
-group by tablespace_name) f,<br>
-(select tablespace_name,<br>
-sum(blocks) blocks,<br>
-round(sum(bytes) / (1024 * 1024), 2) space<br>
-from dba_data_files<br>
-group by tablespace_name) t<br>
-where ts.ts# = us.undotsn<br>
-and ts.name = f.tablespace_name<br>
+<p>select name, used_rate || ‘%’ as used_rate, ‘Free:’ || free<br />
+from (select ts.name,<br />
+round((t.space - (us.free + f.free)) / t.space * 100, 2) as used_rate,<br />
+to_char(us.free + f.free) as free<br />
+from (select undotsn, expiredblks * 8 / 1024 as free<br />
+from v$undostat<br />
+where rownum = 1) us,<br />
+v$tablespace ts,<br />
+(select tablespace_name,<br />
+round(sum(bytes) / (1024 * 1024), 2) free<br />
+from dba_free_space<br />
+group by tablespace_name) f,<br />
+(select tablespace_name,<br />
+sum(blocks) blocks,<br />
+round(sum(bytes) / (1024 * 1024), 2) space<br />
+from dba_data_files<br />
+group by tablespace_name) t<br />
+where ts.ts# = us.undotsn<br />
+and ts.name = f.tablespace_name<br />
 and ts.name = t.tablespace_name)</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>--------------------------</p>
 <p>--胜通--</p>
-<p>如何让sqlplus在shterm中不显示输出内容<br>
-想提取大量数据，并且不想让其输出到shterm的屏幕中，可将其spool到指定文件。但是，同时输出结果的文件，要用到其他地方导入，即出来查询结果，其他什么都不spool出来，可如下处理：<br>
-set linesize 2000<br>
-set head off<br>
-set feedback off<br>
-set termout off<br>
-set timing off<br>
-spool item<br>
-select title || ',' || tags || ',' || systag || ',' || item_type || ',' ||<br>
-item_id || ',' || COLLECTOR_COUNT || ',' || category<br>
-from collect_item;<br>
+<p>如何让sqlplus在shterm中不显示输出内容<br />
+想提取大量数据，并且不想让其输出到shterm的屏幕中，可将其spool到指定文件。但是，同时输出结果的文件，要用到其他地方导入，即出来查询结果，其他什么都不spool出来，可如下处理：<br />
+set linesize 2000<br />
+set head off<br />
+set feedback off<br />
+set termout off<br />
+set timing off<br />
+spool item<br />
+select title || ',' || tags || ',' || systag || ',' || item_type || ',' ||<br />
+item_id || ',' || COLLECTOR_COUNT || ',' || category<br />
+from collect_item;<br />
 spool off</p>
-<p>将以上内容保存到一个sh文件，放在crontab中执行，就会得到只有查询结果的item文件。<br>
+<p>将以上内容保存到一个sh文件，放在crontab中执行，就会得到只有查询结果的item文件。<br />
 如果你要在sqlplus执行如上操作，那么item文件中肯定包含一些没必要的“杂物</p>
 <div><span style="font-size: small;">江枫：去掉尾部多余空格，设置sql的trimout为on应该就可以了</span></div>
 <div><span style="font-size: small;">set trimout on</span></div>
-<p> </p>
+<p>&nbsp;</p>
 <p>-------------</p>
 <p>--查看应用连接过来的连接数情况</p>
-<p>SELECT B.MACHINE, B.CNT, MAX(A.CNT) MAX, MIN(A.CNT) MIN<br>
-FROM (SELECT MACHINE, COUNT(*) CNT FROM V$SESSION GROUP BY MACHINE) A,<br>
-(SELECT REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(MACHINE,<br>
-'[0-9]',<br>
-'#'),<br>
-'#+',<br>
-'#'),<br>
-'#[a-z]*/.',<br>
-'#.') MACHINE,<br>
-COUNT(*) CNT<br>
-FROM V$SESSION<br>
-GROUP BY REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(MACHINE,<br>
-'[0-9]',<br>
-'#'),<br>
-'#+',<br>
-'#'),<br>
-'#[a-z]*/.',<br>
-'#.')) B<br>
-WHERE REGEXP_LIKE(A.MACHINE, REPLACE(B.MACHINE, '#', '[0-9]*'))<br>
+<p>SELECT B.MACHINE, B.CNT, MAX(A.CNT) MAX, MIN(A.CNT) MIN<br />
+FROM (SELECT MACHINE, COUNT(*) CNT FROM V$SESSION GROUP BY MACHINE) A,<br />
+(SELECT REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(MACHINE,<br />
+'[0-9]',<br />
+'#'),<br />
+'#+',<br />
+'#'),<br />
+'#[a-z]*/.',<br />
+'#.') MACHINE,<br />
+COUNT(*) CNT<br />
+FROM V$SESSION<br />
+GROUP BY REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(MACHINE,<br />
+'[0-9]',<br />
+'#'),<br />
+'#+',<br />
+'#'),<br />
+'#[a-z]*/.',<br />
+'#.')) B<br />
+WHERE REGEXP_LIKE(A.MACHINE, REPLACE(B.MACHINE, '#', '[0-9]*'))<br />
 GROUP BY B.MACHINE, B.CNT</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>----------------------</p>
 <p>调整sysaux表空间</p>
 <p>select distinct snap_id from dba_hist_snapshot order by 1;</p>
-<p><span style="color: #000000; font-family: 宋体;">select min(snap_id),max(snap_id) from wrh$_active_session_history;<br>
-select dbid from wrh$_active_session_history where rownum &lt;5;<br>
-exec DBMS_WORKLOAD_REPOSITORY.DROP_SNAPSHOT_RANGE(low_snap_id =&gt; 3615, high_snap_id =&gt; 3800);</span></p>
+<p><span style="color: #000000; font-family: 宋体;">select min(snap_id),max(snap_id) from wrh$_active_session_history;<br />
+select dbid from wrh$_active_session_history where rownum &lt;5;<br />
+exec DBMS_WORKLOAD_REPOSITORY.DROP_SNAPSHOT_RANGE(low_snap_id =&gt; 3615, high_snap_id =&gt; 3800);</p>
 <p>alter database datafile '/u01/oracle/oradata/ark/system.dbf' resize 1024m;</p>
-<p>修改保留时间为三天<br>
-exec dbms_workload_repository.modify_snapshot_settings(interval=&gt;30, retention=&gt;3*24*60);<br>
-SELECT *from dba_hist_wr_control;</p>
-<p> </p>
+<p>修改保留时间为三天<br />
+exec dbms_workload_repository.modify_snapshot_settings(interval=&gt;30, retention=&gt;3*24*60);<br />
+SELECT *from dba_hist_wr_control;</span></p>
+<p>&nbsp;</p>
 <p><span style="color: #000000; font-family: 宋体;">--</span></p>
-<p><span style="color: #000000; font-family: 宋体;">SELECT LAST_DAY(ADD_MONTHS(TO_DATE(TO_CHAR(SYSDATE+365, 'yyyy'), 'yyyy'),<br>
-1 * 11)) + 1 - 1 / 24 / 60 / 60<br>
+<p><span style="color: #000000; font-family: 宋体;">SELECT LAST_DAY(ADD_MONTHS(TO_DATE(TO_CHAR(SYSDATE+365, 'yyyy'), 'yyyy'),<br />
+1 * 11)) + 1 - 1 / 24 / 60 / 60<br />
 FROM DUAL;</span></p>
-<p>二进制转十进制<br>
-select sum(data1)<br>
-from (select substr('1101', rownum, 1) * power(2, length('1101') - rownum) data1<br>
+<p>二进制转十进制<br />
+select sum(data1)<br />
+from (select substr('1101', rownum, 1) * power(2, length('1101') - rownum) data1<br />
 from dual</p>
-<p>十进制转二进制<br>
-select replace(sys_connect_by_path(decode(bitand(10, power(2, ceil(log(2, 10)) - level)),<br>
-0,<br>
-'0',<br>
-'1'),<br>
-'.'),'.',null)<br>
-from dual<br>
-where level = ceil(log(2, 10))<br>
-connect by level &lt;= ceil(log(2, 10));<br>
-connect by rownum &lt;= length('1101'))<br>
+<p>十进制转二进制<br />
+select replace(sys_connect_by_path(decode(bitand(10, power(2, ceil(log(2, 10)) - level)),<br />
+0,<br />
+'0',<br />
+'1'),<br />
+'.'),'.',null)<br />
+from dual<br />
+where level = ceil(log(2, 10))<br />
+connect by level &lt;= ceil(log(2, 10));<br />
+connect by rownum &lt;= length('1101'))<br />
 出处：<a href="http://www.itpub.net/717913.html" target="_blank">http://www.itpub.net/717913.html</a></p>
 </div>
 
@@ -502,12 +498,12 @@ connect by rownum &lt;= length('1101'))<br>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/cool-the-fresh-womens-soccer.html" data-toggle="tooltip" data-placement="top" title="猛的－－朝鮮女足">← Previous Post</a>
+                        <a href="/my%20life/cool-the-fresh-womens-soccer.html" data-toggle="tooltip" data-placement="top" title="猛的－－朝鮮女足">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/recently-busy.html" data-toggle="tooltip" data-placement="top" title="近来比较忙">Next Post →</a>
+                        <a href="/my%20life/recently-busy.html" data-toggle="tooltip" data-placement="top" title="近来比较忙">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -532,7 +528,7 @@ connect by rownum &lt;= length('1101'))<br>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -548,7 +544,7 @@ connect by rownum &lt;= length('1101'))<br>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -661,7 +657,7 @@ connect by rownum &lt;= length('1101'))<br>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -669,24 +665,22 @@ connect by rownum &lt;= length('1101'))<br>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

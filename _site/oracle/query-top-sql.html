@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/query-top-sql.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>查询Top sql</h1>
                     
-                    <span class="meta">Posted by David on July 23, 2008</span>
+                    <span class="meta">Posted by Vincent on July 23, 2008</span>
                 </div>
             </div>
         </div>
@@ -127,70 +123,70 @@
                 <p>From: network</p>
 <div>
 <div>
-<p> </p>
-<p><strong>Top 10 by Buffer Gets:</strong><br>
-set linesize 100<br>
-set pagesize 100<br>
-col sql format a40<br>
-SELECT * FROM<br>
-(SELECT substr(sql_text,1,40) sql,<br>
-buffer_gets, executions, buffer_gets/executions "Gets/Exec",<br>
-hash_value,address<br>
-FROM V$SQLAREA<br>
-WHERE buffer_gets &gt; 10000<br>
-ORDER BY buffer_gets DESC)<br>
+<p>&nbsp;</p>
+<p><strong>Top 10 by Buffer Gets:</strong><br />
+set linesize 100<br />
+set pagesize 100<br />
+col sql format a40<br />
+SELECT * FROM<br />
+(SELECT substr(sql_text,1,40) sql,<br />
+buffer_gets, executions, buffer_gets/executions "Gets/Exec",<br />
+hash_value,address<br />
+FROM V$SQLAREA<br />
+WHERE buffer_gets &gt; 10000<br />
+ORDER BY buffer_gets DESC)<br />
 WHERE rownum &lt;= 10 ;</p>
-<p><strong>Top 10 by Physical Reads:</strong><br>
-set linesize 100<br>
-set pagesize 100<br>
-col sql format a40<br>
-SELECT * FROM (SELECT substr(sql_text,1,40) sql,<br>
-disk_reads, executions, disk_reads/executions "Reads/Exec",<br>
-hash_value,address<br>
-FROM V$SQLAREA<br>
-WHERE disk_reads &gt; 1000<br>
-ORDER BY disk_reads DESC)<br>
+<p><strong>Top 10 by Physical Reads:</strong><br />
+set linesize 100<br />
+set pagesize 100<br />
+col sql format a40<br />
+SELECT * FROM (SELECT substr(sql_text,1,40) sql,<br />
+disk_reads, executions, disk_reads/executions "Reads/Exec",<br />
+hash_value,address<br />
+FROM V$SQLAREA<br />
+WHERE disk_reads &gt; 1000<br />
+ORDER BY disk_reads DESC)<br />
 WHERE rownum &lt;= 10 ;</p>
-<p><strong>Top 10 by Executions:</strong><br>
-set linesize 100<br>
-set pagesize 100<br>
-col sql format a40<br>
-SELECT * FROM (SELECT substr(sql_text,1,40) sql,<br>
-executions, rows_processed, rows_processed/executions "Rows/Exec",<br>
-hash_value,address<br>
-FROM V$SQLAREA<br>
-WHERE executions &gt; 100<br>
-ORDER BY executions DESC)<br>
+<p><strong>Top 10 by Executions:</strong><br />
+set linesize 100<br />
+set pagesize 100<br />
+col sql format a40<br />
+SELECT * FROM (SELECT substr(sql_text,1,40) sql,<br />
+executions, rows_processed, rows_processed/executions "Rows/Exec",<br />
+hash_value,address<br />
+FROM V$SQLAREA<br />
+WHERE executions &gt; 100<br />
+ORDER BY executions DESC)<br />
 WHERE rownum &lt;= 10 ;</p>
-<p><strong>Top 10 by Parse Calls:</strong><br>
-set linesize 100<br>
-set pagesize 100<br>
-col sql format a40<br>
-SELECT * FROM (SELECT substr(sql_text,1,40) sql,<br>
-parse_calls, executions, hash_value,address<br>
-FROM V$SQLAREA<br>
-WHERE parse_calls &gt; 1000<br>
-ORDER BY parse_calls DESC)<br>
+<p><strong>Top 10 by Parse Calls:</strong><br />
+set linesize 100<br />
+set pagesize 100<br />
+col sql format a40<br />
+SELECT * FROM (SELECT substr(sql_text,1,40) sql,<br />
+parse_calls, executions, hash_value,address<br />
+FROM V$SQLAREA<br />
+WHERE parse_calls &gt; 1000<br />
+ORDER BY parse_calls DESC)<br />
 WHERE rownum &lt;= 10 ;</p>
-<p><strong>Top 10 by Sharable Memory:</strong><br>
-set linesize 100<br>
-set pagesize 100<br>
-col sql format a40<br>
-SELECT * FROM (SELECT substr(sql_text,1,40) sql,<br>
-sharable_mem, executions, hash_value,address<br>
-FROM V$SQLAREA<br>
-WHERE sharable_mem &gt; 1048576<br>
-ORDER BY sharable_mem DESC)<br>
+<p><strong>Top 10 by Sharable Memory:</strong><br />
+set linesize 100<br />
+set pagesize 100<br />
+col sql format a40<br />
+SELECT * FROM (SELECT substr(sql_text,1,40) sql,<br />
+sharable_mem, executions, hash_value,address<br />
+FROM V$SQLAREA<br />
+WHERE sharable_mem &gt; 1048576<br />
+ORDER BY sharable_mem DESC)<br />
 WHERE rownum &lt;= 10 ;</p>
-<p><strong>Top 10 by Version Count:</strong><br>
-set linesize 100<br>
-set pagesize 100<br>
-col sql format a40<br>
-SELECT * FROM (SELECT substr(sql_text,1,40) sql,<br>
-version_count, executions, hash_value,address<br>
-FROM V$SQLAREA<br>
-WHERE version_count &gt; 20<br>
-ORDER BY version_count DESC)<br>
+<p><strong>Top 10 by Version Count:</strong><br />
+set linesize 100<br />
+set pagesize 100<br />
+col sql format a40<br />
+SELECT * FROM (SELECT substr(sql_text,1,40) sql,<br />
+version_count, executions, hash_value,address<br />
+FROM V$SQLAREA<br />
+WHERE version_count &gt; 20<br />
+ORDER BY version_count DESC)<br />
 WHERE rownum &lt;= 10 ;</p>
 </div>
 </div>
@@ -206,12 +202,12 @@ WHERE rownum &lt;= 10 ;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/sqlplus-operation-greatly-entire.html" data-toggle="tooltip" data-placement="top" title="SQLPLUS 操作大全 -zt">← Previous Post</a>
+                        <a href="/oracle/sqlplus-operation-greatly-entire.html" data-toggle="tooltip" data-placement="top" title="SQLPLUS 操作大全 -zt">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/exp-00091.html" data-toggle="tooltip" data-placement="top" title="EXP-00091">Next Post →</a>
+                        <a href="/oracle/exp-00091.html" data-toggle="tooltip" data-placement="top" title="EXP-00091">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -236,7 +232,7 @@ WHERE rownum &lt;= 10 ;</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -252,7 +248,7 @@ WHERE rownum &lt;= 10 ;</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -365,7 +361,7 @@ WHERE rownum &lt;= 10 ;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -373,24 +369,22 @@ WHERE rownum &lt;= 10 ;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

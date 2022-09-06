@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/oracle-10046-event.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>Oracle 10046 event</h1>
                     
-                    <span class="meta">Posted by David on July 16, 2008</span>
+                    <span class="meta">Posted by Vincent on July 16, 2008</span>
                 </div>
             </div>
         </div>
@@ -125,12 +121,12 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>10046事件说明10046事件是Oracle提供的内部事件，是对SQL_TRACE的增强.</p>
-<div>10046事件可以设置以下四个级别:<br>
-1 - 启用标准的SQL_TRACE功能,等价于sql_trace<br>
-4 - Level 1 加上绑定值(bind values)<br>
-8 - Level 1 + 等待事件跟踪<br>
-12 - Level 1 + Level 4 + Level 8<br>
-类似sql_trace，10046事件可以在全局设置，也可以在session级设置。
+<div>10046事件可以设置以下四个级别:<br />
+1 - 启用标准的SQL_TRACE功能,等价于sql_trace<br />
+4 - Level 1 加上绑定值(bind values)<br />
+8 - Level 1 + 等待事件跟踪<br />
+12 - Level 1 + Level 4 + Level 8<br />
+类似sql_trace，10046事件可以在全局设置，也可以在session级设置。</p>
 <p>开启10046事件</p>
 <p>SQL&gt; alter session set events '10046 trace name context forever ,level 12' ;</p>
 <p>会话已更改。</p>
@@ -141,26 +137,25 @@
 <p align="left">当我们使用sql_trace/10046等事件进行进程跟踪时，会生成跟踪文件.跟踪文件名称由以下几部分组成:</p>
 <p align="left">&lt;sid&gt;_ora_&lt;pid&gt;.trc</p>
 <p align="left">以下脚本用户获得跟踪文件名称:</p>
-<p>SELECT    a.VALUE<br>
-|| b.symbol<br>
-|| c.instance_name<br>
-|| '_ora_'<br>
-|| d.spid<br>
-|| '.trc' trace_file<br>
-FROM (SELECT VALUE<br>
-FROM v$parameter<br>
-WHERE NAME = 'user_dump_dest') a,<br>
-(SELECT SUBSTR (VALUE, -6, 1) symbol<br>
-FROM v$parameter<br>
-WHERE NAME = 'user_dump_dest') b,<br>
-(SELECT instance_name<br>
-FROM v$instance) c,<br>
-(SELECT spid<br>
-FROM v$session s, v$process p, v$mystat m<br>
-WHERE s.paddr = p.addr AND s.SID = m.SID AND m.statistic# = 0) d<br>
+<p>SELECT    a.VALUE<br />
+|| b.symbol<br />
+|| c.instance_name<br />
+|| '_ora_'<br />
+|| d.spid<br />
+|| '.trc' trace_file<br />
+FROM (SELECT VALUE<br />
+FROM v$parameter<br />
+WHERE NAME = 'user_dump_dest') a,<br />
+(SELECT SUBSTR (VALUE, -6, 1) symbol<br />
+FROM v$parameter<br />
+WHERE NAME = 'user_dump_dest') b,<br />
+(SELECT instance_name<br />
+FROM v$instance) c,<br />
+(SELECT spid<br />
+FROM v$session s, v$process p, v$mystat m<br />
+WHERE s.paddr = p.addr AND s.SID = m.SID AND m.statistic# = 0) d<br />
 /</p>
-<p>tkprof  F:\ORACLE\PRODUCT\10.2.0\ADMIN\ORCL\UDUMP\orcl_ora_3920.trc</p>
-</div>
+<p>tkprof  F:\ORACLE\PRODUCT\10.2.0\ADMIN\ORCL\UDUMP\orcl_ora_3920.trc</p></div>
 
 
                 <hr>
@@ -173,12 +168,12 @@ WHERE s.paddr = p.addr AND s.SID = m.SID AND m.statistic# = 0) d<br>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/switch-logfile-vs-archive-log-current.html" data-toggle="tooltip" data-placement="top" title="switch logfile VS archive log current">← Previous Post</a>
+                        <a href="/oracle/switch-logfile-vs-archive-log-current.html" data-toggle="tooltip" data-placement="top" title="switch logfile VS archive log current">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/alter-index-rebuild-alter-index-rebuild-online.html" data-toggle="tooltip" data-placement="top" title="alter index rebuild &amp; alter index rebuild online">Next Post →</a>
+                        <a href="/oracle/alter-index-rebuild-alter-index-rebuild-online.html" data-toggle="tooltip" data-placement="top" title="alter index rebuild & alter index rebuild online">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -203,7 +198,7 @@ WHERE s.paddr = p.addr AND s.SID = m.SID AND m.statistic# = 0) d<br>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -219,7 +214,7 @@ WHERE s.paddr = p.addr AND s.SID = m.SID AND m.statistic# = 0) d<br>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -332,7 +327,7 @@ WHERE s.paddr = p.addr AND s.SID = m.SID AND m.statistic# = 0) d<br>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -340,24 +335,22 @@ WHERE s.paddr = p.addr AND s.SID = m.SID AND m.statistic# = 0) d<br>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

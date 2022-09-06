@@ -1,7 +1,7 @@
 # Site settings
 title: DBAeyes
 header-img: "img/autumn2.jpg"
-tagline: "相遇在南十字星下"
+tagline: "相遇在南十字星下2"
 description: "Meet at the Southern Cross constellation(Crux)"
 baseurl: ""
 url: "https://dbaeyes.github.io"
@@ -15,7 +15,7 @@ owner:
 
 # Data
 gavatar: http://dreamofbook.qiniudn.com/Az..png
-favicon: img/favicon.ico
+favicon: /img/favicon.ico
 
 douban_username: dbaeyes
 twitter_username: dbaeyes
@@ -33,14 +33,14 @@ kramdown:
 highlighter: rouge
 
 plugins:
-- jekyll-gallery-generator
+# - jekyll-gallery-generator
 - jekyll-paginate
 permalink: none
 paginate: 8
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone: Australia/Adelaide
+timezone: Australia/Melbourne
 
 # Title
 
@@ -53,7 +53,7 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-      author: "David"
+      author: "Vincent"
       header-img: "img/fantasy.jpg" # We don't want posts without a header image, that whould mean white on white
 
 

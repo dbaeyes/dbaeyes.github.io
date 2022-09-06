@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/my%20life/meditation.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>静心</h1>
                     
-                    <span class="meta">Posted by David on November 20, 2013</span>
+                    <span class="meta">Posted by Vincent on November 20, 2013</span>
                 </div>
             </div>
         </div>
@@ -124,14 +120,14 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>希望可以静心看看书，想想问题。<br>
+                <p>希望可以静心看看书，想想问题。<br />
 微博和微信朋友圈属于可有可无的，现在没有必要非去看，所以平时就不看了，定了计划这周不看微博和朋友圈。想和朋友沟通可以直接去找他吃饭就好了。</p>
 <p>最近连续咳嗽两周了，非常痛苦，这两天比较厉害，肋骨下很疼，昨天去医院验血、拍片，应该还好吧（虽然是急诊科医生看的），配了点消炎药吃，现在比昨天晚上和今天早上好了很多。</p>
 <p>当前身体状况不太好，希望接下来可以好好锻炼，目标是跑下1w米能比较轻松的状态。</p>
 <p>最近差不多每两周有回一次老家，哥们峰伟整了块球场，我也会去凑凑热闹，很明显是体能不行，年轻人这状态，真的很糟糕。好好锻炼，你懂的</p>
 <p>静心，不要有太大的情绪波动，做好事情。</p>
 <p>以上杂记</p>
-<p><a href="http://www.flickr.com/photos/dbaeyes/10942209326/" title="Flickr 上 玄风 的 upload"><img src="http://farm3.staticflickr.com/2890/10942209326_33d434fed7_z.jpg" width="640" height="640" alt="upload"></a></p>
+<p><a href="http://www.flickr.com/photos/dbaeyes/10942209326/" title="Flickr 上 玄风 的 upload"><img src="http://farm3.staticflickr.com/2890/10942209326_33d434fed7_z.jpg" width="640" height="640" alt="upload" /></a></p>
 
 
                 <hr>
@@ -144,12 +140,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/mysql-recover-the-database-from-a-compressed-file.html" data-toggle="tooltip" data-placement="top" title="MySQL从压缩文件恢复数据库">← Previous Post</a>
+                        <a href="/mysql/mysql-recover-the-database-from-a-compressed-file.html" data-toggle="tooltip" data-placement="top" title="MySQL从压缩文件恢复数据库">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/i-am-2013.html" data-toggle="tooltip" data-placement="top" title="我的2013">Next Post →</a>
+                        <a href="/my%20life/i-am-2013.html" data-toggle="tooltip" data-placement="top" title="我的2013">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -174,7 +170,7 @@
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -190,7 +186,7 @@
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -303,7 +299,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -311,24 +307,22 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

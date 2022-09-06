@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/mysql-fetch-maximum-minimum-optimized-away.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>mysql 取最大最小值之 optimized away</h1>
                     
-                    <span class="meta">Posted by David on May 29, 2011</span>
+                    <span class="meta">Posted by Vincent on May 29, 2011</span>
                 </div>
             </div>
         </div>
@@ -125,63 +121,63 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>在取mysql主键最大最小值时，mysql会使用最优方式 SELECT tables optimized away</p>
-<p>官方解释<br>
+<p>官方解释<br />
  SELECT tables optimized away：当我们使用某些聚合函数来访问存在索引的某个字段时，MySQL Query Optimizer 会通过索引直接一次定位到所需的数据行完成整个查询。当然，前提是在 Query 中不能有 GROUP BY 操作。如使用MIN()或MAX()的时候</p>
-<p>[cc lang='sql']root@wap 06:57:32&gt;explain select max(id) from tmp_xf;<br>
-+----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br>
-| id | select_type | table | type | possible_keys | key  | key_len | ref  | rows | Extra                        |<br>
-+----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br>
-|  1 | SIMPLE      | NULL  | NULL | NULL          | NULL | NULL    | NULL | NULL | Select tables optimized away |<br>
-+----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br>
-[/cc]<br>
+<p>[cc lang='sql']root@wap 06:57:32>explain select max(id) from tmp_xf;<br />
++----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br />
+| id | select_type | table | type | possible_keys | key  | key_len | ref  | rows | Extra                        |<br />
++----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br />
+|  1 | SIMPLE      | NULL  | NULL | NULL          | NULL | NULL    | NULL | NULL | Select tables optimized away |<br />
++----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br />
+[/cc]<br />
 我们知道，innodb引擎的表是索引组织表，按照主键顺序存储。每个索引的都包含主键用来做指针定位到具体的记录。</p>
-<p>[cc lang='sql']dbaeyes 09:48:10&gt;show create table tmp_xf\G<br>
-*************************** 1. row ***************************<br>
-       Table: tmp_xf<br>
-Create Table: CREATE TABLE `tmp_xf` (<br>
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT ,<br>
-  `account` varchar(50) NOT NULL ,<br>
-  `status` int(11) NOT NULL ,<br>
-  `activity_id` int(11) NOT NULL,<br>
-  `gmt_create` datetime NOT NULL,<br>
-  `gmt_modified` datetime NOT NULL ,<br>
-  PRIMARY KEY (`id`),<br>
-  KEY `status` (`status`)<br>
-) ENGINE=InnoDB AUTO_INCREMENT=990001 DEFAULT CHARSET=gbk<br>
-1 row in set (0.00 sec)<br>
-[/cc]<br>
+<p>[cc lang='sql']dbaeyes 09:48:10>show create table tmp_xf\G<br />
+*************************** 1. row ***************************<br />
+       Table: tmp_xf<br />
+Create Table: CREATE TABLE `tmp_xf` (<br />
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT ,<br />
+  `account` varchar(50) NOT NULL ,<br />
+  `status` int(11) NOT NULL ,<br />
+  `activity_id` int(11) NOT NULL,<br />
+  `gmt_create` datetime NOT NULL,<br />
+  `gmt_modified` datetime NOT NULL ,<br />
+  PRIMARY KEY (`id`),<br />
+  KEY `status` (`status`)<br />
+) ENGINE=InnoDB AUTO_INCREMENT=990001 DEFAULT CHARSET=gbk<br />
+1 row in set (0.00 sec)<br />
+[/cc]<br />
  表记录99w</p>
 <p>select max(id) from tmp_xf where status = 0; 但是这个sql并不能使用</p>
-<p>optimized away<br>
-[cc lang='sql']dbaeyes 09:48:19&gt;explain select max(id) from tmp_xf where status = 0;<br>
-+----+-------------+--------+------+---------------+--------+---------+-------+--------+-------------+<br>
-| id | select_type | table  | type | possible_keys | key    | key_len | ref   | rows   | Extra       |<br>
-+----+-------------+--------+------+---------------+--------+---------+-------+--------+-------------+<br>
-|  1 | SIMPLE      | tmp_xf | ref  | status        | status | 4       | const | 494509 |Using index |<br>
+<p>optimized away<br />
+[cc lang='sql']dbaeyes 09:48:19>explain select max(id) from tmp_xf where status = 0;<br />
++----+-------------+--------+------+---------------+--------+---------+-------+--------+-------------+<br />
+| id | select_type | table  | type | possible_keys | key    | key_len | ref   | rows   | Extra       |<br />
++----+-------------+--------+------+---------------+--------+---------+-------+--------+-------------+<br />
+|  1 | SIMPLE      | tmp_xf | ref  | status        | status | 4       | const | 494509 |Using index |<br />
 +----+-------------+--------+------+---------------+--------+---------+-------+--------+-------------+[/cc]</p>
 <p>sql直接使用了索引，而且扫描了整个索引才获取到需要的数据，这个效率是非常低的。从执行计划可以看到扫描了49w+</p>
-<p>dbaeyes 09:48:30&gt;select max(id) from tmp_xf where status = 0;<br>
-+---------+<br>
-| max(id) |<br>
-+---------+<br>
-|  990000 |<br>
-+---------+<br>
+<p>dbaeyes 09:48:30>select max(id) from tmp_xf where status = 0;<br />
++---------+<br />
+| max(id) |<br />
++---------+<br />
+|  990000 |<br />
++---------+<br />
 1 row in set (1.89 sec)</p>
 <p> 下面尝试另外一种方式，我们创建 包含了 status,id的索引，既把id显示的放在索引中，这样id在索引中肯定是排序好的。</p>
-<p>[cc lang='sql'] root@wap 07:21:36&gt;explain select max(id) from tmp_xf where status = 0;<br>
-+----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br>
-| id | select_type | table | type | possible_keys | key  | key_len | ref  | rows | Extra                        |<br>
-+----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br>
-|  1 | SIMPLE      | NULL  | NULL | NULL          | NULL | NULL    | NULL | NULL | Select tables optimized away |<br>
-+----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br>
+<p>[cc lang='sql'] root@wap 07:21:36>explain select max(id) from tmp_xf where status = 0;<br />
++----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br />
+| id | select_type | table | type | possible_keys | key  | key_len | ref  | rows | Extra                        |<br />
++----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br />
+|  1 | SIMPLE      | NULL  | NULL | NULL          | NULL | NULL    | NULL | NULL | Select tables optimized away |<br />
++----+-------------+-------+------+---------------+------+---------+------+------+------------------------------+<br />
 1 row in set (0.00 sec) </p>
-<p>root@wap 07:21:54&gt;select max(id) from tmp_xf where status = 0;<br>
-+---------+<br>
-| max(id) |<br>
-+---------+<br>
-|  990000 |<br>
-+---------+<br>
-1 row in set (0.00 sec)<br>
+<p>root@wap 07:21:54>select max(id) from tmp_xf where status = 0;<br />
++---------+<br />
+| max(id) |<br />
++---------+<br />
+|  990000 |<br />
++---------+<br />
+1 row in set (0.00 sec)<br />
 [/cc]</p>
 <p>--eof--</p>
 
@@ -196,12 +192,12 @@ Create Table: CREATE TABLE `tmp_xf` (<br>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/table-data-and-field-null-implementation-plan-of-error-in-statistical-information.html" data-toggle="tooltip" data-placement="top" title="表数据量和字段空值统计信息导致的执行计划错误">← Previous Post</a>
+                        <a href="/oracle/table-data-and-field-null-implementation-plan-of-error-in-statistical-information.html" data-toggle="tooltip" data-placement="top" title="表数据量和字段空值统计信息导致的执行计划错误">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-fetch-random-number-index.html" data-toggle="tooltip" data-placement="top" title="mysql取随机数之索引使用">Next Post →</a>
+                        <a href="/mysql/mysql-fetch-random-number-index.html" data-toggle="tooltip" data-placement="top" title="mysql取随机数之索引使用">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -226,7 +222,7 @@ Create Table: CREATE TABLE `tmp_xf` (<br>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -242,7 +238,7 @@ Create Table: CREATE TABLE `tmp_xf` (<br>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -355,7 +351,7 @@ Create Table: CREATE TABLE `tmp_xf` (<br>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -363,24 +359,22 @@ Create Table: CREATE TABLE `tmp_xf` (<br>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

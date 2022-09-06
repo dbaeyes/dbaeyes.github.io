@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/a-sample-of-mysql-with-judgement-criteria-procedure.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>A sample of MySQL procedure -- 带判断条件</h1>
                     
-                    <span class="meta">Posted by David on June 9, 2013</span>
+                    <span class="meta">Posted by Vincent on June 9, 2013</span>
                 </div>
             </div>
         </div>
@@ -125,40 +121,40 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>带判断条件的MySQL存储过程</p>
-<p>[cc lang='sql']<br>
-delimiter $$<br>
-create  procedure sp_xf_update_book()<br>
+<p>[cc lang='sql']<br />
+delimiter $$<br />
+create  procedure sp_xf_update_book()<br />
 begin</p>
-<p>  declare v_done bit default false;<br>
-  declare v_commit int;<br>
-  declare $v_id bigint;<br>
-  declare $existsFlag int default 0;<br>
-  declare $bookId bigint;<br>
+<p>  declare v_done bit default false;<br />
+  declare v_commit int;<br />
+  declare $v_id bigint;<br />
+  declare $existsFlag int default 0;<br />
+  declare $bookId bigint;<br />
   declare $bookName varchar(50);</p>
-<p>  declare cur cursor for<br>
-    select id,book_id,book_name from xf_book;<br>
-  declare continue handler for not found set v_done = true;<br>
-    set autocommit =0;<br>
-    open cur;<br>
-    repeat<br>
-    fetch cur into $v_id,$bookId,$bookName;<br>
-    IF not v_done then<br>
-        select count(*) as cnt into $existsFlag from xf_book_bak where id = $v_id ;<br>
-         if $existsFlag = 0 then<br>
-                 insert into xf_book_bak<br>
-                      select * from xf_book where id=$v_id;<br>
-         else<br>
-         update xf_book_bak set book_name = $bookName  where id=$v_id;<br>
-         end if;<br>
-    end if;<br>
-    set v_commit=v_commit+1;<br>
-    IF (v_commit MOD 100 = 0) THEN<br>
-      COMMIT;<br>
-    END IF;<br>
-    until v_done end repeat;<br>
-    close cur;<br>
-    commit;<br>
-end$$<br>
+<p>  declare cur cursor for<br />
+    select id,book_id,book_name from xf_book;<br />
+  declare continue handler for not found set v_done = true;<br />
+    set autocommit =0;<br />
+    open cur;<br />
+    repeat<br />
+    fetch cur into $v_id,$bookId,$bookName;<br />
+    IF not v_done then<br />
+        select count(*) as cnt into $existsFlag from xf_book_bak where id = $v_id ;<br />
+         if $existsFlag = 0 then<br />
+                 insert into xf_book_bak<br />
+                      select * from xf_book where id=$v_id;<br />
+         else<br />
+         update xf_book_bak set book_name = $bookName  where id=$v_id;<br />
+         end if;<br />
+    end if;<br />
+    set v_commit=v_commit+1;<br />
+    IF (v_commit MOD 100 = 0) THEN<br />
+      COMMIT;<br />
+    END IF;<br />
+    until v_done end repeat;<br />
+    close cur;<br />
+    commit;<br />
+end$$<br />
 delimiter ;[/cc]</p>
 
 
@@ -172,12 +168,12 @@ delimiter ;[/cc]</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/law-of.html" data-toggle="tooltip" data-placement="top" title="规律起来">← Previous Post</a>
+                        <a href="/my%20life/law-of.html" data-toggle="tooltip" data-placement="top" title="规律起来">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/your-positive-can-not.html" data-toggle="tooltip" data-placement="top" title="你乐观一点，可以不">Next Post →</a>
+                        <a href="/my%20life/your-positive-can-not.html" data-toggle="tooltip" data-placement="top" title="你乐观一点，可以不">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -202,7 +198,7 @@ delimiter ;[/cc]</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -218,7 +214,7 @@ delimiter ;[/cc]</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -331,7 +327,7 @@ delimiter ;[/cc]</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -339,24 +335,22 @@ delimiter ;[/cc]</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

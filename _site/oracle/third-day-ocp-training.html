@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/third-day-ocp-training.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>OCP 培训第三天</h1>
                     
-                    <span class="meta">Posted by David on June 12, 2008</span>
+                    <span class="meta">Posted by Vincent on June 12, 2008</span>
                 </div>
             </div>
         </div>
@@ -127,56 +123,56 @@
                 <p>简单记录下：</p>
 <div>
 <p>RAC除了在并行计算方面一般会造成性能的下降</p>
-<p><em><strong>Instance/Database</strong></em><br>
-V$DATABASE<br>
-V$INSTANCE<br>
-V$PARAMETER<br>
-V$SPPARAMETER<br>
-V$SYSTEM_PARAMETER<br>
-V$PROCESS<br>
-V$BGPROCESS<br>
-V$PX_PROCESS_SYSSTAT<br>
+<p><em><strong>Instance/Database</strong></em><br />
+V$DATABASE<br />
+V$INSTANCE<br />
+V$PARAMETER<br />
+V$SPPARAMETER<br />
+V$SYSTEM_PARAMETER<br />
+V$PROCESS<br />
+V$BGPROCESS<br />
+V$PX_PROCESS_SYSSTAT<br />
 V$SYSTEM_EVENT</p>
-<p><strong><em>Disk</em></strong><br>
-V$DATAFILE<br>
-V$FILESTAT<br>
-V$LOG<br>
-V$LOG_HISTORY<br>
-V$DBFILE<br>
-V$TEMPFILE<br>
-V$TEMPSEG_USAGE<br>
+<p><strong><em>Disk</em></strong><br />
+V$DATAFILE<br />
+V$FILESTAT<br />
+V$LOG<br />
+V$LOG_HISTORY<br />
+V$DBFILE<br />
+V$TEMPFILE<br />
+V$TEMPSEG_USAGE<br />
 V$SEGMENT_STATISTICS</p>
-<p><strong><em>Memory<br>
-</em></strong>V$BUFFER_POOL_STATISTICS<br>
-V$LIBRAARYCACHE<br>
-V$SGAINFO<br>
+<p><strong><em>Memory<br />
+</em></strong>V$BUFFER_POOL_STATISTICS<br />
+V$LIBRAARYCACHE<br />
+V$SGAINFO<br />
 V$PGASTAT</p>
-<p><strong><em>Contention<br>
-</em></strong>V$LOCK<br>
-V$UNDOSTAT<br>
-V$WAITSATA<br>
+<p><strong><em>Contention<br />
+</em></strong>V$LOCK<br />
+V$UNDOSTAT<br />
+V$WAITSATA<br />
 V$LATCH</p>
-<p>Direct access to <em><strong>SGA for performance monitoring</strong></em><br>
-V$SESSION<br>
-V$SESSION_WAIT<br>
-V$SYSTEM_EVENT<br>
+<p>Direct access to <em><strong>SGA for performance monitoring</strong></em><br />
+V$SESSION<br />
+V$SESSION_WAIT<br />
+V$SYSTEM_EVENT<br />
 V$SYSSTAT</p>
-<p>在使用EM显示图像影响过慢中的数据库的话，设置为<br>
+<p>在使用EM显示图像影响过慢中的数据库的话，设置为<br />
 Monitor in Memory Access Mode</p>
 <p>SQL Tuning Advisor: Top SQL, SQL Tuning Sets...</p>
 <p><strong><em>SQL Access Advisor</em></strong>: materialized views, indexes.... -- <em><strong>shrink</strong></em></p>
-<p>使用异步提交，可能会导致数据的丢失<br>
-ALTER SESSION SET COMMIT_WIRITE + 参数<br>
-IMMEDIATE, WAIT -- WAIT 事物是否等待redo完成写操作 （默认等待，不丢数据）<br>
+<p>使用异步提交，可能会导致数据的丢失<br />
+ALTER SESSION SET COMMIT_WIRITE + 参数<br />
+IMMEDIATE, WAIT -- WAIT 事物是否等待redo完成写操作 （默认等待，不丢数据）<br />
 IMMEDIATE, NOWAIT -- 不等待，会丢失一部分数据</p>
-<p>COMMIT WRITE BATCH WAIT --无用的，即批量提交，又等待。。。<br>
+<p>COMMIT WRITE BATCH WAIT --无用的，即批量提交，又等待。。。<br />
 COMMIT WRITE BATCH NOWAIT --效率最高，如果丢失会很惨</p>
-<p><strong><em>IOT</em></strong><br>
-PCTTHRESHOLD 20 OVERFLOW TABLESPACE users<br>
+<p><strong><em>IOT</em></strong><br />
+PCTTHRESHOLD 20 OVERFLOW TABLESPACE users<br />
 --当行长度超过20%，超出部分将放在users表空间</p>
-<p>ALTER SESSION ENABLE <strong><em>RESUMABLE</em></strong>;<br>
+<p>ALTER SESSION ENABLE <strong><em>RESUMABLE</em></strong>;<br />
 -- 查询 user_resumable</p>
-<p>Transporting Tablespace --from one platform to another<br>
+<p>Transporting Tablespace --from one platform to another<br />
 TRANSPORTABLE_PLANFORM</p>
 <p>-- EOF --</p>
 </div>
@@ -192,12 +188,12 @@ TRANSPORTABLE_PLANFORM</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/oracle/living-hard.html" data-toggle="tooltip" data-placement="top" title="住的辛苦">← Previous Post</a>
+                        <a href="/my%20life/oracle/living-hard.html" data-toggle="tooltip" data-placement="top" title="住的辛苦">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/oracle/ocp-training-for-fourth-day.html" data-toggle="tooltip" data-placement="top" title="OCP 培训第四天">Next Post →</a>
+                        <a href="/my%20life/oracle/ocp-training-for-fourth-day.html" data-toggle="tooltip" data-placement="top" title="OCP 培训第四天">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -222,7 +218,7 @@ TRANSPORTABLE_PLANFORM</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -238,7 +234,7 @@ TRANSPORTABLE_PLANFORM</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -351,7 +347,7 @@ TRANSPORTABLE_PLANFORM</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -359,24 +355,22 @@ TRANSPORTABLE_PLANFORM</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

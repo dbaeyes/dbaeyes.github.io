@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/how-to-do-with-the-duplicated-data-in-mysql.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>How to do with the duplicated data in MySQL</h1>
                     
-                    <span class="meta">Posted by David on September 29, 2012</span>
+                    <span class="meta">Posted by Vincent on September 29, 2012</span>
                 </div>
             </div>
         </div>
@@ -124,28 +120,28 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>MySQL: 5.1.48<br>
-Phase: the trade_id are duplicated in table tmp_xf_test<br>
+                <p>MySQL: 5.1.48<br />
+Phase: the trade_id are duplicated in table tmp_xf_test<br />
 Purpose: select the record which the gmt_modified is minimum and the trade_id are duplicated.</p>
-<p>Because MySQL get the record in order.<br>
-[cc lang='sql']select * from<br>
-(select id,trade_id,gmt_modified from tmp_xf_2<br>
-            order by trade_id,gmt_modified) t<br>
+<p>Because MySQL get the record in order.<br />
+[cc lang='sql']select * from<br />
+(select id,trade_id,gmt_modified from tmp_xf_2<br />
+            order by trade_id,gmt_modified) t<br />
 group by trade_id;[/cc]</p>
-<p>Another way (more complicated)<br>
-[cc lang='sql']select b.* from (select trade_id, min(gmt_modified) as dt<br>
-from tmp_xf_test<br>
-group by trade_id) a, tmp_xf_test b<br>
-where a.trade_id = b.trade_id<br>
+<p>Another way (more complicated)<br />
+[cc lang='sql']select b.* from (select trade_id, min(gmt_modified) as dt<br />
+from tmp_xf_test<br />
+group by trade_id) a, tmp_xf_test b<br />
+where a.trade_id = b.trade_id<br />
 and a.dt = b.gmt_modified;[/cc]</p>
-<p>--<br>
+<p>--<br />
 Purpose: delete the duplicated rows and keep one which the 'gmt_modified' is mininum</p>
-<p>[cc lang='sql']delete a from tmp_xf_test a,<br>
-(select *, min(gmt_modified) as bid<br>
-from tmp_xf_test<br>
-group by trade_id<br>
-having count(1) &gt; 1) as b<br>
-where a.trade_id = b.trade_id<br>
+<p>[cc lang='sql']delete a from tmp_xf_test a,<br />
+(select *, min(gmt_modified) as bid<br />
+from tmp_xf_test<br />
+group by trade_id<br />
+having count(1) &gt; 1) as b<br />
+where a.trade_id = b.trade_id<br />
 and a.gmt_modified &gt; b.bid;[/cc]</p>
 <p>Have fun</p>
 
@@ -160,12 +156,12 @@ and a.gmt_modified &gt; b.bid;[/cc]</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/something-changes-yes-yes.html" data-toggle="tooltip" data-placement="top" title="something was changed in my work">← Previous Post</a>
+                        <a href="/my%20life/something-changes-yes-yes.html" data-toggle="tooltip" data-placement="top" title="something was changed in my work">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/test-pic.html" data-toggle="tooltip" data-placement="top" title="Holiday">Next Post →</a>
+                        <a href="/my%20life/test-pic.html" data-toggle="tooltip" data-placement="top" title="Holiday">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -190,7 +186,7 @@ and a.gmt_modified &gt; b.bid;[/cc]</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -206,7 +202,7 @@ and a.gmt_modified &gt; b.bid;[/cc]</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -319,7 +315,7 @@ and a.gmt_modified &gt; b.bid;[/cc]</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -327,24 +323,22 @@ and a.gmt_modified &gt; b.bid;[/cc]</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/cursor-using-bulk-collect-bulk-fetch.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>使用bulk collect实现cursor 批量fetch！</h1>
                     
-                    <span class="meta">Posted by David on September 12, 2008</span>
+                    <span class="meta">Posted by Vincent on September 12, 2008</span>
                 </div>
             </div>
         </div>
@@ -126,55 +122,55 @@
 
                 <p>尽管我在开发当中使用批量fetch并不是很多，但是oracle提供了这个功能我们最好能熟悉一下，说不定什么时候会用上它。批量fetch肯定需要和集合结合起来使用，所以这就要求我们熟悉集合的内容！这里不对集合的内容做过多介绍！</p>
 <div>
-<p>declare<br>
-cursor c1 is select * from t_depart;<br>
-v_depart t_depart%rowtype ;<br>
-type v_code_type is table of t_depart.depart_code%type ;<br>
-v_code v_code_type ;<br>
-type v_name_type is table of t_depart.depart_name%type ;<br>
-v_name v_name_type ;<br>
-begin<br>
-open c1;<br>
-fetch c1 bulk collect into v_code , v_name ;<br>
-for i in 1..v_code.count loop<br>
-dbms_output.put_line(v_code(i)||' '||v_name(i));<br>
-end loop;<br>
-close c1;<br>
+<p>declare<br />
+cursor c1 is select * from t_depart;<br />
+v_depart t_depart%rowtype ;<br />
+type v_code_type is table of t_depart.depart_code%type ;<br />
+v_code v_code_type ;<br />
+type v_name_type is table of t_depart.depart_name%type ;<br />
+v_name v_name_type ;<br />
+begin<br />
+open c1;<br />
+fetch c1 bulk collect into v_code , v_name ;<br />
+for i in 1..v_code.count loop<br />
+dbms_output.put_line(v_code(i)||' '||v_name(i));<br />
+end loop;<br />
+close c1;<br />
 end;</p>
 <p>--========================================</p>
 <p>通过上面的列子发现如果列很多的话，为每一列定义一个集合似乎有些繁琐，可以把集合和%rowtype结合起来一起使用简化程序！</p>
-<p>declare<br>
-cursor c1 is select * from t_depart;<br>
-type v_depart_type is table of t_depart%rowtype ;<br>
-v_depart v_depart_type ;<br>
-begin<br>
-open c1;<br>
-fetch c1 bulk collect into v_depart ;<br>
-for i in 1..v_depart.count loop<br>
-dbms_output.put_line(v_depart(i).depart_code||' '||<br>
-v_depart(i).depart_name);<br>
-end loop;<br>
-close c1;<br>
+<p>declare<br />
+cursor c1 is select * from t_depart;<br />
+type v_depart_type is table of t_depart%rowtype ;<br />
+v_depart v_depart_type ;<br />
+begin<br />
+open c1;<br />
+fetch c1 bulk collect into v_depart ;<br />
+for i in 1..v_depart.count loop<br />
+dbms_output.put_line(v_depart(i).depart_code||' '||<br />
+v_depart(i).depart_name);<br />
+end loop;<br />
+close c1;<br />
 end;</p>
 <p>--======================================</p>
 <p>在 输出结果时既可以使用集合的count属性和可以使用first和last，在引用%rowtype类型的内容时还有一个需要注意的地方是 v_depart(i).depart_code，而不是v_depart.depart_code(i),当然没有这样的写法，即使有意义也不一样，大 家可以仔细思考</p>
-<p>declare<br>
-cursor c1 is select * from t_depart;<br>
-type v_depart_type is table of t_depart%rowtype ;<br>
-v_depart v_depart_type ;<br>
-begin<br>
-open c1;<br>
-fetch c1 bulk collect into v_depart ;<br>
-for i in v_depart.first..v_depart.last loop<br>
-dbms_output.put_line(v_depart(i).depart_code||' '||<br>
-v_depart(i).depart_name);<br>
-end loop;<br>
-close c1;<br>
+<p>declare<br />
+cursor c1 is select * from t_depart;<br />
+type v_depart_type is table of t_depart%rowtype ;<br />
+v_depart v_depart_type ;<br />
+begin<br />
+open c1;<br />
+fetch c1 bulk collect into v_depart ;<br />
+for i in v_depart.first..v_depart.last loop<br />
+dbms_output.put_line(v_depart(i).depart_code||' '||<br />
+v_depart(i).depart_name);<br />
+end loop;<br />
+close c1;<br />
 end;</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>From: <a href="http://warehouse.itpub.net/post/777/413035" target="_blank">http://warehouse.itpub.net/post/777/413035</a></p>
 <p>其他博文</p>
-<p><img src="http://blog.csdn.net/images/authorship.gif" alt="原创" width="15" height="16" border="0"> <a href="http://blog.csdn.net/pengle/archive/2006/12/26/1463129.aspx">oracle批量绑定 forall bulk collect用法以及测试案例</a></p>
+<p><img src="http://blog.csdn.net/images/authorship.gif" alt="原创" width="15" height="16" border="0" /> <a href="http://blog.csdn.net/pengle/archive/2006/12/26/1463129.aspx">oracle批量绑定 forall bulk collect用法以及测试案例</a></p>
 <p><a href="http://hi.baidu.com/oraclej/blog/item/e33738fb64c4b7214e4aeac7.html">http://hi.baidu.com/oraclej/blog/item/e33738fb64c4b7214e4aeac7.html</a></p>
 </div>
 
@@ -189,12 +185,12 @@ end;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/the-rowid-for-parallel-execution.html" data-toggle="tooltip" data-placement="top" title="根据rowid 并行执行">← Previous Post</a>
+                        <a href="/oracle/the-rowid-for-parallel-execution.html" data-toggle="tooltip" data-placement="top" title="根据rowid 并行执行">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/autumn-notes-on.html" data-toggle="tooltip" data-placement="top" title="中秋小记">Next Post →</a>
+                        <a href="/my%20life/autumn-notes-on.html" data-toggle="tooltip" data-placement="top" title="中秋小记">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -219,7 +215,7 @@ end;</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -235,7 +231,7 @@ end;</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -348,7 +344,7 @@ end;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -356,24 +352,22 @@ end;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

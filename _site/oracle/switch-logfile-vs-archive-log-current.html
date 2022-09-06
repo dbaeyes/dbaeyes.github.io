@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/switch-logfile-vs-archive-log-current.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -113,7 +109,7 @@
                     </div>
                     <h1>switch logfile VS archive log current</h1>
                     
-                    <span class="meta">Posted by David on July 16, 2008</span>
+                    <span class="meta">Posted by Vincent on July 16, 2008</span>
                 </div>
             </div>
         </div>
@@ -131,8 +127,8 @@
 <div>
 <h4><span style="font-family: Arial, Helvetica, sans-serif;">ALTER SYSTEM SWITCH LOGFILE ;</span></h4>
 <h4><span style="font-family: Arial, Helvetica, sans-serif;">SWITCH LOGFILE Clause</span></h4>
-<p>The <code><span style="font-family: 新宋体;">SWITCH</span></code> <code><span style="font-family: 新宋体;">LOGFILE</span></code> clause lets you explicitly force Oracle to begin writing to a new redo log file group, regardless of whether the files in the current redo log file group are full. When you force a log switch, Oracle begins to perform a checkpoint but returns control to you immediately rather than when the checkpoint is complete. To use this clause, your instance must have the database open. </p>
-<p> </p>
+<p>The <code><span style="font-family: 新宋体;">SWITCH</span></code> <code><span style="font-family: 新宋体;">LOGFILE</span></code> clause lets you explicitly force Oracle to begin writing to a new redo log file group, regardless of whether the files in the current redo log file group are full. When you force a log switch, Oracle begins to perform a checkpoint but returns control to you immediately rather than when the checkpoint is complete. To use this clause, your instance must have the database open.&nbsp;</p>
+<p>&nbsp;</p>
 <h5><span style="font-family: Arial, Helvetica, sans-serif;">ALTER SYSTEM ARCHIVE LOG CURRENT ;</span></h5>
 <h5><span style="font-family: Arial, Helvetica, sans-serif;">CURRENT Clause</span></h5>
 <p>Specify <code><span style="font-family: 新宋体;">CURRENT</span></code> to manually archive the current redo log file group of the specified thread, forcing a log switch. If you omit the <code><span style="font-family: 新宋体;">THREAD</span></code> parameter, then Oracle archives all redo log file groups from all enabled threads, including logs previous to current logs. You can specify <code><span style="font-family: 新宋体;">CURRENT</span></code> only when the database is open.</p>
@@ -142,9 +138,9 @@
 <p>You can use the <code><span style="font-family: 新宋体;">NOSWITCH</span></code> clause only when your instance has the database mounted but not open. If the database is open, then this operation closes the database automatically. You must then manually shut down the database before you can reopen it</p>
 <p>itpub玉面飞龙斑竹这样解释：</p>
 <p><span style="font-family: verdana, arial, helvetica; font-size: small;">在自动归档的情况下：</span></p>
-<p><span style="font-family: verdana, arial, helvetica; font-size: small;">lgwr 切换写下一个日志文件的时候，它触发一个checkpoint 过程，这个checkpoint过程要触发DBWR去将上一个日志文件中redo修改的存储在buffer cache中的dirty buffer全部写回磁盘中，然后ckpt进程纪录scn到controlfile （增量检查点）；同时lgwr还会触发archive进程 通知归档说可以归档某个日志文件了。 checkpoint过程和归档过程之间没有依赖性。<br>
-当上面lwgr触发的checkpoint 过程完成后，会将日志文件的状态从active转到inactive; 这时候这个日志文件才可以被重新写。也就说 并不是日志文件被归档后就可以被覆盖。而要等待发生在该日志文件的检查点过程结束。</span></p>
-<p>如果lgwr要覆盖一个其上检查点过程没有结束的日志文件，lgwr会等待dbwr完成，且应用session会hang住；在alter.log文件中 会出现，checkpoint not complete,unable to allocate new redo log file 类似的错误</p>
+<p><span style="font-family: verdana, arial, helvetica; font-size: small;">lgwr 切换写下一个日志文件的时候，它触发一个checkpoint 过程，这个checkpoint过程要触发DBWR去将上一个日志文件中redo修改的存储在buffer cache中的dirty buffer全部写回磁盘中，然后ckpt进程纪录scn到controlfile （增量检查点）；同时lgwr还会触发archive进程 通知归档说可以归档某个日志文件了。 checkpoint过程和归档过程之间没有依赖性。<br />
+当上面lwgr触发的checkpoint 过程完成后，会将日志文件的状态从active转到inactive; 这时候这个日志文件才可以被重新写。也就说 并不是日志文件被归档后就可以被覆盖。而要等待发生在该日志文件的检查点过程结束。</p>
+<p>如果lgwr要覆盖一个其上检查点过程没有结束的日志文件，lgwr会等待dbwr完成，且应用session会hang住；在alter.log文件中 会出现，checkpoint not complete,unable to allocate new redo log file 类似的错误</span></p>
 <p>当然，如果这个时候db不是自动归档，那么发出switch logfile之后，只会触发ckpt,arc进程不会触发，要使得redo归档，必须手工发出alter system archive log current</p>
 </div>
 </div>
@@ -160,12 +156,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/gypsum-board-was-available-for-such-a-heavy.html" data-toggle="tooltip" data-placement="top" title="石膏板原来可以这样重！！！">← Previous Post</a>
+                        <a href="/my%20life/gypsum-board-was-available-for-such-a-heavy.html" data-toggle="tooltip" data-placement="top" title="石膏板原来可以这样重！！！">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/oracle-10046-event.html" data-toggle="tooltip" data-placement="top" title="Oracle 10046 event">Next Post →</a>
+                        <a href="/oracle/oracle-10046-event.html" data-toggle="tooltip" data-placement="top" title="Oracle 10046 event">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -190,7 +186,7 @@
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -206,7 +202,7 @@
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -319,7 +315,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -327,24 +323,22 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

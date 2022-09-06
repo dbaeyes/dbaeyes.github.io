@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/index-organized-tables-iot-oracle.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -113,7 +109,7 @@
                     </div>
                     <h1>索引组织表 IOT (ORACLE)</h1>
                     
-                    <span class="meta">Posted by David on June 12, 2011</span>
+                    <span class="meta">Posted by Vincent on June 12, 2011</span>
                 </div>
             </div>
         </div>
@@ -132,72 +128,72 @@
 <p>  --处理超级大量数据时，需要使用extent分块来做，这个是必须的 O(∩_∩)O </p>
 <p>在正式开始之前，先对iot和堆表进行一个简单的比较，以便心中有数。</p>
 <p>--常规堆表</p>
-<p>[cc lang='sql']CREATE TABLE tmp_xf (<br>
-id NUMBER,<br>
-PARENT_ID NUMBER,<br>
-NICK VARCHAR2(32),<br>
-GMT_MODIFIED DATE,<br>
-PRIMARY KEY (id))<br>
+<p>[cc lang='sql']CREATE TABLE tmp_xf (<br />
+id NUMBER,<br />
+PARENT_ID NUMBER,<br />
+NICK VARCHAR2(32),<br />
+GMT_MODIFIED DATE,<br />
+PRIMARY KEY (id))<br />
 TABLESPACE tbs_crm_dat;</p>
 <p>alter SESSION enable parallel dml;</p>
 <p>要在dml中开启并行，需要把这个参数打开</p>
-<p>INSERT /*+ parallel(a,8) */ INTO tmp_xf a<br>
+<p>INSERT /*+ parallel(a,8) */ INTO tmp_xf a<br />
 SELECT /*+ parallel(t,8) */  id,PARENT_ID,NICK,GMT_MODIFIED FROM test_order t;[/cc]</p>
-<p>15mins<br>
+<p>15mins<br />
 简单粗暴的导入方式，耗时15分钟。从并行度可以看到是8个seleclt 8个insert</p>
-<p>--索引组织表<br>
-[cc lang='sql']CREATE TABLE tmp_xf_iot (<br>
-id NUMBER,<br>
-PARENT_ID NUMBER,<br>
-NICK VARCHAR2(32),<br>
-GMT_MODIFIED DATE,<br>
-PRIMARY KEY (id))<br>
-ORGANIZATION INDEX<br>
+<p>--索引组织表<br />
+[cc lang='sql']CREATE TABLE tmp_xf_iot (<br />
+id NUMBER,<br />
+PARENT_ID NUMBER,<br />
+NICK VARCHAR2(32),<br />
+GMT_MODIFIED DATE,<br />
+PRIMARY KEY (id))<br />
+ORGANIZATION INDEX<br />
 TABLESPACE tbs_crm_dat;</p>
-<p>14:46:41 SQL&gt;  INSERT /*+ parallel(a,8) */ INTO tmp_xf_iot a<br>
-14:47:03   2  SELECT /*+ parallel(t,8) */  id,PARENT_ID,NICK,GMT_MODIFIED FROM test_order t;<br>
-100501397 ROWS created.<br>
+<p>14:46:41 SQL>  INSERT /*+ parallel(a,8) */ INTO tmp_xf_iot a<br />
+14:47:03   2  SELECT /*+ parallel(t,8) */  id,PARENT_ID,NICK,GMT_MODIFIED FROM test_order t;<br />
+100501397 ROWS created.<br />
 Elapsed: 00:33:41.04[/cc]</p>
 <p>耗时33分钟，是常规表的两倍多，这个时间是可以接受的。毕竟数据导入的同时相当于在维护索引，而且过程中数据在不停的移动。</p>
-<p>=======================分割线 一点都不华丽==========<br>
+<p>=======================分割线 一点都不华丽==========<br />
 读取对比</p>
-<p>-----堆表<br>
-[cc lang='sql']11:35:32 SQL&gt; SELECT * FROM tmp_xf WHERE id = 2165985;</p>
-<p>        ID  PARENT_ID NICK                             GMT_MODIFIED<br>
----------- ---------- -------------------------------- -------------------<br>
+<p>-----堆表<br />
+[cc lang='sql']11:35:32 SQL> SELECT * FROM tmp_xf WHERE id = 2165985;</p>
+<p>        ID  PARENT_ID NICK                             GMT_MODIFIED<br />
+---------- ---------- -------------------------------- -------------------<br />
    2165985          0 twork_mengdie13                  2010-10-26,16:43:17</p>
 <p>Elapsed: 00:00:00.01</p>
-<p>Execution PLAN<br>
-----------------------------------------------------------<br>
+<p>Execution PLAN<br />
+----------------------------------------------------------<br />
 PLAN hash VALUE: 1973243085</p>
-<p>---------------------------------------------------------------------------------------------<br>
-| Id  | Operation                   | Name          | ROWS  | Bytes | COST (%CPU)| TIME     |<br>
----------------------------------------------------------------------------------------------<br>
-|   0 | SELECT STATEMENT            |               |     1 |    53 |     1   (0)| 00:00:01 |<br>
-|   1 |  TABLE ACCESS BY INDEX ROWID| TMP_XF        |     1 |    53 |     1   (0)| 00:00:01 |<br>
-|*  2 |   INDEX UNIQUE SCAN         | SYS_C00131311 |     1 |       |     1   (0)| 00:00:01 |<br>
+<p>---------------------------------------------------------------------------------------------<br />
+| Id  | Operation                   | Name          | ROWS  | Bytes | COST (%CPU)| TIME     |<br />
+---------------------------------------------------------------------------------------------<br />
+|   0 | SELECT STATEMENT            |               |     1 |    53 |     1   (0)| 00:00:01 |<br />
+|   1 |  TABLE ACCESS BY INDEX ROWID| TMP_XF        |     1 |    53 |     1   (0)| 00:00:01 |<br />
+|*  2 |   INDEX UNIQUE SCAN         | SYS_C00131311 |     1 |       |     1   (0)| 00:00:01 |<br />
 ---------------------------------------------------------------------------------------------</p>
-<p>STATISTICS<br>
-----------------------------------------------------------<br>
+<p>STATISTICS<br />
+----------------------------------------------------------<br />
           5  consistent gets[/cc]</p>
 <p>可以看到根据主键访问需要5个逻辑读，分析索引的高度是blevel是3，高度high是4，通过索引拿到rowid是4个逻辑读，在回表的话就是5个逻辑读</p>
 <p>--索引组织表</p>
-<p>[cc lang='sql']11:41:01 SQL&gt; SELECT * FROM tmp_xf_iot WHERE id = 2165985; </p>
-<p>        ID  PARENT_ID NICK                             GMT_MODIFIED<br>
----------- ---------- -------------------------------- -------------------<br>
+<p>[cc lang='sql']11:41:01 SQL> SELECT * FROM tmp_xf_iot WHERE id = 2165985; </p>
+<p>        ID  PARENT_ID NICK                             GMT_MODIFIED<br />
+---------- ---------- -------------------------------- -------------------<br />
    2165985          0 twork_mengdie13                  2010-10-26,16:43:17</p>
 <p>Elapsed: 00:00:00.00</p>
-<p>Execution PLAN<br>
-----------------------------------------------------------<br>
+<p>Execution PLAN<br />
+----------------------------------------------------------<br />
 PLAN hash VALUE: 1560068715</p>
-<p>----------------------------------------------------------------------------------------<br>
-| Id  | Operation         | Name               | ROWS  | Bytes | COST (%CPU)| TIME     |<br>
-----------------------------------------------------------------------------------------<br>
-|   0 | SELECT STATEMENT  |                    |     1 |    53 |     1   (0)| 00:00:01 |<br>
-|*  1 |  INDEX UNIQUE SCAN| SYS_IOT_TOP_249218 |     1 |    53 |     1   (0)| 00:00:01 |<br>
+<p>----------------------------------------------------------------------------------------<br />
+| Id  | Operation         | Name               | ROWS  | Bytes | COST (%CPU)| TIME     |<br />
+----------------------------------------------------------------------------------------<br />
+|   0 | SELECT STATEMENT  |                    |     1 |    53 |     1   (0)| 00:00:01 |<br />
+|*  1 |  INDEX UNIQUE SCAN| SYS_IOT_TOP_249218 |     1 |    53 |     1   (0)| 00:00:01 |<br />
 ----------------------------------------------------------------------------------------</p>
-<p>STATISTICS<br>
-----------------------------------------------------------<br>
+<p>STATISTICS<br />
+----------------------------------------------------------<br />
           4  consistent gets[/cc]</p>
 <p>4个逻辑读，很好理解，索引的高度是一样的，只是少了回表。 哈哈，因为数据都在索引了，不存在回表的概念了。</p>
 <p>--具体的操作记录后续更新...</p>
@@ -217,12 +213,12 @@ PLAN hash VALUE: 1560068715</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/software/recommend-evernotequickhighlighter.html" data-toggle="tooltip" data-placement="top" title="推荐 evernote &amp; quickhighlighter">← Previous Post</a>
+                        <a href="/software/recommend-evernotequickhighlighter.html" data-toggle="tooltip" data-placement="top" title="推荐 evernote & quickhighlighter">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/copying-large-amounts-of-data-to-index-organized-tables.html" data-toggle="tooltip" data-placement="top" title="复制大数据量到索引组织表">Next Post →</a>
+                        <a href="/oracle/copying-large-amounts-of-data-to-index-organized-tables.html" data-toggle="tooltip" data-placement="top" title="复制大数据量到索引组织表">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -247,7 +243,7 @@ PLAN hash VALUE: 1560068715</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -263,7 +259,7 @@ PLAN hash VALUE: 1560068715</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -376,7 +372,7 @@ PLAN hash VALUE: 1560068715</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -384,24 +380,22 @@ PLAN hash VALUE: 1560068715</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

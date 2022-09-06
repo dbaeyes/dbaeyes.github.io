@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/table-data-and-field-null-implementation-plan-of-error-in-statistical-information.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -113,7 +109,7 @@
                     </div>
                     <h1>表数据量和字段空值统计信息导致的执行计划错误</h1>
                     
-                    <span class="meta">Posted by David on May 9, 2011</span>
+                    <span class="meta">Posted by Vincent on May 9, 2011</span>
                 </div>
             </div>
         </div>
@@ -128,94 +124,94 @@
 
                 <p>TABLE_CC 表数据量 8KW，</p>
 <div>
-<p>column: Art_id null number  --distinct values:214<br>
-column: User_id  not null number --distinct values: 83w<br>
- <br>
-Index:<br>
-Idx_userid: user_id,status<br>
-Idx_artid: art_id,gmt_create,status,prod_type<br>
- <br>
-[cc lang='sql']-----SQL---<br>
-SELECT /*+ordered use_nl(t1,t2)*/<br>
- T2.*<br>
-  FROM (SELECT RID<br>
-          FROM (SELECT R.RID, ROWNUM LINENUM<br>
-                  FROM (SELECT ROWID RID<br>
-                          FROM TABLE_CC T<br>
-                         WHERE PROD_TYPE = 1<br>
-                           AND T.USER_ID = :1<br>
-                           AND T.STATUS = :2<br>
-                           AND T.GMT_CREATE &gt;=<br>
-                              TO_DATE(:3, 'yyyy-mm-ddhh24:mi:ss')<br>
-                           AND T.ART_ID = :4<br>
-                         ORDER BY T.GMT_CREATE DESC) R<br>
-                 WHERE ROWNUM &lt;= :6)<br>
-         WHERE LINENUM &gt;= :7) T1,<br>
-       TABLE_CC T2<br>
- WHERE T1.RID = T2.ROWID;<br>
+<p>column: Art_id null number  --distinct values:214<br />
+column: User_id  not null number --distinct values: 83w<br />
+&nbsp;<br />
+Index:<br />
+Idx_userid: user_id,status<br />
+Idx_artid: art_id,gmt_create,status,prod_type<br />
+&nbsp;<br />
+[cc lang='sql']-----SQL---<br />
+SELECT /*+ordered use_nl(t1,t2)*/<br />
+ T2.*<br />
+  FROM (SELECT RID<br />
+          FROM (SELECT R.RID, ROWNUM LINENUM<br />
+                  FROM (SELECT ROWID RID<br />
+                          FROM TABLE_CC T<br />
+                         WHERE PROD_TYPE = 1<br />
+                           AND T.USER_ID = :1<br />
+                           AND T.STATUS = :2<br />
+                           AND T.GMT_CREATE >=<br />
+                              TO_DATE(:3, 'yyyy-mm-ddhh24:mi:ss')<br />
+                           AND T.ART_ID = :4<br />
+                         ORDER BY T.GMT_CREATE DESC) R<br />
+                 WHERE ROWNUM <= :6)<br />
+         WHERE LINENUM >= :7) T1,<br />
+       TABLE_CC T2<br />
+ WHERE T1.RID = T2.ROWID;<br />
 [/cc]</p>
-<p>正常情况，该sql应该走上user_id的索引，每个user_id的记录平均应该是100行，而每个art_id应该会有几十上百万的记录。<br>
- <br>
-但这个sql非常喜欢走art_id开头之索引，因为user_id并不在索引走，导致回表，逻辑读高达90w，如果强制走user_id索引只需要几十的逻辑读。<br>
- <br>
+<p>正常情况，该sql应该走上user_id的索引，每个user_id的记录平均应该是100行，而每个art_id应该会有几十上百万的记录。<br />
+&nbsp;<br />
+但这个sql非常喜欢走art_id开头之索引，因为user_id并不在索引走，导致回表，逻辑读高达90w，如果强制走user_id索引只需要几十的逻辑读。<br />
+&nbsp;<br />
 尝试创建了索引</p>
-<p>1.      user_id, art_id,gmt_create,status,prod_type<br>
-2.      user_id,status,art_id<br>
-3.      user_id,art_id,gmt_crate,status<br>
- <br>
-但上面的sql依然我行我素，摆着效率更高的索引不走，继续走art_id的索引。<br>
-甚至于建上art_id,gmt_create,status,prod_type,user_id的高冗余度索引，依然如此。<br>
- <br>
-<span style="font-family: 宋体;"><br>
+<p>1.      user_id, art_id,gmt_create,status,prod_type<br />
+2.      user_id,status,art_id<br />
+3.      user_id,art_id,gmt_crate,status<br />
+&nbsp;<br />
+但上面的sql依然我行我素，摆着效率更高的索引不走，继续走art_id的索引。<br />
+甚至于建上art_id,gmt_create,status,prod_type,user_id的高冗余度索引，依然如此。<br />
+&nbsp;<br />
+<span style="font-family: 宋体;"><br />
 </span></p>
-<p>在分析了抽样分析表的统计信息和art_id和user_id的统计信息之后，执行计划依旧是错误的。<br>
-Why？？？<br>
- </p>
-<p>最后俊达同学找到了问题的关键。<br>
- <br>
+<p>在分析了抽样分析表的统计信息和art_id和user_id的统计信息之后，执行计划依旧是错误的。<br />
+Why？？？<br />
+&nbsp;</p>
+<p>最后俊达同学找到了问题的关键。<br />
+&nbsp;<br />
 从explain看来，走art_id的索引返回的rows 为1</p>
-<p>走user_id的索引返回值也是1<br>
- <br>
-[cc lang='sql']<br>
----------------------------------------------------------------------------------------------------------<br>
-| Id | Operation                       | Name | Rows  | Bytes | Cost(%CPU)| Time     |<br>
----------------------------------------------------------------------------------------------------------<br>
-|   0| SELECT STATEMENT                 ||     1 |   198 |    3   (0)| 00:00:01 |<br>
-|   1|  NESTED LOOPS                    | |     1 |  198 |     3   (0)| 00:00:01 |<br>
-|*  2|   VIEW                           | |     1 |   25 |     2   (0)| 00:00:01 |<br>
-|*  3|    COUNT STOPKEY                 | |       |      |            |          |<br>
-|   4|     VIEW                         | |     1 |   12 |     2   (0)| 00:00:01 |<br>
-|*  5|      TABLE ACCESS BY INDEX ROWID |TABLE_CC        |     1 |   36 |     2   (0)| 00:00:01 |<br>
-|*  6|       INDEX RANGE SCAN DESCENDING|INX_USER_ID |     1 |       |    2   (0)| 00:00:01 |<br>
-|   7 |  TABLE ACCESS BY USER ROWID     |TABLE_CC        |     1 |  173 |     1   (0)| 00:00:01 |<br>
-[/cc]<br>
+<p>走user_id的索引返回值也是1<br />
+&nbsp;<br />
+[cc lang='sql']<br />
+---------------------------------------------------------------------------------------------------------<br />
+| Id | Operation                       | Name | Rows  | Bytes | Cost(%CPU)| Time     |<br />
+---------------------------------------------------------------------------------------------------------<br />
+|   0| SELECT STATEMENT                 ||     1 |   198 |    3   (0)| 00:00:01 |<br />
+|   1|  NESTED LOOPS                    | |     1 |  198 |     3   (0)| 00:00:01 |<br />
+|*  2|   VIEW                           | |     1 |   25 |     2   (0)| 00:00:01 |<br />
+|*  3|    COUNT STOPKEY                 | |       |      |            |          |<br />
+|   4|     VIEW                         | |     1 |   12 |     2   (0)| 00:00:01 |<br />
+|*  5|      TABLE ACCESS BY INDEX ROWID |TABLE_CC        |     1 |   36 |     2   (0)| 00:00:01 |<br />
+|*  6|       INDEX RANGE SCAN DESCENDING|INX_USER_ID |     1 |       |    2   (0)| 00:00:01 |<br />
+|   7 |  TABLE ACCESS BY USER ROWID     |TABLE_CC        |     1 |  173 |     1   (0)| 00:00:01 |<br />
+[/cc]<br />
 是统计信息惹的祸，当时虽然有了字段和索引的正确的统计信息，但是表的总数据量是不对的，表的row是800w，block是20w。</p>
 <p>Art_id 因为是后加的字段，字段允许控制，<span style="font-family: 宋体;">其</span>number nulls值 5000w</p>
-<p>User_id是非空字段，number nulls为0<br>
-这样在判断执行计划统计rows时，<br>
-表数据量 800w减art_id的空值数为负数，这样返回的行数就算作1，这样分析器就认为走改索引为优<br>
-而走user_id的索引优势就没有了。<br>
-这就是导致执行计划错误的原因。<br>
- </p>
-<p>既然知道了问题所有，也就没必要在分析整个表了，直接修改数据字典，将表的number rows置成8kw<br>
- <br>
+<p>User_id是非空字段，number nulls为0<br />
+这样在判断执行计划统计rows时，<br />
+表数据量 800w减art_id的空值数为负数，这样返回的行数就算作1，这样分析器就认为走改索引为优<br />
+而走user_id的索引优势就没有了。<br />
+这就是导致执行计划错误的原因。<br />
+&nbsp;</p>
+<p>既然知道了问题所有，也就没必要在分析整个表了，直接修改数据字典，将表的number rows置成8kw<br />
+&nbsp;<br />
 exec dbms_stats.set_table_stats(user,'TABLE_CC',numrows=&gt;80000000,numblks=&gt;2000000);</p>
 <p>手动将统计信息置成某个值是非常有效的手段，但需要注意手动设置的值可能在表进行迁移或者重新统计后带来的问题。建议在做表的移动操作是对表统计信息进行备份</p>
-<p>dbms_stats包的使用可参考<a href="http://psoug.org/reference/dbms_stats.html">http://psoug.org/reference/dbms_stats.html</a><br>
- <br>
---创建统计信息备份表<br>
-begin<br>
-dbms_stats.create_stat_table(ownname =&gt; 'USER',stattab =&gt;'STAT_FEEDBACKS');<br>
-end;<br>
- <br>
---备份统计数据<br>
-begin<br>
-dbms_stats.EXPORT_TABLE_STATS(OWNNAME=&gt;'USER',TABNAME=&gt;'USER_FEEDBACKS',stattab=&gt;'STAT_FEEDBACKS');<br>
-end;<br>
- <br>
---导入统计信息<br>
+<p>dbms_stats包的使用可参考<a href="http://psoug.org/reference/dbms_stats.html">http://psoug.org/reference/dbms_stats.html</a><br />
+&nbsp;<br />
+--创建统计信息备份表<br />
+begin<br />
+dbms_stats.create_stat_table(ownname =&gt; 'USER',stattab =&gt;'STAT_FEEDBACKS');<br />
+end;<br />
+&nbsp;<br />
+--备份统计数据<br />
+begin<br />
+dbms_stats.EXPORT_TABLE_STATS(OWNNAME=&gt;'USER',TABNAME=&gt;'USER_FEEDBACKS',stattab=&gt;'STAT_FEEDBACKS');<br />
+end;<br />
+&nbsp;<br />
+--导入统计信息<br />
 execdbms_stats.import_table_stats(OWNNAME=&gt;'USER',TABNAME=&gt;'USER_FEEDBACKS',stattab=&gt;'FEEDBACKS_090521');</p>
-<p> </p>
+<p>&nbsp;</p>
 </div>
 
 
@@ -229,12 +225,12 @@ execdbms_stats.import_table_stats(OWNNAME=&gt;'USER',TABNAME=&gt;'USER_FEEDBACKS
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/mysql-alter-ignore-table.html" data-toggle="tooltip" data-placement="top" title="mysql alter ignore table">← Previous Post</a>
+                        <a href="/mysql/mysql-alter-ignore-table.html" data-toggle="tooltip" data-placement="top" title="mysql alter ignore table">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-fetch-maximum-minimum-optimized-away.html" data-toggle="tooltip" data-placement="top" title="mysql 取最大最小值之 optimized away">Next Post →</a>
+                        <a href="/mysql/mysql-fetch-maximum-minimum-optimized-away.html" data-toggle="tooltip" data-placement="top" title="mysql 取最大最小值之 optimized away">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -259,7 +255,7 @@ execdbms_stats.import_table_stats(OWNNAME=&gt;'USER',TABNAME=&gt;'USER_FEEDBACKS
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -275,7 +271,7 @@ execdbms_stats.import_table_stats(OWNNAME=&gt;'USER',TABNAME=&gt;'USER_FEEDBACKS
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -388,7 +384,7 @@ execdbms_stats.import_table_stats(OWNNAME=&gt;'USER',TABNAME=&gt;'USER_FEEDBACKS
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -396,24 +392,22 @@ execdbms_stats.import_table_stats(OWNNAME=&gt;'USER',TABNAME=&gt;'USER_FEEDBACKS
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

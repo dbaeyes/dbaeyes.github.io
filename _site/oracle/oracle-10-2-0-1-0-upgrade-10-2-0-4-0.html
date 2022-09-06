@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/oracle-10-2-0-1-0-upgrade-10-2-0-4-0.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>Oracle 10.2.0.1.0 upgrade 10.2.0.4.0</h1>
                     
-                    <span class="meta">Posted by David on February 23, 2009</span>
+                    <span class="meta">Posted by Vincent on February 23, 2009</span>
                 </div>
             </div>
         </div>
@@ -126,7 +122,7 @@
 
                 <p>简单的升级，大同小异，测试一下，如在生产环境需要做好完全的测试，和准备好回滚保障操作</p>
 <div>
-----
+----</p>
 <p>(1) Oracle推荐在升级之前先做一个全库的备份；</p>
 <p>(2) 停止所有的Oracle服务</p>
 <p>emctl stop dbconsole</p>
@@ -138,42 +134,41 @@
 <p>(4) 启动监听器</p>
 <p>lsnrctl start</p>
 <p>(5) SQL&gt; STARTUP UPGRADE</p>
-<p>(6) 升级数据字典<br>
-SPOOL /home/oracle/upgrade.log<br>
-SQL&gt; @?/rdbms/admin/catupgrd.sql (前提需要配置环境变量) 或<br>
-SQL&gt;<a href="https://github.com/f" class="user-mention">@f</a>:\oracle\product\10.2.0\db_1/rdbms/admin/catupgrd.sql<br>
+<p>(6) 升级数据字典<br />
+SPOOL /home/oracle/upgrade.log<br />
+SQL&gt; @?/rdbms/admin/catupgrd.sql (前提需要配置环境变量) 或<br />
+SQL&gt;@f:\oracle\product\10.2.0\db_1/rdbms/admin/catupgrd.sql<br />
 SPOOL off</p>
-<p>检查升级后各组件状态<br>
-<a href="https://github.com/f" class="user-mention">@f</a>:\oracle\product\10.2.0\db_1/rdbms/admin/utlu102s.sql</p>
+<p>检查升级后各组件状态<br />
+@f:\oracle\product\10.2.0\db_1/rdbms/admin/utlu102s.sql</p>
 <p>(7） 运行脚本utlrp.sql编译所有invaild的对象</p>
 <p>SQL&gt;@?/rdbms/admin/utlrp.sql</p>
-<p>执行完毕后执行查询所有重新编译错误<br>
-SQL&gt; select * from utl_recomp_errors;<br>
-或者<br>
+<p>执行完毕后执行查询所有重新编译错误<br />
+SQL&gt; select * from utl_recomp_errors;<br />
+或者<br />
 select object_name from dba_objects where status='INVALID';</p>
-<p>执行检查：<br>
-SQL&gt; select name from v$database确认ORACLE_SID正确，为oral<br>
-SQL&gt; show user确认当前使用者为SYS<br>
-SQL&gt; select tablespace_name, bytes from dba_data_files对系统表空间大小进行确认。<br>
-SQL&gt; <a href="https://github.com/f" class="user-mention">@f</a>:\oracle\product\10.2.0\db_1/rdbms/admin/catalog.sql</p>
-<p>检查tempfile<br>
+<p>执行检查：<br />
+SQL&gt; select name from v$database确认ORACLE_SID正确，为oral<br />
+SQL&gt; show user确认当前使用者为SYS<br />
+SQL&gt; select tablespace_name, bytes from dba_data_files对系统表空间大小进行确认。<br />
+SQL&gt; @f:\oracle\product\10.2.0\db_1/rdbms/admin/catalog.sql</p>
+<p>检查tempfile<br />
 select name from v$tempfile</p>
-<p>SQL&gt;shutdown immediate<br>
-SQL&gt;startup<br>
-数据库启动成功<br>
+<p>SQL&gt;shutdown immediate<br />
+SQL&gt;startup<br />
+数据库启动成功<br />
 重启监听器，升级成功。</p>
 <p>#######################</p>
-<p>常见问题：<br>
-1. 安装补丁的时候,因为没有找对oracle的所在目录,所以补丁装不上<br>
+<p>常见问题：<br />
+1. 安装补丁的时候,因为没有找对oracle的所在目录,所以补丁装不上<br />
 设置oralce_home = 您的oracle安装目录     oralce_sid = 你的oracle的sid</p>
-<p>2. 升级后，ORA-01092:ORACLE instance terminated. Disconnection forced<br>
+<p>2. 升级后，ORA-01092:ORACLE instance terminated. Disconnection forced<br />
 出现这个ora错误,是数据库升级后需要用upgrade打开</p>
-<p>SQL&gt; STARTUP UPGRADESQL&gt; SPOOL patch.logSQL&gt; @?/rdbms/admin/catupgrd.sql<br>
+<p>SQL&gt; STARTUP UPGRADESQL&gt; SPOOL patch.logSQL&gt; @?/rdbms/admin/catupgrd.sql<br />
 SQL&gt; SPOOL OFF</p>
-<p>这样升级了里面的数据字典后才算升级成功，升级后重新启动数据库,然后<br>
-编译所有无效的包<br>
-SQL&gt; @?/rdbms/admin/utlrp.sql</p>
-</div>
+<p>这样升级了里面的数据字典后才算升级成功，升级后重新启动数据库,然后<br />
+编译所有无效的包<br />
+SQL&gt; @?/rdbms/admin/utlrp.sql</p></div>
 
 
                 <hr>
@@ -186,12 +181,12 @@ SQL&gt; @?/rdbms/admin/utlrp.sql</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/ora-01031-sqlplus-as-sysdba.html" data-toggle="tooltip" data-placement="top" title="ora-01031 sqlplus /as sysdba">← Previous Post</a>
+                        <a href="/oracle/ora-01031-sqlplus-as-sysdba.html" data-toggle="tooltip" data-placement="top" title="ora-01031 sqlplus /as sysdba">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/thinking/roaring-sound.html" data-toggle="tooltip" data-placement="top" title="吼一声">Next Post →</a>
+                        <a href="/thinking/roaring-sound.html" data-toggle="tooltip" data-placement="top" title="吼一声">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -216,7 +211,7 @@ SQL&gt; @?/rdbms/admin/utlrp.sql</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -232,7 +227,7 @@ SQL&gt; @?/rdbms/admin/utlrp.sql</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -345,7 +340,7 @@ SQL&gt; @?/rdbms/admin/utlrp.sql</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -353,24 +348,22 @@ SQL&gt; @?/rdbms/admin/utlrp.sql</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

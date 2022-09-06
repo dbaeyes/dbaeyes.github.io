@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/10g-admin-workshop-ii-4-recovering-from-noncritical-losses.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>10g Admin Workshop II - 4 - Recovering from Noncritical Losses</h1>
                     
-                    <span class="meta">Posted by David on April 1, 2008</span>
+                    <span class="meta">Posted by Vincent on April 1, 2008</span>
                 </div>
             </div>
         </div>
@@ -126,49 +122,49 @@
 
                 <h1><strong><span style="color: #ff6600; font-size: small;">Objectives</span></strong></h1>
 <div>
-<p>After completing this lesson, you should be able to:<br>
-• Recover temporary tablespaces<br>
-• Recover a redo log group member<br>
-• Recover from a lost index<br>
+<p>After completing this lesson, you should be able to:<br />
+• Recover temporary tablespaces<br />
+• Recover a redo log group member<br />
+• Recover from a lost index<br />
 • Re-create the password file</p>
-<p><strong><span style="color: #ff6600;">Losing a TEMPFILE</span></strong><br>
+<p><strong><span style="color: #ff6600;">Losing a TEMPFILE</span></strong><br />
 SQL statements that require TEMP space to execute fail if one of the tempfiles is missing.</p>
-<p><span style="color: #ff6600;"><strong>Recovering from a TEMPFILE Loss</strong></span><br>
-<span style="color: #ff6600;"><span style="color: #000000;">You can recover from a lost TEMPFILE without restarting the database.</span><br>
-</span><span>SQL&gt; ALTER TABLESPACE temp ADD DATAFILE<br>
-'/u01/app/oracle/oradata/orcl/temp02.dbf' SIZE 20M;<br>
-Tablespace altered.<br>
-SQL&gt; ALTER TABLESPACE temp DROP TEMPFILE<br>
-'/u01/app/oracle/oradata/orcl/temp01.dbf';<br>
+<p><span style="color: #ff6600;"><strong>Recovering from a TEMPFILE Loss</strong></span><br />
+<span style="color: #ff6600;"><span style="color: #000000;">You can recover from a lost TEMPFILE without restarting the database.</span><br />
+</span><span>SQL&gt; ALTER TABLESPACE temp ADD DATAFILE<br />
+'/u01/app/oracle/oradata/orcl/temp02.dbf' SIZE 20M;<br />
+Tablespace altered.<br />
+SQL&gt; ALTER TABLESPACE temp DROP TEMPFILE<br />
+'/u01/app/oracle/oradata/orcl/temp01.dbf';<br />
 Tablespace altered.</span></p>
-<p><strong><span style="color: #ff6600;">Log Group Status: Review</span></strong><br>
-A redo log group has a status of one of the following values at any given time:<br>
-• <span style="color: #3366ff;">CURRENT</span>: The LGWR process is currently writing redo data to it.<br>
-• <span style="color: #3366ff;">ACTIVE</span>: It is no longer being written to, but it is still required for instance recovery.<br>
+<p><strong><span style="color: #ff6600;">Log Group Status: Review</span></strong><br />
+A redo log group has a status of one of the following values at any given time:<br />
+• <span style="color: #3366ff;">CURRENT</span>: The LGWR process is currently writing redo data to it.<br />
+• <span style="color: #3366ff;">ACTIVE</span>: It is no longer being written to, but it is still required for instance recovery.<br />
 • <span style="color: #3366ff;">INACTIVE</span>: It is no longer being written to, and it is no longer required for instance recovery.</p>
-<p><strong><span style="color: #ff6600;">Re-creating Redo Log Files</span></strong><br>
-<span>SQL&gt; ALTER DATABASE DROP LOGFILE MEMBER<br>
-&gt; '/u01/app/oracle/oradata/orcl/redo02b.log';</span></p>
+<p><strong><span style="color: #ff6600;">Re-creating Redo Log Files</span></strong><br />
+<span>SQL&gt; ALTER DATABASE DROP LOGFILE MEMBER<br />
+&gt; '/u01/app/oracle/oradata/orcl/redo02b.log';</p>
 <p>SQL&gt; !rm /u01/app/oracle/oradata/orcl/redo02b.log</p>
-<p>SQL&gt; ALTER DATABASE ADD LOGFILE MEMBER<br>
-&gt; '/u01/app/oracle/oradata/orcl/redo02b.log'<br>
-&gt; TO GROUP 2;</p>
-<p> </p>
-<p> </p>
+<p>SQL&gt; ALTER DATABASE ADD LOGFILE MEMBER<br />
+&gt; '/u01/app/oracle/oradata/orcl/redo02b.log'<br />
+&gt; TO GROUP 2;</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>• You can drop a redo log member only if it is not part of an active or current group. If the group you want to drop is active, then force a log switch to occur.</p>
-<p>The progression of log group #1 from CURRENT to ACTIVE to INACTIVE:<br>
+<p>The progression of log group #1 from CURRENT to ACTIVE to INACTIVE:<br />
 <span>SQL&gt; alter system switch logfile;</span></p>
 <p><span>SQL&gt; alter system checkpoint;</span></p>
-<p><strong><span style="color: #ff6600;">Re-creating a Password Authentication File</span></strong><br>
-1. Log in to the database by using OS authentication.<br>
-2. Set the REMOTE_LOGIN_PASSWORDFILE parameter to NONE and restart the database.<br>
-3. Re-create the password file by using orapwd.<br>
-<span>   $ orapwd file=$ORACLE_HOME/dbs/orapwORCL<br>
-password=admin entries=5</span><br>
-4. Set REMOTE_LOGIN_PASSWORDFILE to EXCLUSIVE.<br>
-5. Add users to the password file and assign appropriate privileges to each user.<br>
+<p><strong><span style="color: #ff6600;">Re-creating a Password Authentication File</span></strong><br />
+1. Log in to the database by using OS authentication.<br />
+2. Set the REMOTE_LOGIN_PASSWORDFILE parameter to NONE and restart the database.<br />
+3. Re-create the password file by using orapwd.<br />
+<span>   $ orapwd file=$ORACLE_HOME/dbs/orapwORCL<br />
+password=admin entries=5</span><br />
+4. Set REMOTE_LOGIN_PASSWORDFILE to EXCLUSIVE.<br />
+5. Add users to the password file and assign appropriate privileges to each user.<br />
 6. Restart the instance.</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>-- EOF --</p>
 </div>
 
@@ -183,12 +179,12 @@ password=admin entries=5</span><br>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/10g-admin-workshop-ii-1-introduction.html" data-toggle="tooltip" data-placement="top" title="10g Admin Workshop II - 1 - Introduction">← Previous Post</a>
+                        <a href="/oracle/10g-admin-workshop-ii-1-introduction.html" data-toggle="tooltip" data-placement="top" title="10g Admin Workshop II - 1 - Introduction">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/digital/my-new-computer.html" data-toggle="tooltip" data-placement="top" title="偶的新电脑">Next Post →</a>
+                        <a href="/digital/my-new-computer.html" data-toggle="tooltip" data-placement="top" title="偶的新电脑">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -213,7 +209,7 @@ password=admin entries=5</span><br>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -229,7 +225,7 @@ password=admin entries=5</span><br>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -342,7 +338,7 @@ password=admin entries=5</span><br>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -350,24 +346,22 @@ password=admin entries=5</span><br>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

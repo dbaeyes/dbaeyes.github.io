@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/exp-00091.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -109,7 +105,7 @@
                     </div>
                     <h1>EXP-00091</h1>
                     
-                    <span class="meta">Posted by David on July 24, 2008</span>
+                    <span class="meta">Posted by Vincent on July 24, 2008</span>
                 </div>
             </div>
         </div>
@@ -124,12 +120,12 @@
 
                 <p>01　查看DB中的NLS_CHARACTERSET的值（提供兩種方法）：</p>
 <div>
-<p>select * from nls_database_parameters t where t.parameter='NLS_CHARACTERSET'<br>
-or<br>
-select * from v$nls_parameters where parameter='NLS_CHARACTERSET';<br>
+<p>select * from nls_database_parameters t where t.parameter='NLS_CHARACTERSET'<br />
+or<br />
+select * from v$nls_parameters where parameter='NLS_CHARACTERSET';<br />
 SQL&gt; select * from v$nls_parameters where parameter='NLS_CHARACTERSET';</p>
-<p>PARAMETER　　　　      VALUE<br>
------------------------　　----------------------------------------------<br>
+<p>PARAMETER　　　　      VALUE<br />
+-----------------------　　----------------------------------------------<br />
 NLS_CHARACTERSET    AL32UTF8</p>
 <p>step 02　根據step 01查出的NLS_CHARACTERSET（AL32UTF8）來設定exp的環境變量：</p>
 <p>WINNT&gt; set NLS_LANG=AMERICAN_AMERICA.AL32UTF8</p>
@@ -149,12 +145,12 @@ NLS_CHARACTERSET    AL32UTF8</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/query-top-sql.html" data-toggle="tooltip" data-placement="top" title="查询Top sql">← Previous Post</a>
+                        <a href="/oracle/query-top-sql.html" data-toggle="tooltip" data-placement="top" title="查询Top sql">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/a-chuckle.html" data-toggle="tooltip" data-placement="top" title="窃喜一下">Next Post →</a>
+                        <a href="/my%20life/a-chuckle.html" data-toggle="tooltip" data-placement="top" title="窃喜一下">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -179,7 +175,7 @@ NLS_CHARACTERSET    AL32UTF8</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -195,7 +191,7 @@ NLS_CHARACTERSET    AL32UTF8</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -308,7 +304,7 @@ NLS_CHARACTERSET    AL32UTF8</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -316,24 +312,22 @@ NLS_CHARACTERSET    AL32UTF8</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

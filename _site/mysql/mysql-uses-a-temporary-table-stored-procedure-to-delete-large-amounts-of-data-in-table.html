@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/mysql-uses-a-temporary-table-stored-procedure-to-delete-large-amounts-of-data-in-table.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>mysql 使用临时表+存储过程删除大表中的大量数据</h1>
                     
-                    <span class="meta">Posted by David on August 9, 2010</span>
+                    <span class="meta">Posted by Vincent on August 9, 2010</span>
                 </div>
             </div>
         </div>
@@ -126,44 +122,43 @@
 
                 <p>当一个表mysql的表成长到1000w以上，然后需要更加某些条件去删除其中的几百万数据的时候，如果直接delete将是一件极其痛苦的事情。 时间长是必然的，而且堵塞了正常应用的更新等操作，很有可能的导致数据库hang住和应用的崩溃</p>
 <div>
---常用的方法，如果表是1000w，符合删除条件的数据是400w的话，那时间一般会超过半个小时乃至更长<br>
-delete from xf_user_info where status=2 and date(gmt_create) &lt; '2010-07-01';
+--常用的方法，如果表是1000w，符合删除条件的数据是400w的话，那时间一般会超过半个小时乃至更长<br />
+delete from xf_user_info where status=2 and date(gmt_create) &lt; '2010-07-01';</p>
 <p>----------使用类似于oracle常用的方式来完成，如果有更好的方法，不吝赐教</p>
-<p>--写个临时表和存储过程，来完成<br>
---创建临时表<br>
-create table tmp_xf_id_del  as<br>
+<p>--写个临时表和存储过程，来完成<br />
+--创建临时表<br />
+create table tmp_xf_id_del  as<br />
 select id from xf_user_info where status=2 and gmt_create&lt; '2010-07-01';</p>
-<p><span style="color: #ff0000;">delimiter //</span> --使用//带代替;，这个符号可以自己定义<br>
+<p><span style="color: #ff0000;">delimiter //</span> --使用//带代替;，这个符号可以自己定义<br />
 delimiter ;  --换回;</p>
 <p><span style="color: #ff0000;">set autocommit =0;</span>  --设置为非自动提交，脚本中定义为100条提交一次</p>
 <p>------华丽的分割线---------</p>
-<p>--创建存储过程<br>
-CREATE PROCEDURE sp_xf_del_test()<br>
-begin<br>
-declare v_exit int default 0;<br>
-declare v_id bigint;<br>
-declare i int default 0;<br>
-declare c_ids cursor for select id from tmp_xf_id_del;<br>
-declare  continue handler for not found set v_exit=1;<br>
-open c_ids;<br>
-repeat<br>
-fetch c_ids into v_id;<br>
-delete from xf_user_info where id  = v_id;<br>
-set i=i+1;<br>
-if mod(i,100)=0 then commit;<br>
-end if;<br>
-until v_exit=1<br>
-end repeat;<br>
-close c_ids;<br>
-commit;<br>
-end;<br>
+<p>--创建存储过程<br />
+CREATE PROCEDURE sp_xf_del_test()<br />
+begin<br />
+declare v_exit int default 0;<br />
+declare v_id bigint;<br />
+declare i int default 0;<br />
+declare c_ids cursor for select id from tmp_xf_id_del;<br />
+declare  continue handler for not found set v_exit=1;<br />
+open c_ids;<br />
+repeat<br />
+fetch c_ids into v_id;<br />
+delete from xf_user_info where id  = v_id;<br />
+set i=i+1;<br />
+if mod(i,100)=0 then commit;<br />
+end if;<br />
+until v_exit=1<br />
+end repeat;<br />
+close c_ids;<br />
+commit;<br />
+end;<br />
 //</p>
-<p>-------------<br>
---调用存储过程<br>
-<span style="color: #ff0000;">call sp_xf_del_test()//</span></p>
-<p>--<br>
-<span style="color: #ff8000; font-family: 宋体;">我的估算： 用100条COMMIT一次的方式比单条提交的方式效率高40%</span></p>
-</div>
+<p>-------------<br />
+--调用存储过程<br />
+<span style="color: #ff0000;">call sp_xf_del_test()//</p>
+<p>--<br />
+</span><span style="color: #ff8000; font-family: 宋体;">我的估算： 用100条COMMIT一次的方式比单条提交的方式效率高40%</span></div>
 
 
                 <hr>
@@ -176,12 +171,12 @@ end;<br>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/sanya-outing.html" data-toggle="tooltip" data-placement="top" title="三亚 outing">← Previous Post</a>
+                        <a href="/my%20life/sanya-outing.html" data-toggle="tooltip" data-placement="top" title="三亚 outing">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/oracle-flashback-query-overview-10g.html" data-toggle="tooltip" data-placement="top" title="Oracle 10g的闪回查询概述">Next Post →</a>
+                        <a href="/oracle/oracle-flashback-query-overview-10g.html" data-toggle="tooltip" data-placement="top" title="Oracle 10g的闪回查询概述">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -206,7 +201,7 @@ end;<br>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -222,7 +217,7 @@ end;<br>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -335,7 +330,7 @@ end;<br>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -343,24 +338,22 @@ end;<br>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

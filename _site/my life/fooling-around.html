@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/my%20life/fooling-around.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -109,7 +105,7 @@
                     </div>
                     <h1>瞎忙</h1>
                     
-                    <span class="meta">Posted by David on March 16, 2011</span>
+                    <span class="meta">Posted by Vincent on March 16, 2011</span>
                 </div>
             </div>
         </div>
@@ -126,11 +122,11 @@
 <div>
 <p>一直的忙碌并不能让自己成长，有所为而有所不为，协调好自己和他人的关系。</p>
 <p>平均10分钟被打断一次，而且中途忙碌的很多是临时插入的事情，所以虽然一整天都在忙，但是忙完之后发现一天都没干啥事情。 响应太快也未必是件好事，适当的让他人等待也是一门学问。</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>--</p>
-<p> </p>
-<p> </p>
-<p> </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 </div>
 
 
@@ -144,12 +140,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/exercise.html" data-toggle="tooltip" data-placement="top" title="锻炼身体">← Previous Post</a>
+                        <a href="/my%20life/exercise.html" data-toggle="tooltip" data-placement="top" title="锻炼身体">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/oracle-small-degree-points.html" data-toggle="tooltip" data-placement="top" title="Oracle degree 小点">Next Post →</a>
+                        <a href="/oracle/oracle-small-degree-points.html" data-toggle="tooltip" data-placement="top" title="Oracle degree 小点">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -174,7 +170,7 @@
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -190,7 +186,7 @@
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -303,7 +299,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -311,24 +307,22 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

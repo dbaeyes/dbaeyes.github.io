@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/mysql-lock-tables-and-unlock-tables.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>mysql LOCK TABLES and UNLOCK TABLES</h1>
                     
-                    <span class="meta">Posted by David on August 23, 2011</span>
+                    <span class="meta">Posted by Vincent on August 23, 2011</span>
                 </div>
             </div>
         </div>
@@ -137,7 +133,7 @@
 <p><span style="color: #0000ff;">session 2:</span></p>
 <p>1. 可以查询</p>
 <p>2. dml： 等待，直到session 1  unlock tables 或者超时</p>
-<p> </p>
+<p>&nbsp;</p>
 <p><span style="color: #ff0000;"> test2:</span></p>
 <p><span style="color: #0000ff;">session1:</span></p>
 <p>lock tables tmp_xf_lock write;</p>
@@ -149,7 +145,7 @@
 <p>2，不可以dml ，都是等待状态</p>
 <p>这些文档里描写的很清楚，所以当只是想停止对表加锁，不让表表数据再发生变更，那么用 read。如果只是想让自己可以更改数据，其他用户不能查询也不能变更数据，那么用 wirte（阻塞了其他线程的读写，有点狠，都不让读了）。 用处各不相同，注意好选择。 看字面意思的 lock write可能会产生误解。</p>
 <p><span style="color: #ff9900;"> FLUSH TABLES WITH READ LOCK; 这样可以锁住所有表</span></p>
-<p> </p>
+<p>&nbsp;</p>
 <p><span style="color: #0000ff;">READ [LOCAL] lock:</span></p>
 <p>The session that holds the lock can read the table (but not write it).</p>
 <p>Multiple sessions can acquire a READ lock for the table at the same time.</p>
@@ -160,7 +156,7 @@
 <p>Only the session that holds the lock can access the table. No other session can access it until the lock is released.</p>
 <p>Lock requests for the table by other sessions block while the WRITE lock is held.</p>
 <p>The LOW_PRIORITY modifier affects lock scheduling if the WRITE lock request must wait, as described later.</p>
-<p> </p>
+<p>&nbsp;</p>
 <div>关于对表别名的lock，参考文档☞</div>
 </div>
 
@@ -175,12 +171,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/mk-query-digest-a-mysql-log-analysis-tool.html" data-toggle="tooltip" data-placement="top" title="mk-query-digest - a mysql log analysis tool">← Previous Post</a>
+                        <a href="/mysql/mk-query-digest-a-mysql-log-analysis-tool.html" data-toggle="tooltip" data-placement="top" title="mk-query-digest - a mysql log analysis tool">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/impossible-where-noticed-after-reading-const-tables.html" data-toggle="tooltip" data-placement="top" title="Impossible WHERE noticed after reading const tables">Next Post →</a>
+                        <a href="/my%20life/impossible-where-noticed-after-reading-const-tables.html" data-toggle="tooltip" data-placement="top" title="Impossible WHERE noticed after reading const tables">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -205,7 +201,7 @@
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -221,7 +217,7 @@
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -334,7 +330,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -342,24 +338,22 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

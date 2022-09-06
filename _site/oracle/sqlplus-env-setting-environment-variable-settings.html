@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/sqlplus-env-setting-environment-variable-settings.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>sqlplus env setting 环境变量设置</h1>
                     
-                    <span class="meta">Posted by David on August 13, 2007</span>
+                    <span class="meta">Posted by Vincent on August 13, 2007</span>
                 </div>
             </div>
         </div>
@@ -125,71 +121,71 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>sqlplus env setting 环境变量设置</p>
-<p>我的SQLPLUS环境设置   --来自 Oracle9i&amp;10g 编程艺术<br>
+<p>我的SQLPLUS环境设置   --来自 Oracle9i&10g 编程艺术<br />
 set serveroutput on size 1000000</p>
-<p>set trimspool on<br>
-set linesize 200<br>
+<p>set trimspool on<br />
+set linesize 200<br />
 set pagesize 9999 --if 0 then no title</p>
-<p>set feedback off<br>
-alter session set nls_date_format='yyyy-mm-dd hh24:mi:ss';<br>
-set feedback on<br>
-set timing on<br>
-set time on<br>
-set lines 132<br>
-set pages 999<br>
-set long 2000000<br>
-set timing on<br>
-set serveroutput on size 1000000<br>
-col object_name format a32<br>
-col column_name format a32<br>
-col index_name format a32<br>
-col file_name format a54<br>
-col db_link format a32<br>
+<p>set feedback off<br />
+alter session set nls_date_format='yyyy-mm-dd hh24:mi:ss';<br />
+set feedback on<br />
+set timing on<br />
+set time on<br />
+set lines 132<br />
+set pages 999<br />
+set long 2000000<br />
+set timing on<br />
+set serveroutput on size 1000000<br />
+col object_name format a32<br />
+col column_name format a32<br />
+col index_name format a32<br />
+col file_name format a54<br />
+col db_link format a32<br />
 col plan_plus_exp format a80</p>
-<p>column global_name new_value gname<br>
-set termout off<br>
-define gname=idle<br>
-column global_name new_value gname<br>
-select lower(user) || '@' || substr( global_name, 1, decode( dot, 0,<br>
-length(global_name), dot-1) ) global_name<br>
-from (select global_name, instr(global_name,'.') dot from global_name );<br>
-set sqlprompt '&amp;gname&gt; '<br>
+<p>column global_name new_value gname<br />
+set termout off<br />
+define gname=idle<br />
+column global_name new_value gname<br />
+select lower(user) || '@' || substr( global_name, 1, decode( dot, 0,<br />
+length(global_name), dot-1) ) global_name<br />
+from (select global_name, instr(global_name,'.') dot from global_name );<br />
+set sqlprompt '&gname> '<br />
 set termout on</p>
 <p>--------TBSITE</p>
-<p>-- Used by Trusted Oracle<br>
+<p>-- Used by Trusted Oracle<br />
 COLUMN ROWLABEL FORMAT A15</p>
-<p>-- Used for the SHOW ERRORS command<br>
-COLUMN LINE/COL FORMAT A8<br>
+<p>-- Used for the SHOW ERRORS command<br />
+COLUMN LINE/COL FORMAT A8<br />
 COLUMN ERROR    FORMAT A65 WORD_WRAPPED</p>
-<p>-- Used for the SHOW SGA command<br>
-COLUMN name_col_plus_show_sga FORMAT a24<br>
-COLUMN units_col_plus_show_sga FORMAT a15<br>
--- Defaults for SHOW PARAMETERS<br>
-COLUMN name_col_plus_show_param FORMAT a36 HEADING NAME<br>
+<p>-- Used for the SHOW SGA command<br />
+COLUMN name_col_plus_show_sga FORMAT a24<br />
+COLUMN units_col_plus_show_sga FORMAT a15<br />
+-- Defaults for SHOW PARAMETERS<br />
+COLUMN name_col_plus_show_param FORMAT a36 HEADING NAME<br />
 COLUMN value_col_plus_show_param FORMAT a30 HEADING VALUE</p>
-<p>-- Defaults for SHOW RECYCLEBIN<br>
-COLUMN origname_plus_show_recyc   FORMAT a16 HEADING 'ORIGINAL NAME'<br>
-COLUMN objectname_plus_show_recyc FORMAT a30 HEADING 'RECYCLEBIN NAME'<br>
-COLUMN objtype_plus_show_recyc    FORMAT a12 HEADING 'OBJECT TYPE'<br>
+<p>-- Defaults for SHOW RECYCLEBIN<br />
+COLUMN origname_plus_show_recyc   FORMAT a16 HEADING 'ORIGINAL NAME'<br />
+COLUMN objectname_plus_show_recyc FORMAT a30 HEADING 'RECYCLEBIN NAME'<br />
+COLUMN objtype_plus_show_recyc    FORMAT a12 HEADING 'OBJECT TYPE'<br />
 COLUMN droptime_plus_show_recyc   FORMAT a19 HEADING 'DROP TIME'</p>
-<p>-- Defaults for SET AUTOTRACE EXPLAIN report<br>
--- These column definitions are only used when SQL*Plus<br>
--- is connected to Oracle 9.2 or earlier.<br>
-COLUMN id_plus_exp FORMAT 990 HEADING i<br>
-COLUMN parent_id_plus_exp FORMAT 990 HEADING p<br>
-COLUMN plan_plus_exp FORMAT a60<br>
-COLUMN object_node_plus_exp FORMAT a8<br>
-COLUMN other_tag_plus_exp FORMAT a29<br>
+<p>-- Defaults for SET AUTOTRACE EXPLAIN report<br />
+-- These column definitions are only used when SQL*Plus<br />
+-- is connected to Oracle 9.2 or earlier.<br />
+COLUMN id_plus_exp FORMAT 990 HEADING i<br />
+COLUMN parent_id_plus_exp FORMAT 990 HEADING p<br />
+COLUMN plan_plus_exp FORMAT a60<br />
+COLUMN object_node_plus_exp FORMAT a8<br />
+COLUMN other_tag_plus_exp FORMAT a29<br />
 COLUMN other_plus_exp FORMAT a44</p>
-<p>-- Default for XQUERY<br>
+<p>-- Default for XQUERY<br />
 COLUMN result_plus_xquery HEADING 'Result Sequence'</p>
-<p>SET TIME ON<br>
-SET TIMING ON<br>
-SET SQLPROMPT "_USER@ _CONNECT_IDENTIFIER&gt;"</p>
-<p>set termout off<br>
-set feedback off<br>
-alter session set nls_date_format='yyyy-mm-dd hh24:mi:ss';<br>
-set feedback on<br>
+<p>SET TIME ON<br />
+SET TIMING ON<br />
+SET SQLPROMPT "_USER@ _CONNECT_IDENTIFIER>"</p>
+<p>set termout off<br />
+set feedback off<br />
+alter session set nls_date_format='yyyy-mm-dd hh24:mi:ss';<br />
+set feedback on<br />
 set termout on</p>
 
 
@@ -203,12 +199,12 @@ set termout on</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/oracle-database-name-instance-name-oracle-sid.html" data-toggle="tooltip" data-placement="top" title="ORACLE 数据库名、实例名、ORACLE_SID">← Previous Post</a>
+                        <a href="/oracle/oracle-database-name-instance-name-oracle-sid.html" data-toggle="tooltip" data-placement="top" title="ORACLE 数据库名、实例名、ORACLE_SID">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/hand-built-gallery-em-startup-problems.html" data-toggle="tooltip" data-placement="top" title="手工建库 EM启动问题">Next Post →</a>
+                        <a href="/oracle/hand-built-gallery-em-startup-problems.html" data-toggle="tooltip" data-placement="top" title="手工建库 EM启动问题">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -233,7 +229,7 @@ set termout on</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -249,7 +245,7 @@ set termout on</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -362,7 +358,7 @@ set termout on</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -370,24 +366,22 @@ set termout on</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

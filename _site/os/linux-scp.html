@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/os/linux-scp.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -109,7 +105,7 @@
                     </div>
                     <h1>linux scp</h1>
                     
-                    <span class="meta">Posted by David on September 10, 2008</span>
+                    <span class="meta">Posted by Vincent on September 10, 2008</span>
                 </div>
             </div>
         </div>
@@ -125,10 +121,10 @@
                 <p>不同的Linux之间copy文件常用有3种方法，第一种就是ftp，也就是其中一台Linux安装ftp Server，这样可以另外一台使用ftp的client程序来进行文件的copy。第二种方法就是采用samba服务，类似Windows文件copy的方式来操作，比较简洁方便，第三种就是利用scp命令来进行文件复制。</p>
 <div>
 <p>scp是有Security的文件copy，基于ssh登录。操作起来比较方便，比如要把当前一个文件copy到远程另外一台主机上，可以如下命令。</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>scp /home/1.gif root@172.19.2.75:/home/root</p>
 <p>然后会提示你输入另外那台172.19.2.75主机的root用户的登录密码，接着就开始cp和ungzip了</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>如果想反过来操作，把文件从远程主机copy到当前系统，也很简单。</p>
 <p>scp <a href="mailto:root@172.19.2.75:/home/abc.gif">root@172.19.2.75:/home/abc.gif</a></p>
 <p>复制文件夹的格式是scp -r <a href="mailto:root@192.168.1.1:/home/">root@192.168.1.1:/home/</a> /本地目录</p>
@@ -145,12 +141,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/web-page-optimization-techniques.html" data-toggle="tooltip" data-placement="top" title="WEB分页与优化技术">← Previous Post</a>
+                        <a href="/oracle/web-page-optimization-techniques.html" data-toggle="tooltip" data-placement="top" title="WEB分页与优化技术">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/file-id-and-the-relationship-between-relative-fno.html" data-toggle="tooltip" data-placement="top" title="file_id 和 relative_fno二者的关系">Next Post →</a>
+                        <a href="/oracle/file-id-and-the-relationship-between-relative-fno.html" data-toggle="tooltip" data-placement="top" title="file_id 和 relative_fno二者的关系">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -175,7 +171,7 @@
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -191,7 +187,7 @@
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -304,7 +300,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -312,24 +308,22 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

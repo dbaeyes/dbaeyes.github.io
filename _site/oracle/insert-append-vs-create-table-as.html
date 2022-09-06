@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/insert-append-vs-create-table-as.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>insert append vs. create table as</h1>
                     
-                    <span class="meta">Posted by David on June 5, 2009</span>
+                    <span class="meta">Posted by Vincent on June 5, 2009</span>
                 </div>
             </div>
         </div>
@@ -126,7 +122,7 @@
 
                 <p>create table tmp_xf_1 as select * from tmp_xf_tst;</p>
 <div>
-1. 13:39:01 SQL&gt; create table tmp_xf_1 as select * from tmp_xf_tst;
+1. 13:39:01 SQL&gt; create table tmp_xf_1 as select * from tmp_xf_tst;</p>
 <p>Table created.</p>
 <p>Elapsed: <span style="color: #ff0000;"><strong>00:00:56.01</strong></span></p>
 <p>create table tmp_xf_2 nologging as select * from tmp_xf_tst;</p>
@@ -148,8 +144,7 @@
 <p>9734310 rows created.</p>
 <p>Elapsed: <strong><span style="color: #ff0000;">00:01:01.32</span></strong></p>
 <p>参看：</p>
-<p>http://hi.baidu.com/dba_james/blog/item/6909ec2b7e0a742ad52af128.html</p>
-</div>
+<p>http://hi.baidu.com/dba_james/blog/item/6909ec2b7e0a742ad52af128.html</p></div>
 
 
                 <hr>
@@ -162,12 +157,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/primary-keys-unique-indexes-built-non-unique-indexes.html" data-toggle="tooltip" data-placement="top" title="建主键 唯一索引 非唯一索引">← Previous Post</a>
+                        <a href="/oracle/primary-keys-unique-indexes-built-non-unique-indexes.html" data-toggle="tooltip" data-placement="top" title="建主键 唯一索引 非唯一索引">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/exchanging-partitions-quiz.html" data-toggle="tooltip" data-placement="top" title="Exchanging Partitions 小测">Next Post →</a>
+                        <a href="/oracle/exchanging-partitions-quiz.html" data-toggle="tooltip" data-placement="top" title="Exchanging Partitions 小测">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -192,7 +187,7 @@
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -208,7 +203,7 @@
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -321,7 +316,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -329,24 +324,22 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

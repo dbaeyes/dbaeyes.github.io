@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/according-to-the-id-initialization-data.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>根据ID初始化数据</h1>
                     
-                    <span class="meta">Posted by David on February 2, 2009</span>
+                    <span class="meta">Posted by Vincent on February 2, 2009</span>
                 </div>
             </div>
         </div>
@@ -124,57 +120,57 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>根据序列ID初始化数据，可以很好的完成并行和增量。 但如果中断需要重新跑那些中断了的进程。<br>
-速度一般，没有extend来的快。 适合需要增量来做的情况<br>
-[cc lang="sql"]<br>
-create or replace procedure SP_FB_INT_COL<br>
-(id_start number,id_end   number) is<br>
-/*<br>
-create by 玄风<br>
-date: 2009-2-1<br>
-初始表两个新增字段<br>
-parenttradeid 主订单号<br>
-validfeedback 是否存在内容<br>
+                <p>根据序列ID初始化数据，可以很好的完成并行和增量。 但如果中断需要重新跑那些中断了的进程。<br />
+速度一般，没有extend来的快。 适合需要增量来做的情况<br />
+[cc lang="sql"]<br />
+create or replace procedure SP_FB_INT_COL<br />
+(id_start number,id_end   number) is<br />
+/*<br />
+create by 玄风<br />
+date: 2009-2-1<br />
+初始表两个新增字段<br />
+parenttradeid 主订单号<br />
+validfeedback 是否存在内容<br />
 */</p>
-<p>i         number;<br>
-j         number;<br>
-n         number;<br>
+<p>i         number;<br />
+j         number;<br />
+n         number;<br />
 loop_time number;</p>
-<p>begin<br>
---确定循环次数<br>
-loop_time := (id_end - id_start) / 10000 + 1;<br>
+<p>begin<br />
+--确定循环次数<br />
+loop_time := (id_end - id_start) / 10000 + 1;<br />
 i         := id_start; --初始ID</p>
-<p>for loop_c in 1 .. loop_time loop<br>
---确定该次循环的最大ID<br>
-    if j + 10000 &lt;= id_end then<br>
-      j := j + 10000;<br>
-    else<br>
-      j := id_end;<br>
+<p>for loop_c in 1 .. loop_time loop<br />
+--确定该次循环的最大ID<br />
+    if j + 10000 <= id_end then<br />
+      j := j + 10000;<br />
+    else<br />
+      j := id_end;<br />
     end if;</p>
-<p>    for c in (select rowid rid<br>
-                from auc_feed<br>
-               where id &gt;= i<br>
-                 and id &lt; j) loop</p>
-<p>      update auc_feed au<br>
-         set au.parenttradeid = au.trade_id,<br>
-             au.validfeedback = decode(au.feedback,<br>
-                                       null,<br>
-                                       0,<br>
-                                       '默认好评!',<br>
-                                       0,<br>
-                                       1)<br>
+<p>    for c in (select rowid rid<br />
+                from auc_feed<br />
+               where id >= i<br />
+                 and id < j) loop</p>
+<p>      update auc_feed au<br />
+         set au.parenttradeid = au.trade_id,<br />
+             au.validfeedback = decode(au.feedback,<br />
+                                       null,<br />
+                                       0,<br />
+                                       '默认好评!',<br />
+                                       0,<br />
+                                       1)<br />
        where au.rowid = c.rid;</p>
-<p>      n := n + 1;<br>
-      if mod(n, 100) = 0 then<br>
-        commit;<br>
+<p>      n := n + 1;<br />
+      if mod(n, 100) = 0 then<br />
+        commit;<br />
       end if;</p>
-<p>    end loop;<br>
-    commit;<br>
---确定下次循环的最小ID<br>
-    i := j;<br>
+<p>    end loop;<br />
+    commit;<br />
+--确定下次循环的最小ID<br />
+    i := j;<br />
 end loop;</p>
-<p>end SP_FB_INT_COL;<br>
-/<br>
+<p>end SP_FB_INT_COL;<br />
+/<br />
 [/cc]</p>
 
 
@@ -188,12 +184,12 @@ end loop;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/game-old.html" data-toggle="tooltip" data-placement="top" title="游戏？ 老了？">← Previous Post</a>
+                        <a href="/my%20life/game-old.html" data-toggle="tooltip" data-placement="top" title="游戏？ 老了？">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/according-to-extend-to-initialize-the-data.html" data-toggle="tooltip" data-placement="top" title="根据extend初始化数据">Next Post →</a>
+                        <a href="/oracle/according-to-extend-to-initialize-the-data.html" data-toggle="tooltip" data-placement="top" title="根据extend初始化数据">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -218,7 +214,7 @@ end loop;</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -234,7 +230,7 @@ end loop;</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -347,7 +343,7 @@ end loop;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -355,24 +351,22 @@ end loop;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

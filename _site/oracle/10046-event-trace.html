@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/10046-event-trace.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>10046 event trace</h1>
                     
-                    <span class="meta">Posted by David on July 11, 2008</span>
+                    <span class="meta">Posted by Vincent on July 11, 2008</span>
                 </div>
             </div>
         </div>
@@ -127,118 +123,112 @@
                 <p>是事件的有效trace级别：</p>
 <div>
 <div>
-<div> Level 0 tracing被关闭。这相当于设置sql_trace=false。<br>
- Level 1 标准SQL trace信息（SQL_TRACE=TRUE）。这是默认级别。<br>
- Level 4 SQL trace信息加绑定变量值。<br>
- Level 8 SQL trace信息加等待事件信息。<br>
+<div> Level 0 tracing被关闭。这相当于设置sql_trace=false。<br />
+ Level 1 标准SQL trace信息（SQL_TRACE=TRUE）。这是默认级别。<br />
+ Level 4 SQL trace信息加绑定变量值。<br />
+ Level 8 SQL trace信息加等待事件信息。<br />
  Level 12 SQL trace 信息，等待事件信息，和绑定变量值。</div>
-<div>两个参数<br>
-alter session set timed_statistics = true;<br>
+<div>两个参数<br />
+alter session set timed_statistics = true;<br />
 alter session set max_dump_file_size = unlimited;</div>
-<div>你能使用trace事件10046来跟踪用户会话或Oracle后台进程。<br>
-会话位置:USER_DUMP_DEST<br>
+<div>你能使用trace事件10046来跟踪用户会话或Oracle后台进程。<br />
+会话位置:USER_DUMP_DEST<br />
 后台位置:BACKGROUND_DUMP_DEST</div>
-<div>跟踪自己的会话：命令格式<br>
-enable<br>
+<div>跟踪自己的会话：命令格式<br />
+enable<br />
 alter session set events '10046 trace name context forever, level 8';</div>
-<div>disable<br>
+<div>disable<br />
 alter session set events '10046 trace name context off';</div>
-<div>--如果你有安装了的DBMS_SUPPORT包，你能使用以下的过程来开启和关闭跟踪：<br>
--- To include Wait Event data with SQL trace (default option)<br>
-exec sys.dbms_support.start_trace;<br>
--- To include Bind variable values, Wait Event data with SQL trace<br>
-exec sys.dbms_support.start_trace(waits =&gt; TRUE, binds=&gt; TRUE)<br>
--- Run your SQL script or program to trace wait event information<br>
--- To turn off the tracing:<br>
+<div>--如果你有安装了的DBMS_SUPPORT包，你能使用以下的过程来开启和关闭跟踪：<br />
+-- To include Wait Event data with SQL trace (default option)<br />
+exec sys.dbms_support.start_trace;<br />
+-- To include Bind variable values, Wait Event data with SQL trace<br />
+exec sys.dbms_support.start_trace(waits =&gt; TRUE, binds=&gt; TRUE)<br />
+-- Run your SQL script or program to trace wait event information<br />
+-- To turn off the tracing:<br />
 exec sys.dbms_support.stop_trace;</div>
 <div>
-如何跟踪其他人的会话<br>
-如果你不能确信参数TIMED_STATISTICS和MAX_DUMP_FILE_SIZE是否对你想跟踪的会话设置合适，你应该从V$SESSION得到SID和它的序列号（SERIAL#）。在开启trace之前，你然后能做以下过程来合适得设置这些参数。<br>
--- Set TIME_STATISTICS to TRUE for SID 1234, Serial# 56789<br>
-exec sys.dbms_system.set_bool_param_in_session( -<br>
-<wbr> <wbr><wbr><wbr>sid =&gt; 1234, -<br>
-<wbr> <wbr><wbr><wbr>serial# =&gt; 56789, -<br>
-<wbr> <wbr><wbr><wbr>parnam =&gt; 'TIMED_STATISTICS', -<br>
-<wbr> <wbr><wbr><wbr>bval =&gt; true);<br>
--- Set MAX_DUMP_FILE_SIZE to 2147483647<br>
--- for SID 1234, Serial# 56789<br>
-exec sys.dbms_system.set_int_param_in_session( -<br>
-<wbr> <wbr><wbr><wbr>sid =&gt; 1234, -<br>
-<wbr> <wbr><wbr><wbr>serial# =&gt; 56789, -<br>
-<wbr> <wbr><wbr><wbr>parnam =&gt; 'MAX_DUMP_FILE_SIZE', -<br>
-<wbr> <wbr><wbr><wbr>intval =&gt; 2147483647);<br>
-如果这些过程不能用于你的oracle版本（Oracle版本8.1.5和以下），你能使用ALTER SYSTEM SET &lt;parameter&gt;命令来设置这些参数。</wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr>
-</div>
-<div>接下来的步骤是在其他会话中去开启trace，然后在你已经收集足够的trace信息之后关闭它。你能使用以下方法之一来处理:<br>
-方法1 <wbr> 使用DBMS_SUPPORT包过程<br>
- -- Enable 'level 12' trace in session 1234 with serial# 56789<br>
-exec dbms_support.start_trace_in_session( -<br>
-<wbr> <wbr><wbr><wbr>sid =&gt; 1234, -<br>
-<wbr> <wbr><wbr><wbr>serial# =&gt; 56789, -<br>
-<wbr> <wbr><wbr><wbr>waits =&gt; true, -<br>
-<wbr> <wbr><wbr><wbr>binds =&gt; true);</wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr>
-</div>
-<div>-- Let the session execute SQL script or<br>
+如何跟踪其他人的会话<br />
+如果你不能确信参数TIMED_STATISTICS和MAX_DUMP_FILE_SIZE是否对你想跟踪的会话设置合适，你应该从V$SESSION得到SID和它的序列号（SERIAL#）。在开启trace之前，你然后能做以下过程来合适得设置这些参数。<br />
+-- Set TIME_STATISTICS to TRUE for SID 1234, Serial# 56789<br />
+exec sys.dbms_system.set_bool_param_in_session( -<br />
+<wbr> <wbr><wbr><wbr>sid =&gt; 1234, -<br />
+<wbr> <wbr><wbr><wbr>serial# =&gt; 56789, -<br />
+<wbr> <wbr><wbr><wbr>parnam =&gt; 'TIMED_STATISTICS', -<br />
+<wbr> <wbr><wbr><wbr>bval =&gt; true);<br />
+-- Set MAX_DUMP_FILE_SIZE to 2147483647<br />
+-- for SID 1234, Serial# 56789<br />
+exec sys.dbms_system.set_int_param_in_session( -<br />
+<wbr> <wbr><wbr><wbr>sid =&gt; 1234, -<br />
+<wbr> <wbr><wbr><wbr>serial# =&gt; 56789, -<br />
+<wbr> <wbr><wbr><wbr>parnam =&gt; 'MAX_DUMP_FILE_SIZE', -<br />
+<wbr> <wbr><wbr><wbr>intval =&gt; 2147483647);<br />
+如果这些过程不能用于你的oracle版本（Oracle版本8.1.5和以下），你能使用ALTER SYSTEM SET &lt;parameter&gt;命令来设置这些参数。</wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></div>
+<div>接下来的步骤是在其他会话中去开启trace，然后在你已经收集足够的trace信息之后关闭它。你能使用以下方法之一来处理:<br />
+方法1 <wbr> 使用DBMS_SUPPORT包过程<br />
+ -- Enable 'level 12' trace in session 1234 with serial# 56789<br />
+exec dbms_support.start_trace_in_session( -<br />
+<wbr> <wbr><wbr><wbr>sid =&gt; 1234, -<br />
+<wbr> <wbr><wbr><wbr>serial# =&gt; 56789, -<br />
+<wbr> <wbr><wbr><wbr>waits =&gt; true, -<br />
+<wbr> <wbr><wbr><wbr>binds =&gt; true);</wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></div>
+<div>-- Let the session execute SQL script or<br />
 -- program for some amount of time</div>
-<div>-- To turn off the tracing:<br>
-exec dbms_support.stop_trace_in_session( -<br>
-<wbr> <wbr><wbr><wbr>sid =&gt; 1234, -<br>
-<wbr> <wbr><wbr><wbr>serial# =&gt; 56789);</wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr>
-</div>
+<div>-- To turn off the tracing:<br />
+exec dbms_support.stop_trace_in_session( -<br />
+<wbr> <wbr><wbr><wbr>sid =&gt; 1234, -<br />
+<wbr> <wbr><wbr><wbr>serial# =&gt; 56789);</wbr></wbr></wbr></wbr></wbr></wbr></wbr></wbr></div>
 <div>2. 方法2 使用dbm_system</div>
-<div>- Enable trace at level 8 for session 1234 with serial# 56789<br>
-execute dbms_system.set_ev( 1234, 56789, 10046, 8, '');<wbr></wbr>
-</div>
-<div>-- Let the session execute SQL script or<br>
+<div>- Enable trace at level 8 for session 1234 with serial# 56789<br />
+execute dbms_system.set_ev( 1234, 56789, 10046, 8, '');<wbr></wbr></div>
+<div>-- Let the session execute SQL script or<br />
 -- program for some amount of time</div>
-<div>-- To turn off the tracing:<br>
+<div>-- To turn off the tracing:<br />
 execute dbms_system.set_ev( 1234, 56789, 10046, 0, '');</div>
-<div>3.方法3 使用oradebug工具。你需要知道会话的OS进程ID(SPID)或Oracle进程ID(PID)。你能查看他们在v$process视图。假设你知道你想跟踪的用户名：<br>
-select s.username,<br>
-p.spid os_process_id,<br>
-p.pid oracle_process_id<br>
-from <wbr><wbr>v$session s, v$process p<br>
-where <wbr>s.paddr = p.addr<br>
-and <wbr><wbr><wbr>s.username = upper('&amp;user_name');</wbr></wbr></wbr></wbr></wbr></wbr>
-</div>
-<div>现在使用SQL*Plus以sysdba连接并发出以下命令：<br>
-alter system set timed_statistics=true;<br>
-oradebug setospid 12345;<br>
---12345 是会话的OS进程id<br>
-Oradebug unlimit;<br>
-Oradebug event 10046 trace name context forever ,level 8;<br>
---让会话执行SQL脚本或程序一段时间<br>
---关闭trace<br>
+<div>3.方法3 使用oradebug工具。你需要知道会话的OS进程ID(SPID)或Oracle进程ID(PID)。你能查看他们在v$process视图。假设你知道你想跟踪的用户名：<br />
+select s.username,<br />
+p.spid os_process_id,<br />
+p.pid oracle_process_id<br />
+from <wbr><wbr>v$session s, v$process p<br />
+where <wbr>s.paddr = p.addr<br />
+and <wbr><wbr><wbr>s.username = upper('&amp;user_name');</wbr></wbr></wbr></wbr></wbr></wbr></div>
+<div>现在使用SQL*Plus以sysdba连接并发出以下命令：<br />
+alter system set timed_statistics=true;<br />
+oradebug setospid 12345;<br />
+--12345 是会话的OS进程id<br />
+Oradebug unlimit;<br />
+Oradebug event 10046 trace name context forever ,level 8;<br />
+--让会话执行SQL脚本或程序一段时间<br />
+--关闭trace<br />
 Oradebug event 10046 trace name context off;</div>
 <div>
 在ORACLE10g1版本中，你能使用DBMS_MONITOR包过程来开启基于SID，服务名，模块，或动作来跟踪。基于动作的跟踪使dba能跟踪一个指定的商业功能。这是一个捕捉：过程要求DBA知道模块和动作名。</div>
-<div> 使用DBMS_MONITOR包来启动对会话1234和serial#56789如下：<br>
-execute dbms_monitor.session_trace_enable(1234,56789,true,true);<br>
--- Let the session execute SQL script or<br>
+<div> 使用DBMS_MONITOR包来启动对会话1234和serial#56789如下：<br />
+execute dbms_monitor.session_trace_enable(1234,56789,true,true);<br />
+-- Let the session execute SQL script or<br />
 -- program for some amount of time</div>
-<div>-- To turn off the tracing:<br>
+<div>-- To turn off the tracing:<br />
 execute dbms_monitor.session_trace_disable(1234, 56789);</div>
 <div>这些过程很像来自DBMS_SUPPORT包。我们推荐你在oracle10g版本1中使用DBMS_MONITOR包。</div>
-<div> 使用DBMS_MONITOR包用于服务，模块，和基于动作的跟踪。<br>
---开启级别12跟踪已知服务，模块，和动作<br>
-execute <wbr>dbms_monitor.serv_mod_act_trace_enable(<br>
-'APPS1','GLEDGER','DEBIT_ENTRY',TRUE,TRUE,NULL);<br>
---执行sql脚本或程序一段时间<br>
---关闭tracing<br>
-Execute dbms_monitor.serv_mod_act_trace_disable(<br>
-'APPS1','GLEDGER','DEBIT_ENTRY');</wbr>
-</div>
+<div> 使用DBMS_MONITOR包用于服务，模块，和基于动作的跟踪。<br />
+--开启级别12跟踪已知服务，模块，和动作<br />
+execute <wbr>dbms_monitor.serv_mod_act_trace_enable(<br />
+'APPS1','GLEDGER','DEBIT_ENTRY',TRUE,TRUE,NULL);<br />
+--执行sql脚本或程序一段时间<br />
+--关闭tracing<br />
+Execute dbms_monitor.serv_mod_act_trace_disable(<br />
+'APPS1','GLEDGER','DEBIT_ENTRY');</wbr></div>
 <div></div>
-<div>怎样找到你的trace文件<br>
+<div>怎样找到你的trace文件<br />
 用户会话的跟踪文件将被写到USER_DUMP_DEST目录，而后台进程的跟踪文件将被写到BACKGROUND_DUMP_DEST目录。跟踪文件命名在许多平台上包含.trc或TRC扩展名。</div>
-<div>使用oradebug trace工具，找到你的跟踪文件是较容易的，因为专用服务的SPID数字也被写到trace文件。另外，你也能得到真正的跟踪文件名如下：<br>
-SQL&gt; oradebug setmypid<br>
-Statement processed.<br>
-SQL&gt; oradebug event 10046 trace name context forever,level 8<br>
-Statement processed.<br>
-SQL&gt; oradebug tracefile_name<br>
-d:\oracle\admin\or92\udump\or92_ora_171.trc<br>
-从Oracle8.1.7开始，你能为你会话设置TRACEFILE_IDENTIFIER参数，使用ALTER SESSION命令，如下显示：<br>
+<div>使用oradebug trace工具，找到你的跟踪文件是较容易的，因为专用服务的SPID数字也被写到trace文件。另外，你也能得到真正的跟踪文件名如下：<br />
+SQL&gt; oradebug setmypid<br />
+Statement processed.<br />
+SQL&gt; oradebug event 10046 trace name context forever,level 8<br />
+Statement processed.<br />
+SQL&gt; oradebug tracefile_name<br />
+d:\oracle\admin\or92\udump\or92_ora_171.trc<br />
+从Oracle8.1.7开始，你能为你会话设置TRACEFILE_IDENTIFIER参数，使用ALTER SESSION命令，如下显示：<br />
 alter session set tracefile_identifier='MyTrace';</div>
 </div>
 </div>
@@ -254,12 +244,12 @@ alter session set tracefile_identifier='MyTrace';</div>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/start-buying-building-materials.html" data-toggle="tooltip" data-placement="top" title="开工了 买建材了">← Previous Post</a>
+                        <a href="/my%20life/start-buying-building-materials.html" data-toggle="tooltip" data-placement="top" title="开工了 买建材了">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/ora-12514.html" data-toggle="tooltip" data-placement="top" title="Ora-12514">Next Post →</a>
+                        <a href="/oracle/ora-12514.html" data-toggle="tooltip" data-placement="top" title="Ora-12514">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -284,7 +274,7 @@ alter session set tracefile_identifier='MyTrace';</div>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -300,7 +290,7 @@ alter session set tracefile_identifier='MyTrace';</div>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -413,7 +403,7 @@ alter session set tracefile_identifier='MyTrace';</div>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -421,24 +411,22 @@ alter session set tracefile_identifier='MyTrace';</div>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/page9/">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -124,7 +120,7 @@ evernote 方便的记录，支持各种平台 android、iphone、ipad、mac、
 使用http://quickhighlighter.com/ 可以把代码漂亮的色彩格式，真...
         </div>
     </a>
-    <p class="post-meta">Posted by David on June 9, 2011</p>
+    <p class="post-meta">Posted by Vincent on June 9, 2011</p>
 </div>
 
 <hr>
@@ -141,7 +137,7 @@ mysql备库处理binlog日志是单线程的，无论主库有多少个database�
 一些情况下，备库的延迟可以通过预热来加快sql的执行速度。预热就是将需要更新的数...
         </div>
     </a>
-    <p class="post-meta">Posted by David on May 29, 2011</p>
+    <p class="post-meta">Posted by Vincent on May 29, 2011</p>
 </div>
 
 <hr>
@@ -157,7 +153,7 @@ mysql备库处理binlog日志是单线程的，无论主库有多少个database�
 [cc lang='sql']dbaeyes 06:47:52>select count(*) ,status from act_info group by status...
         </div>
     </a>
-    <p class="post-meta">Posted by David on May 29, 2011</p>
+    <p class="post-meta">Posted by Vincent on May 29, 2011</p>
 </div>
 
 <hr>
@@ -174,7 +170,7 @@ mysql备库处理binlog日志是单线程的，无论主库有多少个database�
  SELECT tables optimized away：当我们使用某些聚合函数来访问存在索引的某个字段时，MySQL Query Optimizer 会通过索引直接...
         </div>
     </a>
-    <p class="post-meta">Posted by David on May 29, 2011</p>
+    <p class="post-meta">Posted by Vincent on May 29, 2011</p>
 </div>
 
 <hr>
@@ -195,7 +191,7 @@ Index:
 Idx_use...
         </div>
     </a>
-    <p class="post-meta">Posted by David on May 9, 2011</p>
+    <p class="post-meta">Posted by Vincent on May 9, 2011</p>
 </div>
 
 <hr>
@@ -214,7 +210,7 @@ Mark
 IGNORE is a MySQL extension to standard SQL. It controls how ALTER TABLE works if there are duplicates on unique keys in the new tabl...
         </div>
     </a>
-    <p class="post-meta">Posted by David on April 14, 2011</p>
+    <p class="post-meta">Posted by Vincent on April 14, 2011</p>
 </div>
 
 <hr>
@@ -239,7 +235,7 @@ IGNORE is a MySQL extension to standard SQL. It controls how ALTER TABLE work
 将 异或...
         </div>
     </a>
-    <p class="post-meta">Posted by David on April 2, 2011</p>
+    <p class="post-meta">Posted by Vincent on April 2, 2011</p>
 </div>
 
 <hr>
@@ -258,7 +254,7 @@ create index ind_qid on crm_detail(queue_id,gmt_create) parallel 6 tablespace tb
 上面的sql以并行6来创建索引，6个并行用于获...
         </div>
     </a>
-    <p class="post-meta">Posted by David on March 29, 2011</p>
+    <p class="post-meta">Posted by Vincent on March 29, 2011</p>
 </div>
 
 <hr>
@@ -412,12 +408,10 @@ create index ind_qid on crm_detail(queue_id,gmt_create) parallel 6 tablespace tb
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

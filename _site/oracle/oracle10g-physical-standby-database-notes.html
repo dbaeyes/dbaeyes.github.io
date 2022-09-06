@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/oracle10g-physical-standby-database-notes.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -113,7 +109,7 @@
                     </div>
                     <h1>Oracle10G Physical Standby Database笔记</h1>
                     
-                    <span class="meta">Posted by David on June 24, 2008</span>
+                    <span class="meta">Posted by Vincent on June 24, 2008</span>
                 </div>
             </div>
         </div>
@@ -128,102 +124,102 @@
 
                 <p>来源： http://www.cnblogs.com/herolf/archive/2006/03/17/351885.html</p>
 <div>
-<strong>试验环境</strong><strong><br>
-primary server:<br>
-</strong><strong></strong>windows2000 server + oracle 10.0.1.0.2<br>
-ORACLE_SID:dgtest<br>
-ORACLE_HOME: D:\oracle\product\10.1.0\db_1<strong><br>
-standby server:<br>
-</strong>windows XP pro + oracle 10.0.1.0.2<br>
-ORACLE_SID:dgtest<br>
-ORACLE_HOME: D:\oracle\product\10.1.0\db_1
-<p><strong>配置步骤</strong><strong><br>
+<strong>试验环境</strong><strong><br />
+primary server:<br />
+</strong><strong></strong>windows2000 server + oracle 10.0.1.0.2<br />
+ORACLE_SID:dgtest<br />
+ORACLE_HOME: D:\oracle\product\10.1.0\db_1<strong><br />
+standby server:<br />
+</strong>windows XP pro + oracle 10.0.1.0.2<br />
+ORACLE_SID:dgtest<br />
+ORACLE_HOME: D:\oracle\product\10.1.0\db_1</p>
+<p><strong>配置步骤</strong><strong><br />
 </strong>首先，装好primary和standby上的oracle，建SID同为dgtest的库，所有设置完全相同。然后停止shutdown两台上的oracle，将primary上的所有数据文件，控制文件，redo文件和password文件都copy到standby机器的相应位置。（还可以利用热备，rman等来建立初始standby库）<span style="color: #0000ff;">在我感觉在要配置完成，使用新参数文件启动standby的时候拷贝文件为好</span>，这样，我们就拥有了两台完全一样的oracle server。</p>
-<p>1.      在primary database上设置force logging<br>
+<p>1.      在primary database上设置force logging<br />
 <span style="color: #0000ff;">SQL&gt;alter database force logging;</span></p>
-<p> </p>
-<p>2.      修改primary databse的初始化参数<br>
-创建pfile   SQL&gt; create pfile='D:\oracle\product\pfdgtest.ora' from spfile; </p>
-<p>修改参数：<br>
-<span style="color: #ccffff;">#DB_UNIQUE_NAME</span><span style="color: #ccffff;">=‘primary’</span><br>
-CONTROL_FILES='d:\oracle\product\oradata\control01.ctl','d:\oracle\product\oradata\control02.ctl','d:\oracle\product\oradata\control03.ctl'<br>
-LOG_ARCHIVE_DEST_1= '<span style="color: #0000ff;">LOCATION</span>=d:\oracle\product\arch‘<br>
-LOG_ARCHIVE_DEST_2= '<span style="color: #0000ff;">SERVICE</span>=standby’<br>
-LOG_ARCHIVE_DEST_STATE_1=ENABLE<br>
-LOG_ARCHIVE_DEST_STATE_2=ENABLE<br>
-REMOTE_LOGIN_PASSWORDFILE=EXCLUSIVE<br>
-LOG_ARCHIVE_FORMAT='arc%s%t%r.arc'<br>
-<span style="color: #0000ff;">FAL_SERVER=standby<br>
-FAL_CLIENT=primary</span><br>
-STANDBY_FILE_MANAGEMENT=AUTO<br>
+<p>&nbsp;</p>
+<p>2.      修改primary databse的初始化参数<br />
+创建pfile   SQL&gt; create pfile='D:\oracle\product\pfdgtest.ora' from spfile;&nbsp;</p>
+<p>修改参数：<br />
+<span style="color: #ccffff;">#DB_UNIQUE_NAME</span><span style="color: #ccffff;">=‘primary’</span><br />
+CONTROL_FILES='d:\oracle\product\oradata\control01.ctl','d:\oracle\product\oradata\control02.ctl','d:\oracle\product\oradata\control03.ctl'<br />
+LOG_ARCHIVE_DEST_1= '<span style="color: #0000ff;">LOCATION</span>=d:\oracle\product\arch‘<br />
+LOG_ARCHIVE_DEST_2= '<span style="color: #0000ff;">SERVICE</span>=standby’<br />
+LOG_ARCHIVE_DEST_STATE_1=ENABLE<br />
+LOG_ARCHIVE_DEST_STATE_2=ENABLE<br />
+REMOTE_LOGIN_PASSWORDFILE=EXCLUSIVE<br />
+LOG_ARCHIVE_FORMAT='arc%s%t%r.arc'<br />
+<span style="color: #0000ff;">FAL_SERVER=standby<br />
+FAL_CLIENT=primary</span><br />
+STANDBY_FILE_MANAGEMENT=AUTO<br />
 LOCK_NAME_SPACE   ---这是当主数据库和备用数据在同一台机上时要设该参数，设为备用数据库的SID</p>
-<p>3.      设置primary database为archivelog模式<br>
-SQL&gt;shutdown immediate;<br>
-SQL&gt;startup mount;<br>
-SQL&gt;alter database archivelog;<br>
+<p>3.      设置primary database为archivelog模式<br />
+SQL&gt;shutdown immediate;<br />
+SQL&gt;startup mount;<br />
+SQL&gt;alter database archivelog;<br />
 SQL&gt;alter database open:</p>
-<p>4.      在primary database上创建standby database的控制文件<br>
-SQL&gt;shutdown immedaite;<br>
-SQL&gt;startup mount;<br>
-SQL&gt;alter database create standby controlfile as ‘d:\oracle\product\oradata\controlstandby.ctl’<br>
-SQL&gt;alter database open;<br>
+<p>4.      在primary database上创建standby database的控制文件<br />
+SQL&gt;shutdown immedaite;<br />
+SQL&gt;startup mount;<br />
+SQL&gt;alter database create standby controlfile as ‘d:\oracle\product\oradata\controlstandby.ctl’<br />
+SQL&gt;alter database open;<br />
 然后将该controlfile复制到standby server的对应位置</p>
-<p>5.      修改standby databse的初始化参数<br>
-<span style="color: #ccffff;">#DB_UNIQUE_NAME=‘standby’</span><br>
-<span style="color: #0000ff;">CONTROL_FILES='d:\oracle\product\oradata\controlstandby.ctl'</span><br>
-LOG_ARCHIVE_DEST_1= 'LOCATION=d:\oracle\product\arch’<br>
-LOG_ARCHIVE_DEST_2= 'SERVICE=primary‘<br>
-LOG_ARCHIVE_DEST_STATE_1=ENABLE<br>
-LOG_ARCHIVE_DEST_STATE_2=ENABLE<br>
-#STANDBY_ARCHIVE_DEST=‘d:\oracle\product\arch’ -- oracle 10gR2后不需要该参数，用log_archive_d<br>
-REMOTE_LOGIN_PASSWORDFILE=EXCLUSIVE<br>
-FAL_SERVER=primary<br>
-FAL_CLIENT=standby<br>
-STANDBY_FILE_MANAGEMENT=AUTO<br>
-DB_FILE_NAME_CONVERT     ----当primary和standby的数据文件路径不一致时使用<br>
-LOG_FILE_NAME_CONVERT    ----当primary和standby的数据文件路径不一致时使用<br>
-LOCK_NAME_SPACE           ----当主数据库和备用数据在同一台机上时设为备用数据库的SID<br>
+<p>5.      修改standby databse的初始化参数<br />
+<span style="color: #ccffff;">#DB_UNIQUE_NAME=‘standby’</span><br />
+<span style="color: #0000ff;">CONTROL_FILES='d:\oracle\product\oradata\controlstandby.ctl'</span><br />
+LOG_ARCHIVE_DEST_1= 'LOCATION=d:\oracle\product\arch’<br />
+LOG_ARCHIVE_DEST_2= 'SERVICE=primary‘<br />
+LOG_ARCHIVE_DEST_STATE_1=ENABLE<br />
+LOG_ARCHIVE_DEST_STATE_2=ENABLE<br />
+#STANDBY_ARCHIVE_DEST=‘d:\oracle\product\arch’ -- oracle 10gR2后不需要该参数，用log_archive_d<br />
+REMOTE_LOGIN_PASSWORDFILE=EXCLUSIVE<br />
+FAL_SERVER=primary<br />
+FAL_CLIENT=standby<br />
+STANDBY_FILE_MANAGEMENT=AUTO<br />
+DB_FILE_NAME_CONVERT     ----当primary和standby的数据文件路径不一致时使用<br />
+LOG_FILE_NAME_CONVERT    ----当primary和standby的数据文件路径不一致时使用<br />
+LOCK_NAME_SPACE           ----当主数据库和备用数据在同一台机上时设为备用数据库的SID<br />
 具体参数的说明请参考oracle在线文档</p>
-<p>6.      设置primary database和standby database的tnsnames.ora<br>
-primary =<br>
-(DESCRIPTION =<br>
-(ADDRESS_LIST =<br>
-(ADDRESS = (PROTOCOL = TCP)(HOST = primary_server)(PORT = 1521))<br>
-)<br>
-(CONNECT_DATA =<br>
-(SERVICE_NAME = dgtest)<br>
-)<br>
+<p>6.      设置primary database和standby database的tnsnames.ora<br />
+primary =<br />
+(DESCRIPTION =<br />
+(ADDRESS_LIST =<br />
+(ADDRESS = (PROTOCOL = TCP)(HOST = primary_server)(PORT = 1521))<br />
+)<br />
+(CONNECT_DATA =<br />
+(SERVICE_NAME = dgtest)<br />
+)<br />
 )</p>
-<p>standby =<br>
-(DESCRIPTION =<br>
-(ADDRESS_LIST =<br>
-(ADDRESS = (PROTOCOL = TCP)(HOST = standby_server)(PORT = 1521))<br>
-)<br>
-(CONNECT_DATA =<br>
-(SERVICE_NAME = dgtest)<br>
-)<br>
+<p>standby =<br />
+(DESCRIPTION =<br />
+(ADDRESS_LIST =<br />
+(ADDRESS = (PROTOCOL = TCP)(HOST = standby_server)(PORT = 1521))<br />
+)<br />
+(CONNECT_DATA =<br />
+(SERVICE_NAME = dgtest)<br />
+)<br />
 )</p>
 <p>--<span style="color: #0000ff;">使用TNSPING 测试一下listener</span></p>
-<p><span style="color: #0000ff;">--拷贝数据库文件等<br>
+<p><span style="color: #0000ff;">--拷贝数据库文件等<br />
 </span></p>
-<p>7.      启动standby database<br>
-SQL&gt;startup nomount pfile=’d:\oracle\product\initdgtest.ora’<br>
+<p>7.      启动standby database<br />
+SQL&gt;startup nomount pfile=’d:\oracle\product\initdgtest.ora’<br />
 SQL&gt;alter database mount standby database;</p>
-<p>8.      启动primary database<br>
+<p>8.      启动primary database<br />
 SQL&gt;startup pfile=’d:\oracle\product\initdgtest.ora’</p>
-<p>9.      启动standby database到recover manage模式<br>
+<p>9.      启动standby database到recover manage模式<br />
 SQL&gt;alter database recover managed standby database disconnect from session;</p>
 <p><strong>Switchover</strong></p>
 <p>在primary上</p>
-<p>1.      SQL&gt;select switchover_status from v$database<br>
-switchover_status的值入股是To standby，可以直接switchover，如果是sessions active，<br>
+<p>1.      SQL&gt;select switchover_status from v$database<br />
+switchover_status的值入股是To standby，可以直接switchover，如果是sessions active，<br />
 则需要在switchover的命令后面加上with session shutdown</p>
 <p>2.      SQL&gt;alter database commit to switchover to physical standby;</p>
 <p>3.      SQL&gt;shutdowm immediate;</p>
 <p>4.      SQL&gt;startup mount;</p>
 <p>在standby上</p>
 <p>1.      SQL&gt; select switchover_status from v$database</p>
-<p>switchover_status的值入股是To primary，可以直接switchover，如果是sessions active，<br>
+<p>switchover_status的值入股是To primary，可以直接switchover，如果是sessions active，<br />
 则需要在switchover的命令后面加上with session shutdown</p>
 <p>2.      SQL&gt;alter database commit to switchover to primary;</p>
 <p>3.      SQL&gt;shutdown immediate;</p>
@@ -231,87 +227,87 @@ switchover_status的值入股是To standby，可以直接switchover，如果是s
 <p>要想顺利的实现switchover，最好在每台server上都同时设置好primary和standby的一些初始化参数，虽然其中一些参数只有在primary或者standby其中之一上起作用</p>
 <p><strong>Failover</strong></p>
 <p>在standby上</p>
-<p>1.      SQL&gt;alter database recover managed standby database finish;<br>
+<p>1.      SQL&gt;alter database recover managed standby database finish;<br />
 or SQL&gt;alter database recover managed standby database finish skip standby logfile;</p>
 <p>2.      SQL&gt;alter database commit to switchover to primary;</p>
 <p>3.      SQL&gt;shutdown immediate;</p>
 <p>4.      SQL&gt;startup;</p>
-<p> </p>
+<p>&nbsp;</p>
 <p><strong>相关视图</strong><strong></strong></p>
-<p>v$archive_dest<br>
-v$archive_dest_status<br>
-v$log_history<br>
-v$archvied_log<br>
-v$managed_standby<br>
+<p>v$archive_dest<br />
+v$archive_dest_status<br />
+v$log_history<br />
+v$archvied_log<br />
+v$managed_standby<br />
 v$archive_gap</p>
-<p> </p>
-<p> </p>
-<p> </p>
-<p> </p>
-<p> </p>
-<p><strong></strong> </p>
-<p> </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong></strong>&nbsp;</p>
+<p>&nbsp;</p>
 <p><strong>常见问题</strong><strong></strong></p>
-<p> </p>
-<p><strong></strong>1.      日志无法传送<br>
-SQL&gt;select dest_name,status,error from v$archive_dest;<br>
-察看相应的归档路径的状态是否valid，否则根据error信息进行处理 </p>
-<p>2.      无法使用alter database重命名data file<br>
-在standby上，当设置standby_file_management为auto时，不允许下列操作<br>
-alter database rename<br>
-alter database add/drop logfile<br>
-alter database add/drop standby logfile member<br>
+<p>&nbsp;</p>
+<p><strong></strong>1.      日志无法传送<br />
+SQL&gt;select dest_name,status,error from v$archive_dest;<br />
+察看相应的归档路径的状态是否valid，否则根据error信息进行处理&nbsp;</p>
+<p>2.      无法使用alter database重命名data file<br />
+在standby上，当设置standby_file_management为auto时，不允许下列操作<br />
+alter database rename<br />
+alter database add/drop logfile<br />
+alter database add/drop standby logfile member<br />
 alter database create datafile as</p>
-<p>失败<br>
-SQL&gt;alter database commit to switchover to physical standby<br>
-ORA-01093:alter database close only permitted with no session connected<br>
-察看引起该错误的活动session<br>
-SQL&gt;<span style="font-size: medium;"> </span>select sid,process,program from v$session where type='USER' and<br>
-sid&lt;&gt;(select distinct sid from v$mystat);<br>
-断开该session，或者使用如下命令来做switchover<br>
+<p>失败<br />
+SQL&gt;alter database commit to switchover to physical standby<br />
+ORA-01093:alter database close only permitted with no session connected<br />
+察看引起该错误的活动session<br />
+SQL&gt;<span style="font-size: medium;"> </span>select sid,process,program from v$session where type='USER' and<br />
+sid&lt;&gt;(select distinct sid from v$mystat);<br />
+断开该session，或者使用如下命令来做switchover<br />
 SQL&gt;lter database commit to switchover to physical standby with session shutdown;</p>
 <p>--------------------------------------------</p>
-<p> </p>
-<p>我的试验环境：<br>
-Windows xp sp2 + oracle 10.2.0<br>
-ORACLE_SID: dgtest<br>
+<p>&nbsp;</p>
+<p>我的试验环境：<br />
+Windows xp sp2 + oracle 10.2.0<br />
+ORACLE_SID: dgtest<br />
 ORACLE_HOME: D:\oracle\product\10.2.0\db_1</p>
 <p>看过了《oracle高可用环境》那章，又体会到蛮多 o(∩_∩)o... 主要是一些参数了！</p>
-<p>Validate whether received：<br>
-SQL&gt; SELECT SEQUENCE#, FIRST_TIME, NEXT_TIME<br>
+<p>Validate whether received：<br />
+SQL&gt; SELECT SEQUENCE#, FIRST_TIME, NEXT_TIME<br />
 FROM V$ARCHIVED_LOG ORDER BY SEQUENCE#</p>
-<p>Validate whethere new archive redo log have been applied.<br>
-SQL&gt; select SEQUENCE#,DEST_ID,ARCHIVED,APPLIED,DELETED,<br>
+<p>Validate whethere new archive redo log have been applied.<br />
+SQL&gt; select SEQUENCE#,DEST_ID,ARCHIVED,APPLIED,DELETED,<br />
 STATUS from v$archived_log order by SEQUENCE#</p>
-<p>查询库状态：<br>
+<p>查询库状态：<br />
 SQL&gt; select name,open_mode,PROTECTION_MODE,DATABASE_ROLE from v$database;</p>
-<p>------------------------<br>
+<p>------------------------<br />
 网络收集资料</p>
-<p>总结：备库在起来时：<br>
+<p>总结：备库在起来时：<br />
 1.nomount：rfs服务没有起，因此主库文件不会传到备库；mrp进程没有起，因此也不会做recover，归档不</p>
-<p>会applied。<br>
+<p>会applied。<br />
 2.mount：rfs服务启动，主库的归档能传输到备库（可以在主库switchlogfile几次，会发现归档已经传输过去</p>
-<p>）；mrp进程没有启动，归档不applied。<br>
-3.recover managed：rfs在上一步已经启动，归档能传输到备库；且mrp进程已经起来，apply 归档日志！<br>
+<p>）；mrp进程没有启动，归档不applied。<br />
+3.recover managed：rfs在上一步已经启动，归档能传输到备库；且mrp进程已经起来，apply 归档日志！<br />
 http://www.oracleblog.cn/study-note/different-stage-on-dataguard-startup/</p>
-<p>主备切换：<br>
-1、primary——&gt;phsical standby：<br>
-先确认能否转换：<br>
-SELECT SWITCHOVER_STATUS FROM V$DATABASE;<br>
-转换：<br>
-ALTER DATABASE COMMIT TO SWITCHOVER TO PHYSICAL STANDBY;<br>
-SHUTDOWN IMMEDIATE;<br>
-STARTUP NOMOUNT;<br>
-ALTER DATABASE MOUNT STANDBY DATABASE;<br>
-2、phsical standby——&gt;primary：<br>
-先确认能否转换：<br>
-SELECT SWITCHOVER_STATUS FROM V$DATABASE;<br>
-转换：<br>
-ALTER DATABASE COMMIT TO SWITCHOVER TO PRIMARY;<br>
-SHUTDOWN;<br>
-STARTUP;<br>
-3、新primary：<br>
-ALTER DATABASE RECOVER MANAGED STANDBY DATABASE DISCONNECT FROM SESSION;<br>
+<p>主备切换：<br />
+1、primary——&gt;phsical standby：<br />
+先确认能否转换：<br />
+SELECT SWITCHOVER_STATUS FROM V$DATABASE;<br />
+转换：<br />
+ALTER DATABASE COMMIT TO SWITCHOVER TO PHYSICAL STANDBY;<br />
+SHUTDOWN IMMEDIATE;<br />
+STARTUP NOMOUNT;<br />
+ALTER DATABASE MOUNT STANDBY DATABASE;<br />
+2、phsical standby——&gt;primary：<br />
+先确认能否转换：<br />
+SELECT SWITCHOVER_STATUS FROM V$DATABASE;<br />
+转换：<br />
+ALTER DATABASE COMMIT TO SWITCHOVER TO PRIMARY;<br />
+SHUTDOWN;<br />
+STARTUP;<br />
+3、新primary：<br />
+ALTER DATABASE RECOVER MANAGED STANDBY DATABASE DISCONNECT FROM SESSION;<br />
 ALTER SYSTEM ARCHIVE LOG CURRENT;</p>
 </div>
 
@@ -326,12 +322,12 @@ ALTER SYSTEM ARCHIVE LOG CURRENT;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/through-the-oracle-1z043.html" data-toggle="tooltip" data-placement="top" title="通过oracle 1z043">← Previous Post</a>
+                        <a href="/oracle/through-the-oracle-1z043.html" data-toggle="tooltip" data-placement="top" title="通过oracle 1z043">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/thinking/another-month-begins.html" data-toggle="tooltip" data-placement="top" title="又是一个月的开始">Next Post →</a>
+                        <a href="/thinking/another-month-begins.html" data-toggle="tooltip" data-placement="top" title="又是一个月的开始">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -356,7 +352,7 @@ ALTER SYSTEM ARCHIVE LOG CURRENT;</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -372,7 +368,7 @@ ALTER SYSTEM ARCHIVE LOG CURRENT;</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -485,7 +481,7 @@ ALTER SYSTEM ARCHIVE LOG CURRENT;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -493,24 +489,22 @@ ALTER SYSTEM ARCHIVE LOG CURRENT;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

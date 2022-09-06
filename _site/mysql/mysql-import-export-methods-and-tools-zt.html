@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/mysql-import-export-methods-and-tools-zt.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>MySQL导入导出方法与工具 (zt)</h1>
                     
-                    <span class="meta">Posted by David on June 15, 2009</span>
+                    <span class="meta">Posted by Vincent on June 15, 2009</span>
                 </div>
             </div>
         </div>
@@ -126,7 +122,7 @@
 
                 <p>1）.MySQLimport的语法介绍：</p>
 <div>
-<p>　　MySQLimport位于MySQL/bin目录中，是MySQL的一个载入（或者说导入）数据的一个非常有效的工具。这是一个命令行工具。有两个参数以及大量的选项可供选择。这个工具把一个文本文件（textfile）导入到你指定的数据库和表中。比方说我们要从文件Customers.txt中把数据导入到数据库Meet_A_Geek中的表<br>
+<p>　　MySQLimport位于MySQL/bin目录中，是MySQL的一个载入（或者说导入）数据的一个非常有效的工具。这是一个命令行工具。有两个参数以及大量的选项可供选择。这个工具把一个文本文件（textfile）导入到你指定的数据库和表中。比方说我们要从文件Customers.txt中把数据导入到数据库Meet_A_Geek中的表<br />
 Custermers中：</p>
 <p>MySQLimport Meet_A_Geek Customers.txt</p>
 <p>注意：这里Customers.txt是我们要导入数据的文本文件，而Meet_A_Geek是我们要操作的数据库，数据库中的表名是Customers，这里文本文件的数据格式必须与Customers表中的记录格式一致，否则MySQLimport命令将会出错。</p>
@@ -152,8 +148,8 @@ Custermers中：</p>
 <p>"1", "ORD89876", "1 Dozen Roses", "19991226"</p>
 <p>我们的任务是要把这个文件里面的数据导入到数据库Meet_A_Geek中的表格Orders中，我们使用这个命令:</p>
 <p>bin/MySQLimport -prl --fields-enclosed-by=\" --fields-terminated-by=, Meet_A_Geek Orders.txt</p>
-<p>这个命令可能看起来很不爽，不过当你熟悉了之后，这是非常简单的。第一部分，bin/MySQLimport<br>
-,告诉操作系统你要运行的命令是MySQL/bin目录下的MySQLimport，选项p是要求输入密码，这样就要求你在改动数据库之前输入密码，操作<br>
+<p>这个命令可能看起来很不爽，不过当你熟悉了之后，这是非常简单的。第一部分，bin/MySQLimport<br />
+,告诉操作系统你要运行的命令是MySQL/bin目录下的MySQLimport，选项p是要求输入密码，这样就要求你在改动数据库之前输入密码，操作<br />
 起来会更安全。我们用了r选项是因为我们想要把表中的唯一关键字与文件记录中有重复唯一关键字的记录替换成文件中的数据。我们表单中的数据不是最新的，需要用文件中的数据去更新，因而就用r这个选项，替代数据库中已经有的记录。l选项的作用是在我们插入数据的时候锁住表，这样就阻止了用户在我们更新表的时候对表进行查询或者更改的操作。</p>
 <p>批处理是一种非交互式运行MySQL程序的方法，如同您在MySQL中使用的命令一样，你仍然将使用这些命令。</p>
 <p>为了实现批处理，您重定向一个文件到MySQL程序中，首先我们需要一个文本文件，这个文本文件包含有与我们在MySQL中输入的命令相同的文本。</p>
@@ -170,9 +166,9 @@ Custermers中：</p>
 <p>接着按提示输入密码，如果上面的文件中的语句没有错误，那么这些数据就被导入到了数据库中。</p>
 <p>命令行中使用LOAD DATA INFILE 从文件中导入数据到数据库:</p>
 <p>现在您可能会问自己，"究竟为什么我要输入所有的这些SQL语句到文件中，然后通过程序运行它们呢？”</p>
-<p>这样看起来好像需要大量的工作。很好，你这样想很可能就对了。但是假如你有从所有这些命令中产生的log记录呢？现在这样就很棒，嗯，大多数数据库都会自<br>
-动产生数据库中的事件记录的<br>
-log。而大部分log都包含有用过的原始的SQL命令。因此，如果您不能从您现在的数据库中导出数据到新的MySQL数据库中使用，那么您可以使用<br>
+<p>这样看起来好像需要大量的工作。很好，你这样想很可能就对了。但是假如你有从所有这些命令中产生的log记录呢？现在这样就很棒，嗯，大多数数据库都会自<br />
+动产生数据库中的事件记录的<br />
+log。而大部分log都包含有用过的原始的SQL命令。因此，如果您不能从您现在的数据库中导出数据到新的MySQL数据库中使用，那么您可以使用<br />
 log和MySQL的批处理特性，来快速且方便地导入您地数据。当然，这样就省去了打字的麻烦。</p>
 <p>LOAD DATA INFILE</p>
 <p>这是我们要介绍的最后一个导入数据到MySQL数据库中的方法。这个命令与MySQLimport非常相似，但这个方法可以在MySQL命令行中使用。也就是说您可以在所有使用API的程序中使用这个命令。使用这种方法，您就可以在应用程序中导入您想要导入的数据。</p>
@@ -204,8 +200,8 @@ log和MySQL的批处理特性，来快速且方便地导入您地数据。当然
 <p>LOAD DATA INFILE语句中有一个MySQLimport工具中没有特点：</p>
 <p>LOAD DATA INFILE 可以按指定的列把文件导入到数据库中。</p>
 <p>当我们要把数据的一部分内容导入的时候，这个特点就很重要。比方说，我们要从Access数据库升级到MySQL数据库的时候，需要加入一些栏目（列/字段/field）到MySQL数据库中，以适应一些额外的需要。</p>
-<p>这个时候，我们的Access数据库中的数据仍然是可用的，但是因为这些数据的栏目(field)与MySQL中的不再匹配，因此而无法再使用<br>
-MySQLimport工具。尽管如此，我们仍然可以使用LOAD DATA<br>
+<p>这个时候，我们的Access数据库中的数据仍然是可用的，但是因为这些数据的栏目(field)与MySQL中的不再匹配，因此而无法再使用<br />
+MySQLimport工具。尽管如此，我们仍然可以使用LOAD DATA<br />
 INFILE，下面的例子显示了如何向指定的栏目(field)中导入数据：</p>
 <p>LOAD DATA INFILE "/home/Order.txt" INTO TABLE Orders(Order_Number, Order_Date, Customer_ID);</p>
 <p>如您所见，我们可以指定需要的栏目（fields）。这些指定的字段依然是以括号括起，由逗号分隔的，如果您遗漏了其中任何一个，MySQL将会提醒您^_^</p>
@@ -214,7 +210,7 @@ INFILE，下面的例子显示了如何向指定的栏目(field)中导入数据�
 <p>比方说Macmillan USA维护护着一个将要出版的书籍的大型数据库。这个数据库在许多书店之间共享，这样他们就知道哪些书将会很快出版。医院越来越走向采用无纸病历记录，这样这些病历可以随时跟着你。世界变得越来越小，信息也被共享得越来越多。有很多中导出数据得方法，它们都跟导入数据很相似。因为，毕竟，这些都只是一种透视得方式。从数据库导出的数据就是从另一端导入的数据。这里我们并不讨论其他的数据库各种各样的导出数据的方法，您将学会如何用MySQL来实现数据导出。</p>
 <p>使用MySQLdump:</p>
 <p>MySQLdump命令位于MySQL/bin/目录中</p>
-<p>MySQLdump工具很多方面类似相反作用的工具MySQLimport。它们有一些同样的选项。但MySQLdump能够做更多的事情。它可以把整个数据库装载到一个单独的文本文件中。这个文件包含有所有重建您的数据库所需要的SQL命令。这个命令取得所有的模式（Schema，后面有解释）并且将其转换成DDL语法（CREATE语句，即数据库定义语句），取得所有的数据，并且从这些数据中创建INSERT语句。这个工具将您的数据库中所有的设计倒转。因为所有的东西都被包含到了一个文本文件中。这个文本文件可以用一个简单的批处理和一个合适SQL语句导回到MySQL中。这个工具令人难以置信<br>
+<p>MySQLdump工具很多方面类似相反作用的工具MySQLimport。它们有一些同样的选项。但MySQLdump能够做更多的事情。它可以把整个数据库装载到一个单独的文本文件中。这个文件包含有所有重建您的数据库所需要的SQL命令。这个命令取得所有的模式（Schema，后面有解释）并且将其转换成DDL语法（CREATE语句，即数据库定义语句），取得所有的数据，并且从这些数据中创建INSERT语句。这个工具将您的数据库中所有的设计倒转。因为所有的东西都被包含到了一个文本文件中。这个文本文件可以用一个简单的批处理和一个合适SQL语句导回到MySQL中。这个工具令人难以置信<br />
 地简单而快速。决不会有半点让人头疼地地方。</p>
 <p>因此，如果您像装载整个数据库Meet_A_Geek的内容到一个文件中，可以使用下面的命令：</p>
 <p>bin/MySQLdump –p Meet_A_Geek &gt; MeetAGeek_Dump_File.txt</p>
@@ -241,8 +237,8 @@ INFILE，下面的例子显示了如何向指定的栏目(field)中导入数据�
 <p>在您只需要DDL语句时，可以使用这个选项。</p>
 <p>--opt 此选项将打开所有会提高文件导出速度和创造一个可以更快导入的文件的选项。</p>
 <p>-q or -quick 这个选项使得MySQL不会把整个导出的内容读入内存再执行导出，而是在读到的时候就写入导文件中。</p>
-<p>-T path or -tab = path<br>
-这个选项将会创建两个文件，一个文件包含DDL语句或者表创建语句，另一个文件包含数据。DDL文件被命名为table_name.sql,数据文件被命<br>
+<p>-T path or -tab = path<br />
+这个选项将会创建两个文件，一个文件包含DDL语句或者表创建语句，另一个文件包含数据。DDL文件被命名为table_name.sql,数据文件被命<br />
 名为table_name.txt.路径名是存放这两个文件的目录。目录必须已经存在，并且命令的使用者有对文件的特权。</p>
 <p>-w "WHERE Clause" or -where = "Where clause "</p>
 <p>如前面所讲的，您可以使用这一选项来过筛选将要放到导出文件的数据。</p>
@@ -280,35 +276,33 @@ INFILE，下面的例子显示了如何向指定的栏目(field)中导入数据�
 <p>FROM Customers WHERE Customer_ID &gt; 1;</p>
 <p>然后确认 MySQL进程在运行，并且您在MySQL目录中， 输入下面的命令：</p>
 <p>bin/MySQL</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>--</p>
 <p>开始的时候把原始数据格式搞错了，导致每次执行后数据都有点问题</p>
-<p>mysqlimport --fields-enclosed-by='"' --fields-terminated-by=, bbc /home/mysql/tmp/tmp_imp.txt<br>
-"1","ORD89876","1 Dozen Roses","19991226" -&gt;<br>
+<p>mysqlimport --fields-enclosed-by='"' --fields-terminated-by=, bbc /home/mysql/tmp/tmp_imp.txt<br />
+"1","ORD89876","1 Dozen Roses","19991226" -&gt;<br />
 "1","ORD89876", "1 Dozen Roses", "19991226" 在fields-terminated-by 后面的存在空格也是不被允许的，这样导致进入表的数据成了"ORD89876" "1 Dozen Roses" 0 了。</p>
 <p>说一下--fields-enclosed-by 这个分隔符的值可以用单引号括起来，或者有些字符是需要转移的 \"</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>LOAD DATA INFILE "/home/mysql/tmp/tmp_imp.sql" INTO TABLE tmp_imp FIELDS TERMINATED BY ',' ENCLOSED BY '"';</p>
-<p>----<br>
+<p>----<br />
 mysqldump --tab /home/mysql/tmp --no-create-info --fields-terminated-by=, bbc tmp_imp</p>
-<p>select * into outfile '/home/mysql/tmp/tmp_imp_o2.txt'<br>
-fields terminated by ','<br>
-ENCLOSED BY '"'<br>
+<p>select * into outfile '/home/mysql/tmp/tmp_imp_o2.txt'<br />
+fields terminated by ','<br />
+ENCLOSED BY '"'<br />
 from tmp_imp;</p>
-<p>$ cat tmp_imp_o2.txt<br>
-"1","ORD89876","1 Dozen Roses","19991226"<br>
-"1","ORD89876","1 Dozen Roses","19991226"<br>
-"1","ORD89876","1 Dozen Roses","19991226"<br>
+<p>$ cat tmp_imp_o2.txt<br />
+"1","ORD89876","1 Dozen Roses","19991226"<br />
+"1","ORD89876","1 Dozen Roses","19991226"<br />
+"1","ORD89876","1 Dozen Roses","19991226"<br />
 "1","ORD89876","1 Dozen Roses","19991226"</p>
-<p>---dump数据库<br>
-mysqldump -uroot bbc &gt; bbc.txt<br>
---导入dump数据<br>
+<p>---dump数据库<br />
+mysqldump -uroot bbc &gt; bbc.txt<br />
+--导入dump数据<br />
 mysql -uroot bbc&lt;bbc.txt</p>
-<h3>
-<code>LOAD DATA INFILE</code> Syntax</h3>
+<h3><code>LOAD DATA INFILE</code> Syntax</h3>
 <h3><a href="http://dev.mysql.com/doc/refman/5.1/en/load-data.html" target="_blank">http://dev.mysql.com/doc/refman/5.1/en/load-data.html</a></h3>
-<p><a href="http://hi.baidu.com/yttxuehui/blog/item/4caca11e313db31940341778.html" target="_blank">hi.baidu.com/yttxuehui/blog/item/4caca11e313db31940341778.html</a></p>
-</div>
+<p><a href="http://hi.baidu.com/yttxuehui/blog/item/4caca11e313db31940341778.html" target="_blank">hi.baidu.com/yttxuehui/blog/item/4caca11e313db31940341778.html</a></div>
 
 
                 <hr>
@@ -321,12 +315,12 @@ mysql -uroot bbc&lt;bbc.txt</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/oracle-start-with-connect-by-prior-clause-usage-zt.html" data-toggle="tooltip" data-placement="top" title="Oracle start with...connect by prior 子句用法 (zt)">← Previous Post</a>
+                        <a href="/oracle/oracle-start-with-connect-by-prior-clause-usage-zt.html" data-toggle="tooltip" data-placement="top" title="Oracle start with...connect by prior 子句用法 (zt)">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/oracle-escape-characters.html" data-toggle="tooltip" data-placement="top" title="oracle的一些字符转义">Next Post →</a>
+                        <a href="/oracle/oracle-escape-characters.html" data-toggle="tooltip" data-placement="top" title="oracle的一些字符转义">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -351,7 +345,7 @@ mysql -uroot bbc&lt;bbc.txt</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -367,7 +361,7 @@ mysql -uroot bbc&lt;bbc.txt</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -480,7 +474,7 @@ mysql -uroot bbc&lt;bbc.txt</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -488,24 +482,22 @@ mysql -uroot bbc&lt;bbc.txt</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

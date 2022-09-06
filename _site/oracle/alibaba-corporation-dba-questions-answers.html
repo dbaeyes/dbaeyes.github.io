@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/alibaba-corporation-dba-questions-answers.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -109,7 +105,7 @@
                     </div>
                     <h1>阿里巴巴公司DBA笔试题 －－答案</h1>
                     
-                    <span class="meta">Posted by David on August 22, 2007</span>
+                    <span class="meta">Posted by Vincent on August 22, 2007</span>
                 </div>
             </div>
         </div>
@@ -127,7 +123,7 @@
 <p>　　<strong>参考解答：</strong></p>
 <p><strong>一：SQL tuning 类</strong></p>
 <p><strong>1:列举几种表连接方式</strong></p>
-<p> </p>
+<p>&nbsp;</p>
 <table width="95%" border="0" cellspacing="0" cellpadding="6" align="center">
 <tbody>
 <tr>
@@ -136,13 +132,13 @@
 </tbody>
 </table>
 <p><strong>2:不借助第三方工具，怎样查看sql的执行计划</strong></p>
-<p> </p>
+<p>&nbsp;</p>
 <table width="95%" border="0" cellspacing="0" cellpadding="6" align="center">
 <tbody>
 <tr>
-<td bgcolor="#f3f3f3">　　set autot on<br>
-explain plan set statement_id = &amp;item_id for &amp;sql;<br>
-select * from table(dbms_xplan.display);<br>
+<td bgcolor="#f3f3f3">　　set autot on<br />
+explain plan set statement_id = &amp;item_id for &amp;sql;<br />
+select * from table(dbms_xplan.display);<br />
 http://download-west.oracle.com/ ... /b10752/ex_plan.htm</td>
 </tr>
 </tbody>
@@ -151,23 +147,23 @@ http://download-west.oracle.com/ ... /b10752/ex_plan.htm</td>
 <p>在optimizer_mode=choose时,如果表有统计信息(分区表外),优化器将选择CBO,否则选RBO。RBO遵 循简单的分级方法学,使用15种级别要点，当接收到查询，优化器将评估使用到的要点数目, 然后选择最佳级别(最少的数量)的执行路径来运行查询。</p>
 <p>CBO尝试找到最低成本的访问数据的方法,为了最大的吞吐量或最快的初始响应时间,计算使用不同 的执行计划的成本，并选择成本最低的一个,关于表的数据内容的统计被用于确定执行计划。</p>
 <p><strong>4:如何定位重要(消耗资源多)的SQL</strong></p>
-<p> </p>
+<p>&nbsp;</p>
 <table width="95%" border="0" cellspacing="0" cellpadding="6" align="center">
 <tbody>
 <tr>
-<td bgcolor="#f3f3f3"><span style="font-family: Verdana;">select sql_text<br>
-from v$sql<br>
+<td bgcolor="#f3f3f3"><span style="font-family: Verdana;">select sql_text<br />
+from v$sql<br />
 where disk_reads &amp;gt; 1000 or (executions &amp;gt; 0 and buffer_gets/executions &amp;gt; 30000);</span></td>
 </tr>
 </tbody>
 </table>
 <p><strong>5:如何跟踪某个session的SQL</strong></p>
-<p> </p>
+<p>&nbsp;</p>
 <table width="95%" border="0" cellspacing="0" cellpadding="6" align="center">
 <tbody>
 <tr>
-<td bgcolor="#f3f3f3"><span style="font-family: Verdana;">exec dbms_system.set_sql_trace_in_session(sid,serial#,&amp;amp;sql_trace);<br>
-select sid,serial# from v$session where sid = (select sid from v$mystat where rownum = 1);<br>
+<td bgcolor="#f3f3f3"><span style="font-family: Verdana;">exec dbms_system.set_sql_trace_in_session(sid,serial#,&amp;amp;sql_trace);<br />
+select sid,serial# from v$session where sid = (select sid from v$mystat where rownum = 1);<br />
 exec dbms_system.set_ev(&amp;amp;sid,&amp;amp;serial#,&amp;amp;event_10046,&amp;amp;level_12,'');</span></td>
 </tr>
 </tbody>
@@ -181,18 +177,18 @@ exec dbms_system.set_ev(&amp;amp;sid,&amp;amp;serial#,&amp;amp;event_10046,&amp;
 <p><strong>9:绑定变量是什么?绑定变量有什么优缺点?</strong></p>
 <p>绑定变量是相对文本变量来讲的,所谓文本变量是指在SQL直接书写查询条件，这样的SQL在不同条件下需要反复解析,绑定变量是 指使用变量来代替直接书写条件，查询bind value在运行时传递，然后绑定执行。优点是减少硬解析,降低CPU的争用,节省shared_pool ;缺点是不能使用histogram,sql优化比较困难</p>
 <p><strong>10:如何稳定(固定)执行计划</strong></p>
-<p> </p>
+<p>&nbsp;</p>
 <table width="95%" border="0" cellspacing="0" cellpadding="6" align="center">
 <tbody>
 <tr>
-<td bgcolor="#f3f3f3">　　query_rewrite_enabled = true<br>
-star_transformation_enabled = true<br>
+<td bgcolor="#f3f3f3">　　query_rewrite_enabled = true<br />
+star_transformation_enabled = true<br />
 optimizer_features_enable = 9.2.0</td>
 </tr>
 </tbody>
 </table>
 <p>创建并使用stored outline</p>
-<p> </p>
+<p>&nbsp;</p>
 <table width="95%" border="0" cellspacing="0" cellpadding="6" align="center">
 <tbody>
 <tr>
@@ -210,22 +206,22 @@ optimizer_features_enable = 9.2.0</td>
 <p>如果在pga或sort_area_size中不能完成,排序将在临时表空间进行(disk sort),</p>
 <p>临时表空间主要作用就是完成系统中的disk sort.</p>
 <p><strong>12:存在表T(a,b,c,d),要根据字段c排序后取第21—30条记录显示，请给出sql</strong></p>
-<p> </p>
+<p>&nbsp;</p>
 <table width="95%" border="0" cellspacing="0" cellpadding="6" align="center">
 <tbody>
 <tr>
-<td bgcolor="#f3f3f3">　　create table t(a number(,b number(,c number(,d number();<br>
-/<br>
-begin<br>
-for i in 1 .. 300 loop<br>
-insert into t values(mod(i,2),i/2,dbms_random<span style="color: #000000;">.value</span>(1,300),i/4);<br>
-end loop;<br>
-end;<br>
-/<br>
-select * from (select c.*,rownum as rn from (select * from t order by c desc) c) where rn between 21 and 30;<br>
-/<br>
-select * from (select * from test order by c desc) x where rownum &lt; 30<br>
-minus<br>
+<td bgcolor="#f3f3f3">　　create table t(a number(,b number(,c number(,d number();<br />
+/<br />
+begin<br />
+for i in 1 .. 300 loop<br />
+insert into t values(mod(i,2),i/2,dbms_random<span style="color: #000000;">.value</span>(1,300),i/4);<br />
+end loop;<br />
+end;<br />
+/<br />
+select * from (select c.*,rownum as rn from (select * from t order by c desc) c) where rn between 21 and 30;<br />
+/<br />
+select * from (select * from test order by c desc) x where rownum &lt; 30<br />
+minus<br />
 select * from (select * from test order by c desc) y where rownum &lt; 20 order by 3 desc</td>
 </tr>
 </tbody>
@@ -269,11 +265,11 @@ select * from (select * from test order by c desc) y where rownum &lt; 20 order 
 <p>重做日志文件：含对数据库所做的更改记录，这样万一出现故障可以启用数据恢复,一个数据库至少需要两个重做日志文件</p>
 <p>归档日志文件：是重做日志文件的脱机副本，这些副本可能对于从介质失败中进行恢复很必要。</p>
 <p><strong>7:SGA主要有那些部分，主要作用是什么</strong></p>
-<p> </p>
+<p>&nbsp;</p>
 <table width="95%" border="0" cellspacing="0" cellpadding="6" align="center">
 <tbody>
 <tr>
-<td bgcolor="#f3f3f3">　　SGA：db_cache/shared_pool/large_pool/java_pool<br>
+<td bgcolor="#f3f3f3">　　SGA：db_cache/shared_pool/large_pool/java_pool<br />
 db_cache:</td>
 </tr>
 </tbody>
@@ -316,12 +312,12 @@ db_cache:</td>
 <p>数据库可运行在两种不同方式下：</p>
 <p>NOARCHIVELOG方式或ARCHIVELOG 方式数据库在NOARCHIVELOG方式下使用时，不能进行在线日志的归档,如果数据库在ARCHIVELOG方式下运行，可实施在线日志的归档。3: 如果一个表在2004-08-04 10:30:00 被drop，在有完善的归档和备份的情况下，如何恢复?</p>
 <p>手工拷贝回所有备份的数据文件</p>
-<p> </p>
+<p>&nbsp;</p>
 <table width="95%" border="0" cellspacing="0" cellpadding="6" align="center">
 <tbody>
 <tr>
-<td bgcolor="#f3f3f3">　　startup mount;<br>
-sql alter database recover automatic until time '2004-08-04:10:30:00';<br>
+<td bgcolor="#f3f3f3">　　startup mount;<br />
+sql alter database recover automatic until time '2004-08-04:10:30:00';<br />
 alter database open resetlogs;</td>
 </tr>
 </tbody>
@@ -387,12 +383,12 @@ alter database open resetlogs;</td>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/alibaba-corporation-dba-questions-go.html" data-toggle="tooltip" data-placement="top" title="阿里巴巴公司DBA笔试题 －－转">← Previous Post</a>
+                        <a href="/oracle/alibaba-corporation-dba-questions-go.html" data-toggle="tooltip" data-placement="top" title="阿里巴巴公司DBA笔试题 －－转">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/cut-class-today.html" data-toggle="tooltip" data-placement="top" title="今天跷课了">Next Post →</a>
+                        <a href="/my%20life/cut-class-today.html" data-toggle="tooltip" data-placement="top" title="今天跷课了">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -417,7 +413,7 @@ alter database open resetlogs;</td>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -433,7 +429,7 @@ alter database open resetlogs;</td>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -546,7 +542,7 @@ alter database open resetlogs;</td>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -554,24 +550,22 @@ alter database open resetlogs;</td>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/page8/">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -125,7 +121,7 @@ explain走到这个方式，会很慢，一个空表也是如此，在并发量�
 如果直接走索...
         </div>
     </a>
-    <p class="post-meta">Posted by David on September 25, 2011</p>
+    <p class="post-meta">Posted by Vincent on September 25, 2011</p>
 </div>
 
 <hr>
@@ -146,7 +142,7 @@ test1:
 se...
         </div>
     </a>
-    <p class="post-meta">Posted by David on August 23, 2011</p>
+    <p class="post-meta">Posted by Vincent on August 23, 2011</p>
 </div>
 
 <hr>
@@ -165,7 +161,7 @@ se...
 --limit: default: 95%:20  Limit output to the given percentage ...
         </div>
     </a>
-    <p class="post-meta">Posted by David on August 21, 2011</p>
+    <p class="post-meta">Posted by Vincent on August 21, 2011</p>
 </div>
 
 <hr>
@@ -182,7 +178,7 @@ se...
 今天陪小隽睡觉的时候，小家伙做了个超级可爱的动作。 小手指向我的腋窝，做挠痒痒状，然后把小手拿回去用嘴巴吹吹，还发出‘hoho’的声音，感觉是想给我挠痒痒了 哈哈。   类似的动作之前经常出现在看到热水瓶，热水或者电饭煲时（他知道的会烫手的东西），也会用嘴巴吹小手，表示这个...
         </div>
     </a>
-    <p class="post-meta">Posted by David on June 22, 2011</p>
+    <p class="post-meta">Posted by Vincent on June 22, 2011</p>
 </div>
 
 <hr>
@@ -201,7 +197,7 @@ update tmp_xf set c =11 where a = 1;
 所以我们必须在列a上建索引，但是innodb的索引是会有间隙锁（Next-Key)，主要是存在在upd...
         </div>
     </a>
-    <p class="post-meta">Posted by David on June 17, 2011</p>
+    <p class="post-meta">Posted by Vincent on June 17, 2011</p>
 </div>
 
 <hr>
@@ -220,7 +216,7 @@ cost =
     ceiling(clustering_factor * effective table selectivity...
         </div>
     </a>
-    <p class="post-meta">Posted by David on June 16, 2011</p>
+    <p class="post-meta">Posted by Vincent on June 16, 2011</p>
 </div>
 
 <hr>
@@ -236,7 +232,7 @@ cost =
 在oracle中还是推荐使用根据extent分块来实现大数据量的移动 http://hi.baidu.com/dbaeyes/blog/item/dcf741ada8edac004b...
         </div>
     </a>
-    <p class="post-meta">Posted by David on June 12, 2011</p>
+    <p class="post-meta">Posted by Vincent on June 12, 2011</p>
 </div>
 
 <hr>
@@ -253,7 +249,7 @@ cost =
   需求是这样的，将有几十亿数据的A表的新字段cc更新为一个新值（蛋疼的需求），这个值来...
         </div>
     </a>
-    <p class="post-meta">Posted by David on June 12, 2011</p>
+    <p class="post-meta">Posted by Vincent on June 12, 2011</p>
 </div>
 
 <hr>
@@ -407,12 +403,10 @@ cost =
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

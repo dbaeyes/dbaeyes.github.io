@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/online-building-constraints-create-constraint-online.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>在线建约束 Create constraint online</h1>
                     
-                    <span class="meta">Posted by David on September 1, 0208</span>
+                    <span class="meta">Posted by Vincent on September 1, 0208</span>
                 </div>
             </div>
         </div>
@@ -124,30 +120,30 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>在一个拥有大量数据，在线的（也就是说很有可能有其他来操作这个表）表上面建立一个主键约束或者唯一键约束，为了防止出现阻塞的现象，可使用下面的一般性步骤。<br>
-1.       先检查这个表有没有符合建立这个约束的索引。<br>
-2.       如果没有，先以online方式建立符合约束的非unique的索引。<br>
-3.       建立状态为ENABLE NOVALIDATE的约束。<br>
-4.       更改约束状态至ENABLE VALIDATE状态。<br>
-在这个步骤之中，如果你不先手工online建立索引，而是期待oracle在建立约束的时候自动建立索引，这样也会可能导致阻塞的，有第一个实验的结果就可以看出，因为oracle会自动给你建立一个unique索引，而且是非online方式。<br>
-from: 胜通<br>
---[cc lang="sql"]<br>
-CREATE TABLE tmp_xf(i NUMBER,<br>
-ab NUMBER)<br>
+                <p>在一个拥有大量数据，在线的（也就是说很有可能有其他来操作这个表）表上面建立一个主键约束或者唯一键约束，为了防止出现阻塞的现象，可使用下面的一般性步骤。<br />
+1.       先检查这个表有没有符合建立这个约束的索引。<br />
+2.       如果没有，先以online方式建立符合约束的非unique的索引。<br />
+3.       建立状态为ENABLE NOVALIDATE的约束。<br />
+4.       更改约束状态至ENABLE VALIDATE状态。<br />
+在这个步骤之中，如果你不先手工online建立索引，而是期待oracle在建立约束的时候自动建立索引，这样也会可能导致阻塞的，有第一个实验的结果就可以看出，因为oracle会自动给你建立一个unique索引，而且是非online方式。<br />
+from: 胜通<br />
+--[cc lang="sql"]<br />
+CREATE TABLE tmp_xf(i NUMBER,<br />
+ab NUMBER)<br />
 tablesapce tbs_aaa_ind;</p>
-<p>ALTER TABLE tmp_xf<br>
-ADD CONSTRAINT pk_tmp_xf_id PRIMARY KEY(I)<br>
+<p>ALTER TABLE tmp_xf<br />
+ADD CONSTRAINT pk_tmp_xf_id PRIMARY KEY(I)<br />
 USING INDEX;</p>
-<p>CREATE INDEX idx_tmp_xf_ab ON tmp_xf(ab) TABLESPACE tbs_xxx_ind<br>
+<p>CREATE INDEX idx_tmp_xf_ab ON tmp_xf(ab) TABLESPACE tbs_xxx_ind<br />
 ONLINE COMPUTE STATISTICS;</p>
-<p>alter table TMP_XF<br>
-add constraint IDX_TMP_XF_AB unique (AB)<br>
-using index<br>
+<p>alter table TMP_XF<br />
+add constraint IDX_TMP_XF_AB unique (AB)<br />
+using index<br />
 enable NOVALIDATE;</p>
-<p>--验证<br>
+<p>--验证<br />
 ALTER TABLE tmp_xf MODIFY CONSTRAINT IDX_TMP_XF_AB VALIDATE;</p>
-<p>--验证并开启，有锁<br>
-ALTER TABLE tmp_xf MODIFY CONSTRAINT IDX_TMP_XF_AB ENABLE VALIDATE;<br>
+<p>--验证并开启，有锁<br />
+ALTER TABLE tmp_xf MODIFY CONSTRAINT IDX_TMP_XF_AB ENABLE VALIDATE;<br />
 [/cc]</p>
 <p>--eof</p>
 
@@ -163,7 +159,7 @@ ALTER TABLE tmp_xf MODIFY CONSTRAINT IDX_TMP_XF_AB ENABLE VALIDATE;<br>
                     
                     
                     <li class="next">
-                        <a href="/digital/brush-once-more-waiting-for-db.html" data-toggle="tooltip" data-placement="top" title="再一次刷机-- 等待DB">Next Post →</a>
+                        <a href="/digital/brush-once-more-waiting-for-db.html" data-toggle="tooltip" data-placement="top" title="再一次刷机-- 等待DB">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -188,7 +184,7 @@ ALTER TABLE tmp_xf MODIFY CONSTRAINT IDX_TMP_XF_AB ENABLE VALIDATE;<br>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -204,7 +200,7 @@ ALTER TABLE tmp_xf MODIFY CONSTRAINT IDX_TMP_XF_AB ENABLE VALIDATE;<br>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -317,7 +313,7 @@ ALTER TABLE tmp_xf MODIFY CONSTRAINT IDX_TMP_XF_AB ENABLE VALIDATE;<br>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -325,24 +321,22 @@ ALTER TABLE tmp_xf MODIFY CONSTRAINT IDX_TMP_XF_AB ENABLE VALIDATE;<br>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

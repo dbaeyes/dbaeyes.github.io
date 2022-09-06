@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/copying-large-amounts-of-data-to-index-organized-tables.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>复制大数据量到索引组织表</h1>
                     
-                    <span class="meta">Posted by David on June 12, 2011</span>
+                    <span class="meta">Posted by Vincent on June 12, 2011</span>
                 </div>
             </div>
         </div>
@@ -126,72 +122,72 @@
 
                 <p>当导入索引组织表的数据不能排序时，那么效率是很差的。如果用一个大事务来做，很可能失败，并且导致服务器压力很大。</p>
 <p>在oracle中还是推荐使用根据extent分块来实现大数据量的移动 http://hi.baidu.com/dbaeyes/blog/item/dcf741ada8edac004b36d674.html</p>
-<p> 测试：<br>
-1. 使用堆表 2000w记录，耗时 3mins<br>
+<p> 测试：<br />
+1. 使用堆表 2000w记录，耗时 3mins<br />
 2. 使用索引组织表 2000w记录，耗时 20mins</p>
-<p>--创建存储extent的临时表<br>
-[cc lang='sql']dbaeyes@ orcl&gt;create table xf_rowid(<br>
-  2  table_name                     VARCHAR2(50),<br>
-  3  ID                             NUMBER(22),<br>
-  4  ROWID_MIN                      VARCHAR2(100),<br>
-  5  ROWID_MAX                      VARCHAR2(100),<br>
-  6  HAS_DEAL                       NUMBER(22),<br>
-  7  gmt_modified                   DATE,<br>
-  8  primary key(table_name,id));<br>
+<p>--创建存储extent的临时表<br />
+[cc lang='sql']dbaeyes@ orcl>create table xf_rowid(<br />
+  2  table_name                     VARCHAR2(50),<br />
+  3  ID                             NUMBER(22),<br />
+  4  ROWID_MIN                      VARCHAR2(100),<br />
+  5  ROWID_MAX                      VARCHAR2(100),<br />
+  6  HAS_DEAL                       NUMBER(22),<br />
+  7  gmt_modified                   DATE,<br />
+  8  primary key(table_name,id));<br />
 Table created.[/cc]</p>
-<p>--将表的extent对于的最大最小rowid放到临时表中<br>
-[cc lang='sql']dbaeyes@ orcl&gt;insert into xf_rowid(table_name,id,rowid_min,rowid_max,has_deal)<br>
-  2   select 'rac_02',<br>
-  3                            rownum,<br>
-  4          DBMS_ROWID.ROWID_CREATE(1,o.data_object_id,e.RELATIVE_FNO,e.BLOCK_ID,0),<br>
-  5          DBMS_ROWID.ROWID_CREATE(1,o.data_object_id,e.RELATIVE_FNO,e.BLOCK_ID+e.BLOCKS-1,10000),<br>
-  6          0<br>
-  7          from dba_extents e,dba_objects o<br>
-  8          where e.segment_name=upper('user_cat_info')<br>
-  9          and e.owner='DBAEYES'<br>
- 10          AND o.object_name = upper('user_cat_info')<br>
+<p>--将表的extent对于的最大最小rowid放到临时表中<br />
+[cc lang='sql']dbaeyes@ orcl>insert into xf_rowid(table_name,id,rowid_min,rowid_max,has_deal)<br />
+  2   select 'rac_02',<br />
+  3                            rownum,<br />
+  4          DBMS_ROWID.ROWID_CREATE(1,o.data_object_id,e.RELATIVE_FNO,e.BLOCK_ID,0),<br />
+  5          DBMS_ROWID.ROWID_CREATE(1,o.data_object_id,e.RELATIVE_FNO,e.BLOCK_ID+e.BLOCKS-1,10000),<br />
+  6          0<br />
+  7          from dba_extents e,dba_objects o<br />
+  8          where e.segment_name=upper('user_cat_info')<br />
+  9          and e.owner='DBAEYES'<br />
+ 10          AND o.object_name = upper('user_cat_info')<br />
  11          AND o.owner='DBAEYES';</p>
 <p>3446 rows created.[/cc]</p>
-<p>--统一每个extent区块的数据量<br>
-[cc lang='sql']select /*+ rowid(tt) */<br>
-  COUNT(*)<br>
-   from user_cat_info<br>
-  where rowid &gt;= chartorowid('AAF7lUAKSAAAhIFAAA')<br>
-    and rowid &lt;= chartorowid('AAF7lUAKSAAAhQECcQ');</p>
-<p>  COUNT(*)<br>
-----------<br>
+<p>--统一每个extent区块的数据量<br />
+[cc lang='sql']select /*+ rowid(tt) */<br />
+  COUNT(*)<br />
+   from user_cat_info<br />
+  where rowid >= chartorowid('AAF7lUAKSAAAhIFAAA')<br />
+    and rowid <= chartorowid('AAF7lUAKSAAAhQECcQ');</p>
+<p>  COUNT(*)<br />
+----------<br />
     173336[/cc]</p>
 <p>因为单行记录比较小，所以一个extetn存放而来17w多的记录。                 </p>
 <p>--根据extent搬数据的存储过程</p>
-<p>[cc lang='sql']CREATE OR REPLACE PROCEDURE SP_XF_EXTENT_MOVE IS<br>
-  /*<br>
-  CREATE DATE: 20110613<br>
-  USER: XUANFENG<br>
-  根据extent搬数据<br>
+<p>[cc lang='sql']CREATE OR REPLACE PROCEDURE SP_XF_EXTENT_MOVE IS<br />
+  /*<br />
+  CREATE DATE: 20110613<br />
+  USER: XUANFENG<br />
+  根据extent搬数据<br />
   */</p>
-<p>  V_SQLERRM VARCHAR2(200);<br>
-BEGIN<br>
-  FOR C IN (SELECT ID, ROWID_MIN, ROWID_MAX<br>
-              FROM XF_ROWID<br>
-             WHERE TABLE_NAME ='rac_02'<br>
+<p>  V_SQLERRM VARCHAR2(200);<br />
+BEGIN<br />
+  FOR C IN (SELECT ID, ROWID_MIN, ROWID_MAX<br />
+              FROM XF_ROWID<br />
+             WHERE TABLE_NAME ='rac_02'<br />
                AND HAS_DEAL = 0) LOOP</p>
-<p>    INSERT INTO TEST_USER_CAT_IOT(ID, USER_ID, CAT_ID, GMT_MODIFIED)<br>
-      SELECT /*+ rowid(tt) */<br>
-       ID,<br>
-       USER_ID,<br>
-       CAT_ID,<br>
-       TO_DATE(GMT_MODIFIED, 'yyyy-mm-dd hh24:mi:ss')<br>
-        FROM user_cat_info<br>
-       WHERE ROWID &gt;= CHARTOROWID(C.ROWID_MIN)<br>
-         AND ROWID &lt;= CHARTOROWID(C.ROWID_MAX);</p>
-<p>    UPDATE XF_ROWID SET HAS_DEAL = 1 WHERE ID = C.ID;<br>
-    COMMIT;<br>
+<p>    INSERT INTO TEST_USER_CAT_IOT(ID, USER_ID, CAT_ID, GMT_MODIFIED)<br />
+      SELECT /*+ rowid(tt) */<br />
+       ID,<br />
+       USER_ID,<br />
+       CAT_ID,<br />
+       TO_DATE(GMT_MODIFIED, 'yyyy-mm-dd hh24:mi:ss')<br />
+        FROM user_cat_info<br />
+       WHERE ROWID >= CHARTOROWID(C.ROWID_MIN)<br />
+         AND ROWID <= CHARTOROWID(C.ROWID_MAX);</p>
+<p>    UPDATE XF_ROWID SET HAS_DEAL = 1 WHERE ID = C.ID;<br />
+    COMMIT;<br />
   END LOOP;</p>
-<p>EXCEPTION<br>
-  WHEN OTHERS THEN<br>
-    V_SQLERRM := SUBSTR(SQLERRM, 1, 200);<br>
-    DBMS_OUTPUT.PUT_LINE(V_SQLERRM);<br>
-    ROLLBACK;<br>
+<p>EXCEPTION<br />
+  WHEN OTHERS THEN<br />
+    V_SQLERRM := SUBSTR(SQLERRM, 1, 200);<br />
+    DBMS_OUTPUT.PUT_LINE(V_SQLERRM);<br />
+    ROLLBACK;<br />
 END SP_XF_EXTENT_MOVE;[/cc]</p>
 
 
@@ -205,12 +201,12 @@ END SP_XF_EXTENT_MOVE;[/cc]</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/index-organized-tables-iot-oracle.html" data-toggle="tooltip" data-placement="top" title="索引组织表 IOT (ORACLE)">← Previous Post</a>
+                        <a href="/oracle/index-organized-tables-iot-oracle.html" data-toggle="tooltip" data-placement="top" title="索引组织表 IOT (ORACLE)">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/the-formula-of-the-cost-based.html" data-toggle="tooltip" data-placement="top" title="The formula of the Cost Based">Next Post →</a>
+                        <a href="/oracle/the-formula-of-the-cost-based.html" data-toggle="tooltip" data-placement="top" title="The formula of the Cost Based">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -235,7 +231,7 @@ END SP_XF_EXTENT_MOVE;[/cc]</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -251,7 +247,7 @@ END SP_XF_EXTENT_MOVE;[/cc]</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -364,7 +360,7 @@ END SP_XF_EXTENT_MOVE;[/cc]</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -372,24 +368,22 @@ END SP_XF_EXTENT_MOVE;[/cc]</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

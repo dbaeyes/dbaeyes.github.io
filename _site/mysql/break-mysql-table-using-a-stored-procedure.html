@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/break-mysql-table-using-a-stored-procedure.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -113,7 +109,7 @@
                     </div>
                     <h1>MYSQL拆表用存储过程</h1>
                     
-                    <span class="meta">Posted by David on August 31, 2010</span>
+                    <span class="meta">Posted by Vincent on August 31, 2010</span>
                 </div>
             </div>
         </div>
@@ -126,118 +122,118 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>mysql表或分表的数据达到一定量（也许是800w或者1000w..）这个时候非常需要再分表，简单的办法是直接写<br>
---假设根据user_id分表，分成64张<br>
-insert into table_new_0000 select * from table_old where mod(user_id,64)=0;<br>
-insert into table_new_0001 select * from table_old where mod(user_id,64)=1;<br>
-...<br>
+                <p>mysql表或分表的数据达到一定量（也许是800w或者1000w..）这个时候非常需要再分表，简单的办法是直接写<br />
+--假设根据user_id分表，分成64张<br />
+insert into table_new_0000 select * from table_old where mod(user_id,64)=0;<br />
+insert into table_new_0001 select * from table_old where mod(user_id,64)=1;<br />
+...<br />
 一共64条sql，OK 搞定。  但是这个一张表被全表扫描了64次，做的无用功比较多，而且导致停机时间比较长。 </p>
-<p>虽然mysql的存储过程不是很熟，稍稍学习了下写了两个脚本，一个全量+一个增量脚本完成表的拆分。<br>
-线上库也实践了下，8个分表，每个分表1000W记录拆分到64个分表。<br>
-全量 时间 150分钟，全量的时候几个分表可以一起跑，我是同时跑3个分表<br>
+<p>虽然mysql的存储过程不是很熟，稍稍学习了下写了两个脚本，一个全量+一个增量脚本完成表的拆分。<br />
+线上库也实践了下，8个分表，每个分表1000W记录拆分到64个分表。<br />
+全量 时间 150分钟，全量的时候几个分表可以一起跑，我是同时跑3个分表<br />
 增量 时间 每个分表4分钟 4个一起跑，一共是 8分钟搞定。 这样停机时间加上应用的发布一共只需要20分钟就可以搞定了。</p>
 <p>附脚本：</p>
-<p>[cc lang="sql"]###################<br>
+<p>[cc lang="sql"]###################<br />
 delimeter //</p>
-<p>-----------<br>
---- 全量脚本：<br>
-CREATE PROCEDURE  sp_xf_move_item()<br>
-begin<br>
-declare v_exit int default 0;<br>
-declare v_spid bigint;<br>
-declare v_id bigint;<br>
-declare i int default 0;<br>
-declare c_table int;<br>
---定义游标（要分拆的表，定义一个数量的截止时间）<br>
-declare c_ids cursor for select id,user_id from item_records_0000 where gmt_modified &lt; '2010-8-25 00:00:00';<br>
-declare  continue handler for not found set v_exit=1;<br>
-open c_ids;<br>
-repeat<br>
---将需要的值装入变量<br>
-fetch c_ids into v_id,v_spid;<br>
-if v_exit = 0 then<br>
-set <a href="https://github.com/vv_id" class="user-mention">@vv_id</a> = v_id;<br>
---根据取模字段获取数据存在的表<br>
-select mod(v_spid,64) into c_table;<br>
---组装动态sql<br>
-SET <a href="https://github.com/SQL_CONTEXT" class="user-mention">@SQL_CONTEXT</a> =<br>
-CONCAT('insert into item_record_',<br>
-LPAD(c_table, 4, 0),<br>
+<p>-----------<br />
+--- 全量脚本：<br />
+CREATE PROCEDURE  sp_xf_move_item()<br />
+begin<br />
+declare v_exit int default 0;<br />
+declare v_spid bigint;<br />
+declare v_id bigint;<br />
+declare i int default 0;<br />
+declare c_table int;<br />
+--定义游标（要分拆的表，定义一个数量的截止时间）<br />
+declare c_ids cursor for select id,user_id from item_records_0000 where gmt_modified < '2010-8-25 00:00:00';<br />
+declare  continue handler for not found set v_exit=1;<br />
+open c_ids;<br />
+repeat<br />
+--将需要的值装入变量<br />
+fetch c_ids into v_id,v_spid;<br />
+if v_exit = 0 then<br />
+set @vv_id = v_id;<br />
+--根据取模字段获取数据存在的表<br />
+select mod(v_spid,64) into c_table;<br />
+--组装动态sql<br />
+SET @SQL_CONTEXT =<br />
+CONCAT('insert into item_record_',<br />
+LPAD(c_table, 4, 0),<br />
 ' select * from item_records_0000 where id = ?');</p>
-<p>PREPARE STMT FROM <a href="https://github.com/SQL_CONTEXT" class="user-mention">@SQL_CONTEXT</a>;<br>
---执行sql<br>
-EXECUTE STMT using <a href="https://github.com/vv_id" class="user-mention">@vv_id</a>;<br>
-DEALLOCATE PREPARE STMT;<br>
-end if;<br>
-set i=i+1;<br>
---100条提交一次，以提高效率，记得执行存储过程前设置auto_commit<br>
-if mod(i,100)=0 then commit;<br>
-end if;<br>
-until v_exit=1<br>
-end repeat;<br>
-close c_ids;<br>
-commit;<br>
-end;<br>
-//<br>
-[/cc]<br>
------------<br>
-set auto_commit=0;<br>
+<p>PREPARE STMT FROM @SQL_CONTEXT;<br />
+--执行sql<br />
+EXECUTE STMT using @vv_id;<br />
+DEALLOCATE PREPARE STMT;<br />
+end if;<br />
+set i=i+1;<br />
+--100条提交一次，以提高效率，记得执行存储过程前设置auto_commit<br />
+if mod(i,100)=0 then commit;<br />
+end if;<br />
+until v_exit=1<br />
+end repeat;<br />
+close c_ids;<br />
+commit;<br />
+end;<br />
+//<br />
+[/cc]<br />
+-----------<br />
+set auto_commit=0;<br />
 call  sp_xf_move_item();</p>
 <p>#### 增量脚本 ######</p>
-<p>[cc lang="sql"]CREATE PROCEDURE sp_xf_add_item()<br>
-begin<br>
-declare v_exit int default 0;<br>
-declare v_spid bigint;<br>
-declare v_id bigint;<br>
-declare i int default 0;<br>
-declare c_table int;<br>
-declare c_ids cursor for select id,supplier_id from item_records_0000 where gmt_modified &gt;= '2010-8-25 00:00:00';<br>
-declare  continue handler for not found set v_exit=1;<br>
-open c_ids;<br>
+<p>[cc lang="sql"]CREATE PROCEDURE sp_xf_add_item()<br />
+begin<br />
+declare v_exit int default 0;<br />
+declare v_spid bigint;<br />
+declare v_id bigint;<br />
+declare i int default 0;<br />
+declare c_table int;<br />
+declare c_ids cursor for select id,supplier_id from item_records_0000 where gmt_modified >= '2010-8-25 00:00:00';<br />
+declare  continue handler for not found set v_exit=1;<br />
+open c_ids;<br />
 repeat</p>
-<p>fetch c_ids into v_id,v_spid;<br>
-if v_exit = 0 then<br>
-set <a href="https://github.com/vv_id" class="user-mention">@vv_id</a> = v_id;<br>
-set <a href="https://github.com/v_row" class="user-mention">@v_row</a>=0;<br>
-select mod(v_spid,64) into c_table;<br>
---判断数据是否已经存在<br>
-SET <a href="https://github.com/SQL_C" class="user-mention">@SQL_C</a> =<br>
-CONCAT('select count(*) into <a href="https://github.com/v_row" class="user-mention">@v_row</a> from item_record_',<br>
-LPAD(c_table, 4, 0),<br>
+<p>fetch c_ids into v_id,v_spid;<br />
+if v_exit = 0 then<br />
+set @vv_id = v_id;<br />
+set @v_row=0;<br />
+select mod(v_spid,64) into c_table;<br />
+--判断数据是否已经存在<br />
+SET @SQL_C =<br />
+CONCAT('select count(*) into @v_row from item_record_',<br />
+LPAD(c_table, 4, 0),<br />
 ' where id = ?');</p>
-<p>PREPARE STMT_C FROM <a href="https://github.com/SQL_C" class="user-mention">@SQL_C</a>;<br>
-EXECUTE STMT_C using <a href="https://github.com/vv_id" class="user-mention">@vv_id</a>;<br>
+<p>PREPARE STMT_C FROM @SQL_C;<br />
+EXECUTE STMT_C using @vv_id;<br />
 DEALLOCATE PREPARE STMT_C;                       </p>
-<p>SET <a href="https://github.com/SQL_INSERT" class="user-mention">@SQL_INSERT</a> =<br>
-CONCAT('insert into bbc_item_record_',<br>
-LPAD(c_table, 4, 0),<br>
+<p>SET @SQL_INSERT =<br />
+CONCAT('insert into bbc_item_record_',<br />
+LPAD(c_table, 4, 0),<br />
 ' select * from item_records_0000 where id = ?');</p>
-<p>PREPARE STMT_I FROM <a href="https://github.com/SQL_INSERT" class="user-mention">@SQL_INSERT</a>;         </p>
-<p>SET <a href="https://github.com/SQL_DELETE" class="user-mention">@SQL_DELETE</a> =<br>
-CONCAT('DELETE FROM bbc_item_record_',<br>
-LPAD(c_table, 4, 0),<br>
-' where id = ?');<br>
-PREPARE STMT_D FROM <a href="https://github.com/SQL_DELETE" class="user-mention">@SQL_DELETE</a>;<br>
---如果数据已经存在，则先delete在insert<br>
-if <a href="https://github.com/v_row" class="user-mention">@v_row</a>&gt;0 then </p>
-<p>EXECUTE STMT_D using <a href="https://github.com/vv_id" class="user-mention">@vv_id</a>;<br>
+<p>PREPARE STMT_I FROM @SQL_INSERT;         </p>
+<p>SET @SQL_DELETE =<br />
+CONCAT('DELETE FROM bbc_item_record_',<br />
+LPAD(c_table, 4, 0),<br />
+' where id = ?');<br />
+PREPARE STMT_D FROM @SQL_DELETE;<br />
+--如果数据已经存在，则先delete在insert<br />
+if @v_row>0 then </p>
+<p>EXECUTE STMT_D using @vv_id;<br />
 DEALLOCATE PREPARE STMT_D;</p>
-<p>end if;<br>
-EXECUTE STMT_I using <a href="https://github.com/vv_id" class="user-mention">@vv_id</a>;<br>
+<p>end if;<br />
+EXECUTE STMT_I using @vv_id;<br />
 DEALLOCATE PREPARE STMT_I;       </p>
-<p>end if;<br>
-set i=i+1;<br>
-if mod(i,100)=0 then commit;<br>
-end if;<br>
-until v_exit=1<br>
-end repeat;<br>
-close c_ids;<br>
-commit;<br>
-end;<br>
-//<br>
+<p>end if;<br />
+set i=i+1;<br />
+if mod(i,100)=0 then commit;<br />
+end if;<br />
+until v_exit=1<br />
+end repeat;<br />
+close c_ids;<br />
+commit;<br />
+end;<br />
+//<br />
 [/cc]</p>
-<p>-------<br>
-如果全量和增量之间的时间拖的比较长，那么可以设置时间，多做几次增量已缩短最后的停机时间，你懂的。。。<br>
+<p>-------<br />
+如果全量和增量之间的时间拖的比较长，那么可以设置时间，多做几次增量已缩短最后的停机时间，你懂的。。。<br />
 call sp_xf_add_item()//</p>
 <p>EOF</p>
 
@@ -252,12 +248,12 @@ call sp_xf_add_item()//</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/oracle-flashback-query-overview-10g.html" data-toggle="tooltip" data-placement="top" title="Oracle 10g的闪回查询概述">← Previous Post</a>
+                        <a href="/oracle/oracle-flashback-query-overview-10g.html" data-toggle="tooltip" data-placement="top" title="Oracle 10g的闪回查询概述">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/hand-shake-for-a-moment-almost-bought-the-mercedes-benz-smart.html" data-toggle="tooltip" data-placement="top" title="手抖了一下 差点买了奔驰 Smart">Next Post →</a>
+                        <a href="/my%20life/hand-shake-for-a-moment-almost-bought-the-mercedes-benz-smart.html" data-toggle="tooltip" data-placement="top" title="手抖了一下 差点买了奔驰 Smart">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -282,7 +278,7 @@ call sp_xf_add_item()//</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -298,7 +294,7 @@ call sp_xf_add_item()//</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -411,7 +407,7 @@ call sp_xf_add_item()//</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -419,24 +415,22 @@ call sp_xf_add_item()//</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

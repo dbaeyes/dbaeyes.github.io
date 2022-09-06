@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/mysql-optimization-covering-indexes-like.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -113,7 +109,7 @@
                     </div>
                     <h1>MySQL覆盖索引 LIKE优化</h1>
                     
-                    <span class="meta">Posted by David on September 19, 2012</span>
+                    <span class="meta">Posted by Vincent on September 19, 2012</span>
                 </div>
             </div>
         </div>
@@ -126,113 +122,113 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>测试过程：<br>
-[cc lang='sql']<br>
-表结构,创建数据<br>
-root@test 02:16:15&gt;show create table tmp_xf_like\G<br>
-*************************** 1. row ***************************<br>
-Table: tmp_xf_like<br>
-Create Table: CREATE TABLE `tmp_xf_like` (<br>
-`id` int(11) NOT NULL AUTO_INCREMENT,<br>
-`user_id` bigint(20) NOT NULL,<br>
-`title` varchar(128) DEFAULT NULL,<br>
-`memo` varchar(2000) DEFAULT NULL,<br>
-PRIMARY KEY (`id`),<br>
-KEY `idx_userid` (`user_id`,`title`)<br>
-) ENGINE=InnoDB AUTO_INCREMENT=503 DEFAULT CHARSET=utf8<br>
+                <p>测试过程：<br />
+[cc lang='sql']<br />
+表结构,创建数据<br />
+root@test 02:16:15>show create table tmp_xf_like\G<br />
+*************************** 1. row ***************************<br />
+Table: tmp_xf_like<br />
+Create Table: CREATE TABLE `tmp_xf_like` (<br />
+`id` int(11) NOT NULL AUTO_INCREMENT,<br />
+`user_id` bigint(20) NOT NULL,<br />
+`title` varchar(128) DEFAULT NULL,<br />
+`memo` varchar(2000) DEFAULT NULL,<br />
+PRIMARY KEY (`id`),<br />
+KEY `idx_userid` (`user_id`,`title`)<br />
+) ENGINE=InnoDB AUTO_INCREMENT=503 DEFAULT CHARSET=utf8<br />
 1 row in set (0.00 sec)</p>
-<p>insert into tmp_xf_like(user_id,title,memo) values(1,'abc','abcefeghiklimldsdfa'),<br>
+<p>insert into tmp_xf_like(user_id,title,memo) values(1,'abc','abcefeghiklimldsdfa'),<br />
 (2,'ccc','abcefeghiklimldsdfa'),(3,'bdc','abcefeghiklimldsdfa'),(4,'eee','abcefeghiklimldsdfa');</p>
-<p>insert into tmp_xf_like(user_id,title)<br>
-select user_id,title from tmp_xf_like;<br>
-[/cc]<br>
-索引走法<br>
-[cc lang='sql']标准的覆盖索引<br>
-root@test 02:13:21&gt;explain select id from tmp_xf_like where user_id=1 ;<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br>
-| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br>
-| 1 | SIMPLE | tmp_xf_like | ref | idx_userid | idx_userid | 8 | const | 64 | Using index |<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br>
+<p>insert into tmp_xf_like(user_id,title)<br />
+select user_id,title from tmp_xf_like;<br />
+[/cc]<br />
+索引走法<br />
+[cc lang='sql']标准的覆盖索引<br />
+root@test 02:13:21>explain select id from tmp_xf_like where user_id=1 ;<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br />
+| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br />
+| 1 | SIMPLE | tmp_xf_like | ref | idx_userid | idx_userid | 8 | const | 64 | Using index |<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br />
 1 row in set (0.00 sec)</p>
-<p>先根据索引，然后回表<br>
-root@test 02:13:41&gt;explain select * from tmp_xf_like where user_id=1;<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+-------+<br>
-| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+-------+<br>
-| 1 | SIMPLE | tmp_xf_like | ref | idx_userid | idx_userid | 8 | const | 64 | |<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+-------+<br>
+<p>先根据索引，然后回表<br />
+root@test 02:13:41>explain select * from tmp_xf_like where user_id=1;<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+-------+<br />
+| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+-------+<br />
+| 1 | SIMPLE | tmp_xf_like | ref | idx_userid | idx_userid | 8 | const | 64 | |<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+-------+<br />
 1 row in set (0.00 sec)</p>
-<p>还是覆盖索引，但是因为查询字段是两个，所以extra中提示 Using where<br>
-root@test 02:15:05&gt;explain select id from tmp_xf_like where user_id=1 and title='abc';<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------------+------+--------------------------+<br>
-| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------------+------+--------------------------+<br>
-| 1 | SIMPLE | tmp_xf_like | ref | idx_userid | idx_userid | 395 | const,const | 64 | Using where; Using index |<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------------+------+--------------------------+<br>
+<p>还是覆盖索引，但是因为查询字段是两个，所以extra中提示 Using where<br />
+root@test 02:15:05>explain select id from tmp_xf_like where user_id=1 and title='abc';<br />
++----+-------------+-------------+------+---------------+------------+---------+-------------+------+--------------------------+<br />
+| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br />
++----+-------------+-------------+------+---------------+------------+---------+-------------+------+--------------------------+<br />
+| 1 | SIMPLE | tmp_xf_like | ref | idx_userid | idx_userid | 395 | const,const | 64 | Using where; Using index |<br />
++----+-------------+-------------+------+---------------+------------+---------+-------------+------+--------------------------+<br />
 1 row in set (0.01 sec)</p>
-<p>这个sql会先通过user_id过滤，然后回表再过滤title的数据，虽然title已经在联合索引中<br>
-root@test 03:21:47&gt;explain select * from tmp_xf_like where user_id=1 and title like '%b%';<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br>
-| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br>
-| 1 | SIMPLE | tmp_xf_like | ref | idx_userid | idx_userid | 8 | const | 64 | Using where |<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br>
+<p>这个sql会先通过user_id过滤，然后回表再过滤title的数据，虽然title已经在联合索引中<br />
+root@test 03:21:47>explain select * from tmp_xf_like where user_id=1 and title like '%b%';<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br />
+| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br />
+| 1 | SIMPLE | tmp_xf_like | ref | idx_userid | idx_userid | 8 | const | 64 | Using where |<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+-------------+<br />
 1 row in set (0.00 sec)</p>
-<p>这个sql虽然用了like，但是用到了覆盖索引。所以上面的sql我们可以引用这种写法来解决大量回表的问题<br>
-root@test 03:21:48&gt;explain select id from tmp_xf_like where user_id=1 and title like '%b%';<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+--------------------------+<br>
-| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+--------------------------+<br>
-| 1 | SIMPLE | tmp_xf_like | ref | idx_userid | idx_userid | 8 | const | 64 | Using where; Using index |<br>
-+----+-------------+-------------+------+---------------+------------+---------+-------+------+--------------------------+<br>
+<p>这个sql虽然用了like，但是用到了覆盖索引。所以上面的sql我们可以引用这种写法来解决大量回表的问题<br />
+root@test 03:21:48>explain select id from tmp_xf_like where user_id=1 and title like '%b%';<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+--------------------------+<br />
+| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+--------------------------+<br />
+| 1 | SIMPLE | tmp_xf_like | ref | idx_userid | idx_userid | 8 | const | 64 | Using where; Using index |<br />
++----+-------------+-------------+------+---------------+------------+---------+-------+------+--------------------------+<br />
 1 row in set (0.00 sec)</p>
-<p>先使用覆盖索引，然后根据主键和原表关联获取数据<br>
-root@test 03:23:12&gt;explain SELECT T2.*<br>
-    -&gt;   FROM (SELECT ID<br>
-    -&gt;           FROM TMP_XF_LIKE<br>
-    -&gt;          WHERE USER_ID = 1<br>
-    -&gt;            AND TITLE LIKE '%b%') T1,<br>
-    -&gt;        TMP_XF_LIKE T2<br>
-    -&gt;  WHERE T1.ID = T2.ID;<br>
-+----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br>
-| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br>
-+----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br>
-| 1 | PRIMARY | | ALL | NULL | NULL | NULL | NULL | 64 | |<br>
-| 1 | PRIMARY | T2 | eq_ref | PRIMARY | PRIMARY | 4 | T1.ID | 1 | |<br>
-| 2 | DERIVED | TMP_XF_LIKE | ref | idx_userid | idx_userid | 8 | | 64 | Using where; Using index |<br>
-+----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br>
+<p>先使用覆盖索引，然后根据主键和原表关联获取数据<br />
+root@test 03:23:12>explain SELECT T2.*<br />
+    ->   FROM (SELECT ID<br />
+    ->           FROM TMP_XF_LIKE<br />
+    ->          WHERE USER_ID = 1<br />
+    ->            AND TITLE LIKE '%b%') T1,<br />
+    ->        TMP_XF_LIKE T2<br />
+    ->  WHERE T1.ID = T2.ID;<br />
++----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br />
+| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |<br />
++----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br />
+| 1 | PRIMARY | | ALL | NULL | NULL | NULL | NULL | 64 | |<br />
+| 1 | PRIMARY | T2 | eq_ref | PRIMARY | PRIMARY | 4 | T1.ID | 1 | |<br />
+| 2 | DERIVED | TMP_XF_LIKE | ref | idx_userid | idx_userid | 8 | | 64 | Using where; Using index |<br />
++----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br />
 [/cc]</p>
-<p>MySQL的分页sql也有回表的问题，推荐写法如下<br>
-[cc lang='sql']<br>
-root@test 03:29:41&gt;explain<br>
-    -&gt; SELECT T1.ID, T1.user_id, T1.title, T1.memo<br>
-    -&gt;   FROM (SELECT ID<br>
-    -&gt;           FROM tmp_xf_like<br>
-    -&gt;          WHERE user_id = '1'<br>
-    -&gt;          ORDER BY title LIMIT 20, 10) T2,<br>
-    -&gt;        tmp_xf_like T1 FORCE INDEX(PRIMARY)<br>
-    -&gt; WHERE T1.ID = T2.ID;<br>
-+----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br>
-| id | select_type | table       | type   | possible_keys | key        | key_len | ref   | rows | Extra                    |<br>
-+----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br>
-|  1 | PRIMARY     | <derived2>  | ALL    | NULL          | NULL       | NULL    | NULL  |   10 |                          |<br>
-|  1 | PRIMARY     | T1          | eq_ref | PRIMARY       | PRIMARY    | 4       | T2.ID |    1 |                          |<br>
-|  2 | DERIVED     | tmp_xf_like | ref    | idx_userid    | idx_userid | 8       |       |   64 | Using where; Using index |<br>
-+----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br>
-3 rows in set (0.00 sec)</derived2></p>
+<p>MySQL的分页sql也有回表的问题，推荐写法如下<br />
+[cc lang='sql']<br />
+root@test 03:29:41>explain<br />
+    -> SELECT T1.ID, T1.user_id, T1.title, T1.memo<br />
+    ->   FROM (SELECT ID<br />
+    ->           FROM tmp_xf_like<br />
+    ->          WHERE user_id = '1'<br />
+    ->          ORDER BY title LIMIT 20, 10) T2,<br />
+    ->        tmp_xf_like T1 FORCE INDEX(PRIMARY)<br />
+    -> WHERE T1.ID = T2.ID;<br />
++----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br />
+| id | select_type | table       | type   | possible_keys | key        | key_len | ref   | rows | Extra                    |<br />
++----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br />
+|  1 | PRIMARY     | <derived2>  | ALL    | NULL          | NULL       | NULL    | NULL  |   10 |                          |<br />
+|  1 | PRIMARY     | T1          | eq_ref | PRIMARY       | PRIMARY    | 4       | T2.ID |    1 |                          |<br />
+|  2 | DERIVED     | tmp_xf_like | ref    | idx_userid    | idx_userid | 8       |       |   64 | Using where; Using index |<br />
++----+-------------+-------------+--------+---------------+------------+---------+-------+------+--------------------------+<br />
+3 rows in set (0.00 sec)</p>
 <p>普通的mysql分页：</p>
-<p>root@test 03:30:05&gt;explain<br>
-    -&gt; SELECT T1.ID, T1.USER_ID, T1.TITLE, T1.MEMO<br>
-    -&gt;   FROM TMP_XF_LIKE T1<br>
-    -&gt;  WHERE USER_ID = '1'<br>
-    -&gt;  ORDER BY TITLE LIMIT 20, 10;<br>
-+----+-------------+-------+------+---------------+------------+---------+-------+------+-------------+<br>
-| id | select_type | table | type | possible_keys | key        | key_len | ref   | rows | Extra       |<br>
-+----+-------------+-------+------+---------------+------------+---------+-------+------+-------------+<br>
-|  1 | SIMPLE      | T1    | ref  | idx_userid    | idx_userid | 8       | const |   64 | Using where |<br>
+<p>root@test 03:30:05>explain<br />
+    -> SELECT T1.ID, T1.USER_ID, T1.TITLE, T1.MEMO<br />
+    ->   FROM TMP_XF_LIKE T1<br />
+    ->  WHERE USER_ID = '1'<br />
+    ->  ORDER BY TITLE LIMIT 20, 10;<br />
++----+-------------+-------+------+---------------+------------+---------+-------+------+-------------+<br />
+| id | select_type | table | type | possible_keys | key        | key_len | ref   | rows | Extra       |<br />
++----+-------------+-------+------+---------------+------------+---------+-------+------+-------------+<br />
+|  1 | SIMPLE      | T1    | ref  | idx_userid    | idx_userid | 8       | const |   64 | Using where |<br />
 +----+-------------+-------+------+---------------+------------+---------+-------+------+-------------+[/cc]</p>
-<p>--eof</p>
+<p>--eof</derived2></p>
 
 
                 <hr>
@@ -245,12 +241,12 @@ root@test 03:29:41&gt;explain<br>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/thinking/it-cannot-be-said-that-busy.html" data-toggle="tooltip" data-placement="top" title="不能说忙">← Previous Post</a>
+                        <a href="/my%20life/thinking/it-cannot-be-said-that-busy.html" data-toggle="tooltip" data-placement="top" title="不能说忙">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/thinking/busy-fool-away.html" data-toggle="tooltip" data-placement="top" title="忙傻掉了呗">Next Post →</a>
+                        <a href="/thinking/busy-fool-away.html" data-toggle="tooltip" data-placement="top" title="忙傻掉了呗">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -275,7 +271,7 @@ root@test 03:29:41&gt;explain<br>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -291,7 +287,7 @@ root@test 03:29:41&gt;explain<br>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -404,7 +400,7 @@ root@test 03:29:41&gt;explain<br>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -412,24 +408,22 @@ root@test 03:29:41&gt;explain<br>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

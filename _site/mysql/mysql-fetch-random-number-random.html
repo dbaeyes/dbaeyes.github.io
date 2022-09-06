@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/mysql-fetch-random-number-random.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>MYSQL 取随机数 random</h1>
                     
-                    <span class="meta">Posted by David on April 26, 2010</span>
+                    <span class="meta">Posted by Vincent on April 26, 2010</span>
                 </div>
             </div>
         </div>
@@ -125,127 +121,126 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <h1></h1>
-<div>mysql 取随机数
-<p>--对一个表取任意随机数<br>
-SELECT *<br>
-FROM TMP_XF_TEST<br>
-WHERE ID &gt;= (SELECT FLOOR(RAND() * (SELECT MAX(ID) FROM TMP_XF_TEST)))<br>
+<div>mysql 取随机数</p>
+<p>--对一个表取任意随机数<br />
+SELECT *<br />
+FROM TMP_XF_TEST<br />
+WHERE ID &gt;= (SELECT FLOOR(RAND() * (SELECT MAX(ID) FROM TMP_XF_TEST)))<br />
 order by id LIMIT 1;</p>
-<p>--有条件性的取随机数<br>
-SELECT *<br>
-FROM TMP_XF_TEST<br>
-WHERE ID &gt;= (SELECT FLOOR(RAND() *<br>
-((SELECT MAX(ID) FROM TMP_XF_TEST WHERE GID = 9) -<br>
-(SELECT MIN(ID) FROM TMP_XF_TEST WHERE GID = 9))) +<br>
-(SELECT MIN(ID) FROM TMP_XF_TEST WHERE GID = 9))<br>
-AND GID = 9<br>
+<p>--有条件性的取随机数<br />
+SELECT *<br />
+FROM TMP_XF_TEST<br />
+WHERE ID &gt;= (SELECT FLOOR(RAND() *<br />
+((SELECT MAX(ID) FROM TMP_XF_TEST WHERE GID = 9) -<br />
+(SELECT MIN(ID) FROM TMP_XF_TEST WHERE GID = 9))) +<br />
+(SELECT MIN(ID) FROM TMP_XF_TEST WHERE GID = 9))<br />
+AND GID = 9<br />
 ORDER BY ID LIMIT 1;</p>
 <p>--gid上存在索引</p>
-<p>或者<br>
-SELECT *<br>
-FROM TMP_XF_TEST AS t1 JOIN<br>
-(SELECT ROUND(RAND() * ((SELECT MAX(id) FROM TMP_XF_TEST WHERE GID = 9)-(SELECT MIN(id) FROM TMP_XF_TEST WHERE GID = 9))<br>
-+(SELECT MIN(id) FROM TMP_XF_TEST WHERE GID = 9)) AS id) AS t2<br>
-WHERE t1.id &gt;= t2.id AND t1.GID = 9<br>
+<p>或者<br />
+SELECT *<br />
+FROM TMP_XF_TEST AS t1 JOIN<br />
+(SELECT ROUND(RAND() * ((SELECT MAX(id) FROM TMP_XF_TEST WHERE GID = 9)-(SELECT MIN(id) FROM TMP_XF_TEST WHERE GID = 9))<br />
++(SELECT MIN(id) FROM TMP_XF_TEST WHERE GID = 9)) AS id) AS t2<br />
+WHERE t1.id &gt;= t2.id AND t1.GID = 9<br />
 ORDER BY t1.id LIMIT 1;</p>
-<p>#########<br>
+<p>#########<br />
 不要用下面的杯具写法</p>
-<p>mysql&gt; insert into tmp_xf_test(user_nick,gid,item_id,gmt_create,gmt_modified,memo)<br>
--&gt; select user_nick,gid,item_id,gmt_create,gmt_modified,memo from tmp_xf_test;<br>
-Query OK, 165888 rows affected (9.65 sec)<br>
+<p>mysql&gt; insert into tmp_xf_test(user_nick,gid,item_id,gmt_create,gmt_modified,memo)<br />
+-&gt; select user_nick,gid,item_id,gmt_create,gmt_modified,memo from tmp_xf_test;<br />
+Query OK, 165888 rows affected (9.65 sec)<br />
 Records: 165888  Duplicates: 0  Warnings: 0</p>
-<p>mysql&gt; SELECT *<br>
--&gt; FROM `tmp_xf_test`<br>
--&gt; WHERE id &gt;= (SELECT FLOOR( MAX(id) * RAND()) FROM `tmp_xf_test` )<br>
--&gt; ORDER BY id LIMIT 1;<br>
-+-----+-----------+-----+---------+---------------------+---------------------+--------------------+<br>
-| id  | user_nick | gid | item_id | gmt_create          | gmt_modified        | memo               |<br>
-+-----+-----------+-----+---------+---------------------+---------------------+--------------------+<br>
-| 467 | 玄风      |   9 |     123 | 2010-04-26 14:56:39 | 2010-04-26 14:56:39 | 玄风测试使用的数据 |<br>
-+-----+-----------+-----+---------+---------------------+---------------------+--------------------+<br>
+<p>mysql&gt; SELECT *<br />
+-&gt; FROM `tmp_xf_test`<br />
+-&gt; WHERE id &gt;= (SELECT FLOOR( MAX(id) * RAND()) FROM `tmp_xf_test` )<br />
+-&gt; ORDER BY id LIMIT 1;<br />
++-----+-----------+-----+---------+---------------------+---------------------+--------------------+<br />
+| id  | user_nick | gid | item_id | gmt_create          | gmt_modified        | memo               |<br />
++-----+-----------+-----+---------+---------------------+---------------------+--------------------+<br />
+| 467 | 玄风      |   9 |     123 | 2010-04-26 14:56:39 | 2010-04-26 14:56:39 | 玄风测试使用的数据 |<br />
++-----+-----------+-----+---------+---------------------+---------------------+--------------------+<br />
 1 row in set (51.12 sec)</p>
-<p>mysql&gt; explain SELECT *<br>
--&gt; FROM `tmp_xf_test`<br>
--&gt; WHERE id &gt;= (SELECT FLOOR( MAX(id) * RAND()) FROM `tmp_xf_test` )<br>
--&gt; ORDER BY id LIMIT 1\G<br>
-*************************** 1. row ***************************<br>
-id: 1<br>
-select_type: PRIMARY<br>
-table: tmp_xf_test<br>
-type: index<br>
-possible_keys: NULL<br>
-key: PRIMARY<br>
-key_len: 8<br>
-ref: NULL<br>
-rows: 1<br>
-Extra: Using where<br>
-*************************** 2. row ***************************<br>
-id: 2<br>
-select_type: UNCACHEABLE SUBQUERY<br>
-table: tmp_xf_test<br>
-type: index<br>
-possible_keys: NULL<br>
-key: idx_tmp_xf_test_gid<br>
-key_len: 4<br>
-ref: NULL<br>
-rows: 331954<br>
-Extra: Using index<br>
+<p>mysql&gt; explain SELECT *<br />
+-&gt; FROM `tmp_xf_test`<br />
+-&gt; WHERE id &gt;= (SELECT FLOOR( MAX(id) * RAND()) FROM `tmp_xf_test` )<br />
+-&gt; ORDER BY id LIMIT 1\G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: PRIMARY<br />
+table: tmp_xf_test<br />
+type: index<br />
+possible_keys: NULL<br />
+key: PRIMARY<br />
+key_len: 8<br />
+ref: NULL<br />
+rows: 1<br />
+Extra: Using where<br />
+*************************** 2. row ***************************<br />
+id: 2<br />
+select_type: UNCACHEABLE SUBQUERY<br />
+table: tmp_xf_test<br />
+type: index<br />
+possible_keys: NULL<br />
+key: idx_tmp_xf_test_gid<br />
+key_len: 4<br />
+ref: NULL<br />
+rows: 331954<br />
+Extra: Using index<br />
 2 rows in set (0.01 sec)</p>
 <p>---</p>
-<p>mysql&gt; SELECT * FROM `tmp_xf_test` t1 join<br>
--&gt; (SELECT FLOOR( MAX(id) * RAND()) as id FROM `tmp_xf_test` )  as t2<br>
--&gt; where t1.id &gt;=t2.id<br>
--&gt; ORDER BY t1.id LIMIT 1;<br>
-+-------+-----------+-----+---------+---------------------+---------------------+--------------------+-------+<br>
-| id    | user_nick | gid | item_id | gmt_create          | gmt_modified        | memo               | id    |<br>
-+-------+-----------+-----+---------+---------------------+---------------------+--------------------+-------+<br>
-| 40311 | 玄风      |   9 |     123 | 2010-04-28 15:47:19 | 2010-04-28 15:47:19 | 玄风测试使用的数据 | 40311 |<br>
-+-------+-----------+-----+---------+---------------------+---------------------+--------------------+-------+<br>
+<p>mysql&gt; SELECT * FROM `tmp_xf_test` t1 join<br />
+-&gt; (SELECT FLOOR( MAX(id) * RAND()) as id FROM `tmp_xf_test` )  as t2<br />
+-&gt; where t1.id &gt;=t2.id<br />
+-&gt; ORDER BY t1.id LIMIT 1;<br />
++-------+-----------+-----+---------+---------------------+---------------------+--------------------+-------+<br />
+| id    | user_nick | gid | item_id | gmt_create          | gmt_modified        | memo               | id    |<br />
++-------+-----------+-----+---------+---------------------+---------------------+--------------------+-------+<br />
+| 40311 | 玄风      |   9 |     123 | 2010-04-28 15:47:19 | 2010-04-28 15:47:19 | 玄风测试使用的数据 | 40311 |<br />
++-------+-----------+-----+---------+---------------------+---------------------+--------------------+-------+<br />
 1 row in set (0.14 sec)</p>
 <p>##############</p>
-<p>mysql&gt; SELECT * FROM `tmp_xf_test`<br>
--&gt; WHERE id &gt;= (SELECT floor(RAND() * (SELECT MAX(id) FROM `tmp_xf_test`)))<br>
--&gt; ORDER BY id LIMIT 1;<br>
-+------+-----------+-----+---------+---------------------+---------------------+--------------------+<br>
-| id   | user_nick | gid | item_id | gmt_create          | gmt_modified        | memo               |<br>
-+------+-----------+-----+---------+---------------------+---------------------+--------------------+<br>
-| 1352 | 玄风      |   9 |     123 | 2010-04-28 15:47:19 | 2010-04-28 15:47:19 | 玄风测试使用的数据 |<br>
-+------+-----------+-----+---------+---------------------+---------------------+--------------------+<br>
+<p>mysql&gt; SELECT * FROM `tmp_xf_test`<br />
+-&gt; WHERE id &gt;= (SELECT floor(RAND() * (SELECT MAX(id) FROM `tmp_xf_test`)))<br />
+-&gt; ORDER BY id LIMIT 1;<br />
++------+-----------+-----+---------+---------------------+---------------------+--------------------+<br />
+| id   | user_nick | gid | item_id | gmt_create          | gmt_modified        | memo               |<br />
++------+-----------+-----+---------+---------------------+---------------------+--------------------+<br />
+| 1352 | 玄风      |   9 |     123 | 2010-04-28 15:47:19 | 2010-04-28 15:47:19 | 玄风测试使用的数据 |<br />
++------+-----------+-----+---------+---------------------+---------------------+--------------------+<br />
 1 row in set (0.00 sec)</p>
-<p>mysql&gt; explain SELECT * FROM `tmp_xf_test`<br>
--&gt; WHERE id &gt;= (SELECT floor(RAND() * (SELECT MAX(id) FROM `tmp_xf_test`)))<br>
--&gt; ORDER BY id LIMIT 1\G<br>
-*************************** 1. row ***************************<br>
-id: 1<br>
-select_type: PRIMARY<br>
-table: tmp_xf_test<br>
-type: index<br>
-possible_keys: NULL<br>
-key: PRIMARY<br>
-key_len: 8<br>
-ref: NULL<br>
-rows: 1<br>
-Extra: Using where<br>
-*************************** 2. row ***************************<br>
-id: 3<br>
-select_type: SUBQUERY<br>
-table: NULL<br>
-type: NULL<br>
-possible_keys: NULL<br>
-key: NULL<br>
-key_len: NULL<br>
-ref: NULL<br>
-rows: NULL<br>
-Extra: Select tables optimized away<br>
+<p>mysql&gt; explain SELECT * FROM `tmp_xf_test`<br />
+-&gt; WHERE id &gt;= (SELECT floor(RAND() * (SELECT MAX(id) FROM `tmp_xf_test`)))<br />
+-&gt; ORDER BY id LIMIT 1\G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: PRIMARY<br />
+table: tmp_xf_test<br />
+type: index<br />
+possible_keys: NULL<br />
+key: PRIMARY<br />
+key_len: 8<br />
+ref: NULL<br />
+rows: 1<br />
+Extra: Using where<br />
+*************************** 2. row ***************************<br />
+id: 3<br />
+select_type: SUBQUERY<br />
+table: NULL<br />
+type: NULL<br />
+possible_keys: NULL<br />
+key: NULL<br />
+key_len: NULL<br />
+ref: NULL<br />
+rows: NULL<br />
+Extra: Select tables optimized away<br />
 2 rows in set, 1 warning (0.00 sec)</p>
 <p>对应的另外一种杯具写法是：</p>
-<p>SELECT *<br>
-FROM TMP_XF_TEST<br>
-WHERE ID &gt;= (SELECT FLOOR(RAND() * (MAX(ID) - MIN(ID))) + MIN(ID) MID<br>
-FROM TMP_XF_TEST<br>
-WHERE GID = 9)<br>
-AND GID = 9 LIMIT 1;</p>
-</div>
+<p>SELECT *<br />
+FROM TMP_XF_TEST<br />
+WHERE ID &gt;= (SELECT FLOOR(RAND() * (MAX(ID) - MIN(ID))) + MIN(ID) MID<br />
+FROM TMP_XF_TEST<br />
+WHERE GID = 9)<br />
+AND GID = 9 LIMIT 1;</p></div>
 
 
                 <hr>
@@ -258,12 +253,12 @@ AND GID = 9 LIMIT 1;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/cute-little-thing.html" data-toggle="tooltip" data-placement="top" title="可爱的小家伙">← Previous Post</a>
+                        <a href="/my%20life/cute-little-thing.html" data-toggle="tooltip" data-placement="top" title="可爱的小家伙">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/mysql/mysql-explain.html" data-toggle="tooltip" data-placement="top" title="MySQL的 explain">Next Post →</a>
+                        <a href="/mysql/mysql-explain.html" data-toggle="tooltip" data-placement="top" title="MySQL的 explain">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -288,7 +283,7 @@ AND GID = 9 LIMIT 1;</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -304,7 +299,7 @@ AND GID = 9 LIMIT 1;</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -417,7 +412,7 @@ AND GID = 9 LIMIT 1;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -425,24 +420,22 @@ AND GID = 9 LIMIT 1;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

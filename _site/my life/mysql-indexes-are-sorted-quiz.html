@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/my%20life/mysql-indexes-are-sorted-quiz.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>MYSQL 排序 索引 小测</h1>
                     
-                    <span class="meta">Posted by David on June 29, 2009</span>
+                    <span class="meta">Posted by Vincent on June 29, 2009</span>
                 </div>
             </div>
         </div>
@@ -126,149 +122,148 @@
 
                 <p>性能测试中碰到关于mysql排序消耗非常之巨，使用索引来去除排序，可以比较好的降低load。我对mysql是比较初学的</p>
 <div>
-root@orphean 02:19:27&gt;select count(*) from tmp_info;<br>
-+----------+<br>
-| count(*) |<br>
-+----------+<br>
-|    42916 |<br>
-+----------+<br>
-1 row in set (0.02 sec)
-<p>root@orphean 02:29:27&gt;select count(*) from tmp_info where status = 1;<br>
-+----------+<br>
-| count(*) |<br>
-+----------+<br>
-|    32911 |<br>
-+----------+<br>
+root@orphean 02:19:27&gt;select count(*) from tmp_info;<br />
++----------+<br />
+| count(*) |<br />
++----------+<br />
+|    42916 |<br />
++----------+<br />
 1 row in set (0.02 sec)</p>
-<p>root@orphean 02:29:40&gt;select count(*) from tmp_info where status = 2;<br>
-+----------+<br>
-| count(*) |<br>
-+----------+<br>
-|    10005 |<br>
-+----------+<br>
+<p>root@orphean 02:29:27&gt;select count(*) from tmp_info where status = 1;<br />
++----------+<br />
+| count(*) |<br />
++----------+<br />
+|    32911 |<br />
++----------+<br />
+1 row in set (0.02 sec)</p>
+<p>root@orphean 02:29:40&gt;select count(*) from tmp_info where status = 2;<br />
++----------+<br />
+| count(*) |<br />
++----------+<br />
+|    10005 |<br />
++----------+<br />
 1 row in set (0.00 sec)</p>
-<p>root@orphean 02:33:16&gt;select count(*) from tmp_info<br>
--&gt; where status = 1 and outer_sys_code = 1 and<br>
--&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%';<br>
-+----------+<br>
-| count(*) |<br>
-+----------+<br>
-|    32888 |<br>
-+----------+<br>
+<p>root@orphean 02:33:16&gt;select count(*) from tmp_info<br />
+-&gt; where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%';<br />
++----------+<br />
+| count(*) |<br />
++----------+<br />
+|    32888 |<br />
++----------+<br />
 1 row in set (0.19 sec)</p>
-<p>--可以看到虽然加了很多查询条件，但是过滤性并不好，返回的数据量还是比较大，占了增加的表3/4<br>
---看一下全表扫描和用索引的消耗<br>
+<p>--可以看到虽然加了很多查询条件，但是过滤性并不好，返回的数据量还是比较大，占了增加的表3/4<br />
+--看一下全表扫描和用索引的消耗<br />
 索引字段：`status`, `level`, `appraise`, `open_date`, `outer_sys_code`, `gmt_modified`</p>
-<p>root@orphean 04:06:20&gt;explain select count(*) from tmp_info<br>
--&gt; where status = 1 and outer_sys_code = 1 and<br>
--&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%' \G<br>
-*************************** 1. row ***************************<br>
-id: 1<br>
-select_type: SIMPLE<br>
-table: tmp_info<br>
-type: ref<br>
-possible_keys: IDX_RECRUIT_STATUS<br>
-key: IDX_RECRUIT_STATUS<br>
-key_len: 1<br>
-ref: const<br>
-rows: 1626<br>
-Extra: Using where<br>
+<p>root@orphean 04:06:20&gt;explain select count(*) from tmp_info<br />
+-&gt; where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%' \G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: tmp_info<br />
+type: ref<br />
+possible_keys: IDX_RECRUIT_STATUS<br />
+key: IDX_RECRUIT_STATUS<br />
+key_len: 1<br />
+ref: const<br />
+rows: 1626<br />
+Extra: Using where<br />
 1 row in set (0.00 sec)</p>
-<p>+----------+<br>
-| count(*) |<br>
-+----------+<br>
-|    32888 |<br>
-+----------+<br>
+<p>+----------+<br />
+| count(*) |<br />
++----------+<br />
+|    32888 |<br />
++----------+<br />
 1 row in set (0.17 sec)</p>
-<p>=======================<br>
-root@orphean 04:07:08&gt;explain select count(*) from tmp_info IGNORE INDEX (IDX_RECRUIT_STATUS)<br>
--&gt; where status = 1 and outer_sys_code = 1 and<br>
--&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%' \G<br>
-*************************** 1. row ***************************<br>
-id: 1<br>
-select_type: SIMPLE<br>
-table: tmp_info<br>
-type: ALL<br>
-possible_keys: NULL<br>
-key: NULL<br>
-key_len: NULL<br>
-ref: NULL<br>
-rows: 42277<br>
-Extra: Using where<br>
+<p>=======================<br />
+root@orphean 04:07:08&gt;explain select count(*) from tmp_info IGNORE INDEX (IDX_RECRUIT_STATUS)<br />
+-&gt; where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%' \G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: tmp_info<br />
+type: ALL<br />
+possible_keys: NULL<br />
+key: NULL<br />
+key_len: NULL<br />
+ref: NULL<br />
+rows: 42277<br />
+Extra: Using where<br />
 1 row in set (0.00 sec)</p>
-<p>+----------+<br>
-| count(*) |<br>
-+----------+<br>
-|    32888 |<br>
-+----------+<br>
+<p>+----------+<br />
+| count(*) |<br />
++----------+<br />
+|    32888 |<br />
++----------+<br />
 1 row in set (0.14 sec)</p>
 <p>可以看到全表扫描速度要快，其实这个也是可想而知的，用索引扫描返回了表70%多的数据，上面的是count语句，下面看一下分页list语句</p>
-<p>root@orphean 04:12:49&gt;explain select * from tmp_info   where status = 1 and outer_sys_code = 1 and<br>
--&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%'<br>
--&gt; ORDER BY gmt_modified desc<br>
--&gt; LIMIT 1,20 \G<br>
-*************************** 1. row ***************************<br>
-id: 1<br>
-select_type: SIMPLE<br>
-table: tmp_info<br>
-type: ref<br>
-possible_keys: IDX_RECRUIT_STATUS<br>
-key: IDX_RECRUIT_STATUS<br>
-key_len: 1<br>
-ref: const<br>
-rows: 21041<br>
-Extra: Using where<br>
+<p>root@orphean 04:12:49&gt;explain select * from tmp_info   where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%'<br />
+-&gt; ORDER BY gmt_modified desc<br />
+-&gt; LIMIT 1,20 \G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: tmp_info<br />
+type: ref<br />
+possible_keys: IDX_RECRUIT_STATUS<br />
+key: IDX_RECRUIT_STATUS<br />
+key_len: 1<br />
+ref: const<br />
+rows: 21041<br />
+Extra: Using where<br />
 1 row in set (0.00 sec)</p>
-<p>---------------------------+------------------------+---------------------+---------------------+<br>
+<p>---------------------------+------------------------+---------------------+---------------------+<br />
 20 rows in set (0.00 sec)</p>
-<p>root@orphean 04:13:19&gt;explain select * from tmp_info   IGNORE INDEX (IDX_RECRUIT_STATUS)<br>
--&gt; where status = 1 and outer_sys_code = 1 and<br>
--&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%'<br>
--&gt; ORDER BY gmt_modified desc<br>
--&gt; LIMIT 1,20 \G<br>
-*************************** 1. row ***************************<br>
-id: 1<br>
-select_type: SIMPLE<br>
-table: tmp_info<br>
-type: ALL<br>
-possible_keys: NULL<br>
-key: NULL<br>
-key_len: NULL<br>
-ref: NULL<br>
-rows: 42082<br>
-Extra: Using where; Using filesort<br>
+<p>root@orphean 04:13:19&gt;explain select * from tmp_info   IGNORE INDEX (IDX_RECRUIT_STATUS)<br />
+-&gt; where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%'<br />
+-&gt; ORDER BY gmt_modified desc<br />
+-&gt; LIMIT 1,20 \G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: tmp_info<br />
+type: ALL<br />
+possible_keys: NULL<br />
+key: NULL<br />
+key_len: NULL<br />
+ref: NULL<br />
+rows: 42082<br />
+Extra: Using where; Using filesort<br />
 1 row in set (0.00 sec)</p>
-<p>---------------------------+-------------<br>
+<p>---------------------------+-------------<br />
 20 rows in set (0.33 sec)</p>
-<p>这个非常明显，看到使用索引去掉filesort之后，sql的效率非常高，显示执行的时间是0.00s（基本在几个毫秒），而使用全表就需要非常330ms<br>
+<p>这个非常明显，看到使用索引去掉filesort之后，sql的效率非常高，显示执行的时间是0.00s（基本在几个毫秒），而使用全表就需要非常330ms<br />
 如果我把索引中的gmt_modifid字段移后，是排序用不到索引，那是什么效果呢</p>
-<p>ALTER TABLE `orphean`.`tmp_info` DROP INDEX `IDX_RECRUIT_STATUS`,<br>
+<p>ALTER TABLE `orphean`.`tmp_info` DROP INDEX `IDX_RECRUIT_STATUS`,<br />
 ADD INDEX `IDX_RECRUIT_STATUS` USING BTREE(`status`, `level`, `appraise`, `open_date`, `outer_sys_code`， `gmt_modified`);</p>
-<p>root@orphean 04:58:50&gt;EXPLAIN select * from tmp_info<br>
--&gt; where status = 1 and outer_sys_code = 1 and<br>
--&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%'<br>
--&gt; ORDER BY gmt_modified desc<br>
--&gt; LIMIT 1,20 \G<br>
-*************************** 1. row ***************************<br>
-id: 1<br>
-select_type: SIMPLE<br>
-table: tmp_info<br>
-type: ref<br>
-possible_keys: IDX_RECRUIT_STATUS<br>
-key: IDX_RECRUIT_STATUS<br>
-key_len: 1<br>
-ref: const<br>
-rows: 11234<br>
-Extra: Using where; Using filesort<br>
+<p>root@orphean 04:58:50&gt;EXPLAIN select * from tmp_info<br />
+-&gt; where status = 1 and outer_sys_code = 1 and<br />
+-&gt; level &lt;=10000 and appraise &lt;=1000 and open_date &gt;='2009-06-15 11:27:39' and category like '%,1048,%'<br />
+-&gt; ORDER BY gmt_modified desc<br />
+-&gt; LIMIT 1,20 \G<br />
+*************************** 1. row ***************************<br />
+id: 1<br />
+select_type: SIMPLE<br />
+table: tmp_info<br />
+type: ref<br />
+possible_keys: IDX_RECRUIT_STATUS<br />
+key: IDX_RECRUIT_STATUS<br />
+key_len: 1<br />
+ref: const<br />
+rows: 11234<br />
+Extra: Using where; Using filesort<br />
 1 row in set (0.00 sec)</p>
-<p>---------------------------+------------------------+---------------------+---------------------+<br>
+<p>---------------------------+------------------------+---------------------+---------------------+<br />
 20 rows in set (0.35 sec)</p>
 <p>没有用到排序索引消耗的代价比全表扫描来的还大，可惜排序对于mysql的消耗是非常非常大的。 上面的sql比较是将30000多条记录排序啊，代价昂贵！</p>
 <p>在性能测试的时候，使用全表扫描或者没有用上索引排序的时候，数据库CPU在50%（16个CPU用掉了8个），load在8以上，而在用索引去掉排序之后，使CPU下降到4%，load在1以下</p>
-<p>小结：1. 尽可以去除mysql的排序，使用索引。 要使用索引来用作排序，必须索引列都在查询条件中，而且排序字段前面的查询条件是用=号连接，<br>
-因此可能会创建多个索引，前面的字段都相同，只是排序字段的位置不一样的情况。 这个时候用强制索引去提示吧<br>
-2. 如果在确定查询返回的结果集太大，查询条件的筛选度太下，那就干脆用全表扫描吧，用 IGNORE INDEX (IDX_NAME)来忽略索引。</p>
-</div>
+<p>小结：1. 尽可以去除mysql的排序，使用索引。 要使用索引来用作排序，必须索引列都在查询条件中，而且排序字段前面的查询条件是用=号连接，<br />
+因此可能会创建多个索引，前面的字段都相同，只是排序字段的位置不一样的情况。 这个时候用强制索引去提示吧<br />
+2. 如果在确定查询返回的结果集太大，查询条件的筛选度太下，那就干脆用全表扫描吧，用 IGNORE INDEX (IDX_NAME)来忽略索引。</p></div>
 
 
                 <hr>
@@ -281,12 +276,12 @@ Extra: Using where; Using filesort<br>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/my%20life/transformers-2-making-a-comeback.html" data-toggle="tooltip" data-placement="top" title="变形金刚2 卷土重来">← Previous Post</a>
+                        <a href="/my%20life/transformers-2-making-a-comeback.html" data-toggle="tooltip" data-placement="top" title="变形金刚2 卷土重来">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/these-days.html" data-toggle="tooltip" data-placement="top" title="这些天">Next Post →</a>
+                        <a href="/my%20life/these-days.html" data-toggle="tooltip" data-placement="top" title="这些天">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -311,7 +306,7 @@ Extra: Using where; Using filesort<br>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -327,7 +322,7 @@ Extra: Using where; Using filesort<br>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -440,7 +435,7 @@ Extra: Using where; Using filesort<br>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -448,24 +443,22 @@ Extra: Using where; Using filesort<br>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

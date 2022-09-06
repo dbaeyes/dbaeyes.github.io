@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/mysql-logical-backup-has-completed-preparation-of-library-building.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -113,7 +109,7 @@
                     </div>
                     <h1>mysql逻辑备份完成备库搭建</h1>
                     
-                    <span class="meta">Posted by David on September 13, 2012</span>
+                    <span class="meta">Posted by Vincent on September 13, 2012</span>
                 </div>
             </div>
         </div>
@@ -126,76 +122,76 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
-                <p>场景：<br>
-当前1主1备，MM结构<br>
-master A:192.168.0.1:3306<br>
+                <p>场景：<br />
+当前1主1备，MM结构<br />
+master A:192.168.0.1:3306<br />
 slave B:192.168.0.2:3306</p>
-<p>要搭建新的一主一备用于替换老的机器<br>
-master C:192.168.0.3:3306<br>
+<p>要搭建新的一主一备用于替换老的机器<br />
+master C:192.168.0.3:3306<br />
 slave D:192.168.0.4:3306</p>
 <p>1. 先搭建好C-&gt;D的复制，做成MS</p>
-<p>2. 做逻辑备份<br>
-<a href="https://github.com/B" class="user-mention">@B</a>:192.168.0.2:3306</p>
-<p>--记录主库position点<br>
-[cc lang='sql']stop slave;<br>
+<p>2. 做逻辑备份<br />
+@B:192.168.0.2:3306</p>
+<p>--记录主库position点<br />
+[cc lang='sql']stop slave;<br />
 show slave status\G</p>
-<p>root@localhost : (none) 12:03:50&gt; show slave status\G<br>
-*************************** 1. row ***************************<br>
-Slave_IO_State:<br>
-Master_Host: 192.168.0.1<br>
-Master_User: repl<br>
-Master_Port: 3306<br>
-Connect_Retry: 60<br>
-Master_Log_File: mysql-bin.001487<br>
-Read_Master_Log_Pos: 257348319<br>
-Relay_Log_File: mysql-relay-bin.004637<br>
-Relay_Log_Pos: 368556686<br>
-Relay_Master_Log_File: mysql-bin.001477<br>
-Slave_IO_Running: No<br>
-Slave_SQL_Running: No<br>
-Replicate_Do_DB:<br>
-Replicate_Ignore_DB:<br>
-Replicate_Do_Table:<br>
-Replicate_Ignore_Table:<br>
-Replicate_Wild_Do_Table:<br>
-Replicate_Wild_Ignore_Table:<br>
-Last_Errno: 0<br>
-Last_Error:<br>
-Skip_Counter: 0<br>
-Exec_Master_Log_Pos: 368556541<br>
-Relay_Log_Space: 5626137334<br>
-Until_Condition: None<br>
+<p>root@localhost : (none) 12:03:50&gt; show slave status\G<br />
+*************************** 1. row ***************************<br />
+Slave_IO_State:<br />
+Master_Host: 192.168.0.1<br />
+Master_User: repl<br />
+Master_Port: 3306<br />
+Connect_Retry: 60<br />
+Master_Log_File: mysql-bin.001487<br />
+Read_Master_Log_Pos: 257348319<br />
+Relay_Log_File: mysql-relay-bin.004637<br />
+Relay_Log_Pos: 368556686<br />
+Relay_Master_Log_File: mysql-bin.001477<br />
+Slave_IO_Running: No<br />
+Slave_SQL_Running: No<br />
+Replicate_Do_DB:<br />
+Replicate_Ignore_DB:<br />
+Replicate_Do_Table:<br />
+Replicate_Ignore_Table:<br />
+Replicate_Wild_Do_Table:<br />
+Replicate_Wild_Ignore_Table:<br />
+Last_Errno: 0<br />
+Last_Error:<br />
+Skip_Counter: 0<br />
+Exec_Master_Log_Pos: 368556541<br />
+Relay_Log_Space: 5626137334<br />
+Until_Condition: None<br />
 ......[/cc]</p>
-<p>记录下这两个值，用户新备库从老主库做恢复，而不是从老备库做恢复<br>
-[cc lang='sql']Relay_Master_Log_File: mysql-bin.001477<br>
+<p>记录下这两个值，用户新备库从老主库做恢复，而不是从老备库做恢复<br />
+[cc lang='sql']Relay_Master_Log_File: mysql-bin.001477<br />
 Exec_Master_Log_Pos: 368556541[/cc]</p>
-<p>show master stastus;<br>
+<p>show master stastus;<br />
 可以不用执行，因为备库的position值在dump的文件中存在</p>
-<p>开始备份<br>
+<p>开始备份<br />
 [cc lang='sql']mysqldump -uroot -pxxx --master-data=2 --single-transaction --all-database &gt; all.sql &amp;[/cc]</p>
-<p>--master-data=2 记录position值，如果是1，表示在恢复后直接应用该记录<br>
+<p>--master-data=2 记录position值，如果是1，表示在恢复后直接应用该记录<br />
 --single-transaction 避免lock tables</p>
-<p>3. 在新主库做恢复<br>
-<a href="https://github.com/C" class="user-mention">@C</a>:192.168.0.3:3306</p>
+<p>3. 在新主库做恢复<br />
+@C:192.168.0.3:3306</p>
 <p>mysql -uroot &lt; all.sql &gt; /tmp/import.log &amp;[/cc]</p>
 <p>指向主库做恢复</p>
-<p>[cc lang='sql']change master to<br>
-master_host='192.168.0.1',<br>
-master_port=3306,<br>
-master_user='slave',<br>
-master_password='slave',<br>
-master_log_file='mysql-bin.001477',<br>
+<p>[cc lang='sql']change master to<br />
+master_host='192.168.0.1',<br />
+master_port=3306,<br />
+master_user='slave',<br />
+master_password='slave',<br />
+master_log_file='mysql-bin.001477',<br />
 master_log_pos=368556541;[/cc]</p>
-<p>4. 升级下mysql版本，如需要<br>
+<p>4. 升级下mysql版本，如需要<br />
 [cc lang='sql']/u01/mysql/bin/mysql_upgrade -uroot [/cc]</p>
 <p>5. 完成追赶后，做应用的切换，再把主机C指向D</p>
 <p>change master to ...</p>
-<p>做备份需要的权限：<br>
-[cc lang='sql']GRANT REPLICATION SLAVE ON *.* TO 'slave'@'%' IDENTIFIED BY '******';[/cc]<br>
-关于字符集：<br>
-Utf8表数据通过gbk转化导到文件中，部分数据损坏，重新入库数据损坏<br>
-Utf8表数据通过Utf8转化导到文件中，无数据损坏，重新入库数据正常<br>
-Utf8表数据通过latin1转化导到文件中，无数据损坏，重新入库数据正常<br>
+<p>做备份需要的权限：<br />
+[cc lang='sql']GRANT REPLICATION SLAVE ON *.* TO 'slave'@'%' IDENTIFIED BY '******';[/cc]<br />
+关于字符集：<br />
+Utf8表数据通过gbk转化导到文件中，部分数据损坏，重新入库数据损坏<br />
+Utf8表数据通过Utf8转化导到文件中，无数据损坏，重新入库数据正常<br />
+Utf8表数据通过latin1转化导到文件中，无数据损坏，重新入库数据正常<br />
 加参数 --default-character-set=utf8 可以加在mysqlduamp或者load中</p>
 
 
@@ -209,12 +205,12 @@ Utf8表数据通过latin1转化导到文件中，无数据损坏，重新入库�
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/software/hello-world.html" data-toggle="tooltip" data-placement="top" title="Hello world!">← Previous Post</a>
+                        <a href="/software/hello-world.html" data-toggle="tooltip" data-placement="top" title="Hello world!">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/os/command-nc.html" data-toggle="tooltip" data-placement="top" title="command: nc">Next Post →</a>
+                        <a href="/os/command-nc.html" data-toggle="tooltip" data-placement="top" title="command: nc">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -239,7 +235,7 @@ Utf8表数据通过latin1转化导到文件中，无数据损坏，重新入库�
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -255,7 +251,7 @@ Utf8表数据通过latin1转化导到文件中，无数据损坏，重新入库�
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -368,7 +364,7 @@ Utf8表数据通过latin1转化导到文件中，无数据损坏，重新入库�
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -376,24 +372,22 @@ Utf8表数据通过latin1转化导到文件中，无数据损坏，重新入库�
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

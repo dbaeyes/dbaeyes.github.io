@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/track-optimizing-sql.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -113,7 +109,7 @@
                     </div>
                     <h1>跟踪 优化 SQL</h1>
                     
-                    <span class="meta">Posted by David on August 5, 2008</span>
+                    <span class="meta">Posted by Vincent on August 5, 2008</span>
                 </div>
             </div>
         </div>
@@ -128,45 +124,44 @@
 
                 <p>1.获取用户连接</p>
 <div>
-select s.sid sid, s.SERIAL# "serial#", s.username, s.machine, s.program,<br>
-p.spid ServPID, s.server<br>
-from v$session s, v$process p<br>
-where p.addr = s.paddr ;
-<p>2. 启动跟踪功能<br>
+select s.sid sid, s.SERIAL# "serial#", s.username, s.machine, s.program,<br />
+p.spid ServPID, s.server<br />
+from v$session s, v$process p<br />
+where p.addr = s.paddr ;</p>
+<p>2. 启动跟踪功能<br />
 SQL&gt; exec sys.dbms_system.set_sql_trace_in_session(141,982, true);</p>
 <p>3. 运行141,982对应session下的sql语句</p>
-<p>4. 关闭跟踪功能<br>
+<p>4. 关闭跟踪功能<br />
 SQL&gt; exec sys.dbms_system.set_sql_trace_in_session(141,982,false);</p>
-<p>5. 格式化跟踪数据<br>
+<p>5. 格式化跟踪数据<br />
 &gt; tkprof dgtest_ora_3420.trc dgtest_ora_3420.out sys=no explain=hr/hr</p>
 <p>&gt; tkprof dgtest_ora_3420.trc dgtest_ora_3420.out sys=no explain=hr/hr SORT=(EXECPU,FCHCPU)</p>
-<p>============主体部分===================<br>
-update t set owner = 'OOO'<br>
-WHERE<br>
+<p>============主体部分===================<br />
+update t set owner = 'OOO'<br />
+WHERE<br />
 OWNER = 'SYS'</p>
-<p>call     count       cpu    elapsed       disk      query    current        rows<br>
-------- ------ -------- ---------- ---------- ---------- ---------- ----------<br>
-Parse        1      0.00       0.02          0          4          0           0<br>
-Execute      1      0.42       1.85        682      13417      24725       23236<br>
-Fetch        0      0.00       0.00          0          0          0           0<br>
-------- ------ -------- ---------- ---------- ---------- ---------- ----------<br>
+<p>call     count       cpu    elapsed       disk      query    current        rows<br />
+------- ------ -------- ---------- ---------- ---------- ---------- ----------<br />
+Parse        1      0.00       0.02          0          4          0           0<br />
+Execute      1      0.42       1.85        682      13417      24725       23236<br />
+Fetch        0      0.00       0.00          0          0          0           0<br />
+------- ------ -------- ---------- ---------- ---------- ---------- ----------<br />
 total        2      0.42       1.88        682      13421      24725       23236</p>
-<p>Misses in library cache during parse: 1<br>
-Optimizer mode: ALL_ROWS<br>
+<p>Misses in library cache during parse: 1<br />
+Optimizer mode: ALL_ROWS<br />
 Parsing user id: 56 (HR)</p>
-<p>Rows     Row Source Operation<br>
-------- ---------------------------------------------------<br>
-0 UPDATE T (cr=13461 pr=680 pw=0 time=1816660 us)<br>
+<p>Rows     Row Source Operation<br />
+------- ---------------------------------------------------<br />
+0 UPDATE T (cr=13461 pr=680 pw=0 time=1816660 us)<br />
 47174   TABLE ACCESS FULL T (cr=13403 pr=680 pw=0 time=94492 us)</p>
-<p>Rows     Execution Plan<br>
-------- ---------------------------------------------------<br>
-0 UPDATE STATEMENT   MODE: ALL_ROWS<br>
-0   UPDATE OF 'T'<br>
+<p>Rows     Execution Plan<br />
+------- ---------------------------------------------------<br />
+0 UPDATE STATEMENT   MODE: ALL_ROWS<br />
+0   UPDATE OF 'T'<br />
 47174    TABLE ACCESS   MODE: ANALYZED (FULL) OF 'T' (TABLE)</p>
-<p>解释：<br>
-1) sql语句的统计信息<br>
-我们把select语句的执行过程分成3个阶段(分析</p>
-</div>
+<p>解释：<br />
+1) sql语句的统计信息<br />
+我们把select语句的执行过程分成3个阶段(分析</p></div>
 
 
                 <hr>
@@ -179,12 +174,12 @@ Parsing user id: 56 (HR)</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/index-cost.html" data-toggle="tooltip" data-placement="top" title="索引成本计算">← Previous Post</a>
+                        <a href="/oracle/index-cost.html" data-toggle="tooltip" data-placement="top" title="索引成本计算">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/thinking/daniel-chatting.html" data-toggle="tooltip" data-placement="top" title="看大牛们聊天">Next Post →</a>
+                        <a href="/thinking/daniel-chatting.html" data-toggle="tooltip" data-placement="top" title="看大牛们聊天">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -209,7 +204,7 @@ Parsing user id: 56 (HR)</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -225,7 +220,7 @@ Parsing user id: 56 (HR)</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -338,7 +333,7 @@ Parsing user id: 56 (HR)</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -346,24 +341,22 @@ Parsing user id: 56 (HR)</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

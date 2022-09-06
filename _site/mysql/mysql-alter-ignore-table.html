@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/mysql-alter-ignore-table.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -113,7 +109,7 @@
                     </div>
                     <h1>mysql alter ignore table</h1>
                     
-                    <span class="meta">Posted by David on April 14, 2011</span>
+                    <span class="meta">Posted by Vincent on April 14, 2011</span>
                 </div>
             </div>
         </div>
@@ -129,28 +125,28 @@
                 <h1></h1>
 <div>
 <p>Mark</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>IGNORE is a MySQL extension to standard SQL. It controls how <a href="http://dev.mysql.com/doc/refman/4.1/en/alter-table.html">ALTER TABLE</a> works if there are duplicates on unique keys in the new table or if warnings occur when strict mode is enabled. If IGNORE is not specified, the copy is aborted and rolled back if duplicate-key errors occur. If IGNORE is specified, only the first row is used of rows with duplicates on a unique key, The other conflicting rows are deleted. Incorrect values are truncated to the closest matching acceptable value.</p>
-<p> </p>
-<p> </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>root@test 01:57:29&gt;alter ignore table tmp_abc add unique key uk_b(b);</p>
 <p>Query OK, 5 rows affected (0.65 sec)</p>
 <p>Records: 5  Duplicates: 3  Warnings: 0</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>----BUT---- WHY --</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>alter ignore table table_bbb add unique key uk_tcm_sellerid(seller_id,service_date);</p>
 <p>Error 1062: Duplicate entry '10688998-2011-04-11 00:00:00' for key 'uk_tcm_sellerid'</p>
 <p>[2011-04-14 03:00:00] SQL执行失败！</p>
 <p>--- which variables?</p>
-<p> </p>
-<p> </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>##########</p>
 <p>mysql删除表中重复记录的sql，只能搞个临时表了</p>
-<p> </p>
-<p> </p>
-<p> </p>
-<p> </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>create table tmp_xd_del_id as</p>
 <p>select id from tt_stats a</p>
 <p>WHERE a.id != (SELECT MAX(id)</p>
@@ -159,13 +155,13 @@
 <p>AND a.service_date = b.service_date);</p>
 <p>delete from tt_stats where id in(select id from tmp_xd_del_id);</p>
 <p>-- one sql</p>
-<p>delete a from table_name a,<br>
-(select *, min(id) as bid<br>
-from table_name<br>
-group by index_value, member_id<br>
-having count(1) &gt; 1) as b<br>
-where a.index_value = b.index_value<br>
-and a.member_id = b.member_id<br>
+<p>delete a from table_name a,<br />
+(select *, min(id) as bid<br />
+from table_name<br />
+group by index_value, member_id<br />
+having count(1) &gt; 1) as b<br />
+where a.index_value = b.index_value<br />
+and a.member_id = b.member_id<br />
 and a.id &gt; b.bid;</p>
 </div>
 
@@ -180,12 +176,12 @@ and a.id &gt; b.bid;</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/mysql-use-bit-operations.html" data-toggle="tooltip" data-placement="top" title="mysql 使用位运算">← Previous Post</a>
+                        <a href="/mysql/mysql-use-bit-operations.html" data-toggle="tooltip" data-placement="top" title="mysql 使用位运算">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/table-data-and-field-null-implementation-plan-of-error-in-statistical-information.html" data-toggle="tooltip" data-placement="top" title="表数据量和字段空值统计信息导致的执行计划错误">Next Post →</a>
+                        <a href="/oracle/table-data-and-field-null-implementation-plan-of-error-in-statistical-information.html" data-toggle="tooltip" data-placement="top" title="表数据量和字段空值统计信息导致的执行计划错误">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -210,7 +206,7 @@ and a.id &gt; b.bid;</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -226,7 +222,7 @@ and a.id &gt; b.bid;</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -339,7 +335,7 @@ and a.id &gt; b.bid;</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -347,24 +343,22 @@ and a.id &gt; b.bid;</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

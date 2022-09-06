@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/os/iterm2-auto-automatic-login-log-on-script.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -115,7 +111,7 @@
                     </div>
                     <h1>Iterm2 auto login 自动登录脚本</h1>
                     
-                    <span class="meta">Posted by David on October 31, 2012</span>
+                    <span class="meta">Posted by Vincent on November 1, 2012</span>
                 </div>
             </div>
         </div>
@@ -129,39 +125,39 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>入了MAC PRO后，terminal工具需要重新考虑，同事严重推荐使用iterm2，刚开始还没适应过来，用了一段时间的secureCRT，不过secureCRT不支持retina屏，还是转向免费又好用的iterm2</p>
-<p>使用iterm2必须要配置好自动登录,在 Preferences-&gt;Profiles-&gt;新增profile<br>
+<p>使用iterm2必须要配置好自动登录,在 Preferences->Profiles->新增profile<br />
 "Send text at start:"中写入你需要启动是调用的脚本</p>
-<p>1. 直接登录，不用通过中转机方式，简单明了<br>
-[cc lang='sql']#!/usr/bin/expect<br>
-set timeout 120<br>
-spawn /usr/bin/ssh toby@login.xxxx.org<br>
-expect "*password*"<br>
-send "****\n"<br>
+<p>1. 直接登录，不用通过中转机方式，简单明了<br />
+[cc lang='sql']#!/usr/bin/expect<br />
+set timeout 120<br />
+spawn /usr/bin/ssh toby@login.xxxx.org<br />
+expect "*password*"<br />
+send "****\n"<br />
 interact[/cc]</p>
-<p>2. 需要通过挑板机的方式<br>
-[cc lang='sql']#!/bin/sh<br>
-sshcmd='ssh   -o StrictHostKeyChecking=no   -o NumberOfPasswordPrompts=1 -o ConnectTimeout=2'<br>
-online_login_ssh (){<br>
-expect -c "set timeout -1;<br>
-spawn -noecho $sshcmd -tt toby@login.xxx.org  $sshcmd  $2<br>
-expect *assword:*;<br>
-send -- xxxx\r;<br>
-expect *assword:*;<br>
-send -- $1\r;<br>
-interact;";<br>
-}<br>
-online_login_ssh tobypasswd boby@hostnameip[/cc]<br>
+<p>2. 需要通过挑板机的方式<br />
+[cc lang='sql']#!/bin/sh<br />
+sshcmd='ssh   -o StrictHostKeyChecking=no   -o NumberOfPasswordPrompts=1 -o ConnectTimeout=2'<br />
+online_login_ssh (){<br />
+expect -c "set timeout -1;<br />
+spawn -noecho $sshcmd -tt toby@login.xxx.org  $sshcmd  $2<br />
+expect *assword:*;<br />
+send -- xxxx\r;<br />
+expect *assword:*;<br />
+send -- $1\r;<br />
+interact;";<br />
+}<br />
+online_login_ssh tobypasswd boby@hostnameip[/cc]<br />
 脚本的介绍可参考这位网友的文章 <a href="http://hi.baidu.com/nangegehao/item/d4a9c6d8878e423ce2108f0b" title="expect spawn、linux expect 用法小记" target="_blank">expect spawn、linux expect 用法小记</a></p>
 <p>对于登录服务器的密码是动态的，那么可以参考这位网友的写法，使用类似于secureCRT的clone session的方式，避免重复输入密码 <a href="http://laughingchs.iteye.com/blog/1317703" title="linux clone session" target="_blank">linux clone session</a></p>
-<p>在你的登录账户下的.ssh文件夹新建一个文件：config.<br>
-cd ~/.ssh<br>
-config的文件中，内容为：<br>
-[cc lang='sql']host *<br>
-ControlMaster auto<br>
+<p>在你的登录账户下的.ssh文件夹新建一个文件：config.<br />
+cd ~/.ssh<br />
+config的文件中，内容为：<br />
+[cc lang='sql']host *<br />
+ControlMaster auto<br />
 ControlPath ~/.ssh/master-%r@%h:%p[/cc]</p>
-<p>重新打开终端，第一次，你还是需要输入密码，第二次ssh登录同一台机器，你就不用输入密码了，跟secureCRT一样的clone session的方式一样。<br>
-在~/.ssh/目录下发现master-*的sock文件。它记录了你目前登录到的机器，这样的话，你登录同样的机器就会重用同一个链接了。<br>
-config文件的详细介绍可以参考：<br>
+<p>重新打开终端，第一次，你还是需要输入密码，第二次ssh登录同一台机器，你就不用输入密码了，跟secureCRT一样的clone session的方式一样。<br />
+在~/.ssh/目录下发现master-*的sock文件。它记录了你目前登录到的机器，这样的话，你登录同样的机器就会重用同一个链接了。<br />
+config文件的详细介绍可以参考：<br />
 http://linux.die.net/man/5/ssh_config</p>
 <p>使用这种方式只需要输入一次密码即可，所以当使用时，再配合上面介绍的自动登录脚本会有问题，会导致自动登录脚本卡壳住。 解决办法是：在自动登录脚本中欧功能把输入密码的那两行去掉，即可！</p>
 <p>Have fun!</p>
@@ -177,12 +173,12 @@ http://linux.die.net/man/5/ssh_config</p>
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/breakdown-caused-by-swap-in-mysql.html" data-toggle="tooltip" data-placement="top" title="breakdown caused by swap in MySQL">← Previous Post</a>
+                        <a href="/mysql/breakdown-caused-by-swap-in-mysql.html" data-toggle="tooltip" data-placement="top" title="breakdown caused by swap in MySQL">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/bye-bye-2012-new-in-2013.html" data-toggle="tooltip" data-placement="top" title="bye-bye 2012, new in 2013">Next Post →</a>
+                        <a href="/my%20life/bye-bye-2012-new-in-2013.html" data-toggle="tooltip" data-placement="top" title="bye-bye 2012, new in 2013">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -207,7 +203,7 @@ http://linux.die.net/man/5/ssh_config</p>
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -223,7 +219,7 @@ http://linux.die.net/man/5/ssh_config</p>
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -336,7 +332,7 @@ http://linux.die.net/man/5/ssh_config</p>
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -344,24 +340,22 @@ http://linux.die.net/man/5/ssh_config</p>
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

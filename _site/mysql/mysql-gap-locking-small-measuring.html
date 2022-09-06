@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/mysql-gap-locking-small-measuring.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>mysql 间隙锁小测</h1>
                     
-                    <span class="meta">Posted by David on June 17, 2011</span>
+                    <span class="meta">Posted by Vincent on June 17, 2011</span>
                 </div>
             </div>
         </div>
@@ -129,43 +125,43 @@
 <pre>update tmp_xf set c =11 where a = 1;</pre>
 <p>整个tmp_xf表都会被lock。</p>
 <p>所以我们必须在列a上建索引，但是innodb的索引是会有间隙锁（Next-Key)，主要是存在在update对insert的影响上，两个update之间没有影响。 看下面的测试</p>
-<p> </p>
-<p><a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=SHOW">show</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=CREATE">create</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">table</a> tmp_xf\G<br>
-*************************** 1. row ***************************<br>
-<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">Table</a>: tmp_xf<br>
-<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=CREATE">Create</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">Table</a>: <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=CREATE">CREATE</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">TABLE</a> `tmp_xf` (<br>
-`id` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://dev.mysql.com/doc/refman/5.1/en/non-typed-operators.html">NOT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=AUTO_INCREMENT">AUTO_INCREMENT</a>,<br>
-`a` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a>,<br>
-`b` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a>,<br>
-`c` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a>,<br>
-`d` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> '10',<br>
-<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=PRIMARY%20KEY">PRIMARY KEY</a> (`id`),<br>
-<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=KEY">KEY</a> `a` (`a`)<br>
+<p>&nbsp;</p>
+<p><a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=SHOW">show</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=CREATE">create</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">table</a> tmp_xf\G<br />
+*************************** 1. row ***************************<br />
+<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">Table</a>: tmp_xf<br />
+<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=CREATE">Create</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">Table</a>: <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=CREATE">CREATE</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TABLE">TABLE</a> `tmp_xf` (<br />
+`id` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://dev.mysql.com/doc/refman/5.1/en/non-typed-operators.html">NOT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=AUTO_INCREMENT">AUTO_INCREMENT</a>,<br />
+`a` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a>,<br />
+`b` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a>,<br />
+`c` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a>,<br />
+`d` <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INT">int</a>(11) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> '10',<br />
+<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=PRIMARY%20KEY">PRIMARY KEY</a> (`id`),<br />
+<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=KEY">KEY</a> `a` (`a`)<br />
 ) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=ENGINE">ENGINE</a>=<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INNODB">InnoDB</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=AUTO_INCREMENT">AUTO_INCREMENT</a>=77 <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=DEFAULT">DEFAULT</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=">CHARSET</a>=gbk;</p>
-<p><a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=SELECT">select</a> * <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=FROM">from</a> tmp_xf;<br>
-+----+------+------+------+------+<br>
-| id | a    | b    | c    | d    |<br>
-+----+------+------+------+------+<br>
-|  1 |    1 | <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a> |   11 |   10 |<br>
-| 41 |   30 |    1 |    1 |   10 |<br>
-| 42 |   50 |    1 |    1 |   10 |<br>
-| 43 |  100 |    1 |    1 |   10 |<br>
-+----+------+------+------+------+<br>
+<p><a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=SELECT">select</a> * <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=FROM">from</a> tmp_xf;<br />
++----+------+------+------+------+<br />
+| id | a    | b    | c    | d    |<br />
++----+------+------+------+------+<br />
+|  1 |    1 | <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=NULL">NULL</a> |   11 |   10 |<br />
+| 41 |   30 |    1 |    1 |   10 |<br />
+| 42 |   50 |    1 |    1 |   10 |<br />
+| 43 |  100 |    1 |    1 |   10 |<br />
++----+------+------+------+------+<br />
 4 rows <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=IN">in</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=SET">set</a> (0.00 sec)</p>
-<p>session1&amp;#65306;<br>
+<p>session1&amp;#65306;<br />
 <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=UPDATE">update</a> tmp_xf <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=SET">set</a> c =11 <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=WHERE">where</a> a = 1;</p>
-<p>session2&amp;#65306;<br>
+<p>session2&amp;#65306;<br />
 <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INSERT">insert</a> <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=INTO">into</a> tmp_xf (a,b,c) <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=VALUES">values</a> (2,1,1);</p>
-<p>Result&amp;#65306;<br>
-a         <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=LOCK">lock</a> range(<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=ALL">all</a> the row <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=IN">in</a> the range can be inserted)<br>
-1           &lt;=29<br>
-30          1  <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TO">to</a> 49<br>
-50          30 <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TO">to</a> 99<br>
-100         &gt;=50<br>
+<p>Result&amp;#65306;<br />
+a         <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=LOCK">lock</a> range(<a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=ALL">all</a> the row <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=IN">in</a> the range can be inserted)<br />
+1           &lt;=29<br />
+30          1  <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TO">to</a> 49<br />
+50          30 <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=TO">to</a> 99<br />
+100         &gt;=50<br />
 可以看到以查询条件a=50为例，那么锁的范围从上一个值30开始一直到下一个值100的前一个值99，这段范围都不被允许insert记录，update是可以的。 这个类似于起点和终点的概念，如果一边是开区间，那么开区间整个都会被lock</p>
-<p> </p>
+<p>&nbsp;</p>
 <p>简单用3个值来表示，下面是手画的图。</p>
-<p><a href="http://hiphotos.baidu.com/dbaeyes/pic/item/2735dfc3bd81f50bb219a870.jpg" target="_blank"><img src="http://hiphotos.baidu.com/dbaeyes/abpic/item/2735dfc3bd81f50bb219a870.jpg" alt="" width="200" height="143" border="0" data-pinit="registered"></a></p>
+<p><a href="http://hiphotos.baidu.com/dbaeyes/pic/item/2735dfc3bd81f50bb219a870.jpg" target="_blank"><img src="http://hiphotos.baidu.com/dbaeyes/abpic/item/2735dfc3bd81f50bb219a870.jpg" alt="" width="200" height="143" border="0" data-pinit="registered" /></a></p>
 <p>间隙锁（Next-key locking)是为了防止“幻读”问题：不仅对查询中读取的行进行加锁，而且还对索引结构中的间隙（gaps)进行加锁，以防止幻影（Phantom）插入。 -- from 《高性能mysql》</p>
 </div>
 
@@ -180,12 +176,12 @@ a         <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/the-formula-of-the-cost-based.html" data-toggle="tooltip" data-placement="top" title="The formula of the Cost Based">← Previous Post</a>
+                        <a href="/oracle/the-formula-of-the-cost-based.html" data-toggle="tooltip" data-placement="top" title="The formula of the Cost Based">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/my%20life/little-june-june-grow-logs.html" data-toggle="tooltip" data-placement="top" title="小隽隽的成长日志">Next Post →</a>
+                        <a href="/my%20life/little-june-june-grow-logs.html" data-toggle="tooltip" data-placement="top" title="小隽隽的成长日志">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -210,7 +206,7 @@ a         <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -226,7 +222,7 @@ a         <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -339,7 +335,7 @@ a         <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -347,24 +343,22 @@ a         <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

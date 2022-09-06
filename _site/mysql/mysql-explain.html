@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/mysql/mysql-explain.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -109,7 +105,7 @@
                     </div>
                     <h1>MySQL的 explain</h1>
                     
-                    <span class="meta">Posted by David on April 28, 2010</span>
+                    <span class="meta">Posted by Vincent on April 28, 2010</span>
                 </div>
             </div>
         </div>
@@ -167,8 +163,7 @@
 <p>Impossible WHERE noticed after reading const tables：MySQL Query Optimizer 通过收集到的统计信息判断出不可能存在结果。</p>
 <p>No tables：Query 语句中使用 FROM DUAL或不包含任何 FROM子句。</p>
 <p>Not exists：在某些左连接中，MySQL Query Optimizer通过改变原有 Query 的组成而使用的优化方法，可以部分减少数据访问次数</p>
-<p>[原文：<a href="http://book.51cto.com/art/200906/132436.htm%5D">http://book.51cto.com/art/200906/132436.htm]</a></p>
-</div>
+<p>[原文：<a href="http://book.51cto.com/art/200906/132436.htm%5D">http://book.51cto.com/art/200906/132436.htm]</a></div>
 
 
                 <hr>
@@ -181,12 +176,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/mysql/mysql-fetch-random-number-random.html" data-toggle="tooltip" data-placement="top" title="MYSQL 取随机数 random">← Previous Post</a>
+                        <a href="/mysql/mysql-fetch-random-number-random.html" data-toggle="tooltip" data-placement="top" title="MYSQL 取随机数 random">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/sql-page.html" data-toggle="tooltip" data-placement="top" title="sql 分页">Next Post →</a>
+                        <a href="/oracle/sql-page.html" data-toggle="tooltip" data-placement="top" title="sql 分页">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -211,7 +206,7 @@
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -227,7 +222,7 @@
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -340,7 +335,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -348,24 +343,22 @@
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>

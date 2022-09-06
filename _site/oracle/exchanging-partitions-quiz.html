@@ -13,7 +13,7 @@
     <link rel="canonical" href="http://localhost:4000/oracle/exchanging-partitions-quiz.html">
 
     <!-- Icons -->
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -78,10 +78,6 @@
                     <a href="/tags.html">Tags</a>
                 </li>
                 
-                <li>
-                    <a href="/photos/">Photos</a>
-                </li>
-                
 
             </ul>
         </div>
@@ -97,7 +93,7 @@
         background-image: url('/img/fantasy.jpg')
     }
 </style>
-<header class="intro-header">
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -111,7 +107,7 @@
                     </div>
                     <h1>Exchanging Partitions 小测</h1>
                     
-                    <span class="meta">Posted by David on June 8, 2009</span>
+                    <span class="meta">Posted by Vincent on June 8, 2009</span>
                 </div>
             </div>
         </div>
@@ -125,108 +121,108 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
 
                 <p>--exchange partition的语法：</p>
-<div>ALTER TABLE table1<br>
-EXCHANGE PARTITION partition<br>
-WITH TABLE table2<br>
-INDEXES]<br>
-[{ WITH | WITHOUT } VALIDATION]<br>
-[EXCEPTIONS INTO [schema.]table]<br>
-[UPDATE/NVALIDATE GLOBAL INDEXES<br>
-[NOPARALLEL/PARALLEL[int]]]
-<p>普通索引和Global分区索引存在时都不能在交换时including indexes，即不能带索引交换，此时如存在Local分区索引，则索引状态为Unusable<br>
-UPDATE GLOBAL INDEXES选项对普通索引和Global分区索引进行rebuild，但对Local分区索引无效,非分区表的索引也都将UNUSABLE<br>
-WITHOUT VALIDATION选项将会把不符合分区规则的数据强制交换过来，这种情况就会出现交换后分区中的数据存在违背分区条件的情况<br>
+<div>ALTER TABLE table1<br />
+EXCHANGE PARTITION partition<br />
+WITH TABLE table2<br />
+INDEXES]<br />
+[{ WITH | WITHOUT } VALIDATION]<br />
+[EXCEPTIONS INTO [schema.]table]<br />
+[UPDATE/NVALIDATE GLOBAL INDEXES<br />
+[NOPARALLEL/PARALLEL[int]]]</p>
+<p>普通索引和Global分区索引存在时都不能在交换时including indexes，即不能带索引交换，此时如存在Local分区索引，则索引状态为Unusable<br />
+UPDATE GLOBAL INDEXES选项对普通索引和Global分区索引进行rebuild，但对Local分区索引无效,非分区表的索引也都将UNUSABLE<br />
+WITHOUT VALIDATION选项将会把不符合分区规则的数据强制交换过来，这种情况就会出现交换后分区中的数据存在违背分区条件的情况<br />
 不带索引交换时也需要检查是否存在主键 如有则也需要在中间表创建，否则无法进行正常地交换。原因是当有数据的segment交换到对方，而对方存在主键导致无法检验约束</p>
 <p>--测试过程！！！</p>
-<p>insert into test_p<br>
-select * from test_p;<br>
-----<br>
+<p>insert into test_p<br />
+select * from test_p;<br />
+----<br />
 SQL&gt; select count(*) from test_p;</p>
-<p>COUNT(*)<br>
-----------<br>
-2788920<br>
-----<br>
-create table test_pt<br>
-( ID                  NUMBER not null,<br>
-RATER_TYPE          NUMBER(1) default 0)<br>
-PARTITION BY RANGE (rater_type)<br>
-(<br>
-PARTITION p_rated VALUES LESS THAN<br>
-( 1 ) ,<br>
-PARTITION p_rater VALUES LESS THAN<br>
-( 2 )<br>
-);<br>
-----<br>
-SQL&gt; select count(*) from test_pt;<br>
-COUNT(*)         0<br>
+<p>COUNT(*)<br />
+----------<br />
+2788920<br />
+----<br />
+create table test_pt<br />
+( ID                  NUMBER not null,<br />
+RATER_TYPE          NUMBER(1) default 0)<br />
+PARTITION BY RANGE (rater_type)<br />
+(<br />
+PARTITION p_rated VALUES LESS THAN<br />
+( 1 ) ,<br />
+PARTITION p_rater VALUES LESS THAN<br />
+( 2 )<br />
+);<br />
+----<br />
+SQL&gt; select count(*) from test_pt;<br />
+COUNT(*)         0<br />
 ----</p>
-<p>15:53:57 SQL&gt; insert /*+ append */ into test_pt select * from test_p;<br>
-2788896 rows created.<br>
+<p>15:53:57 SQL&gt; insert /*+ append */ into test_pt select * from test_p;<br />
+2788896 rows created.<br />
 Elapsed: 00:00:24.62</p>
-<p>15:58:30 SQL&gt; select count(*) from test_pt partition(p_rated);<br>
-COUNT(*)<br>
-----------<br>
+<p>15:58:30 SQL&gt; select count(*) from test_pt partition(p_rated);<br />
+COUNT(*)<br />
+----------<br />
 1292320</p>
-<p>create table TEST_PT_RATED<br>
-( ID                  NUMBER not null,<br>
-RATER_TYPE          NUMBER(1) default 0<br>
+<p>create table TEST_PT_RATED<br />
+( ID                  NUMBER not null,<br />
+RATER_TYPE          NUMBER(1) default 0<br />
 );</p>
-<p>create table TEST_PT_RATER<br>
-( ID                  NUMBER not null,<br>
-RATER_TYPE          NUMBER(1) default 0<br>
+<p>create table TEST_PT_RATER<br />
+( ID                  NUMBER not null,<br />
+RATER_TYPE          NUMBER(1) default 0<br />
 );</p>
-<p>alter table TEST_PT<br>
-exchange partition p_rated<br>
-with table TEST_PT_RATED<br>
+<p>alter table TEST_PT<br />
+exchange partition p_rated<br />
+with table TEST_PT_RATED<br />
 without validation;</p>
-<p>Table altered.<br>
-Elapsed: 00:00:00.03<br>
+<p>Table altered.<br />
+Elapsed: 00:00:00.03<br />
 --使用without validation一般会更快，实际做的动作只是更新了一下数据字典而已</p>
-<p>alter table TEST_PT<br>
-exchange partition p_rater<br>
+<p>alter table TEST_PT<br />
+exchange partition p_rater<br />
 with table TEST_PT_RATER;</p>
-<p>Table altered.<br>
-Elapsed: 00:00:00.04<br>
+<p>Table altered.<br />
+Elapsed: 00:00:00.04<br />
 --不带without validation一样迅速，新表并不存在索引之类的玩意儿</p>
-<p>SEGMENT_NAME                   segment_size(G) SEGMENT_TYPE<br>
------------------------------- --------------- ------------------<br>
-TEST_PT                                      0 TABLE PARTITION<br>
-TEST_PT_RATER                              .45 TABLE<br>
+<p>SEGMENT_NAME                   segment_size(G) SEGMENT_TYPE<br />
+------------------------------ --------------- ------------------<br />
+TEST_PT                                      0 TABLE PARTITION<br />
+TEST_PT_RATER                              .45 TABLE<br />
 TEST_PT_RATED                              .47 TABLE</p>
 <p>可以看到EXCHANGE PARTITION是非常迅速，而且并不需要额外的表空间！</p>
 <p>create index idx_pt_id on TEST_PT(id);</p>
 <p>create index idx_pt_rater_id on TEST_PT_RATER(id);</p>
 <p>create index idx_pt_rated_id on TEST_PT_RATED(id);</p>
-<p>16:56:11 SQL&gt; alter table TEST_PT<br>
-16:57:41   2 exchange partition p_rated<br>
-16:57:41   3 with table TEST_PT_RATED<br>
-16:57:41   4 including indexes<br>
-16:57:41   5 without validation;<br>
-with table TEST_PT_RATED<br>
-*<br>
-ERROR at line 3:<br>
-ORA-14098: index mismatch for tables in ALTER TABLE EXCHANGE PARTITION<br>
+<p>16:56:11 SQL&gt; alter table TEST_PT<br />
+16:57:41   2 exchange partition p_rated<br />
+16:57:41   3 with table TEST_PT_RATED<br />
+16:57:41   4 including indexes<br />
+16:57:41   5 without validation;<br />
+with table TEST_PT_RATED<br />
+*<br />
+ERROR at line 3:<br />
+ORA-14098: index mismatch for tables in ALTER TABLE EXCHANGE PARTITION<br />
 --存在index名字不一样的索引是不允许带including indexes交换</p>
-<p>Elapsed: 00:00:00.02<br>
-16:57:42 SQL&gt; alter table TEST_PT<br>
-16:58:05   2 exchange partition p_rated<br>
-16:58:05   3 with table TEST_PT_RATED<br>
-16:58:05   4 without validation;<br>
-Table altered.<br>
+<p>Elapsed: 00:00:00.02<br />
+16:57:42 SQL&gt; alter table TEST_PT<br />
+16:58:05   2 exchange partition p_rated<br />
+16:58:05   3 with table TEST_PT_RATED<br />
+16:58:05   4 without validation;<br />
+Table altered.<br />
 Elapsed: 00:00:00.05</p>
 <p>alter index IDX_PT_RATED_ID rebuild;</p>
-<p>---<br>
+<p>---<br />
 drop index idx_pt_rater_id;</p>
-<p>alter table TEST_PT<br>
-exchange partition p_rater<br>
-with table TEST_PT_RATER<br>
-including indexes<br>
+<p>alter table TEST_PT<br />
+exchange partition p_rater<br />
+with table TEST_PT_RATER<br />
+including indexes<br />
 without validation;</p>
-<p>Table altered.<br>
+<p>Table altered.<br />
 Elapsed: 00:00:00.03</p>
-<p>----<br>
-以前的记录： <a href="http://hi.baidu.com/dbaeyes/blog/item/83408bf2d9b05011b07ec5cc.html" target="_blank">http://hi.baidu.com/dbaeyes/blog/item/83408bf2d9b05011b07ec5cc.html</a><br>
-ORACLE DOC <a href="http://download.oracle.com/docs/cd/B19306_01/server.102/b14231/partiti.htm#sthref2762" target="_blank">http://download.oracle.com/docs/cd/B19306_01/server.102/b14231/partiti.htm#sthref2762<br>
+<p>----<br />
+以前的记录： <a href="http://hi.baidu.com/dbaeyes/blog/item/83408bf2d9b05011b07ec5cc.html" target="_blank">http://hi.baidu.com/dbaeyes/blog/item/83408bf2d9b05011b07ec5cc.html</a><br />
+ORACLE DOC <a href="http://download.oracle.com/docs/cd/B19306_01/server.102/b14231/partiti.htm#sthref2762" target="_blank">http://download.oracle.com/docs/cd/B19306_01/server.102/b14231/partiti.htm#sthref2762<br />
 </a></p>
 <h3>Exchanging Partitions</h3>
 <p>You can convert a partition (or subpartition) into a non-partitioned table, and a non-partitioned table into a partition (or subpartition) of a partitioned table by exchanging their data segments. You can also convert a hash-partitioned table into a partition of a range-hash partitioned table, or convert the partition of the range-hash partitioned table into a hash-partitioned table. Similarly, you can convert a list-partitioned table into a partition of a range-list partitioned table, or convert the partition of the range-list partitioned table into a list-partitioned table</p>
@@ -252,12 +248,12 @@ ORACLE DOC <a href="http://download.oracle.com/docs/cd/B19306_01/server.102/b14
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/oracle/insert-append-vs-create-table-as.html" data-toggle="tooltip" data-placement="top" title="insert append vs. create table as">← Previous Post</a>
+                        <a href="/oracle/insert-append-vs-create-table-as.html" data-toggle="tooltip" data-placement="top" title="insert append vs. create table as">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/oracle/oracle-start-with-connect-by-prior-clause-usage-zt.html" data-toggle="tooltip" data-placement="top" title="Oracle start with...connect by prior 子句用法 (zt)">Next Post →</a>
+                        <a href="/oracle/oracle-start-with-connect-by-prior-clause-usage-zt.html" data-toggle="tooltip" data-placement="top" title="Oracle start with...connect by prior 子句用法 (zt)">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -282,7 +278,7 @@ ORACLE DOC <a href="http://download.oracle.com/docs/cd/B19306_01/server.102/b14
 
 
 
-
+</script>
 
 <!-- async load function -->
 <script>
@@ -298,7 +294,7 @@ ORACLE DOC <a href="http://download.oracle.com/docs/cd/B19306_01/server.102/b14
 
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+    async("https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js",function(){
         anchors.options = {
           visible: 'always',
           placement: 'right',
@@ -411,7 +407,7 @@ ORACLE DOC <a href="http://download.oracle.com/docs/cd/B19306_01/server.102/b14
 
                 </ul>
                 <p class="copyright text-muted">
-                © 2011~2022 Vincent ♪ Powered by Jekyll.
+                &copy; 2011~2022 Vincent ♪ Powered by Jekyll.
                 </p>
             </div>
         </div>
@@ -419,24 +415,22 @@ ORACLE DOC <a href="http://download.oracle.com/docs/cd/B19306_01/server.102/b14
 </footer>
 
 <!-- jQuery -->
-<script src="/js/jquery.min.js%20"></script>
+<script src="/js/jquery.min.js "></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js%20"></script>
+<script src="/js/bootstrap.min.js "></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="/js/clean-blog.min.js%20"></script>
+<script src="/js/clean-blog.min.js "></script>
 
 
 
 
 <!-- Highlight.js -->
-<script>
-    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
-        hljs.initHighlightingOnLoad();
-    })
-</script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>
