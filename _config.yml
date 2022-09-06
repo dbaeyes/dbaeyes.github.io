@@ -1,7 +1,7 @@
 # Site settings
 title: DBAeyes
-header-img: "img/autumn2.jpg"
-tagline: "相遇在南十字星下2"
+header-img: "/img/autumn2.jpg"
+tagline: "相遇在南十字星下"
 description: "Meet at the Southern Cross constellation(Crux)"
 baseurl: ""
 url: "https://dbaeyes.github.io"
@@ -33,7 +33,6 @@ kramdown:
 highlighter: rouge
 
 plugins:
-# - jekyll-gallery-generator
 - jekyll-paginate
 permalink: none
 paginate: 8
@@ -54,7 +53,7 @@ defaults:
     values:
       layout: "post"
       author: "Vincent"
-      header-img: "img/fantasy.jpg" # We don't want posts without a header image, that whould mean white on white
+      header-img: "/img/fantasy.jpg" # We don't want posts without a header image, that whould mean white on white
 
 
 # Comments
