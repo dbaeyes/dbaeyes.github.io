@@ -1,6 +1,6 @@
 # Site settings
 title: DBAeyes
-header-img: "/img/autumn2.jpg"
+header-img: "img/autumn2.jpg"
 tagline: "相遇在南十字星下"
 description: "Meet at the Southern Cross constellation(Crux)"
 baseurl: ""
@@ -53,7 +53,7 @@ defaults:
     values:
       layout: "post"
       author: "Vincent"
-      header-img: "/img/fantasy.jpg" # We don't want posts without a header image, that whould mean white on white
+      header-img: "img/fantasy.jpg" # We don't want posts without a header image, that whould mean white on white
 
 
 # Comments
