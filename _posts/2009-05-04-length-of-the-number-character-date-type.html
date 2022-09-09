@@ -1,0 +1,50 @@
+---
+layout: post
+title: 数字、字符、日期类型的长度
+date: 2009-05-04 17:37:06.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+meta:
+  views: '828'
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+---
+<h1></h1>
+<div>insert into tmp_xf_test values(923456789012,'Ad62d45cf37fc5ae977429bd7189373d',sysdate);</p>
+<table width="668" border="0" cellspacing="0" cellpadding="0">
+<colgroup>
+<col width="85" />
+<col width="205" />
+<col width="55" />
+<col width="118" />
+<col width="205" /></colgroup>
+<tbody>
+<tr>
+<td width="85" height="17">I</td>
+<td width="205">DUMP(I)</td>
+<td width="55">NN</td>
+<td width="118">DUMP(NN)</td>
+<td width="205">DUMP(GMT)</td>
+</tr>
+<tr>
+<td align="right" height="17">923456789012</td>
+<td>Typ=2<strong> Len=7:</strong>198,93,35,57,79,91,13</td>
+<td>Ad62d45cf37fc5ae977429bd7189373d</td>
+<td>Typ=1 <strong>Len=32</strong>: 65,100,54,50,100,52,53<span>…</span></td>
+<td>Typ=12 <strong>Len=7</strong>: 120,109,5,4,18,29,12</td>
+</tr>
+</tbody>
+</table>
+<p>提倡使用数字ID</p>
+<p>number[（[,]）]。<br />
+缺省的精度是38,scale是0.<br />
+PLS_INTEGER<br />
+-2147483647-2147483647</p>
+<p>在Oracle中Number类型可以用来存储0，正负定点或者浮点数，可表示的数据范围在<br />
+1.0 * 10(-130) —— 9.9...9 * 10(125) {38个9后边带88个0}<br />
+的数字，当Oracle中的数学表达式的值&gt;=1.0*10(126)时，Oracle就会报错。</p></div>

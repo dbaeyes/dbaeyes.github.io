@@ -1,0 +1,24 @@
+---
+layout: post
+title: Oralce性能调整的顺序
+date: 2007-08-16 09:41:22.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- performance
+- tuning
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '436'
+---
+<h1></h1>
+<div>1. 服务器、网络、磁盘调整<br />
+2. 实例调整。对Oracle SGA进行调整，并查看所有oracle初始化参数以保证对数据块进行了正确的配置。    以8i为例：db_block_buffers,shared_pool_size以及sort_area_size资源短缺的情况<br />
+3. 对象调整。表和索引等设置<br />
+4. SQL调整。 识别出最常使用的SQL<br />
+5. 设计调整。 应用的设计是Oracle性能中最重要的因素。</div>

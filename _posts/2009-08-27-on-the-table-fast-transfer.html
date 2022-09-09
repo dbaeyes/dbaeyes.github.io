@@ -1,0 +1,82 @@
+---
+layout: post
+title: 对大表的快速复制
+date: 2009-08-27 14:59:52.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- sql
+- data
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '1040'
+---
+<p>一般我们采用复制表的方式主要是</p>
+<div>create table table_name<br />
+as select /*+ parallel (t 10)*/  * from t_name t ...</p>
+<p>insert /*+ append */ into table_name<br />
+select  /*+ parallel (t 10)*/ * from tname t ...</p>
+<p>这两者方法都没有问题，但如果数据量到达一定程度，比如说10亿，大小400G，而且表上还存在业务，这样的话，很容易出现01555的问题。 我在运行了3个小时后遇到了恼人的01555，将undo_retention改到一个足够大的值还是不行，毕竟表太大，而且表上有业务在更新数据。</p>
+<p>有一种方式可以避免01555，可以从物理备库恢复到某个时刻后，从备库表拖数据，这样上面的问题是没有了，不过有一点是需要考虑的，通过单dblink的话是有网络流量限制的，一般是20M/S，这样400G的表需要7个小时，还是太慢了。</p>
+<p>最终考虑采用extent的方式，一块一块的拖，在我预想这样的速度应该会比直接在主库复制一个新表要慢一下的。<br />
+事实胜于雄辩，采用extent的方式，开12个进程，花了2个半小时完成了整个表的复制。不开12个并行直接复制表快了30%，而且采用extnt的方式比较灵活，可以在很多情况下继续上次为完成的工作，就是所谓的断点了,当然这种方式也是有一定代价的，负载会比前面的方法至少高一倍以上</p>
+<p>------------------------------------------------------------<br />
+create table MY_ROWID<br />
+(<br />
+ID        NUMBER,<br />
+ROWID_MIN VARCHAR2(100),<br />
+ROWID_MAX VARCHAR2(100),<br />
+HAS_DEAL  NUMBER<br />
+);</p>
+<p>insert into my_rowid(id,rowid_min,rowid_max,has_deal)<br />
+select rownum,<br />
+DBMS_ROWID.ROWID_CREATE(1,o.data_object_id,e.RELATIVE_FNO,e.BLOCK_ID,0),<br />
+DBMS_ROWID.ROWID_CREATE(1,o.data_object_id,e.RELATIVE_FNO,e.BLOCK_ID+e.BLOCKS-1,10000),<br />
+0<br />
+from dba_extents e,dba_objects o<br />
+where e.segment_name=upper('base_table')<br />
+and e.owner='FBADMIN'<br />
+AND o.object_name = upper('base_table')<br />
+AND o.owner='FBADMIN';</p>
+<p>commit;<br />
+----------------------------------------------------------------------<br />
+CREATE OR REPLACE PROCEDURE SP_XF_COPY_TABLE(N NUMBER) IS<br />
+/*<br />
+复制评价表<br />
+2009-8-26<br />
+*/</p>
+<p>V_SQLERRM VARCHAR2(200);<br />
+BEGIN<br />
+FOR C IN (SELECT ID, ROWID_MIN, ROWID_MAX<br />
+FROM MY_ROWID<br />
+WHERE HAS_DEAL = 0<br />
+AND MOD(ID, 12) = N) LOOP</p>
+<p>INSERT  INTO<br />
+SELECT /*+ rowid(t) */<br />
+*<br />
+FROM base_table t<br />
+WHERE ROWID &gt;= CHARTOROWID(C.ROWID_MIN)<br />
+AND ROWID &lt;= CHARTOROWID(C.ROWID_MAX);</p>
+<p>UPDATE MY_ROWID SET HAS_DEAL = 1 WHERE ID = C.ID;<br />
+COMMIT;<br />
+END LOOP;<br />
+COMMIT;<br />
+EXCEPTION<br />
+WHEN OTHERS THEN<br />
+V_SQLERRM := SUBSTR(SQLERRM, 1, 200);<br />
+DBMS_OUTPUT.PUT_LINE(V_SQLERRM);</p>
+<p>ROLLBACK;<br />
+END SP_XF_COPY_TABLE;</p>
+<p>---------</p>
+<p>尽量使用后台跑脚本<br />
+nohup $HOME/worksh/sp_xf_tmp00.sh &gt;/tmp/sp_xf_tmp00.txt &amp;</p>
+<p>--check data<br />
+SELECT COUNT(*) from my_rowid t WHERE has_deal = 0;</p>
+<p>~~~~~~~~~~~~~~~~~~~~~<br />
+很多情况下可以使用extent来处理大表的数据</p>
+<p>--EOF--</p></div>

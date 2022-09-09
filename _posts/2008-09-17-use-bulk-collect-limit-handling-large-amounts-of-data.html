@@ -1,0 +1,64 @@
+---
+layout: post
+title: 使用bulk collect limit处理大量数据
+date: 2008-09-17 23:05:35.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- sql
+- pl sql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '841'
+---
+<p>很多时候需要出来大量的数据，这个时候分批获取和提交对减少系统的负载是非常有帮助的！</p>
+<p>例子：</p>
+<p>create table t<br />
+as<br />
+select * from dba_objects;<br />
+------------------------------</p>
+<p>alter table T add constraint PK_T primary key (OBJECT_ID);<br />
+------------------------------</p>
+<p>create table t1 (names varchar2(50));<br />
+----------------------------------</p>
+<p>对应的存储过程<br />
+[cc lang="sql"]<br />
+/*<br />
+creator:玄风<br />
+date:2008-9-17<br />
+function:分批处理大量数据例子<br />
+*/<br />
+create or replace procedure SP_TEST_BULK(id_begin in number,<br />
+                                         id_end   in number) is</p>
+<p>v_cnt number;</p>
+<p>type rec_ids is table of varchar2(50);<br />
+v_ids rec_ids;</p>
+<p>cursor c1 is<br />
+    select object_name<br />
+      from t<br />
+     where object_id >= id_begin<br />
+       and object_id <= id_end;</p>
+<p>begin<br />
+open c1;<br />
+loop<br />
+    fetch c1 bulk collect<br />
+      into v_ids limit 5000;</p>
+<p>    v_cnt := v_ids.count;</p>
+<p>    for i in 1 .. v_cnt loop<br />
+      insert into t1 (names) values (v_ids(i));</p>
+<p>      if mod(i, 10) = 0 then<br />
+        commit;<br />
+      end if;<br />
+    end loop;</p>
+<p>    exit when c1%notfound;<br />
+end loop;</p>
+<p>commit;<br />
+close c1;</p>
+<p>end SP_TEST_BULK;<br />
+[/cc]<br />
+--EOF--</p>

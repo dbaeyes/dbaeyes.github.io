@@ -1,0 +1,164 @@
+---
+layout: post
+title: mysql取随机数之索引使用
+date: 2011-05-29 20:22:40.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- index
+- mysql
+- tuning
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '1113'
+---
+<p>之前写过关于mysql取随机数的记录，当时没有去分析表里数据量的分布情况，所以当执行计划不同时，实际的效果有非常大的差别。<br />
+[cc lang='sql']dbaeyes 06:47:52>select count(*) ,status from act_info group by status;<br />
++----------+--------+<br />
+| count(*) | status |<br />
++----------+--------+<br />
+|   989978 |      0 |<br />
+|       20 |      1 |<br />
+|        1 |      2 |<br />
+|        1 |      3 |<br />
++----------+--------+[/cc]<br />
+表中的status的大部分数据都是0（初始化状态）<br />
+用之前文章中提到的方式 索引 idx_info_status(status,id)<br />
+[cc lang='sql']dbaeyes 06:53:30>explain SELECT t1.*<br />
+    -> FROM<br />
+    -> (SELECT ROUND(RAND() * (<br />
+    -> (SELECT MAX(id) FROM act_info WHERE status = 0)-<br />
+    -> (SELECT MIN(id) FROM act_info WHERE status = 0))<br />
+    -> +(SELECT MIN(id) FROM act_info WHERE status = 0)) AS id) AS t2,act_info AS t1<br />
+    -> WHERE t1.id >= t2.id AND t1.status = 0<br />
+    -> ORDER BY t1.id LIMIT 3 ;<br />
++----+-------------+------------+--------+--------------------------------+------------------------+---------+-------+--------+------------------------------+<br />
+| id | select_type | table      | type   | possible_keys                  | key                    | key_len | ref   | rows   | Extra                        |<br />
++----+-------------+------------+--------+--------------------------------+------------------------+---------+-------+--------+------------------------------+<br />
+|  1 | PRIMARY     | <derived2> | system | NULL                           | NULL                   | NULL    | NULL  |      1 |                              |<br />
+|  1 | PRIMARY     | t1         | ref    | PRIMARY,idx_info_stat | idx_info_stat| 4       | const | 257438 | Using where                  |<br />
+|  2 | DERIVED     | NULL       | NULL   | NULL                           | NULL                   | NULL    | NULL  |   NULL | No tables used               |<br />
+|  5 | SUBQUERY    | NULL       | NULL   | NULL                           | NULL                   | NULL    | NULL  |   NULL | Select tables optimized away |<br />
+|  4 | SUBQUERY    | NULL       | NULL   | NULL                           | NULL                   | NULL    | NULL  |   NULL | Select tables optimized away |<br />
+|  3 | SUBQUERY    | NULL       | NULL   | NULL                           | NULL                   | NULL    | NULL  |   NULL | Select tables optimized away |<br />
++----+-------------+------------+--------+--------------------------------+------------------------+---------+-------+--------+------------------------------+<br />
+6 rows in set (0.00 sec)[/cc]<br />
+通过explain可以看到可选主键primary或者索引方式，mysql选择了索引扫描，扫描记录是有25w<br />
+直接执行时间：<br />
+3 rows in set (3.81 sec)</p>
+<p>通过改用强制索引（主键）的方式</p>
+<p>[cc lang='sql']dbaeyes 06:53:48>explain SELECT t1.*<br />
+    -> FROM<br />
+    -> (SELECT ROUND(RAND() * (<br />
+    -> (SELECT MAX(id) FROM act_info WHERE status = 0)-<br />
+    -> (SELECT MIN(id) FROM act_info WHERE status = 0))<br />
+    -> +(SELECT MIN(id) FROM act_info WHERE status = 0)) AS id) AS t2,act_info AS t1 force index (primary)<br />
+    -> WHERE t1.id >= t2.id AND t1.status = 0<br />
+    -> ORDER BY t1.id LIMIT 3 ;<br />
++----+-------------+------------+--------+---------------+---------+---------+------+--------+------------------------------+<br />
+| id | select_type | table      | type   | possible_keys | key     | key_len | ref  | rows   | Extra                        |<br />
++----+-------------+------------+--------+---------------+---------+---------+------+--------+------------------------------+<br />
+|  1 | PRIMARY     | <derived2> | system | NULL          | NULL    | NULL    | NULL |      1 |                              |<br />
+|  1 | PRIMARY     | t1         | range  | PRIMARY       | PRIMARY | 8       | NULL | 494509 | Using where                  |<br />
+|  2 | DERIVED     | NULL       | NULL   | NULL          | NULL    | NULL    | NULL |   NULL | No tables used               |<br />
+|  5 | SUBQUERY    | NULL       | NULL   | NULL          | NULL    | NULL    | NULL |   NULL | Select tables optimized away |<br />
+|  4 | SUBQUERY    | NULL       | NULL   | NULL          | NULL    | NULL    | NULL |   NULL | Select tables optimized away |<br />
+|  3 | SUBQUERY    | NULL       | NULL   | NULL          | NULL    | NULL    | NULL |   NULL | Select tables optimized away |<br />
++----+-------------+------------+--------+---------------+---------+---------+------+--------+------------------------------+<br />
+6 rows in set (0.00 sec)[/cc]<br />
+通过主键扫描的记录数有49w之多<br />
+sql时间执行时间<br />
+3 rows in set (0.00 sec)<br />
+explain看到是通过索引扫描的记录数比主键要少，但是实际消耗的时间远远超过通过主键扫描。<br />
+理解：上面两条sql的性能差距只是在id > ? and status = 0 </p>
+<p>当表中大量数据都是status=0时，通过主键快速定位到行，然后删选少量数据，就可以得到满足的记录。<br />
+而通过索引扫描，再回表，效率就比较低。</p>
+<p>--如果获取的status=1，数据量较少时<br />
+[cc lang='sql']dbaeyes 06:55:05>explain SELECT t1.*<br />
+    -> FROM<br />
+    -> (SELECT ROUND(RAND() * (<br />
+    -> (SELECT MAX(id) FROM act_info WHERE status = 1)-<br />
+    -> (SELECT MIN(id) FROM act_info WHERE status = 1))<br />
+    -> +(SELECT MIN(id) FROM act_info WHERE status = 1)) AS id) AS t2,act_info AS t1<br />
+    -> WHERE t1.id >= t2.id AND t1.status =1<br />
+    -> ORDER BY t1.id LIMIT 3 ;[/cc]</p>
+<p>那么走status效率更高。因为索引status=1可以快速的获取所需的记录。而通过主键需要扫描非常大量的记录才能得到3条满足需求的记录</p>
+<p>[cc lang='sql']dbaeyes 06:55:05>explain SELECT t1.*<br />
+    -> FROM<br />
+    -> (SELECT ROUND(RAND() * (<br />
+    -> (SELECT MAX(id) FROM act_info WHERE status = 1)-<br />
+    -> (SELECT MIN(id) FROM act_info WHERE status = 1))<br />
+    -> +(SELECT MIN(id) FROM act_info WHERE status = 1)) AS id) AS t2,act_info AS t1<br />
+    -> WHERE t1.id >= t2.id AND t1.status =1<br />
+    -> ORDER BY t1.id LIMIT 3 ;<br />
++----+-------------+------------+--------+--------------------------------+------------------------+---------+------+------+------------------------------+<br />
+| id | select_type | table      | type   | possible_keys                  | key                    | key_len | ref  | rows | Extra                        |<br />
++----+-------------+------------+--------+--------------------------------+------------------------+---------+------+------+------------------------------+<br />
+|  1 | PRIMARY     | <derived2> | system | NULL                           | NULL                   | NULL    | NULL |    1 |                              |<br />
+|  1 | PRIMARY     | t1         | range  | PRIMARY,idx_info_stat | idx_info_stat | 12      | NULL |    2 | Using where                  |<br />
+|  2 | DERIVED     | NULL       | NULL   | NULL                           | NULL                   | NULL    | NULL | NULL | No tables used               |<br />
+|  5 | SUBQUERY    | NULL       | NULL   | NULL                           | NULL                   | NULL    | NULL | NULL | Select tables optimized away |<br />
+|  4 | SUBQUERY    | NULL       | NULL   | NULL                           | NULL                   | NULL    | NULL | NULL | Select tables optimized away |<br />
+|  3 | SUBQUERY    | NULL       | NULL   | NULL                           | NULL                   | NULL    | NULL | NULL | Select tables optimized away |<br />
++----+-------------+------------+--------+--------------------------------+------------------------+---------+------+------+------------------------------+<br />
+6 rows in set (0.01 sec)</p>
+<p>dbaeyes 06:55:09>SELECT t1.*<br />
+    -> FROM<br />
+    -> (SELECT ROUND(RAND() * (<br />
+    -> (SELECT MAX(id) FROM act_info WHERE status = 1)-<br />
+    -> (SELECT MIN(id) FROM act_info WHERE status = 1))<br />
+    -> +(SELECT MIN(id) FROM act_info WHERE status = 1)) AS id) AS t2,act_info AS t1<br />
+    -> WHERE t1.id >= t2.id AND t1.status =1<br />
+    -> ORDER BY t1.id LIMIT 3 ;<br />
++--------+-------------------+--------+-------------+---------------------+---------------------+<br />
+| id     | account           | status | activity_id | gmt_create          | gmt_modified        |<br />
++--------+-------------------+--------+-------------+---------------------+---------------------+<br />
+| 287970 | 297969@dbaeye.com |      1 |           1 | 2011-05-24 15:39:39 | 2011-05-27 14:28:17 |<br />
+| 290249 | 300248@dbaeye.com |      1 |           1 | 2011-05-24 15:39:39 | 2011-05-25 15:18:13 |<br />
+| 295588 | 305587@dbaeye.com |      1 |           1 | 2011-05-24 15:39:39 | 2011-05-26 13:47:08 |<br />
++--------+-------------------+--------+-------------+---------------------+---------------------+<br />
+3 rows in set (0.00 sec)[/cc]</p>
+<p> [cc lang='sql']<br />
+dbaeyes 06:55:38>explain SELECT t1.*<br />
+    -> FROM<br />
+    -> (SELECT ROUND(RAND() * (<br />
+    -> (SELECT MAX(id) FROM act_info WHERE status = 1)-<br />
+    -> (SELECT MIN(id) FROM act_info WHERE status = 1))<br />
+    -> +(SELECT MIN(id) FROM act_info WHERE status = 1)) AS id) AS t2,act_info AS t1 force index (primary)<br />
+    -> WHERE t1.id >= t2.id AND t1.status =1<br />
+    -> ORDER BY t1.id LIMIT 3 ;<br />
++----+-------------+------------+--------+---------------+---------+---------+------+--------+------------------------------+<br />
+| id | select_type | table      | type   | possible_keys | key     | key_len | ref  | rows   | Extra                        |<br />
++----+-------------+------------+--------+---------------+---------+---------+------+--------+------------------------------+<br />
+|  1 | PRIMARY     | <derived2> | system | NULL          | NULL    | NULL    | NULL |      1 |                              |<br />
+|  1 | PRIMARY     | t1         | range  | PRIMARY       | PRIMARY | 8       | NULL |153278 | Using where                  |<br />
+|  2 | DERIVED     | NULL       | NULL   | NULL          | NULL    | NULL    | NULL |   NULL | No tables used               |<br />
+|  5 | SUBQUERY    | NULL       | NULL   | NULL          | NULL    | NULL    | NULL |   NULL | Select tables optimized away |<br />
+|  4 | SUBQUERY    | NULL       | NULL   | NULL          | NULL    | NULL    | NULL |   NULL | Select tables optimized away |<br />
+|  3 | SUBQUERY    | NULL       | NULL   | NULL          | NULL    | NULL    | NULL |   NULL | Select tables optimized away |<br />
++----+-------------+------------+--------+---------------+---------+---------+------+--------+------------------------------+<br />
+6 rows in set (0.00 sec)</p>
+<p>dbaeyes 06:55:53><br />
+dbaeyes 06:55:54>SELECT t1.*<br />
+    -> FROM<br />
+    -> (SELECT ROUND(RAND() * (<br />
+    -> (SELECT MAX(id) FROM act_info WHERE status = 1)-<br />
+    -> (SELECT MIN(id) FROM act_info WHERE status = 1))<br />
+    -> +(SELECT MIN(id) FROM act_info WHERE status = 1)) AS id) AS t2,act_info AS t1 force index (primary)<br />
+    -> WHERE t1.id >= t2.id AND t1.status =1<br />
+    -> ORDER BY t1.id LIMIT 3 ;<br />
++--------+-------------------+--------+-------------+---------------------+---------------------+<br />
+| id     | account           | status | activity_id | gmt_create          | gmt_modified        |<br />
++--------+-------------------+--------+-------------+---------------------+---------------------+<br />
+| 664048 | 674047@dbaeye.com |      1 |           1 | 2011-05-24 15:40:08 | 2011-05-25 16:01:27 |<br />
+| 675669 | 685668@dbaeye.com |      1 |           1 | 2011-05-24 15:40:09 | 2011-05-25 17:47:41 |<br />
+| 732710 | 742709@dbaeye.com |      1 |           1 | 2011-05-24 15:40:13 | 2011-05-25 16:26:18 |<br />
++--------+-------------------+--------+-------------+---------------------+---------------------+<br />
+3 rows in set (0.16 sec)<br />
+ [/cc]<br />
+--EOF--<br />
+</derived2></derived2></derived2></derived2></p>

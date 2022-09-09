@@ -1,0 +1,63 @@
+---
+layout: post
+title: MySQL error 1535 --table definition on master and slave does not match
+date: 2013-01-21 21:08:09.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- troubleshooting
+- mysql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  _aioseop_keywords: mysql,slave
+  _aioseop_title: MySQL error 1535 --table definition on master and slave does not
+    match
+  views: '12380'
+---
+<p>It will be slave error when change column type on slave first.</p>
+<p>Table definition:<br />
+[cc lang='sql']<br />
+CREATE TABLE `table_xf` (<br />
+`i` int(11) NOT NULL AUTO_INCREMENT,<br />
+`name` varchar(16) DEFAULT NULL,<br />
+PRIMARY KEY (`i`)<br />
+) ENGINE=InnoDB DEFAULT CHARSET=gbk</p>
+<p>select * from table_xf;<br />
++---+------+<br />
+| i | name |<br />
++---+------+<br />
+| 1 | a |<br />
+| 2 | b |<br />
+| 3 | c |<br />
++---+------+<br />
+3 rows in set (0.00 sec)<br />
+[/cc]</p>
+<p>Then do the column change on the slave first<br />
+[cc lang='sql']<br />
+root@xf_ccc 08:50:43&gt;alter table table_xf modify column i bigint not null auto_increment;<br />
+Query OK, 3 rows affected (0.18 sec)<br />
+Records: 3 Duplicates: 0 Warnings: 0<br />
+[/cc]<br />
+When update the record on the Master,<br />
+[cc lang='sql']<br />
+root@xf_ccc 08:51:21&gt;update table_xf set name='a1' where i=1;<br />
+Query OK, 1 row affected (0.00 sec)<br />
+Rows matched: 1 Changed: 1 Warnings: 0<br />
+[/cc]</p>
+<p>The Slave's error info in the "show slave status"<br />
+<span style="color: #ff0000;">Last_Errno: 1535</span><br />
+<span style="color: #ff0000;"> Last_Error: Table definition on master and slave does not match: Column 0 type mismatch - received type 3, xf_ccc.table_xf has type 8</span></p>
+<p>After do the change on the Master and skip the erro on the Salve<br />
+SET GLOBAL SQL_slave_SKIP_COUNTER = 1;<br />
+START SLAVE;</p>
+<p>The master and slave will be OK, but the discordant data should be corrected.</p>
+<p>You also can set the variables for this issue.</p>
+<p>set global <a href="http://dev.mysql.com/doc/refman/5.1/en/replication-options-slave.html#sysvar_slave_type_conversions">slave_type_conversions</a>=’ALL_NON_LOSSY’;</p>
+<p><a href="http://www.dbathink.com/2013/01/mysql-error-1535-table-definition-on-master-and-slave-does-not-match/slave_type_conversions/" rel="attachment wp-att-1567"><img class="alignnone size-full wp-image-1567" alt="slave_type_conversions" src="http://www.dbathink.com/wp-content/uploads/2013/01/slave_type_conversions.jpg" width="761" height="417" data-pinit="registered" /></a></p>
+<p>Changing the type conversion mode requires restarting the slave with the new <code>slave_type_conversions</code>setting.</p>
+<p>Then start slave.</p>
+<p>--eof</p>

@@ -1,0 +1,496 @@
+---
+layout: post
+title: SQLPLUS 操作大全 -zt
+date: 2008-07-23 01:17:27.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- sql
+- sqlplus
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '834'
+---
+<p>B SQL*PLUS</p>
+<div>Sql*plus 中使用绑定变量：<br />
+sql&gt; variable x number;<br />
+sql&gt; exec :x := 7788;<br />
+sql&gt; SELECT empno,ename from scott.emp where empno=:x;<br />
+SQL*PLUS 是Oracle提供的一个工具程序，它不仅可以用于测试，运行SQL语句和PL/SQL块，而且还可以用于管理Oracle数据库，<br />
+1.启动sql*plus<br />
+为了使用sql*plus，必须首先要启动sql*plus。Oracle不仅提供了命令行和图形界面的sql*plus，而且还可以在web浏览器中<br />
+运行.<br />
+(1)在命令运行sql*plus<br />
+在命令行运行sql*plus是使用sqlplus命令来完成的，该命令适用于任何操作系统平台，<br />
+语法如下:<br />
+sqlplus [username]/[password][@server]<br />
+如上所示:username用于指定数据库用户名，password用于指定用户口令，server则用于指定主机字符串(网络服务名).<br />
+当连接到本地数据时，不需要提供网络服务名,如果要连接到远程数据库，则必须要使用网络服务名.<br />
+(2)在windows环境中运行sql*plus<br />
+如果在windows环境中安装了oralce数据库产品，那么可以在窗口环境中运行sql*plus<br />
+具体方法: "开始-&gt;程序-&gt;oracle-oradb10g_home1-&gt;application development-&gt;sql*plus"<br />
+2.连接命令<br />
+(1)conn[ect]<br />
+该命令用于连接到数据库。注意，使用该命令建立新会话时，会自动断开先前会话，示例如下:<br />
+sql&gt;conn scott/yhai1981@demo<br />
+(2)disc[onnect]<br />
+该命令用于断开已经存在的数据库连接。注：该命令只是断开连接会话，而不会退出sql*plus，示例如下:<br />
+sql&gt;disc<br />
+(3)passw[ord]<br />
+该命令用于修改用户的口令。注，任何用户都可以使用该命令修改其自身口令，但如果要修改其他用户的口令时，<br />
+则必须以DBA身份(sys和system)登录，在sql*plus中，当修改用户口令时，可以使用该命令取代sql命令alter user,<br />
+示例如下:<br />
+sql&gt;passw<br />
+更改scott的口令<br />
+旧口令:******<br />
+新口令:******<br />
+重新键入新口令:******<br />
+口令已更改<br />
+sql&gt;<br />
+(4)exit<br />
+该命令用于退出 sql*plus,另外你也可以使用quit命令退出sql*plus.使用该命令不仅会断开连接，而且也会退出sql*plus<br />
+注:默认情况下，当执行该命令时会自动提交事务。<br />
+3，编辑命令<br />
+(1)l[ist]<br />
+该命令用于列出sql缓冲区的内容，使用该命令可以列出sql缓冲某行，某几行或所有行的内容。在显示结果中,数据字为具体<br />
+的行号，而"*"则表示当前行。<br />
+示例一:列出sql缓冲区所有内容<br />
+sql&gt;l<br />
+示例二:列出sql缓冲区首行内容:<br />
+sql&gt;l1<br />
+(2)a[ppend]<br />
+该命令用于在sql缓冲区的当前行尾部添加内容。注:该命令将内容追加到标记为"*"的行的尾部，示例如下:<br />
+sql&gt;l<br />
+1 select empno,ename,sal,hiredate,comm,deptno<br />
+2 from emp<br />
+3* where deptno=10<br />
+sql&gt;a and job='CLERK'<br />
+sql&gt;l<br />
+SQL&gt; list<br />
+1 select empno,ename,sal,hiredate,comm,deptno<br />
+2 from emp<br />
+3* where deptno=10 and job='CLERK'<br />
+(3)c[hange]<br />
+该命令用于修改sql缓冲区的内容。如果在编写sql语句时写错了某个词，那么使用该命令可以进行修改，<br />
+sql&gt;select ename from temp where deptno=10;<br />
+SQL&gt; c /temp/emp<br />
+1* select ename from emp where deptno=10<br />
+(4)del<br />
+该命令用于删除sql缓冲区中内容，使用它可以删除某行，某几行或所有行，在默认情况下，当直接执行<br />
+del时，只删除当前行的内容，示例如下:<br />
+SQL&gt; l<br />
+1 select ename<br />
+2 from emp<br />
+3* where deptno=20<br />
+sql&gt;del<br />
+SQL&gt; l<br />
+1 select ename<br />
+2* from emp<br />
+如果一次要删除多行，则指定起始行号和终止行号，例如"del 3 5"<br />
+(5)i[nput]<br />
+该命令用于在sql缓冲区的当前行后新增加一行。示例如下:<br />
+SQL&gt; l<br />
+1 select ename<br />
+2* from emp<br />
+sql&gt;i where deptno=30<br />
+如果要在首行前增加内容，则使用"0文本"<br />
+sql&gt;0 create table temp as<br />
+SQL&gt; l<br />
+1 create table temp as<br />
+2 select ename<br />
+3 from emp<br />
+4* where deptno=30<br />
+(6) n<br />
+该数值用于定位sql缓冲区的当前行，示例如下:<br />
+(7)edi[t]<br />
+该命令用于编辑sql缓冲区的内容。当运行该命令时，在windows平台中会自动启动"记事本",以编辑sql缓冲区<br />
+(8)run和/<br />
+run的/命令都可以用于运行sql缓冲区中的sql语句。注:当使用run命令时，还会列出sql缓冲区内容,eg：<br />
+SQL&gt; run<br />
+1* select ename from emp where deptno=20<br />
+4.文件操纵命令<br />
+(1)save<br />
+该命令用于将当前sql缓冲区的内容保存到sql脚本中。当执行该命令时，默认选项为create，即建立新文件。<br />
+eg:<br />
+SQL&gt; save c:\a.sql create<br />
+已创建 file c:\a.sql<br />
+当执行命令之后，就会建立新脚本文件a.sql，并将sql缓冲区内容存放到该文件中。如果sql已经存在，使用<br />
+replace选项可以替撚已存在的sql脚本，如果要给已存在的sql脚本追加内容，可以使用append选项。<br />
+(2)get<br />
+该命令与save命令作用恰好相反，用于将sql脚本中的所有内容装载到sql缓冲区中。<br />
+eg:<br />
+SQL&gt; get c:\a.sql<br />
+1* select ename from emp where deptno=20<br />
+(3)start和@<br />
+start和@命令用于运行sql脚本文件。注:当运行sql脚本文件时，应该指定文件路径.eg:<br />
+SQL&gt; @c:\a.sql<br />
+ENAME<br />
+----------<br />
+SMITH<br />
+JONES<br />
+SCOTT<br />
+ADAMS<br />
+FORD<br />
+(4)@@<br />
+该命令与@命令类似，也可以运行脚本文件，但主要作用是在脚本文件中嵌套调用其它的脚本文件。当使用该命令<br />
+嵌套脚本文件时，可在调用文件所在目录下查找相应文件名。<br />
+(5)ed[it]<br />
+该命令不仅可用于编辑sql缓冲区内容，也可以用于编辑sql脚本文件。当运行该命令时，会启动默认的系统编辑<br />
+器来编辑sql脚本。运行方法为:<br />
+sql&gt;edit c:/a.sql<br />
+(6)spool<br />
+该命令用于将sql*plus屏幕内容存放到文本文件中。执行该命令时，应首先建立假脱机文件，并将随后sql*plus<br />
+屏幕的所有内容全部存放到该文件中，最后使用spool off命令关闭假脱机文件。eg:<br />
+sql&gt;spool c:\a.sql<br />
+5.格式命令<br />
+sql*plus不仅可以用于执行sql语句、pl/sql块，而且还可以根据select结果生成报表。使用sql*plus的格式命令<br />
+可以控制报表的显示格式，例如使用column命令可以控制列的显示格式，使用ttitle命令可以指定页标题;使用<br />
+btitle命令可以指定页脚注。<br />
+(1)col[umn]<br />
+该命令用于控制列的显示格式。column命令包含有四个选项，其中clear选项用于清除已定义列的显示格式:<br />
+heading选项用于指定列的显示标题;justify选项用于指定列标题的对齐格式(left,center,right);format选项用于<br />
+指定列的显示格式，其中格式模型包含以下一些元素。<br />
+An:设置char,varchar2类型列的显示宽度;<br />
+9: 在number类型列上禁止显示前导0;<br />
+0: 在number类型列上强制显示前导0;<br />
+$: 在number类型列前显示美元符号;<br />
+L: 在number类型列前显示本地货币符号;<br />
+.: 指定number类型列的小数点位置;<br />
+,: 指定number类型列的千分隔符;<br />
+eg1:使用column设置列显示格式<br />
+sql&gt;col ename heading 'name' format a10<br />
+sql&gt;col sal heading 'sal' format L99999.99<br />
+sql&gt;select ename,sal,hiredate from emp<br />
+sql&gt;where empno=7788;<br />
+name                       sal HIREDATE<br />
+---------- ------------------- -------------------<br />
+SCOTT                ￥3000.00 04/19/1987 00:00:00<br />
+sql&gt;col ename clear<br />
+sql&gt;col sal clear<br />
+sql&gt;select ename,sal,hiredate from emp<br />
+sql&gt;where empno=7788;<br />
+(2)title<br />
+该命令用于指定页标题，页标题会自动显示在页的中央。如果页标题由多个词组成，则用单引号引住。如果要将页<br />
+标题分布在多行显示，则用"|"分开不同单词。如果不希望显示页标题，则使用"ttitle off"命令，禁止显示,eg:<br />
+SQL&gt; set linesize 40<br />
+SQL&gt; ttitle 'employee report'<br />
+SQL&gt; select ename,sal,hiredate from emp where empno=7788;</p>
+<p>星期二 5月 20                第    1<br />
+employee report</p>
+<p>ENAME             SAL<br />
+---------- ----------<br />
+HIREDATE<br />
+-------------------<br />
+SCOTT            3000<br />
+04/19/1987 00:00:00<br />
+(3)btitle<br />
+该命令用于指定页脚注，页脚注会自动显示在页的中央。如果页脚注由多个词组成，则用单引号引注。如果要将页脚注<br />
+分布在多行显示，则用"|"分开不同单词。如果不希望显示页脚注，则使用"btitle off"命令，禁止显示。eg:<br />
+SQL&gt; btitle 'page end'<br />
+SQL&gt; select ename,sal,hiredate from emp where empno=7788<br />
+ENAME             SAL<br />
+---------- ----------<br />
+HIREDATE<br />
+-------------------<br />
+SCOTT            3000<br />
+04/19/1987 00:00:00<br />
+page end<br />
+(4)break<br />
+该命令用于禁止显示重复行，并将显示结果分隔为几个部分，以表现更友好的显示结果，通常应该在order by 的排序列上<br />
+使用该命令。eg:<br />
+SQL&gt; set pagesize 40<br />
+SQL&gt; break on deptno skip 1<br />
+SQL&gt; select deptno,ename,sal from emp order by deptno<br />
+2 ;</p>
+<p>DEPTNO ENAME             SAL<br />
+---------- ---------- ----------<br />
+10 CLARK            2450<br />
+KING             5000<br />
+MILLER           1300</p>
+<p>20 JONES            2975<br />
+FORD             3000<br />
+ADAMS            1100<br />
+SMITH             800<br />
+SCOTT            3000</p>
+<p>30 WARD             1250<br />
+TURNER           1500<br />
+ALLEN            1600<br />
+JAMES             950<br />
+BLAKE            2850<br />
+MARTIN           1250<br />
+6.交互式命令<br />
+如果经常要执行某些sql语句和sql*plus命令，可以将这些语句和命令存放到sql脚本中。通过使用sql脚本，<br />
+一方面可以降低命令输入量，另一方面可以避免用户的输入错误。为了使得sql脚本可以根据不同输入获得<br />
+不同结果，需要在sql脚本中包含交互式命令。通过使用交互式命令，可以在sql*plus中定义变量，并且在运行<br />
+sql脚本时可以为这些变量动态输入数据。下面介绍sql*plus的交互命令，以及引用变量所使用的标号。<br />
+(1)&amp;<br />
+引用替代变量(substitution variable)时，必须要带有该标号。如果替代变量已经定义，则会直接使用其数据，<br />
+如果替代变量没有定义，则会临时定义替代变量(该替代变量只在当前语句中起作用),并需要为其输入数据。<br />
+注:如果替代变量为数字列则提供数据，则可以直接引用;如果替代变量为字符类型列或日期类型列提供数据，<br />
+则必须要用单引号引注。eg:<br />
+SQL&gt; select ename,sal from emp where deptno=&amp;no and job='&amp;job';<br />
+输入 no 的值: 20<br />
+输入 job 的值: CLERK<br />
+原值    1: select ename,sal from emp where deptno=&amp;no and job='&amp;job'<br />
+新值    1: select ename,sal from emp where deptno=20 and job='CLERK'<br />
+(2)&amp;&amp;<br />
+该标号类似于单个&amp;标号。但需要注意，&amp;标号所定义的替代变量只在当前语句中起作用;而&amp;&amp;标号所定义的变量<br />
+会在当前sql*plus环境中一直生效。eg:<br />
+SQL&gt; select ename,sal from emp where deptno=&amp;&amp;no and job='&amp;&amp;job' --定义了no变量<br />
+输入 no 的值: 20<br />
+输入 job 的值: CLERK<br />
+原值    1: select ename,sal from emp where deptno=&amp;&amp;no and job='&amp;&amp;job'<br />
+新值    1: select ename,sal from emp where deptno=20 and job='CLERK'<br />
+SQL&gt; select ename,sal from emp where deptno=&amp;no;<br />
+原值    1: select ename,sal from emp where deptno=&amp;no             --直接引用no变量<br />
+新值    1: select ename,sal from emp where deptno=20<br />
+ENAME             SAL<br />
+---------- ----------<br />
+SMITH             800<br />
+JONES            2975<br />
+SCOTT            3000<br />
+ADAMS            1100<br />
+FORD             3000<br />
+如例所示，当第一次引用no变量时，使用&amp;&amp;标号需要为其输入数据;当第二次引用no变量时，<br />
+使用&amp;标号直接引用其原有值，而不需要输入数据。<br />
+(3)define<br />
+该命令用于定义类型为char的替代变量，而且该命令的定义的替代变量只在当前sql*plus环境中起作用。<br />
+当使用该命令定义变量时，如果变量值包含空格或区分大小写，则用引号引注。另外，使用"define变量名"可以检查变量<br />
+是否已经定义。eg:<br />
+sql&gt;set verify off<br />
+sql&gt;define title=CLERK<br />
+sql&gt;select ename,sal from where job='&amp;title';<br />
+(4)accept<br />
+该命令可以用于定义char,number和date类型的替代变量。与define命令相比，accept命令更加灵活。当使用该命令定义替代<br />
+变量时，还可以指定变量输入提示、变量输入格式、隐藏输入内容。<br />
+eg1:指定变量输入提示<br />
+SQL&gt; accept title prompt '请输入岗位:'<br />
+请输入岗位:CLERK<br />
+SQL&gt; select ename,sal from emp where job='&amp;title';<br />
+原值    1: select ename,sal from emp where job='&amp;title'<br />
+新值    1: select ename,sal from emp where job='CLERK'</p>
+<p>ENAME             SAL<br />
+---------- ----------<br />
+SMITH             800<br />
+ADAMS            1100<br />
+JAMES             950<br />
+MILLER           1300<br />
+eg2:隐藏用户输入<br />
+sql&gt;accept pwd hide<br />
+(5)undefine<br />
+该命令用于清除替代变量的定义。eg:<br />
+sql&gt;undefine pwd<br />
+SQL&gt; disc<br />
+从 Oracle Database 10g Enterprise Edition Release 10.2.0.1.0 - Production<br />
+With the Partitioning, OLAP and Data Mining options 断开<br />
+SQL&gt; conn scott/&amp;pwd<br />
+输入 pwd 的值: yhai1981<br />
+已连接<br />
+(6)prompt的pause<br />
+prompt命令用于输出提示信息，而pause命令则用于暂停脚本执行。在sql脚本中结合使用这两条命令，可以控制sql脚本<br />
+的暂停的执行。假定在a.sql脚本中包含以下命令：<br />
+prompt '按&lt;Return&gt;键继续'<br />
+pause<br />
+当运行该sql脚本时，会暂停执行，eg:<br />
+sql&gt;@c:\a.sql<br />
+'按&lt;Return&gt;键继续'<br />
+(7)variable<br />
+该命令用于在sql*plus中定义绑定变量。当在sql语句或pl/sql块中引用绑定变量时，必须要在绑定变量前加冒号(:);<br />
+当直接给绑定变量赋值时，需要使用execute命令(类似于调用存储过程).示例如下:<br />
+sql&gt;var no number<br />
+sql&gt;exec :no:=7788<br />
+sql&gt;select ename from emp where empno=:no;<br />
+ename<br />
+------------------<br />
+scott<br />
+(8)print<br />
+该命令用于输出绑定变量结果,eg:<br />
+SQL&gt; print no</p>
+<p>NO<br />
+----------<br />
+7788<br />
+7.显示和设置环境变量<br />
+使用sql*plus的环境变量可以控制其运行环境，例如设置行显示宽度，设置每页显示的行数、<br />
+设置自动提交标记、设置自动跟踪等等。使用show命令可以显示当前sql*plus的环境变量设置<br />
+:使用set命令可以修改当前sql*plus的环境变量设置。下面介绍常用的sql*plus环境变量。<br />
+(1)显示所有环境变量<br />
+为了显示sql*plus的所有环境变量，必须要使用show all命令。示例如下:<br />
+SQL&gt; show all<br />
+appinfo 为 OFF 并且已设置为 "SQL*Plus"<br />
+arraysize 15<br />
+autocommit OFF<br />
+autoprint OFF<br />
+autorecovery OFF<br />
+autotrace OFF<br />
+blockterminator "." (hex 2e)<br />
+btitle OFF 为下一条 SELECT 语句的前几个字符<br />
+cmdsep OFF<br />
+colsep " "<br />
+compatibility version NATIVE<br />
+concat "." (hex 2e)<br />
+copycommit 0<br />
+COPYTYPECHECK 为 ON<br />
+define "&amp;" (hex 26)<br />
+describe DEPTH 1 LINENUM OFF INDENT ON<br />
+echo OFF<br />
+editfile "afiedt.buf"<br />
+embedded OFF<br />
+escape OFF<br />
+用于 6 或更多行的 FEEDBACK ON<br />
+flagger OFF<br />
+flush ON<br />
+heading ON<br />
+headsep "|" (hex 7c)<br />
+instance "local"<br />
+linesize 80<br />
+lno 4<br />
+loboffset 1<br />
+logsource ""<br />
+long 80<br />
+longchunksize 80<br />
+markup HTML OFF HEAD "&lt;style type='text/css'&gt; body {font:10pt Arial,Helvetica,sans-serif; color:black; background:White;} p {font:10pt Arial,Helvetica,sans-serif; color:black; background:White;} table,tr,td {font:10pt Arial,Helvetica,sans-serif; color:Black; background:#f7f7e7; padding:0px 0px 0px 0px; margin:0px 0px 0px 0px;} th {font:bold 10pt Arial,Helvetica,sans-serif; color:#336699; background:#cccc99; padding:0px 0px 0px 0px;} h1 {font:16pt Arial,Helvetica,Geneva,sans-serif; color:#336699; background-color:White; border-bottom:1px solid #cccc99; margin-top:0pt; margin-bottom:0pt; padding:0px 0px 0px 0px;} h2 {font:bold 10pt Arial,Helvetica,Geneva,sans-serif; color:#336699; background-color:White; margin-top:4pt; margin-bottom:0pt;} a {font:9pt Arial,Helvetica,sans-serif; color:#663300; background:#ffffff; margin-top:0pt; margin-bottom:0pt; vertical-align:top;}&lt;/style&gt;&lt;title&gt;SQL*Plus Report&lt;/title&gt;" BODY "" TABLE "border='1' width='90%' align='center' summary='Script output'" SPOOL OFF ENTMAP ON PREFORMAT OFF<br />
+newpage 1<br />
+null ""<br />
+numformat ""<br />
+numwidth 10<br />
+pagesize 14<br />
+PAUSE 为 OFF<br />
+pno 1<br />
+recsep WRAP<br />
+recsepchar " " (hex 20)<br />
+release 1002000100<br />
+repfooter OFF 为 NULL<br />
+repheader OFF 为 NULL<br />
+serveroutput OFF<br />
+shiftinout INVISIBLE<br />
+showmode OFF<br />
+spool ON<br />
+sqlblanklines OFF<br />
+sqlcase MIXED<br />
+sqlcode 0<br />
+sqlcontinue "&gt; "<br />
+sqlnumber ON<br />
+sqlpluscompatibility 10.2.0<br />
+sqlprefix "#" (hex 23)<br />
+sqlprompt "SQL&gt; "<br />
+sqlterminator ";" (hex 3b)<br />
+suffix "sql"<br />
+tab ON<br />
+termout ON<br />
+timing OFF<br />
+trimout ON<br />
+trimspool OFF<br />
+ttitle OFF 为下一条 SELECT 语句的前几个字符<br />
+underline "-" (hex 2d)<br />
+USER 为 "SCOTT"<br />
+verify ON<br />
+wrap : 将换至下一行<br />
+SQL&gt; spool off</p>
+<p>(2)arraysize<br />
+该环境变量用于指定数组提取尺寸，其默认值为15.该值越大，网络开销将会越低，但占用内存会增加。假定使用默认值，<br />
+如果查询返回行数为50行，则需要通过网络传送4将数据;如果设置为25，则网络传送次数只有两次。eg:</p>
+<p>SQL&gt; show arraysize<br />
+arraysize 15<br />
+SQL&gt; set arraysize 25<br />
+(3)autocommit<br />
+该环境变量用于设置是否自动提交dml语句，其默认值为off(表示禁止自动提交)。当设置为ON时，每次执行DML<br />
+语句都会自动提交。eg:<br />
+SQL&gt; show autocommit<br />
+autocommit OFF<br />
+SQL&gt; set autocommit on<br />
+SQL&gt; show autocommit<br />
+autocommit IMMEDIATE<br />
+(4)colsep<br />
+该环境变量用于设置列之间的分隔符，默认分隔符为空格。如果要使用其它分隔符，则使用set命令进行设置。eg:<br />
+sql&gt;set colsep |<br />
+SQL&gt; select ename,sal from emp where empno=7788</p>
+<p>ENAME     |       SAL<br />
+----------|----------<br />
+SCOTT     |      3000<br />
+(5)feedback<br />
+该环境变量用于指定显示反馈行数信息的最低行数，其默认值为6。如果要禁止显示行数反馈信息，则将feedback<br />
+设置为off。假设只要有查询结果就返回行数，那么可以将该环境变量设置为1.eg:<br />
+sql&gt;set feedback 1<br />
+sql&gt;select ename,sal from emp where empno=7788;</p>
+<p>ENAME     |       SAL<br />
+----------|----------<br />
+SCOTT     |      3000<br />
+已选择 1 行。<br />
+(6)heading<br />
+该环境变量用于设置是否显示标题，其默认值为on。如果不显示列标题，则设置为off。eg:<br />
+sql&gt;set heading off<br />
+sql&gt;select ename,sal from emp where empno=7788<br />
+SCOTT     |      3000<br />
+(7)linesize<br />
+该环境变量用于设置行宽度，默认值为80。在默认情况下，如果数据长度超过80个字符，那么在sql*plus中会折<br />
+行显示数据结果。要在一行中显示全部数据，应该设置更大的值。eg:<br />
+(8)pagesize<br />
+该环境变量用于设置每页所显示的行数,默认值为14<br />
+set pagesize 0;　　　//输出每页行数，缺省为24,为了避免分页，可设定为0。<br />
+(9)long<br />
+该环境变量用于设置long和lob类型列的显示长度。默认值为80,也就是说当查询long或lob列时，只会显示该列的前80个字符，<br />
+应该设置更大的值。eg:<br />
+sql&gt;show long<br />
+long 80<br />
+sql&gt;set long 300<br />
+(10)serveroutput<br />
+该环境变量用于控制服务器输出，其默认值为off，表示禁止服务器输出。在默认情况下，当调用dbms_output包时，<br />
+不会在sql*plus屏幕上显示输出结果。在调用dbms_output包时，为了在屏幕上输出结果，必须要将serveroutput设置<br />
+为on。eg:<br />
+sql&gt;set serveroutput on<br />
+sql&gt;exec dbms_output.put_line('hello')<br />
+(11)termout<br />
+该环境变量用于控制sql脚本的输出，其默认值为ON。当使用默认值时，如果sql脚本有输出结果，则会在屏幕上输出<br />
+显示结果，如果设置为OFF，则不会在屏幕上输出sql脚本。eg:<br />
+SQL&gt; set termout off<br />
+SQL&gt; @c:\a<br />
+(12)time<br />
+该环境变量用于设置在sql提示符前是否显示系统时间，默认值为off,表示禁止显示系统时间。如果设置为on,<br />
+则在sql提示符前会显示系统时间.eg:<br />
+SQL&gt; set time on<br />
+12:09:59 SQL&gt;<br />
+(13)timing<br />
+该环境变量用于设置是否要显示sql语句执行时间,默认值为off，表示不会显示sql语句执行时间。如果设置为<br />
+ON，则会显示sql语句执行时间。eg:<br />
+sql&gt;set timing on<br />
+SQL&gt; select count(*) from emp;</p>
+<p>COUNT(*)<br />
+----------<br />
+14</p>
+<p>已选择 1 行。</p>
+<p>已用时间: 00: 00: 00.03<br />
+(14)trimspool<br />
+set trimout on;　　　//去除标准输出每行的拖尾空格，缺省为off<br />
+set trimspool on;　　//去除重定向（spool）输出每行的拖尾空格，缺省为off</p>
+<p>如果trimspool设置为on，将移除spool文件中的尾部空格 ，trimout同trimspool功能相似，只不过对象是控制台。<br />
+If trimspool is set to on, it will remove trailing blanks in spooled files.<br />
+See also trimout which does the same thing to the output to the console (terminal).<br />
+eg:<br />
+set trimspool off<br />
+spool c:\temp\trimspool.txt<br />
+declare<br />
+v_name varchar2(30);<br />
+begin<br />
+SELECT table_name into v_name<br />
+FROM all_tables<br />
+WHERE rownum =1;<br />
+dbms_output.put_line(v_name);<br />
+end;<br />
+/<br />
+set trimspool on<br />
+declare<br />
+v_name varchar2(30);<br />
+begin<br />
+SELECT table_name into v_name<br />
+FROM all_tables<br />
+WHERE rownum =1;<br />
+dbms_output.put_line(v_name);<br />
+end;<br />
+/<br />
+spool off</p>
+<p>-- from ITPUB</p></div>

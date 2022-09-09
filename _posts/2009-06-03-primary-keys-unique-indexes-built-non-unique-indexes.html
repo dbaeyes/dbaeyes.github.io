@@ -1,0 +1,56 @@
+---
+layout: post
+title: 建主键 唯一索引 非唯一索引
+date: 2009-06-03 11:44:17.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- index
+- oracle
+meta:
+  views: '888'
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+---
+<p>表中ID有重复数据，但必须要先建索引给查下用的情况：</p>
+<div>
+SQL&gt; create table tmp_xf1<br />
+2 (id number);</p>
+<p>SQL&gt; insert into tmp_xf1 values(1);</p>
+<p>insert into tmp_xf1 values(1);<br />
+insert into tmp_xf1 values(2);</p>
+<p>commit;</p>
+<p>SQL&gt; alter table tmp_xf1 add constraint pk_tmp_xf1_id primary key(id) using index;<br />
+alter table tmp_xf1 add constraint pk_tmp_xf1_id primary key(id) using index<br />
+*<br />
+ERROR at line 1:<br />
+ORA-02437: cannot validate (FBADMIN.PK_TMP_XF1_ID) - primary key violated</p>
+<p>---<br />
+create index PK_TMP_XF1_ID on tmp_xf1(id);</p>
+<p>delete from tmp_xf1 where id =1;</p>
+<p>---<br />
+SQL&gt; alter table tmp_xf1 add constraint pk_tmp_xf1_id primary key(id) using index;</p>
+<p>Table altered.</p>
+<p>---</p>
+<p>SQL&gt; insert into tmp_xf1 values(2);<br />
+insert into tmp_xf1 values(2)<br />
+*<br />
+ERROR at line 1:<br />
+ORA-00001: unique constraint (FBADMIN.PK_TMP_XF1_ID) violated</p>
+<p>---</p>
+<p>SQL&gt; set autot on<br />
+SQL&gt;<br />
+SQL&gt; select * from tmp_xf1 where id = 2;</p>
+<p>--<br />
+INDEX RANGE SCAN| PK_TMP_XF1_ID |<br />
+因为索引建的是非唯一索引，所以根据ID查询的时候还是使用INDEX RANGE SCAN</p>
+<p>###############</p>
+<p>SQL&gt; create unique index PK_TMP_XF1_ID on tmp_xf1(id);</p>
+<p>Index created.</p>
+<p>SQL&gt; alter table tmp_xf1 add constraint pk_tmp_xf1_id primary key(id) using index;</p>
+<p>Table altered.</p>
+<p>--then</p>
+<p>INDEX UNIQUE SCAN| PK_TMP_XF1_ID |</p></div>

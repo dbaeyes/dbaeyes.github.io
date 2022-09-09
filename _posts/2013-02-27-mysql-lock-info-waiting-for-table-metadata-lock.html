@@ -1,0 +1,105 @@
+---
+layout: post
+title: MySQL lock info  --  Waiting for table metadata lock
+date: 2013-02-27 18:29:40.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- lock
+- troubleshooting
+- mysql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  _aioseop_keywords: mysql,lock,metadata
+  _aioseop_title: MySQL lock info  --  Waiting for table metadata lock
+  views: '4995'
+---
+<p>现象：<br />
+1. 数据库发现一条根据主键更新的sql特别慢，持续70秒后显示更新超时。<br />
+[cc lang='sql']update user_quotation set GMT_MODIFIED = now() where ID = 230967517;[/cc]</p>
+<p>2. 任何DDL操作都显示<br />
+[cc lang='sql']10060303 root localhost icbu_rfq Query 164 Waiting for table metadata lock<br />
+=================================================================================<br />
+alter table isr_quotation_price \nmodify item_image varchar(1024) comment '商品图片' [/cc]</p>
+<p>可以通过下面视图查询被lock的信息</p>
+<p>[cc lang='sql']root@information_schema 06:54:35:::select * from INNODB_LOCKS;<br />
++-------------------------+-------------+-----------+-----------+----------------------------+------------+------------+-----<br />
+| lock_id | lock_trx_id | lock_mode | lock_type | lock_table | lock_index | lock_space | lock_page | lock_rec | lock_data |</p>
+<p>+-------------------------+-------------+-----------+-----------+----------------------------+------------+------------+-----<br />
+| 13C937945:2238:218183:6 | 13C937945 | X | RECORD | `db_1`.`user_quotation` | `PRIMARY` | 2238 | 218183 | 6 | 230967517 |<br />
+| 139F30A92:2238:218183:6 | 139F30A92 | X | RECORD | `db_1`.`user_quotation` | `PRIMARY` | 2238 | 218183 | 6 | 230967517 |</p>
+<p>+-------------------------+-------------+-----------+-----------+----------------------------+------------+------------+-----</p>
+<p>root@information_schema 06:53:23:::select * from INNODB_LOCK_WAITS;<br />
++-------------------+-------------------------+-----------------+-------------------------+<br />
+| requesting_trx_id | requested_lock_id | blocking_trx_id | blocking_lock_id |<br />
++-------------------+-------------------------+-----------------+-------------------------+<br />
+| 13C937945 | 13C937945:2238:218183:6 | 139F30A92 | 139F30A92:2238:218183:6 |<br />
+[/cc]<br />
+被这个事务139F30A92 阻塞了。</p>
+<p>[cc lang='sql']root@information_schema 06:55:10:::<br />
+select * from innodb_trx where trx_id = '139F30A92'\G<br />
+*************************** 1. row ***************************<br />
+trx_id: 139F30A92<br />
+trx_state: RUNNING<br />
+trx_started: 2013-02-25 06:27:43<br />
+trx_requested_lock_id: NULL<br />
+trx_wait_started: NULL<br />
+trx_weight: 976<br />
+trx_mysql_thread_id: 10059235<br />
+trx_query: NULL<br />
+trx_operation_state: NULL<br />
+trx_tables_in_use: 0<br />
+trx_tables_locked: 0<br />
+trx_lock_structs: 391<br />
+trx_lock_memory_bytes: 47544<br />
+trx_rows_locked: 427<br />
+trx_rows_modified: 585<br />
+trx_concurrency_tickets: 0<br />
+trx_isolation_level: READ COMMITTED<br />
+trx_unique_checks: 1<br />
+trx_foreign_key_checks: 1<br />
+trx_last_foreign_key_error: NULL<br />
+trx_adaptive_hash_latched: 0<br />
+trx_adaptive_hash_timeout: 10000<br />
+1 row in set (0.00 sec) [/cc]</p>
+<p>可以看到这个的事的开始时间： trx_started: 2013-02-25 06:27:43，已经持续了12个小时。</p>
+<p>也可以通过 show engine innodb status\G 查看被lock的信息</p>
+<p>MySQL thread id 6251366, OS thread handle 0x5b8c0940, query id 28842999247 Slave has read all relay log; waiting for the slave I/O thread to update it<br />
+---<span style="color: #ff0000;">TRANSACTION 139F30A92, ACTIVE 44531 sec</span><br />
+391 lock struct(s), heap size 47544, 427 row lock(s), undo log entries 585<br />
+MySQL thread id 10059235, OS thread handle 0x59172940, query id 28839628267 172.20.134.37 db_1<br />
+TABLE LOCK table `db_1`.`user_quotation` trx id 139F30A92 lock mode IX<br />
+RECORD LOCKS space id 2238 page no 269143 n bits 120 index `PRIMARY` of table `db_1`.`user_quotation` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+RECORD LOCKS space id 2238 page no 211551 n bits 112 index `PRIMARY` of table `db_1`.`user_quotation` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+RECORD LOCKS space id 2238 page no 269142 n bits 120 index `PRIMARY` of table `db_1`.`user_quotation` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+TABLE LOCK table `db_1`.`buyer_profile_remind` trx id 139F30A92 lock mode IX<br />
+RECORD LOCKS space id 2238 page no 216392 n bits 112 index `PRIMARY` of table `db_1`.`user_quotation` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+TABLE LOCK table `db_1`.`buyer_profile` trx id 139F30A92 lock mode IX<br />
+RECORD LOCKS space id 2179 page no 6590 n bits 824 index `idx_prof_compid` of table `db_1`.`buyer_profile` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+RECORD LOCKS space id 2179 page no 39120 n bits 120 index `PRIMARY` of table `db_1`.`buyer_profile` trx id 139F30A92 lock_mode X locks rec but not gap<br />
+TABLE LOCK table `db_1`.`buyer_card_theme` trx id 139F30A92 lock mode IX<br />
+TOO MANY LOCKS PRINTED FOR THIS TRX: SUPPRESSING FURTHER PRINTS<br />
+----------------------------</p>
+<p>Do action:</p>
+<p>[cc lang='sql']root@information_schema 08:01:37>SELECT trx_id,trx_state,trx_started,trx_mysql_thread_id<br />
+ FROM innodb_trx WHERE trx_id in(SELECT lock_trx_id FROM INNODB_LOCKS);<br />
++-----------+-----------+---------------------+---------------------+<br />
+| trx_id    | trx_state | trx_started         | trx_mysql_thread_id |<br />
++-----------+-----------+---------------------+---------------------+<br />
+| 2D0F7A9DB | LOCK WAIT | 2013-04-18 08:00:57 |            17926426 |<br />
+| 2D0F65C55 | LOCK WAIT | 2013-04-18 08:00:25 |            17923010 |<br />
+| 2D0C80153 | RUNNING   | 2013-04-18 07:37:59 |            17911138 |<br />
+| 2D09B8B62 | RUNNING   | 2013-04-18 07:15:43 |            17916547 |<br />
++-----------+-----------+---------------------+---------------------+<br />
+4 rows in set (0.01 sec)</p>
+<p>root@information_schema 08:01:38>kill 17911138;<br />
+Query OK, 0 rows affected (0.00 sec)</p>
+<p>root@information_schema 08:01:47>kill 17916547;<br />
+Query OK, 0 rows affected (0.00 sec)</p>
+<p>root@information_schema 08:01:53>SELECT trx_id,trx_state,trx_started,trx_mysql_thread_id FROM innodb_trx WHERE trx_id in(SELECT lock_trx_id FROM INNODB_LOCKS);<br />
+Empty set (0.00 sec)[/cc]</p>
+<p>select trx_id,trx_state,trx_started,trx_mysql_thread_id from innodb_trx ;</p>

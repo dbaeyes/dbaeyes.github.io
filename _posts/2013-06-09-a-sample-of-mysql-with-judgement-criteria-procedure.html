@@ -1,0 +1,55 @@
+---
+layout: post
+title: A sample of MySQL procedure -- 带判断条件
+date: 2013-06-09 16:51:34.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- mysql
+- procedure
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  _aioseop_title: a sample of procedure
+  views: '4446'
+  _aioseop_keywords: mysql,procedure
+---
+<p>带判断条件的MySQL存储过程</p>
+<p>[cc lang='sql']<br />
+delimiter $$<br />
+create  procedure sp_xf_update_book()<br />
+begin</p>
+<p>  declare v_done bit default false;<br />
+  declare v_commit int;<br />
+  declare $v_id bigint;<br />
+  declare $existsFlag int default 0;<br />
+  declare $bookId bigint;<br />
+  declare $bookName varchar(50);</p>
+<p>  declare cur cursor for<br />
+    select id,book_id,book_name from xf_book;<br />
+  declare continue handler for not found set v_done = true;<br />
+    set autocommit =0;<br />
+    open cur;<br />
+    repeat<br />
+    fetch cur into $v_id,$bookId,$bookName;<br />
+    IF not v_done then<br />
+        select count(*) as cnt into $existsFlag from xf_book_bak where id = $v_id ;<br />
+         if $existsFlag = 0 then<br />
+                 insert into xf_book_bak<br />
+                      select * from xf_book where id=$v_id;<br />
+         else<br />
+         update xf_book_bak set book_name = $bookName  where id=$v_id;<br />
+         end if;<br />
+    end if;<br />
+    set v_commit=v_commit+1;<br />
+    IF (v_commit MOD 100 = 0) THEN<br />
+      COMMIT;<br />
+    END IF;<br />
+    until v_done end repeat;<br />
+    close cur;<br />
+    commit;<br />
+end$$<br />
+delimiter ;[/cc]</p>

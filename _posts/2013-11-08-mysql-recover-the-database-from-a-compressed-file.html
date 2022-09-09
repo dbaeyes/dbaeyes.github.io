@@ -1,0 +1,48 @@
+---
+layout: post
+title: MySQL从压缩文件恢复数据库
+date: 2013-11-08 15:07:06.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- mysql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '6575'
+  _aioseop_title: mysql imp
+  _aioseop_keywords: mysql, imp
+---
+<p>MySQL备份的过程使用了bzip2压缩以节省存储空间，正常的恢复过程是<br />
+[cc lang='sql']<br />
+解压<br />
+nohup pbzip2 -d -k -p10 dump_dbcc_20131103.sql.bz2 &<br />
+恢复<br />
+nohup mysql -uroot  < dump_dbcc_20131103.sql &<br />
+[/cc]<br />
+关于pbzip2请参考帮助，非常给力的并行压缩工具</p>
+<p>但是通过解压和dump需要两个过程，而且消耗时间和临时的存储空间<br />
+那么我们能否使用管道的方式直接导入呢<br />
+[cc lang='sql']nohup pbzip2 -d -k -c dump_dbcc_20131103.sql.bz2  |mysql -uroot -S /u01/mysql/run/mysql.sock -f &[/cc]<br />
+测试结果，到备份文件小的情况下有时候可以导入，但当压缩文件非常大的情况下，会报错<br />
+[cc lang='sql']ERROR 1064 (42000) at line 218731: You have an error in your SQL syntax;<br />
+check the manual that corresponds to your MySQL server version for the<br />
+right syntax to use near 'caught [sig=1], quitting...<br />
+Terminator thread: premature exit requested - quitti' at line 2 [/cc]<br />
+怀疑是否是多线程解压的问题，那么改用单线程解压并管道导入呢，加上进程控制参数 -p<br />
+[cc lang='sql']nohup pbzip2 -d -k -c -p1 dump_dbcc_20131103.sql.bz2  | nohup mysql -uroot -S /u01/mysql/run/mysql.sock -f &[/cc]<br />
+依旧报上述错误</p>
+<p>caught [sig=1], quitting  ，去掉nohup，用<a href="https://wiki.archlinux.org/index.php/GNU_Screen" title="screen">screen</a>代替。<br />
+尝试成功了</p>
+<p><a href="https://wiki.archlinux.org/index.php/GNU_Screen" title="screen">screen</a>是个好工具，让进程免受 HUP 信号的影响<br />
+简单说：<br />
+   * CTRL-a d 来暂时断开当前会话<br />
+   * screen -dmS session name 来建立一个处于断开模式下的会话（并指定其会话名），简单的用screen就ok<br />
+   * screen -list 来列出所有会话。screen -ls<br />
+   * screen -r session name 来重新连接指定会话<br />
+-------<br />
+单进程导入总是很慢的，可以用split将通过管道并行解压的文件拆分，然后用多个MySQL进程并行导入。当然这个是需要做成工具的。</p>
+<p>--eof</p>

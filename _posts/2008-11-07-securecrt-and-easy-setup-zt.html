@@ -1,0 +1,157 @@
+---
+layout: post
+title: SecureCRT好用的设置 (zt)
+date: 2008-11-07 11:30:49.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- Software
+tags:
+- software
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '1700'
+---
+<p>VanDyke CRT 和 VanDyke SecureCRT是最常用的终端仿真<a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span><strong>程序</strong></span></a>，简单的说就是<a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span><strong>windows</strong></span></a>下登录UNIX或Liunx服务器主机的<a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span><strong>软件</strong></span></a>。二者不同的是SecureCRT支持SSH∗（SSH1和SSH2）。</p>
+<div>
+<p>本文主要介绍SecureCRT的使用方法和技巧。</p>
+<p>∗<strong>[</strong>概念解释<strong>]</strong>什么是SSH？</p>
+<p>SSH的英文全称是Secure Shell。</p>
+<p>传统的网络服务程序，如：<a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span style="text-decoration: underline;"><strong>ftp</strong></span></a>和telnet在本质上都是不<a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span style="text-decoration: underline;"><strong>安全</strong></span></a>的，因为它们在网络上用明文传送口令和数据，别有用心的人非常容易就可以截获这些口令和数据。而通过使用SSH客户端与服务器端通讯时，用户名及口令均进行了加密，有效防止了对口令的窃听。同时通过SSH的数据传输是经过压缩的，所以可以提高数据的传输速度，既然如此我们为什么不使用它呢。SSH是由客户端和服务端的软件组成的，有两个不兼容的版本分别是：1.x和2.x。至于具体如何安装服务器端，普通用户就不需要关心了。☺</p>
+<h3>一、安装</h3>
+<h4><strong>1</strong>、安装</h4>
+<p>首先要下载SecureCRT，目前最新的版本为6.0 （截止到2008年1月，其破解版本还未出现），我们以5.53版为例进行介绍，下载安装文件scrt553.exe和破解文件keygen.exe。</p>
+<p>安装过程很简单，运行scrt553.exe，只要“下一步”即可，安装过程中可以看到 SecureCRT支持以下协议：</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjvjX7e9GbufQ3007vWmAtLabxvli7aroQ4pZ6glNheEGk2dVlY1UUKUoI9EohH9C-q5FzgBPcuQLg?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55Rjt1F-7Kc9-JSdc2UpNxuia4uKLisq8CposgZ9n-MX4dKloniQoWhwe4lMvT1aki3X4RKgwjzReYhw?PARTNER=WRITER" alt="clip_image002" width="244" height="187" border="0" data-pinit="registered" /></a></p>
+<p>安装完成后，第一次启动SecureCRT会有如下提示：</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55Rjv9MYQ8BHQWTE5z4Gn8czYrh4Cfw0-yx6Htj68a2ApEK49YA3iS-VDdEPzLYrOi_ZzYDBgv48-xfw?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjsOlIP1yMkQMaAcJ6lGz9m8C_mtOgmY3CEkvVqnFgtyx9yxc39C13-1lE6bkgMDtgsSZAg9LqFjJA?PARTNER=WRITER" alt="clip_image004" width="244" height="114" border="0" data-pinit="registered" /></a></p>
+<p>用户需要指定一个目录，用来存放SecureCRT的配置信息。此目录默认为C:\Documents and Settings\用户名\Application Data\VanDyke\Config，如果是升级SecureCRT需要保持此<a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span style="text-decoration: underline;"><strong>文件</strong></span></a>夹与旧版本一致，如果重装<a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span style="text-decoration: underline;"><strong>系统</strong></span></a>，一定要备份此目录。</p>
+<p>如果需要更改，启动SecureCRT后点击Options =&gt; Global ptions =&gt; General修改 Configuration folder即可。</p>
+<h4><strong>2</strong>、破解</h4>
+<p>未破解版本，只有30天的使用期。关闭SecureCRT，将keygen.exe拷贝到安装目录C:\Program Files\SecureCRT中，运行它，填写Name，Company后点击Generate得到Serial, Date, License Key信息，点击Patch按钮，破解并备份SecureCRT主程序。</p>
+<p>运行SecureCRT，点击Help=&gt; Enter License Data…, 填写从keygen得到的注册信息即可.</p>
+<h3>二、基本设置</h3>
+<h4><strong>1</strong>、修改设置</h4>
+<p>为了SecureCRT用起来更方便，需要做一些设置，需要修改的有如下几处：</p>
+<h4><strong>1</strong>、退出主机自动关闭窗口</h4>
+<p>Options =&gt; Global ptions =&gt; General =&gt; Default Session =&gt; Edit Default Settings...</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjvpfrCYSDDHUPGYKkWha_uOmA_05tg_Hg0TWWX4pcgug8_0oC3lACZ_FhTIhD_B4lppGEPiHX9_Tw?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjtqCRjZptQiBq2fwid0ute9UJDpK1JvoLedNJlluLEGjWIpchUYHCUoE-Dj4OgNYaAjOlqjZdqWBQ?PARTNER=WRITER" alt="clip_image006" width="244" height="209" border="0" data-pinit="registered" /></a></p>
+<p>Terminal中将Close on disconnect 选上，当用户从主机中退出后可以自动关闭当前连接的窗口。</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjsHb_V9rlaqSTuWKIj9p7AjD7ghuIDSWFaVqWucWILijOYT8MQsnC5lx6K4LMRCYdfQqnjlNFDZ_Q?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjsT7cJY9TdtdFhaJ-ocTyefttweN_a4SUfbyUD-QMn3ZNrW7K7gB4wkaTPxOUF3hqwpRi9phacxfg?PARTNER=WRITER" alt="clip_image008" width="244" height="210" border="0" data-pinit="registered" /></a></p>
+<h4><strong>2</strong>、修改默认卷屏行数</h4>
+<p>当你做一个操作，屏幕输出有上百行，当需要将屏幕回翻时，这个设置会有很大帮助，默认为500行，可以改为10000行，不用担心找不到了。</p>
+<p>Terminal =&gt; Emulation =&gt; Scrollback 修改为10000。</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjuD4WxraYFVlxKFLZbqwVj1NwtqchnbCbtrRPgA-6TZIUZgrtSTUpUpTtk7JQClcxYcdrNTVg9XPw?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjvVotHtbOgQpKihWdhiurMMJ_UNl3_b-ZOYsZff9esptqY-CE1Gl5bzieDStVUY86GKqaZw5NYExw?PARTNER=WRITER" alt="clip_image010" width="244" height="209" border="0" data-pinit="registered" /></a></p>
+<h4><strong>3</strong>、修改<strong>SFTP</strong>默认下载路径（可选）：</h4>
+<p>对于使用SSH的连接中，可以使用SFTP下载文件，在这里可以设置文件的下载目录（默认为下载到“我的文档”中）</p>
+<p>Connection =&gt; SSH2 =&gt; SFTP Tab =&gt; Initial directories =&gt; Local directory</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjvQ3NyvVm18mVxjCUkrZbvGttmMHvBIathUnBTD9LuFEW1Gy3l2SOMC_NhKK5wls-wFbjY18BRcng?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjsJR7cYuyEksNFyi34V4z2yDs55v4VD1vDtjdCHFCErrQl6r0AB1BfNmRFRyqlkOtTMeQOZIN4MKw?PARTNER=WRITER" alt="clip_image012" width="244" height="210" border="0" data-pinit="registered" /></a></p>
+<h4><strong>4</strong>、修改<strong>Xmodem/Zmodem</strong>上传下载路径（可选）</h4>
+<p>SecureCRT可以使用Xmodem/Zmodem方便的上传和下载文件。</p>
+<p>在Session ptions =&gt;Xmodem/Zmodem =&gt; Directories中设置</p>
+<h4><strong>5</strong>、拷贝与粘贴的设置</h4>
+<p>通过鼠标操作即可拷贝或粘贴所需内容是一个非常方便的设置</p>
+<p>Options =&gt; Global ptions =&gt; Terminal =&gt; Mouse</p>
+<p>选中Copy on select 和 Paste on middle button</p>
+<p>这样设置后，只要用鼠标选中所需内容，则将内容拷贝到剪切板中，点击鼠标中键即可粘贴内容。</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjtjPB_ZUO2Su6_K0l431DrKb8_SOai2bP-e4ZCM50WwibnEuSQtHdTBLdWfQzWq21NdZew5BB1-ag?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjtQiKZOaQ1SjtEQ28JK4HAEQUg6hZSMokfINFOKWod0uY-AukdXIv8QO5zI_EHtVQSvwwkohlhWnw?PARTNER=WRITER" alt="clip_image014" width="244" height="209" border="0" data-pinit="registered" /></a></p>
+<p>另外可以设置使用Windows下的拷贝粘贴快捷键，Options =&gt; Global ptions =&gt; General =&gt; Default Session =&gt; Edit Default Settings... =&gt; Terminal =&gt; Mapped keys =&gt; Use windows copy and paste hotkeys</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjtDP42Vm5kc__tYrPAXHVXFNKOucwEnOogWFmrMzO54FhplF_3lOdLoAddTxdAaqyMoS0o7pycgmw?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjuLDQemA3L6kmqEtXRmpTW-Vp2uJG5KkyPSTTjMtVJ51Rjlprrv5i2saX9hH_YcxzdL1cS2mrjW8Q?PARTNER=WRITER" alt="clip_image016" width="244" height="209" border="0" data-pinit="registered" /></a></p>
+<h4><strong>6</strong>、<strong>Tabs</strong>设置</h4>
+<p>从Secure5.0以后，增加了Tabs（标签）选项，多个连接可以在同一个窗口下打开，类似IE7.0的风格。将Double-click 选项修改为 Close Tab，双击标签可关闭连接窗口。</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjtMY8i3BXYO34r83Tolo_UkPRVpycdJttTZZeSIDr75Cmv4qvp5spPscagJRA8xfdNbEn7_C1t6fg?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjvkHcceX7sLFwjL4aFSSteopbzeHhMxAkxhOZ0d47unvUr5rOAl4iG_Q3LVo9n72Bk6HiBSqsfD_w?PARTNER=WRITER" alt="clip_image018" width="244" height="210" border="0" data-pinit="registered" /></a></p>
+<h3>三、界面介绍</h3>
+<h4><strong>1</strong>、菜单</h4>
+<h5><strong>1</strong>）<strong>File</strong>文件</h5>
+<p>Connect... 连接，打开一个连接或者编辑已有的连接，创建新连接。</p>
+<p>Quick Connect... 快速连接，快速连接对话框，快速连接主机的最便捷方式</p>
+<p>Connect in Tab... 在Tab中打开一个新的会话窗口。</p>
+<p>Clone Session 克隆当前会话窗口。</p>
+<p>Connect SFTP Tab 打开SFTP窗口，对于SSH连接，此选项可用。在此会话窗口中可使用SFTP命令传输文件。</p>
+<p>Reconnect 重新连接</p>
+<p>Disconnect 中断当前会话窗口的连接</p>
+<p>Log Session 把当前窗口的会话记录到log文件中。</p>
+<p>Raw Log Session 将更详细的会话记录到log文件中，包括服务器更详细的响应信息。</p>
+<p>Trace Options 在log文件中记录协议会话信息选项。（包括客户端与主机互相连接时的一些信息内容）</p>
+<h5><strong>2</strong>）<strong>Edit</strong>编辑</h5>
+<p>拷贝粘贴等</p>
+<h5><strong>3) View</strong>视图</h5>
+<p>显示各种工具条</p>
+<h5><strong>4) Options</strong>选项</h5>
+<p>包括全局选项和Session选项</p>
+<h5><strong>5) Transfer</strong>传递文件</h5>
+<p>使用Xmodem/Zmodem上传下载文件</p>
+<h5><strong>6) Script.</strong>脚本</h5>
+<p>运行一个脚本文件，或记录一个新的脚本。（类似Word中的宏功能）</p>
+<h5><strong>7) Tools</strong>工具</h5>
+<p>键盘映射编辑，密钥生成工具等</p>
+<h5><strong>8) Help</strong>帮助</h5>
+<h4><strong>2</strong>、对话框和按钮</h4>
+<p>点击File =&gt; Connect可出现Connect对话框。</p>
+<p>从左至右按钮依次为：</p>
+<p>连接（激活选中的连接条目）；快速连接（快捷连接新的主机）；新建连接（在对话框中新增一个连接条目）；剪切；复制；粘贴；删除（对话框中的条目）；新建文件夹，属性（显示选中条目的属性），创建条目的桌面快捷方式，帮助。</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55Rjtw4IcKoOPovY9JakmaUo6eGvS9XkopLTRLP_8ywvVa4qFw-Edm69JFx6LeMRnpdcQ5YoviE03JRw?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55Rjvy8ehW6Lh9ohKDdhZrD9Ox07bq36I_NbLE6Yt5TrvC7RNMvOki3hBvvCDZLKP_Tf5vMw3V11Nq5A?PARTNER=WRITER" alt="clip_image020" width="244" height="211" border="0" data-pinit="registered" /></a></p>
+<p>Connect对话框下方有两个选项：</p>
+<p>Show dialog on start (启动SecureCRT时显示Connect对话框)；</p>
+<p>Open in a tab (以新标签卡的形式打开一个会话)，选中此选项，新的会话窗口如下图所示：</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55Rjs_z5WaIh3_VgPyHJ6JFiOEZqdtkB2-dylIp4daYUmjklJ1FNcCw_aincYQbBkF_7ApNmofQswRRw?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjsX_Kipoaa05qmiT323QlRmAEvFh72sxD8c4CNsgZHdaDTk5HmGKe2p0hj2yEfVXOmD4YFE8Nn2tw?PARTNER=WRITER" alt="clip_image022" width="244" height="138" border="0" data-pinit="registered" /></a></p>
+<p>否则将打开多个SecureCRT窗口：<a href="http://by1.storage.msn.com/y1plhPeGU55Rjs4pS9GcIC33vdx9ixBO1nQyMviHKM_ikhxI0L9gXF2b0xGlBm8GNJ06eQdVAzV1YDjhx80fPzHqg?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjshlhLwTVGLUYk_Tn-qrVQE9qU24wsYqUEltOxgm8BeNRIsJu0zyRXs5iZ20gJlMm_pbgvnfkg9kg?PARTNER=WRITER" alt="clip_image024" width="244" height="24" border="0" /></a></p>
+<h3>四、使用方法</h3>
+<h4><strong>1</strong>、新建连接</h4>
+<p>File =&gt; Connect =&gt; 点击 New Session 按钮，出现以下窗口，填写连接的名字，协议（SSH1，SSH2，Telnet, Rlogin等）</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjuP-9TknUjpWEvzvCGugH8zsJTOSDkPrPRFuWKA5yxTAoHMxXMEMu2dK7IsfLix5GHQkBzYGyR65Q?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjvR2bkcFd82YUQqknel5TQF6v56bXMIzYesSEGFabt7lEAWS_IcgL6vWXOFdGFe1zwml7eX-MoYew?PARTNER=WRITER" alt="clip_image026" width="244" height="211" border="0" data-pinit="registered" /></a><a href="http://by1.storage.msn.com/y1plhPeGU55RjtWduLBi27Fb9_kqouYmym1ABsRDviLum5TD0AGWgd7t5JYlfMeAD3N7YnqwHH37WFN2UUjJfJyJw?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjvoXaO_fU1_G1XNqHLbRONXJv05gs8o-d6zgUaA7E9SjXnTMPloFOAN90uDLKpyrkiDytM7gfMcGQ?PARTNER=WRITER" alt="clip_image028" width="244" height="210" border="0" data-pinit="registered" /></a></p>
+<p>点击SSH2选项，填写主机名或者IP地址，端口号，用户名。另外可设置会话窗口的颜色方案，点击Appearance选项，可自己设计或者选择已有的颜色方案，更改字体，光标等。</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjtibN5nmTVPxwK0r1ofiuu4lzcq_GTf-XjJWjE27WLm12O5faCBJlxUJCf9IBevu9MbmPm4fA1zFg?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55Rjuq5zLESA974CbnJTTGlYYHh25-ADXZ_S9cwVYLBYiBFNvy3XV95TzNuGIzPH3fzQPokozYMRxryw?PARTNER=WRITER" alt="clip_image030" width="244" height="210" border="0" data-pinit="registered" /></a><a href="http://by1.storage.msn.com/y1plhPeGU55RjsjFZv1imH_KjdEOZp-AXH0Hk4A8kEQQJ-U17ICQhw0p0pO6Po_8HcQtoEPuK_twoT7doPG87OdPQ?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjtMjweFvxOy5JhCxuJU37f9qxK8rX6LMdfTrQpxObPvhHtiNC26Cy92ZhME6UX-6p2AAIL5293obQ?PARTNER=WRITER" alt="clip_image032" width="244" height="209" border="0" data-pinit="registered" /></a></p>
+<h4><strong>2</strong>、快速连接</h4>
+<p>点击快速连接按钮出现下面的对话框，填入主机信息和用户名即可快速连接。</p>
+<p>下面有两个选项Save session(保存快速连接的信息到连接对话框中)；Open in a tab (以新标签卡的形式打开一个会话)</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjtEmNdKqHy92mWN7eR5bFsOpIfxioGAP67FuourvbuJZi3Ai6lKUq4PFLqSk-WJZOx13dTIkTGVyQ?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55Rjv_DNLhfJYM0za9HYhantJZx5pJEg1wXbX5q-HMvtxBaU7hoIE1iT771jppPnAst-IBJB4sH2Mrog?PARTNER=WRITER" alt="clip_image034" width="244" height="211" border="0" data-pinit="registered" /></a></p>
+<h4><strong>3</strong>、使用<strong>SSH</strong>连接主机</h4>
+<p>按照上面的介绍新建一个SSH连接，如果是第一次连接会有如下提示，点击Accept &amp; Save即可。</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55Rjv5Y7H7O4fRbNZ-R5W7R6fVGzrbktMnVJ4ITL-uZpM8cSObo0oivbgMSlBQj5pxeHO9HynwFqwerg?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjtpsmuzDKTPUHTcv1HdBFg9cDNgdtpau3tRbQCIUVn7kFrWUfOV0XYgQ6HwDT8Q2Vh9UZ-YMVuGbg?PARTNER=WRITER" alt="clip_image036" width="244" height="120" border="0" data-pinit="registered" /></a></p>
+<p>对于SSH连接，鼠标右键单击条目卡，可出现右键菜单，单击其中的Connect SFTP Tab，可打开SFTP窗口</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjsSDAiMDhVqWdlcV-WyxpPg0RPkSWmYg6Og8-9T6H7JWt1gcN5nNg3YyLw-QyeIwHoAj532kz6YZg?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55Rjs8xV75pkAJgch-TFVlc_ctvr2EUM7KAisnUU_Xl6c9vcKR1oIQgzhnowcOXroggglcNVmki9qYDw?PARTNER=WRITER" alt="clip_image038" width="244" height="234" border="0" data-pinit="registered" /></a><a href="http://by1.storage.msn.com/y1plhPeGU55Rjt9B2-QKhrcgr3jB81H47zVOTudPSC6r1reQxzMk_C4IJY1l6dGXb4njZuTt5Sug-ut_-jMOfrbqQ?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjuDADfGXmwTA80IgRFYEAj_fOeNIttBIZ58iEGHFAsrBWQC7ULJzl4tPNOU127_9S-yR9ptSjMSLQ?PARTNER=WRITER" alt="clip_image040" width="237" height="244" border="0" data-pinit="registered" /></a></p>
+<p>可使用SFTP命令下载和上传文件，本地路径设置见Connection =&gt; SSH2 =&gt; SFTP Tab =&gt; Initial directories =&gt; Local directory，默认为“我的文档”。</p>
+<p>基本的SFTP命令：</p>
+<p>get [-a | -b] remote-path 下载文件，(-a) 强制使用ascii模式，(-b)强制使用binary模式</p>
+<p>put [-a | -b] local-path 上传文件，(-a) 强制使用ascii模式，(-b)强制使用binary模式</p>
+<p>建议使用-b选项，否则上传到UNIX或<a href="file:///D:/%E5%BE%AE%E4%BA%91%E7%BD%91%E7%9B%98/22194522/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/%E7%99%BE%E5%BA%A6blog-old/blog/blog/:;" target="_self"><span style="text-decoration: underline;"><strong>LINUX</strong></span></a>主机上的文件后有^M字符。</p>
+<h4><strong>4</strong>、使用<strong>Telnet</strong>连接主机</h4>
+<p>新建一个Telnet连接，在Telnet选项中填写主机IP，端口号信息。</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjtXGTr-P5_jZaPznvDzMDNiJ2RNVeLpukA525bYtJuvDvc3OQok0o0gBnG7sRHh7xnVLpt0tUkteg?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjsDM98hI1Zz57BW6lDgZdXjvBVhj5mpDc-skOcuqSREvY3882Xz96qTdzwZs4MtIGTXpWMfCqfLcA?PARTNER=WRITER" alt="clip_image042" width="244" height="209" border="0" data-pinit="registered" /></a><a href="http://by1.storage.msn.com/y1plhPeGU55Rjv94stN3B_Vf8HzQXUFBwtiOgUnT0tm0ytWB7NkOCEBjbbzdBOfelXHVCX4h7dmnEE5BvUJnNkevg?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjvEP9djpbbdbDqvMR3qrFzbqFSyOrZW-22XqYNHJQjJN-TvqF5UwH2-FosLC2hQ3Kro1aoNJ5O6LQ?PARTNER=WRITER" alt="clip_image044" width="244" height="210" border="0" data-pinit="registered" /></a></p>
+<p>在Linux主机下，可以使用Xmodem/Zmodem方便的上传和下载文件</p>
+<p>基本命令：sz 下载文件到本地；rz 上传本地文件到主机。</p>
+<h4><strong>5</strong>、其它技巧</h4>
+<h5><strong>1</strong>）使用脚本来进行重复性工作</h5>
+<p>可以像word的宏一样，把你的重复性操作记录为一个脚本文件</p>
+<p>Script. =&gt; Start Recording Script, 开始记录</p>
+<p>Script. =&gt; Stop Recording Script，停止记录， Save as …保存成script文件。下次调用时Script. =&gt; Run =&gt; Select Script. to run …</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55Rjv2a1PwVQPoJo4DkDT2n_0wabKHhY8W2FPopFH3JbxleTNCS_WVJQxG-s4p96mG85lPxHrCUIlBpw?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjsqqmgxS9kbLpDzVT2gC6OmfzXw0Gn66CE2ijhvB6G2Rrud3yytQXhq7mUtrhK_XkzOd7Lu79tILQ?PARTNER=WRITER" alt="clip_image046" width="244" height="121" border="0" data-pinit="registered" /></a></p>
+<h5><strong>2)</strong>使用<strong>Map key</strong>来进行重复输入工作</h5>
+<p>可以设置为全局选项（对所有连接都有效），也可以只设置为Session选项，如下图</p>
+<p>Options =&gt; Session ptions =&gt; Terminal =&gt; Mapped keys =&gt; Map a key，出现Map Key 对话框</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjsqcVZAB9pPP5BdhVIsoIe9q6J38lkBXrpnlXldmJPIJ0BtefYhezrWVgbIE4Pkk4xd2NAYW-ADww?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjsLloQsmXzgx8TgelhAxLUcaH25rlBfdB1tZimeuZZEdGXlBJYwepKVT2GSiqui62O0XEuIPD3bnQ?PARTNER=WRITER" alt="clip_image048" width="244" height="210" border="0" data-pinit="registered" /></a><a href="http://by1.storage.msn.com/y1plhPeGU55Rjt7fJ1eZjUAnq1HrIo1tQOBKOtM5xpNejcinBdBQ5nGh_AR2-Iyu47KYotoUCUsoz5F4od2P663xA?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55Rjs0XmZUkzWduhx-wzsKeJSJL38REoj62leNjROnHAWtUS_JoS0Y0UHuXGK3423Z73SLRKhf52ht3Q?PARTNER=WRITER" alt="clip_image050" width="244" height="125" border="0" data-pinit="registered" /></a></p>
+<p>例如，单击F12键，在Send String 输入你要经常重复使用的命令，ok</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjtquO06dYSfZyflhIuJpy4GUIyC3pC3KHf6IEjeCBRioaR3jgyrf0Q2Jp0Ki81nyADJH0uau-N3sA?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjvuOR0GUZMFBCod5-XIXvNAQCB3IaB0mP3ZJwkbCeYFreZV5pyNN8KGhcX4rizOlWjGJ6si9erEdA?PARTNER=WRITER" alt="clip_image052" width="244" height="102" border="0" data-pinit="registered" /></a></p>
+<p>则下次在会话窗口中点击F12键将直接输入df –m</p>
+<h5><strong>3</strong>）自动登录</h5>
+<p>以登录一个Telnet的主机为例，Session ptions =&gt; Connection =&gt; Logon Scripts =&gt; Automate logon, 在login后的send中输入用户名，在Password后的send中输入密码。则可实现自动登录。</p>
+<p><a href="http://by1.storage.msn.com/y1plhPeGU55RjsxsOnE_wn-sjrXKUt_GqEFuTbaHfuQ8_Wo601-fMduVFYiFqtakq1FBgk3QVYMb-iaH2q9oybdOA?PARTNER=WRITER"><img src="http://by1.storage.msn.com/y1plhPeGU55RjverlO8WyEZEGfv_mgHL9K0pD696qrIIpFvDbNjkR2ffxVKlM9kzo9jd67F2GoWZnkra2l2Us8bdg?PARTNER=WRITER" alt="clip_image054" width="244" height="210" border="0" data-pinit="registered" /></a></p>
+<p>&nbsp;</p>
+<p><span style="font-size: large;"><strong>用SecureCRT来上传和下载数据</strong></span><br />
+今天才知道，原来SecureCRT可以使用linux下的zmodem协议来快速的传送文件,而且还使用非常方便哦，我还傻傻的找其他软件来sftp，笨死了：（<br />
+你只要设置一下上传和下载的默认目录就行<br />
+options--&gt;session options--&gt;file transfer 下可以设置上传和下载的目录<br />
+剩下的你只要在用SecureCRT登陆linux终端的时候：<br />
+发送文件到客户端：<br />
+sz filename<br />
+zmodem接收可以自行启动.<br />
+从客户端上传文件到linux服务端：<br />
+只要服务端执行,<br />
+rz<br />
+然后在 SecureCRT 里选文件发送,协议 zmodem<br />
+简单吧，如果你以前一直使用ssh，而又没有对外开放ftp服务，你就直接使用这种方式来传输你的文件吧，很方便哦：）<br />
+frank发表 于</p>
+</div>

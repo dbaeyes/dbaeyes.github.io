@@ -1,0 +1,33 @@
+---
+layout: post
+title: 根据rowid建临时表更新大表数据
+date: 2009-03-24 10:17:25.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- sql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '543'
+---
+<p>[cc lang="sql"]create table tmp_xf_rowid as<br />
+select rowid rid from xf_detail<br />
+where isdo_bss is not null<br />
+order by 1;</p>
+<p>declare<br />
+i number := 0;<br />
+begin<br />
+for c in (select * from tmp_xf_rowid) loop<br />
+    update xf_detail t set isdo_bss = null where t.rowid = c.rid;<br />
+    i := i + 1;<br />
+    if mod(i, 100) = 0 then<br />
+      commit;<br />
+    end if;<br />
+end loop;<br />
+commit;<br />
+end;[/cc]</p>

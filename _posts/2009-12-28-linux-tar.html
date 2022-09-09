@@ -1,0 +1,54 @@
+---
+layout: post
+title: LINUX TAR
+date: 2009-12-28 13:00:10.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- OS
+tags:
+- linux
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '904'
+---
+<p>Linux下最常用的打包命令就是tar，使用tar命令打包后，就可以用其它的命令来进行压缩了。tar命令的使用方法如下：</p>
+<div>
+tar [-cxtzjvfpPN] 文件与目录</p>
+<p>参数说明：</p>
+<p>-c ：建立一个打包文件；</p>
+<p>-x ：解开一个打包文件；</p>
+<p>-t ：查看 tar包里面的文件；</p>
+<p>（特别注意，在选择参数时，c/x/t仅能存在一个，不可同时存在，因为不可能同时压缩与解压缩。）</p>
+<p>-z ：打包后用gzip压缩，生成.tar.gz文件；</p>
+<p>-j ：打包后用zip2压缩，生成.tar.bz2文件；</p>
+<p>-v ：压缩的过程中显示文件；</p>
+<p>-f ：使用文件名，请留意，在f之后要立即接文件名，不要再加其它参数；</p>
+<p>-p ：保持原文件的属性；</p>
+<p>-P ：使用绝对路径来压缩；</p>
+<p>-N ：设定日期(yyyy/mm/dd)，比后面接的日期还要新的文件才会被打包进新建的文件中；</p>
+<p>--exclude FILE：在打包的过程中，不要将FILE打包。</p>
+<p>举几个例子：</p>
+<p>例一：将整个/etc目录下的文件全部打包成为/tmp/etc.tar</p>
+<p>tar -cvf /tmp/etc.tar /etc  #仅打包，不压缩</p>
+<p>tar -zcvf /tmp/etc.tar.gz /etc  #打包后，以gzip压缩</p>
+<p>tar -jcvf /tmp/etc.tar.bz2 /etc  #打包后，以bzip2压缩</p>
+<p>例二：查阅上述/tmp/etc.tar.gz文件内有哪些文件</p>
+<p>tar -ztvf /tmp/etc.tar.gz</p>
+<p>例三：将/tmp/etc.tar.gz文件解压缩到/usr/local/src下</p>
+<p>cd /usr/local/src   #先将工作目录变换到/usr/local/src下</p>
+<p>tar -zxvf /tmp/etc.tar.gz</p>
+<p>例四：只将/tmp/etc.tar.gz内的etc/passwd解压到/tmp下</p>
+<p>cd /tmp</p>
+<p>tar -zxvf /tmp/etc.tar.gz etc/passwd</p>
+<p>例五：将/etc内的所有文件备份下来，并且保存其权限！</p>
+<p>tar -zxvpf /tmp/etc.tar.gz /etc</p>
+<p>例六：在/home当中，比2005/06/01新的文件才备份</p>
+<p>tar -N '2005/06/01' -zcvf home.tar.gz /home</p>
+<p>例七：备份/home、/etc，但不要/home/dmtsai</p>
+<p>tar --exclude /home/dmtsai -zcvf myfile.tar.gz /home/* /etc</p>
+<p>例八：将/etc打包后直接解开在/tmp底下，而不产生文件！</p>
+<p>cd /tmp</p>
+<p>tar -cvf - /etc | tar -xvf -</p></div>

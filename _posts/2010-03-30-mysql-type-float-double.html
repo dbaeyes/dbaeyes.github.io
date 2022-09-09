@@ -1,0 +1,74 @@
+---
+layout: post
+title: mysql float double 类型
+date: 2010-03-30 11:30:28.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- mysql
+- sql
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '628'
+---
+<h1></h1>
+<div>一般在oracle的数字类型都设置为number不带长度，这个扩展性比较好。不太需要去关心是整数还是小数，而且长度所占的空间也是和存储的数值相关。</p>
+<p>mysql中数值类型占的长度比较固定，对于float的使用心里没什么底。 直接用数值进行小测一下。</p>
+<p>##################################################################</p>
+<p>mysql&gt; show create table tmp_xf_test\G<br />
+*************************** 1. row ***************************<br />
+Table: tmp_xf_test<br />
+Create Table: CREATE TABLE `tmp_xf_test` (<br />
+`t1` float(7,4) DEFAULT NULL,<br />
+`t2` float DEFAULT NULL,<br />
+`t3` double(7,4) DEFAULT NULL,<br />
+`t4` double DEFAULT NULL<br />
+) ENGINE=MyISAM DEFAULT CHARSET=gbk</p>
+<p>1. mysql&gt; insert into tmp_xf_test values(5.1,5.1,5.1,5.1);<br />
+|   5.1000 |         5.1 |   5.1000 |                  5.1 |<br />
+--设置了具体精度的，小数后面会用0补全</p>
+<p>2. 123456789.123456789<br />
+| 999.9999 | 1.23457e+08 | 999.9999 |     123456789.123457 |<br />
+--限制(7,4)的  溢出了</p>
+<p>3. 123.4567<br />
+| 123.4567 |     123.457 | 123.4567 |             123.4567 |</p>
+<p>4. 123.45678<br />
+| 123.4568 |     123.457 | 123.4568 |            123.45678 |</p>
+<p>5. 1234.456<br />
+| 999.9999 |     1234.46 | 999.9999 |             1234.456 |  --溢出</p>
+<p>6. 0.00009<br />
+|   0.0001 |       9e-05 |   0.0001 |                9e-05 |</p>
+<p>7. 0.123456789012345678901<br />
+|   0.1235 |    0.123457 |   0.1235 |    0.123456789012346 |  --16位有效长度</p>
+<p>8. 12345678901234567890.123456789012345678901<br />
+| 999.9999 | 1.23457e+19 | 999.9999 | 1.23456789012346e+19 |<br />
+-- float 7位有效长度，double 16位有效长度</p>
+<p>9. 12345678901234567890<br />
+| 999.9999 | 1.23457e+19 | 999.9999 | 1.23456789012346e+19 |</p>
+<p>------------------------<br />
+具体参考手册<br />
+<a href="http://dev.mysql.com/doc/refman/5.1/en/numeric-types.html" target="_blank">http://dev.mysql.com/doc/refman/5.1/en/numeric-types.html</a></p>
+<p>The FLOAT and DOUBLE data types are used to represent approximate numeric data values. For FLOAT, the SQL standard allows an optional specification of the precision (but not the range of the exponent) in bits following the keyword FLOAT in parentheses. MySQL also supports this optional precision specification, but the precision value is used only to determine storage size. A precision from 0 to 23 results in a four-byte single-precision FLOAT column. A precision from 24 to 53 results in an eight-byte double-precision DOUBLE column.</p>
+<p>MySQL allows a nonstandard syntax: FLOAT(M,D) or REAL(M,D) or DOUBLE PRECISION(M,D). Here, “(M,D)” means than values can be stored with up to M digits in total, of which D digits may be after the decimal point. For example, a column defined as FLOAT(7,4) will look like -999.9999 when displayed. MySQL performs rounding when storing values, so if you insert 999.00009 into a FLOAT(7,4) column, the approximate result is 999.0001.</p>
+<p>--关于浮点数可以参考<br />
+<a href="http://www.ibm.com/developerworks/cn/java/j-math2.html" target="_blank">http://www.ibm.com/developerworks/cn/java/j-math2.html</a></p>
+<p>--------------题外话，空间还是不能很好的应用格式，复制过来就格式乱掉了。</p>
+<p>mysql&gt; select * from tmp_xf_test;<br />
++----------+-------------+----------+----------------------+<br />
+| t1       | t2          | t3       | t4                   |<br />
++----------+-------------+----------+----------------------+<br />
+|   5.1000 |         5.1 |   5.1000 |                  5.1 |<br />
+| 999.9999 | 1.23457e+08 | 999.9999 |     123456789.123457 |<br />
+| 123.4567 |     123.457 | 123.4567 |             123.4567 |<br />
+| 123.4568 |     123.457 | 123.4568 |            123.45678 |<br />
+| 999.9999 |     1234.46 | 999.9999 |             1234.456 |<br />
+|   0.0001 |       9e-05 |   0.0001 |                9e-05 |<br />
+|   0.1235 |    0.123457 |   0.1235 |    0.123456789012346 |<br />
+| 999.9999 | 1.23457e+19 | 999.9999 | 1.23456789012346e+19 |<br />
+| 999.9999 | 1.23457e+19 | 999.9999 | 1.23456789012346e+19 |<br />
++----------+-------------+----------+----------------------+<br />
+9 rows in set (0.00 sec)</p></div>

@@ -1,0 +1,144 @@
+---
+layout: post
+title: ORACLE EXPLAIN PLAN的总结
+date: 2008-07-17 17:13:40.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- sql
+- oracle
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '593'
+---
+<p><span style="font-size: medium;">在</span><span style="font-family: 'Times New Roman';">ORACLE</span><span style="font-size: medium;">数据库中</span><span style="font-family: 'Times New Roman';">,</span><span style="font-size: medium;">需要对</span><span style="font-family: 'Times New Roman';">SQL</span><span style="font-size: medium;">语句进行优化的话需要知道其执行计划</span><span style="font-family: 'Times New Roman';">,</span><span style="font-size: medium;">从而针对性的进行调整</span><span style="font-family: 'Times New Roman';">.ORACLE</span><span style="font-size: medium;">的执行计划的获得有几种方法</span><span style="font-family: 'Times New Roman';">,</span><span style="font-size: medium;">下面就来总结下。</span></p>
+<div>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">1</span>、<span style="font-family: 'Times New Roman';">EXPLAIN</span>的使用</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">    Oracle RDBMS</span>执行每一条<span style="font-family: 'Times New Roman';">SQL</span>语句，都必须经过<span style="font-family: 'Times New Roman';">Oracle</span>优化器的评估。所以，了解优化器是如何选择<span style="font-family: 'Times New Roman';">(</span>搜索<span style="font-family: 'Times New Roman';">)</span>路径以及索引是如何被使用的，对优化<span style="font-family: 'Times New Roman';">SQL</span>语句有很大的帮助。<span style="font-family: 'Times New Roman';">Explain</span>可以用来迅速方便地查出对于给定<span style="font-family: 'Times New Roman';">SQL</span>语句中的查询数据是如何得到的即搜索路径<span style="font-family: 'Times New Roman';">(</span>我们通常称为<span style="font-family: 'Times New Roman';">Access Path)</span>。从而使我们选择最优的查询方式达到最大的优化效果。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">1.1 </span>、安装</span></p>
+<p><span style="font-size: medium;">要使用<span style="font-family: 'Times New Roman';">EXPLAIN</span>首先要执行相应的脚本，创建出<span style="font-family: 'Times New Roman';">Explain_plan</span>表。</span></p>
+<p><span style="font-size: medium;">具体脚本执行如下：</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">$ORACLE_HOME/rdbms/admin/utlxplan.sql (UNIX) </span>该脚本后会生成一个表这个程序会创建一个名为<span style="font-family: 'Times New Roman';">plan_table</span>的表。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">1.2 </span>、使用</span></p>
+<p><span style="font-size: medium;">常规使用语法：</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';"><span style="color: #ff0000;">explain PLAN [ SET STATEMENT_ID [=] &lt; string literal &gt; ] [ INTO &lt; table_name &gt; ]</span></span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';"><span style="color: #ff0000;">FOR &lt; sql_statement &gt;</span></span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;">其中：</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">STATEMENT_ID</span>：是一个唯一的字符串，把当前执行计划与存储在同一<span style="font-family: 'Times New Roman';">PLAN</span>中的其它执行计划区别开来。</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">TABLE_NAME</span>：是<span style="font-family: 'Times New Roman';">plan</span>表名，它结构如前所示，你可以任意设定这个名称。</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">sql_statement</span>：真正的<span style="font-family: 'Times New Roman';">SQL</span>语句。</span></p>
+<p><span style="font-size: medium;">比如：</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt;explain plan set statement_id='T_TEST' for select * from t_test;  </span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;">执行下面语句可以查询到执行计划</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt;SELECT A.OPERATION,OPTIONS,OBJECT_NAME,OBJECT_TYPE,ID,PARENT_ID</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2 FROM PLAN_TABLE a</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">3 WHERE STATEMENT_ID='T_TEST'</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">4 ORDER BY Id;</span></span></p>
+<p><span style="font-size: medium;">也可以用这句话<span style="font-family: 'Times New Roman';"> select * from table(dbms_xplan.display); </span>可以把所有<span style="font-family: 'Times New Roman';">PLAN_TABLE</span>里的数据罗列出来。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2 </span>、<span style="font-family: 'Times New Roman';">AUTOTRACE</span>的使用方法</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2.1</span>、安装</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;">用<span style="font-family: 'Times New Roman';">sys</span>用户运行脚本<span style="font-family: 'Times New Roman';">ultxplan.sql</span></span></p>
+<p><span style="font-size: medium;">建立这个表的脚本是：（<span style="font-family: 'Times New Roman';">UNIX:$ORACLE_HOME/rdbms/admin, Windows:%ORACLE_HOME%\rdbms\admin</span>）<span style="font-family: 'Times New Roman';">ultxplan.sql</span>。</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt; connect sys/sys@colm2 as sysdba;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt; @C:\oracle\ora92\rdbms\admin\utlxplan.sql;</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt; create public synonym plan_table for plan_table;--</span>建立同义词</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt; grant all on plan_table to public;--</span>授权所有用户</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;">要在数据库中建立一个角色<span style="font-family: 'Times New Roman';">plustrace,</span>用<span style="font-family: 'Times New Roman';">sys</span>用户运行脚本<span style="font-family: 'Times New Roman';">plustrce.sql</span>来创建这个角色，这个脚本在目录（<span style="font-family: 'Times New Roman';">UNIX:$ORACLE_HOME/sqlplus/admin, Windows:%ORACLE_HOME%\sqlplus\admin</span>）中；</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt; @C:\oracle\ora92\sqlplus\admin\plustrce.sql;</span></span></p>
+<p><span style="font-size: medium;">然后将角色<span style="font-family: 'Times New Roman';">plustrace</span>授予需要<span style="font-family: 'Times New Roman';">autotrace</span>的用户；</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt;grant plustrace to public;</span></span></p>
+<p><span style="font-size: medium;">经过以上步骤的设置，就可以在<span style="font-family: 'Times New Roman';">sql*plus</span>中使用<span style="font-family: 'Times New Roman';">autotrace</span>了</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2</span>、<span style="font-family: 'Times New Roman';">2 </span>使用</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;">使用起来非常方便，只要使用一条命令就可以了</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt;SET AUTOTRACE ON</span>；</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">*autotrace</span>功能只能在<span style="font-family: 'Times New Roman';">SQL*PLUS</span>里使用</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;">其他一些使用方法：</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2.2.1</span>、在<span style="font-family: 'Times New Roman';">SQLPLUS</span>中得到语句总的执行时间</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt; set timing on;</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2.2.2</span>、只显示执行计划<span style="font-family: 'Times New Roman';">--</span>（会同时执行语句得到结果）</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt;set autotrace on explain</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;">比如：</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">sql&gt; select count(*) from test;</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">count(*)</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">-------------</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">4</span></span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">Execution plan</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">----------------------------</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">0            select statement ptimitzer=choose (cost=3 card=1)</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">1     0        sort(aggregate)</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2     1           partition range(all)</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">3     2             table access (full) of 't_test' (cost=3 card=900)</span></span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2.2.3</span>、只显示统计信息<span style="font-family: 'Times New Roman';">---</span>（会同时执行语句得到结果）</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt;set autotrace on statistics;</span></span></p>
+<p><span style="font-size: medium;">（备注：对于<span style="font-family: 'Times New Roman';">SYS</span>用户，统计信息将会是<span style="font-family: 'Times New Roman';">0</span>）</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2.2.4</span>、显示执行计划，屏蔽执行结果<span style="font-family: 'Times New Roman';">--</span>（但语句实质还执行的）</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt; set autotrace on traceonly;   </span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;">（备注：同<span style="font-family: 'Times New Roman';">SET AUTOTRACE ON; </span>只不过不显示结果，显示计划和统计）</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2.2.5</span>、仅仅显示执行计划，屏蔽其他一切结果<span style="font-family: 'Times New Roman';">--(</span>语句还是执行了<span style="font-family: 'Times New Roman';">)</span></span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt;set autotrace on traceonly explain;</span></span></p>
+<p><span style="font-size: medium;">对于仅仅查看大表的<span style="font-family: 'Times New Roman';">Explain Plan</span>非常管用。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">2.2.6</span>、关闭</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">SQL&gt;set autotrace off;</span></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="color: #ff0000;">总结：<span style="font-family: 'Times New Roman';">SQLPLUS </span>下的自动显示功能，在看执行计划中其语句还是会被执行的。尤其在执行<span style="font-family: 'Times New Roman';">UPDATE/DELETE</span>语句时请千万注意，<span style="font-family: 'Times New Roman';">ORACLE</span>是先执行脚本同时显示执行计划的，即使使用<span style="font-family: 'Times New Roman';">set autotrace on traceonly explain;</span></span></span></p>
+<p><span style="font-size: medium;"><span style="color: #ff0000;">这个时候推荐使用<span style="font-family: 'Times New Roman';">EXPLAIN PLAN FOR</span>来看或者<span style="font-family: 'Times New Roman';">PL/SQL</span>等第三方工具</span></span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">3</span>、第三工具来看执行计划</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">   </span>如果在<span style="font-family: 'Times New Roman';">PL/SQL</span>中使用选择要查询语句显示执行计划，则只需要<span style="font-family: 'Times New Roman';">SQL WINDOWS </span>窗口里面输入要查询的<span style="font-family: 'Times New Roman';">SQL</span>语句，然后选择按键<span style="font-family: 'Times New Roman';">F5</span>或者在菜单<span style="font-family: 'Times New Roman';">TOOLS-&gt;Explain Plan </span>菜单按键就可以在执行计划窗口查看该语句的执行计划。</span></p>
+<p><span style="font-size: medium;">在<span style="font-family: 'Times New Roman';">TOAD</span>语句中在执行当前的<span style="font-family: 'Times New Roman';">SQL</span>窗口中选择下方的<span style="font-family: 'Times New Roman';">Explain PlanTAB</span>页即可以查看要执行语句的执行计划信息。</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">4</span>、限制</span></p>
+<p><span style="font-size: medium;"><span style="font-family: 'Times New Roman';">explain</span>真正的唯一的限制是用户不能去解释其它用户的表，视图，索引或其它类型，用户必须是所有被解释事物的所有者，如果不是所有者而只有<span style="font-family: 'Times New Roman';">select</span>权限，<span style="font-family: 'Times New Roman';">explain</span>会返回一个错误。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-family: 'Times New Roman'; font-size: medium;">From: </span><a href="http://space.itpub.net/127656/viewspace-364817" target="_blank">http://space.itpub.net/127656/viewspace-364817</a></p>
+<p>&nbsp;</p>
+<p>简单方法搞定最好：</p>
+<p>&nbsp;</p>
+<p>设置autotrace权限<br />
+@?/sqlplus/admin/plustrce<br />
+grant plustrace to public;</p>
+</div>

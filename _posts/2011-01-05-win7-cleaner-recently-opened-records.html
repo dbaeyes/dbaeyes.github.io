@@ -1,0 +1,105 @@
+---
+layout: post
+title: Win7清除程序的最近打开记录
+date: 2011-01-05 21:25:16.000000000 +10:30
+type: post
+published: true
+status: publish
+categories:
+- OS
+tags:
+- blog
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '948'
+---
+<p>悲剧的HI 百度空间, 居然没有标签功能, 所以你才看到标题一长串.</p>
+<div>
+<p>正文开始前先说说本文包含哪些内容, 顺序如下:</p>
+<p>1. 禁用"最近"打开记录(包括开始菜单)</p>
+<p>2. 手动清除"最近"打开记录. (不包括菜单)</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><strong>1. 禁用"最近"打开记录</strong></p>
+<p>当我们使用资源管理器的时候, 在对应的目录执行过程序或者其它操作, 那么在任务栏右键点击资源管理器时, 便会有"最近"使用记录.</p>
+<p>如前面所说, 此记录只有在你运行过该目录下的文件时才会产生, 因此一般的打开文件夹操作不会产生记录.</p>
+<p>有些人或许喜欢该记录功能, 但是有些人则不喜欢. 不喜欢的话, 你可以关闭掉该功能.</p>
+<p>方法: 任务栏"右键"-&gt;"属性"-&gt;"开始菜单"选项卡, 在隐私方框中有两个选项, 第一个是"存储并显示最近在开始菜单中打开的程序", 第二个是"存储并显示最近在开始菜单和任务栏中打开的项目".</p>
+<p>把第二个勾去掉则不再有"最近"记录. 第一个勾则是使用开始菜单中的程序才会产生记录.</p>
+<div>
+<p>&nbsp;</p>
+<p><strong>2. 手动清除"最近"打开记录. (不包括菜单)</strong></p>
+<p>对于该记录的清除, 除了自己一个一个删除记录, 就只有下面的办法, 微软并没有对该记录提供自动清除的办法.</p>
+<p>打开这个路劲: "%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations"</p>
+<p>在此目录下, 记录了所有程序的Jumplist, 也就是"最近"打开记录, 只要将该目录下的所有文件删除掉, 即可清除掉所有程序的最近打开记录.</p>
+<p>需要注意一点的是, 该做法同时会清除掉程序的"固定"记录(即"锁定"记录), 这是一个比较悲剧的事情. 因此, 你可以把需要的先固定好, 然后备份对应的".automaticDestinations-ms"文件.</p>
+<p>下面提供本人已知的Jumplist记录文件, 欢迎大家回复反馈更多的已知Jumplist记录文件.</p>
+<p>详细的Jumplist记录可以看该网址: <a href="http://hkmhd.99rr.net/jumplist.htm">http://hkmhd.99rr.net/jumplist.htm</a></p>
+<p>&nbsp;</p>
+<table border="1">
+<tbody>
+<tr>
+<td>程序名</td>
+<td>进程名</td>
+<td>文件</td>
+</tr>
+<tr>
+<td>资源管理器</td>
+<td>Explorer.exe</td>
+<td>1b4dd67f29cb1962.automaticDestinations-ms</td>
+</tr>
+<tr>
+<td>记事本</td>
+<td>notepad.exe</td>
+<td>918e0ecb43d17e23.automaticDestinations-ms</td>
+</tr>
+<tr>
+<td>Word 2007</td>
+<td>winWord.exe</td>
+<td>7226dfab90fd8ba1.automaticDestinations-ms</td>
+</tr>
+<tr>
+<td>Notepad2</td>
+<td>Notepad2.exe</td>
+<td>4558f5eb8da50289.automaticDestinations-ms</td>
+</tr>
+<tr>
+<td>QQ影音</td>
+<td>QQPlayer.exe</td>
+<td>154699ee4f4571e8.automaticDestinations-ms</td>
+</tr>
+<tr>
+<td>傲游浏览器2</td>
+<td>Maxthon.exe</td>
+<td>ba636c4aa7c7d0eb.automaticDestinations-ms</td>
+</tr>
+<tr>
+<td>Adobe Flash Player(debug) 10.0 r32</td>
+<td>FlashPlayer.exe</td>
+<td>cb6e361346bce5e6.automaticDestinations-ms</td>
+</tr>
+<tr>
+<td>Winrar</td>
+<td>Winrar.exe</td>
+<td>80ab7d3dce2e3ba2.automaticDestinations-ms</td>
+</tr>
+<tr>
+<td>7-Zip</td>
+<td>7zFM.exe</td>
+<td>e24010c8532a6e62.automaticDestinations-ms</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>

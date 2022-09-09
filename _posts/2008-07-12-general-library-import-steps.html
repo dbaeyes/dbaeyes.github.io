@@ -1,0 +1,39 @@
+---
+layout: post
+title: 全库导入的一般步骤
+date: 2008-07-12 21:49:09.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- test
+- oracle
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '4765'
+---
+<p>IMP全库导入的一般步骤</p>
+<div>
+1.先全库加rows=n把结构导进去<br />
+imp system/manager file=exp.dmp log=imp.log full=y rows=n indexes=n<br />
+2.使业务用户的触发器失效/删除主键和唯一索引<br />
+spool drop_pk_u.sql</p>
+<p>select 'alter table '||table_name||' drop constraint '||constraint_name||';'<br />
+from user_constraints<br />
+where constraint_type in ('P','U')<br />
+/</p>
+<p>spool off</p>
+<p>spool disable_trigger.sql</p>
+<p>select 'alter trigger '||trigger_name||' disable;'<br />
+from user_triggers<br />
+/</p>
+<p>spool off</p>
+<p>@drop_pk_u.sql<br />
+@disable_trigger.sql</p>
+<p>3.以ignore=y全库导入<br />
+imp system/manager file=exp.dmp log=imp.log full=y ignore=y</p>
+<p>4.通过toad提取源数据库创建主键和索引的脚本,在目标数据库中创建主键和索引.</p>
+</div>

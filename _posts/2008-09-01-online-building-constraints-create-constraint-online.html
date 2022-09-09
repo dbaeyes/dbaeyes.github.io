@@ -1,0 +1,45 @@
+---
+layout: post
+title: 在线建约束 Create constraint online
+date: 0208-09-01 11:01:41.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- index
+meta:
+  _edit_last: '1'
+  posturl_add_url: 'yes'
+  _aioseop_keywords: oracle,constraint.online
+  _aioseop_title: Create constraint online
+  views: '1257'
+---
+<p>在一个拥有大量数据，在线的（也就是说很有可能有其他来操作这个表）表上面建立一个主键约束或者唯一键约束，为了防止出现阻塞的现象，可使用下面的一般性步骤。<br />
+1.       先检查这个表有没有符合建立这个约束的索引。<br />
+2.       如果没有，先以online方式建立符合约束的非unique的索引。<br />
+3.       建立状态为ENABLE NOVALIDATE的约束。<br />
+4.       更改约束状态至ENABLE VALIDATE状态。<br />
+在这个步骤之中，如果你不先手工online建立索引，而是期待oracle在建立约束的时候自动建立索引，这样也会可能导致阻塞的，有第一个实验的结果就可以看出，因为oracle会自动给你建立一个unique索引，而且是非online方式。<br />
+from: 胜通<br />
+--[cc lang="sql"]<br />
+CREATE TABLE tmp_xf(i NUMBER,<br />
+ab NUMBER)<br />
+tablesapce tbs_aaa_ind;</p>
+<p>ALTER TABLE tmp_xf<br />
+ADD CONSTRAINT pk_tmp_xf_id PRIMARY KEY(I)<br />
+USING INDEX;</p>
+<p>CREATE INDEX idx_tmp_xf_ab ON tmp_xf(ab) TABLESPACE tbs_xxx_ind<br />
+ONLINE COMPUTE STATISTICS;</p>
+<p>alter table TMP_XF<br />
+add constraint IDX_TMP_XF_AB unique (AB)<br />
+using index<br />
+enable NOVALIDATE;</p>
+<p>--验证<br />
+ALTER TABLE tmp_xf MODIFY CONSTRAINT IDX_TMP_XF_AB VALIDATE;</p>
+<p>--验证并开启，有锁<br />
+ALTER TABLE tmp_xf MODIFY CONSTRAINT IDX_TMP_XF_AB ENABLE VALIDATE;<br />
+[/cc]</p>
+<p>--eof</p>

@@ -1,0 +1,60 @@
+---
+layout: post
+title: mysql alter ignore table
+date: 2011-04-14 14:51:36.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- MySQL
+tags:
+- mysql
+- sql
+- ddl
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '1199'
+---
+<h1></h1>
+<div>
+<p>Mark</p>
+<p>&nbsp;</p>
+<p>IGNORE is a MySQL extension to standard SQL. It controls how <a href="http://dev.mysql.com/doc/refman/4.1/en/alter-table.html">ALTER TABLE</a> works if there are duplicates on unique keys in the new table or if warnings occur when strict mode is enabled. If IGNORE is not specified, the copy is aborted and rolled back if duplicate-key errors occur. If IGNORE is specified, only the first row is used of rows with duplicates on a unique key, The other conflicting rows are deleted. Incorrect values are truncated to the closest matching acceptable value.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>root@test 01:57:29&gt;alter ignore table tmp_abc add unique key uk_b(b);</p>
+<p>Query OK, 5 rows affected (0.65 sec)</p>
+<p>Records: 5  Duplicates: 3  Warnings: 0</p>
+<p>&nbsp;</p>
+<p>----BUT---- WHY --</p>
+<p>&nbsp;</p>
+<p>alter ignore table table_bbb add unique key uk_tcm_sellerid(seller_id,service_date);</p>
+<p>Error 1062: Duplicate entry '10688998-2011-04-11 00:00:00' for key 'uk_tcm_sellerid'</p>
+<p>[2011-04-14 03:00:00] SQL执行失败！</p>
+<p>--- which variables?</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>##########</p>
+<p>mysql删除表中重复记录的sql，只能搞个临时表了</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>create table tmp_xd_del_id as</p>
+<p>select id from tt_stats a</p>
+<p>WHERE a.id != (SELECT MAX(id)</p>
+<p>FROM tt_stats b</p>
+<p>WHERE a.seller_id = b.seller_id</p>
+<p>AND a.service_date = b.service_date);</p>
+<p>delete from tt_stats where id in(select id from tmp_xd_del_id);</p>
+<p>-- one sql</p>
+<p>delete a from table_name a,<br />
+(select *, min(id) as bid<br />
+from table_name<br />
+group by index_value, member_id<br />
+having count(1) &gt; 1) as b<br />
+where a.index_value = b.index_value<br />
+and a.member_id = b.member_id<br />
+and a.id &gt; b.bid;</p>
+</div>

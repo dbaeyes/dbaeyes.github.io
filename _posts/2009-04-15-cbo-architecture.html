@@ -1,0 +1,74 @@
+---
+layout: post
+title: CBO体系结构
+date: 2009-04-15 22:24:31.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- cbo
+- oracle
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '956'
+---
+<p>今天听了B2C 陈立同学的CBO体系结构的分享，收益颇多。 够我消化好一阵子了，很多东西是在不断的摸索中积累起来的。 向大牛们学习！</p>
+<div>
+简单记录一下</p>
+<p>基于规则的优化器<br />
+<strong>1: 通过rowid访问单笔记录</strong><br />
+2: Single Row by Cluster Join<br />
+3: Single Row by Hash Cluster Key with Unique or Primary Key<br />
+<strong>4: 通过唯一索引或主键访问单笔记录</strong><br />
+5: Clustered Join<br />
+6: Hash Cluster Key<br />
+7: Indexed Cluster Key<br />
+<strong>8: 复合索引扫描<br />
+9: 单列索引扫描<br />
+10: 索引列上的闭区间搜索<br />
+11: 索引列上的开区间搜索</strong><br />
+12: 排序归并连接<br />
+13: 索引列的MAX和MIN<br />
+14: 索引列排序<br />
+<strong>15: 全表扫描</strong></p>
+<p><strong>CBO误区</strong><br />
+不同SQL文本的Cost是不可比较的<br />
+统计信息就是指柱状图<br />
+执行计划突然错误, 分析柱状图就可以解决所有问题<br />
+帮定变量可以减少硬解析, 任何时候都应该使用它<br />
+/*+NO_MERGE*/是不使用归并连接</p>
+<p><strong>单表访问路径</strong></p>
+<p>全表扫描(Full Table Scan)<br />
+Cost ≈ Blocks / db_block_multiblock_read_count</p>
+<p>索引范围扫描(Index Range Scan)<br />
+Cost =<br />
+BLevel +<br />
+Index Selective × Leaf Blocks<br />
+[ + Table Selective × Clustering Factor]<br />
+[ - 1]</p>
+<p>索引快速全扫描(Fast Full Index Scan)</p>
+<p>索引全扫描(Index Full Scan)<br />
+Cost ≈ Leaf Blocks / db_block_multiblock_read_count</p>
+<p>Column1 = value1<br />
+1/distinct_value<br />
+Column1 &gt; value1<br />
+Column1 &lt; value1<br />
+Function(C1) operator value1<br />
+对于等于是固定的1%<br />
+对于其他的是固定的5%</p>
+<p><strong>重要的统计变量</strong><br />
+Table<br />
+--Blocks 决定全表扫描成本<br />
+--Num_rows 决定单表访问的输出结果集基数<br />
+Index<br />
+--Leaf_blocks 决定索引全扫描/范围扫描成本<br />
+--Blevel 决定索引唯一扫描成本<br />
+--Clustering_factor 决定索引访问表成本<br />
+Column<br />
+--Num_distinct 无柱状图时使用 = :1 时决定选择率<br />
+--Density 有柱状图时使用 =:1 时决定选择率<br />
+--Low_value &amp; High_value 使用硬编码时决定选择率</p>
+<p>--EOF--</p></div>

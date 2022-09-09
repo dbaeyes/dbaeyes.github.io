@@ -1,0 +1,78 @@
+---
+layout: post
+title: WEB分页与优化技术
+date: 2008-09-08 10:38:31.000000000 +09:30
+type: post
+published: true
+status: publish
+categories:
+- Oracle
+tags:
+- oracle
+- index
+meta:
+  posturl_add_url: 'yes'
+  _edit_last: '1'
+  views: '995'
+---
+<p><strong>表扫描与索引扫描</strong></p>
+<div>
+<p>•    <span style="font-family: Calibri;">Where a=41</span></p>
+<p>•    表扫描（假定没有索引）</p>
+<p>– <span style="font-family: Calibri;">1</span>、扫描所有的该表的数据块</p>
+<p>– <span style="font-family: Calibri;">2</span>、从数据块中找到记录，并过滤</p>
+<p>– 需要扫描该表所有的数据块</p>
+<p>•    索引扫描</p>
+<p>– <span style="font-family: Calibri;">1</span>、在索引中搜索<span style="font-family: Calibri;">a=41</span>的位置（一般只扫描<span style="font-family: Calibri;">3</span>个块左右<span style="font-family: Calibri;">R-&gt;B-&gt;L</span>）</p>
+<p>– <span style="font-family: Calibri;">2</span>、获得所有<span style="font-family: Calibri;">a=41</span>的相关行的<span style="font-family: Calibri;">rowid</span></p>
+<p>– <span style="font-family: Calibri;">3</span>、根据<span style="font-family: Calibri;">rowid</span>，回表查询数据，如果数据量少，回表就少</p>
+<p>– 假定需要的数据都在索引中，可以不回表</p>
+<p>•    如索引为<span style="font-family: Calibri;">(a,b)</span>，查询为<span style="font-family: Calibri;">select b from table where a=41</span></p>
+<p>&nbsp;</p>
+<p>•    处决于扫描的数据量对应表的总量的百分比</p>
+<p>•    少量数据扫描，索引扫描总是好的</p>
+<p>•    <span style="font-family: Calibri;">OLTP</span>系统，尽量采用索引扫描<span style="font-family: Calibri;">(</span>因为查询结果一般很小）</p>
+<p>•    如果有可能，只在索引上查询，不用回表，或者少回表</p>
+<p>– 回表会读取更多的块（因为表数据是无序的）</p>
+<p>– 排序，先分页再回表<span style="font-family: Calibri;">(</span>减少回表）</p>
+<p>– 求总数，如<span style="font-family: Calibri;">count(*)</span>，尽量不回表</p>
+<p>– 但是查询字段很少的查询，可以建立复合索引，避免回表</p>
+<p>–</p>
+<p><strong>分页技术与数据库查询分页</strong></p>
+<p>•    搜索技术的发展，如<span style="font-family: Calibri;">google</span>，已经不是普通的数据库分页技术</p>
+<p>•    我们的讨论的分页技术都是指数据库获取数据并分页，并简称为<span style="font-family: Calibri;">WEB</span>分页技术</p>
+<p>•    我们的数据库统一为<span style="font-family: Calibri;">Oracle</span>数据库，分页技术主要是<span style="font-family: Calibri;">rownum</span>与分析函数</p>
+<p>– <span style="font-family: Calibri;">ROWNUM</span>，伪列，实际不存在（与<span style="font-family: Calibri;">rowid</span>是不一样的）</p>
+<p>–</p>
+<p><strong>分页案例一：无排序分页</strong></p>
+<p>•    无顺序要求</p>
+<p>•    正确写法</p>
+<p>– <span style="font-family: Calibri;">Select * from (select rownum rn,t.* from table t where </span>条件<span style="font-family: Calibri;"> and rownum &lt;=n) where rn &gt;=m</span></p>
+<p>•    错误写法</p>
+<p>– <span style="font-family: Calibri;">Select * from (Select rownum rn,* from (select * from table t where </span>条件<span style="font-family: Calibri;">) where rownum &lt;=n) where rn &gt;=m</span></p>
+<p>•    特征</p>
+<p>– 越靠前越快（正好是大部分人只对前面数据感兴趣）</p>
+<p>– 如果有<span style="font-family: Calibri;">where</span>条件，也仅仅是选出足够的数据就停止扫描，不用扫描所有块</p>
+<p>&nbsp;</p>
+<p><strong>分页案例二：排序分页</strong></p>
+<p>•    要求排序后分页（我们的大部分分页需求）</p>
+<p>•    正确写法</p>
+<p>– <span style="font-family: Calibri;">Select * from (Select rownum rn,* from (select * from table t where </span>条件<span style="font-family: Calibri;"> order by field) where rownum &lt;=n) where rn &gt;=m</span></p>
+<p>•    错误写法</p>
+<p>– <span style="font-family: Calibri;">Select * from (select rownum rn,t.* from table t where </span>条件<span style="font-family: Calibri;"> and rownum &lt;=n order by field) where rn &gt;=m</span></p>
+<p>•    注意了，是不是与无排序条件的相反</p>
+<p>•    因为，如果把<span style="font-family: Calibri;">rownum</span>与<span style="font-family: Calibri;">order by</span>写一起，是取出<span style="font-family: Calibri;">rownum</span>范围内的再排序（也就是说<span style="font-family: Calibri;">rownum</span>的优先级高）</p>
+<p>•    必须要先排序</p>
+<p>•    如果是全表扫描，必须扫描所有块</p>
+<p>•    如果是索引扫描，必须选择出所有的数据</p>
+<p>•    可以采用分析函数</p>
+<p>– <span style="font-family: Calibri;">Select * from (select row_number over(order by field) rn,t.* from table) where rn&gt;=m and rn &lt;=n</span></p>
+<p>&nbsp;</p>
+<p><strong>分页优化</strong></p>
+<p>•    如果是很大的表，需要足够多的<span style="font-family: Calibri;">where</span>条件，筛选出定量的记录并分页</p>
+<p>•    如果有排序要求，先排序后分页</p>
+<p>•    尽量走索引，少回表，如果实在有需要回表，先在索引上分页，再回表</p>
+<p>– 因为索引是有序的，访问的块比较少</p>
+<p>– 只访问索引，可以获得行的<span style="font-family: Calibri;">rowid</span>，根据<span style="font-family: Calibri;">rowid</span>可最终获得数据</p>
+<p>– 如果先分页再回表，可以只回表该页的数据，不用回表所有数据</p>
+</div>
