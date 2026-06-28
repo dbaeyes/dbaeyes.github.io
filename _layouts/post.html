@@ -57,27 +57,13 @@ layout: default
                     {% endif %}
                 </ul>
 
-                <!-- Duoshuo Share start -->
-                <style>
-                    .ds-share{
-                        text-align: right;
-                    }
-
-                    @media only screen and (max-width: 700px) {
-                        .ds-share {
-
-                        }
-                    }
-                </style>
+                <!-- Comments -->
+                {% include giscus.html %}
 
             </div>
         </div>
     </div>
 </article>
-
-
-
-</script>
 
 <!-- async load function -->
 <script>

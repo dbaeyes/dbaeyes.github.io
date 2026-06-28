@@ -4,7 +4,7 @@ header-img: "img/autumn2.jpg"
 tagline: "相遇在南十字星下"
 description: "Meet at the Southern Cross constellation(Crux)"
 baseurl: ""
-url: "https://dbaeyes.github.io"
+url: "https://www.yyds.au"
 #url: "http://localhost:4000"
 
 # About/contact
@@ -56,13 +56,17 @@ defaults:
       header-img: "img/fantasy.jpg" # We don't want posts without a header image, that whould mean white on white
 
 
-# Comments
-comments :
-  provider : duoshuo
-  duoshuo :
-    short_name : David
-  disqus :
-      short_name : David
+# Comments - Giscus (GitHub Discussions)
+# Setup: https://giscus.app — fill in repo_id and category_id after enabling Discussions on your repo
+comments:
+  provider: giscus
+  giscus:
+    repo: dbaeyes/dbaeyes.github.io
+    repo_id: "MDEwOlJlcG9zaXRvcnk1NDQ2MTg2NA=="
+    category: General
+    category_id: "DIC_kwDOAz8FqM4DAFTa"
+    mapping: pathname
+    theme: preferred_color_scheme
 
 # Analytics and webmaster tools stuff goes here
 google_analytics: G-1655M1GSSK
