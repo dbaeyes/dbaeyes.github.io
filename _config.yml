@@ -36,7 +36,7 @@ plugins:
 - jekyll-paginate
 permalink: none
 paginate: 10
-exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md","vendor"]
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 timezone: Australia/Melbourne
