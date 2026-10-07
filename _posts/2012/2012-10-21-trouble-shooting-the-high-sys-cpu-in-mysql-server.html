@@ -22,8 +22,7 @@ meta:
 数据库突然出现load上涨，特别是cpu sys飙涨，导致sql响应变慢，应用连接数不够的情况。<br />
 现象非常明显，如下面图示</p>
 <p>MySQL version: 5.1.60<br />
-<a href="http://www.dbathink.com/wp-content/uploads/2012/10/load1.jpg"><img src="http://www.dbathink.com/wp-content/uploads/2012/10/load1.jpg" alt="" title="load1_for_high_syscpu" width="799" height="415" class="alignnone size-full wp-image-1507" /></a><br />
-<a href="http://www.dbathink.com/wp-content/uploads/2012/10/cpuinfo.jpg"><img src="http://www.dbathink.com/wp-content/uploads/2012/10/cpuinfo.jpg" alt="" title="cpuinfo_high_syscpu" width="805" height="617" class="alignnone size-full wp-image-1508" /></a> </p>
+<span class="img-missing">[图片已失效]</span> </p>
 <p>Analyze<br />
 1. The qps was not incresed obvious, also the volume of business<br />
 2. The SYS CPU was significant changed， this maybe caused by hardware/OS/MySQL<br />
@@ -49,5 +48,5 @@ The 3 parameters were <a href="http://www.mysqlperformanceblog.com/2011/12/02/ke
 percona的这篇文章对这三个参数做了benchmark。</p>
 <p>We get the great result from the parameter adjusts.<br />
 调整参数后，效果非常明显，应用不再报连接数问题</p>
-<p><a href="http://www.dbathink.com/wp-content/uploads/2012/10/cpuinfo_done.jpg"><img src="http://www.dbathink.com/wp-content/uploads/2012/10/cpuinfo_done.jpg" alt="" title="cpuinfo_good_done" width="803" height="406" class="alignnone size-full wp-image-1511" /></a></p>
+<p><span class="img-missing">[图片已失效]</span></p>
 <p>--eof</p>

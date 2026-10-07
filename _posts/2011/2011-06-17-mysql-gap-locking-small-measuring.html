@@ -59,6 +59,6 @@ a         <a href="http://search.mysql.com/search?site=refman-%35%31&amp;q=
 可以看到以查询条件a=50为例，那么锁的范围从上一个值30开始一直到下一个值100的前一个值99，这段范围都不被允许insert记录，update是可以的。 这个类似于起点和终点的概念，如果一边是开区间，那么开区间整个都会被lock</p>
 <p>&nbsp;</p>
 <p>简单用3个值来表示，下面是手画的图。</p>
-<p><a href="http://hiphotos.baidu.com/dbaeyes/pic/item/2735dfc3bd81f50bb219a870.jpg" target="_blank"><img src="http://hiphotos.baidu.com/dbaeyes/abpic/item/2735dfc3bd81f50bb219a870.jpg" alt="" width="200" height="143" border="0" data-pinit="registered" /></a></p>
+<p><span class="img-missing">[图片已失效]</span></p>
 <p>间隙锁（Next-key locking)是为了防止“幻读”问题：不仅对查询中读取的行进行加锁，而且还对索引结构中的间隙（gaps)进行加锁，以防止幻影（Phantom）插入。 -- from 《高性能mysql》</p>
 </div>

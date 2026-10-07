@@ -41,7 +41,7 @@ Query   282     closing tables  update xdual set x=now() where id = 5<br />
 <a href="http://dev.mysql.com/doc/refman/5.1/en/innodb-parameters.html#sysvar_innodb_open_files" target="_blank">innodb_open_files</a>=65536   (2000)</p>
 <p>Then I used the MySQL monitor tool '<a href="http://code.taobao.org/p/orzdba/src/trunk/" target="_blank">orzdba</a>' for a long time survey.<br />
 后来使用<a href="http://code.taobao.org/p/orzdba/src/trunk/" target="_blank">orzdba</a>  进行持续关注，发现了如下现象<br />
-<a href="http://www.dbathink.com/wp-content/uploads/2012/10/swap1.jpg"><img src="http://www.dbathink.com/wp-content/uploads/2012/10/swap1.jpg" alt="" title="swap_case" width="1040" height="314" class="alignnone size-full wp-image-1518" /></a></p>
+<span class="img-missing">[图片已失效]</span></p>
 <p>When the load rised up, the os <a href="http://www.softpanorama.org/Internals/Unix_filesystems/linux_swap_filesystem.shtml" target="_blank">swap </a>is serious. When swap out, the qps fall down from 2000 to 100, the thread running rised from 5 to 700. I considered the phenomenon was caused by swap.<br />
 在发生load上涨时，发生了严重的<a href="http://www.softpanorama.org/Internals/Unix_filesystems/linux_swap_filesystem.shtml" target="_blank">swap</a>。swap out发生时，qps急剧下降（从2000详见到100以内），thread runing从5上涨到700. 所以基本可以认为是swap导致的</p>
 <p>Check the Memory Info.<br />
