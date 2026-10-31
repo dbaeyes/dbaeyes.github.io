@@ -19,6 +19,8 @@ permalink: /:categories/:year/:month/:day/:title.html
 
 9 月 9 日和 iPhone 18 Pro 一起发布，10 月 23 日开卖。
 
+![iPhone Duo 合上与展开示意](/img/apple-2026-iphone-duo.svg)
+
 几个关键参数：
 
 | 项目 | iPhone Duo |
@@ -66,6 +68,8 @@ permalink: /:categories/:year/:month/:day/:title.html
 
 **轻了 200 多克。** 这个其实比触摸屏更实在。天天背电脑通勤的人，200 克是能感觉出来的。
 
+![14 寸 MacBook Pro 新旧款重量对比](/img/apple-2026-macbook-weight.svg)
+
 **对干活的人来说，触摸屏意义不大。** 我平时用 Mac 主要是终端、SSH、写脚本、看监控，手基本不离键盘。抬手去戳屏幕，反而打断节奏。对我来说，OLED 和轻量化才是真升级，触摸只是附带的。
 
 配满能到 14,000 多美元。如果你现在手上的 M3 / M4 MacBook Pro 用得好好的，**没必要为了触摸屏换。**
@@ -82,6 +86,8 @@ permalink: /:categories/:year/:month/:day/:title.html
 
 看起来全是升级，但有一个地方让人看不懂：**屏幕只有 60Hz，没有 ProMotion 高刷。**
 
+![60Hz 与 120Hz 刷新对比](/img/apple-2026-refresh-rate.svg)
+
 用过高刷的人都知道，回到 60Hz 是很难受的，滑动的时候能明显感觉到拖影。现在连几百块的安卓平板都是 120Hz 了，苹果的手机从 iPhone 17 开始全系高刷，结果一台 699 美元、用了 Pro 芯片、上了 OLED 的 iPad mini，还是 60Hz。
 
 原因其实不难猜：**产品线切分。** 目前 iPad 里只有 iPad Pro 有 OLED + ProMotion，苹果不想让 mini 抢了 Pro 的卖点。技术上不是做不到，是不想给。
@@ -89,6 +95,8 @@ permalink: /:categories/:year/:month/:day/:title.html
 还有一个小坑：**芯片名字一样，规格不一样。** 128GB 和 256GB 版本的 A20 Pro 是 5 核 CPU，只有 512GB 才是完整的 6 核。“和 iPhone 18 Pro 同款芯片”这句话，只对顶配成立。
 
 再看价格：2024 年的 iPad mini 起售价 499 美元，今年 6 月涨到 599，新款直接 699。两年涨了 200 美元，已经和 iPad Air 差不多了。
+
+![iPad mini 起售价变化](/img/apple-2026-ipad-mini-price.svg)
 
 所以这台 iPad mini 的问题是：**价格往 Pro 靠，体验却被故意卡住。**
 

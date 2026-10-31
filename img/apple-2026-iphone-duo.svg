@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" width="640" height="380" font-family="-apple-system, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', Arial, sans-serif">
+  <rect width="640" height="380" fill="#fcfcfb"/>
+  <text x="32" y="44" font-size="20" font-weight="700" fill="#0b0b0b">iPhone Duo：合上是手机，打开是小平板</text>
+  <text x="32" y="70" font-size="13" fill="#52514e">示意图，非实际比例</text>
+  <!-- closed -->
+  <rect x="80" y="100" width="120" height="220" rx="18" fill="#1f1f1e"/>
+  <rect x="88" y="108" width="104" height="204" rx="12" fill="#2a78d6"/>
+  <rect x="122" y="116" width="36" height="10" rx="5" fill="#1f1f1e"/>
+  <text x="140" y="346" font-size="15" font-weight="700" fill="#0b0b0b" text-anchor="middle">合上：外屏 5.4 寸</text>
+  <!-- arrow -->
+  <path d="M236,210 H300" stroke="#8a8984" stroke-width="2" fill="none"/>
+  <path d="M300,210 l-10,-6 v12 z" fill="#8a8984"/>
+  <text x="268" y="196" font-size="12" fill="#52514e" text-anchor="middle">展开</text>
+  <!-- open -->
+  <rect x="330" y="100" width="260" height="220" rx="18" fill="#1f1f1e"/>
+  <rect x="338" y="108" width="244" height="204" rx="12" fill="#6aa0e2"/>
+  <line x1="460" y1="108" x2="460" y2="312" stroke="#fcfcfb" stroke-width="1" stroke-dasharray="4 4" opacity="0.7"/>
+  <text x="460" y="346" font-size="15" font-weight="700" fill="#0b0b0b" text-anchor="middle">打开：内屏 7.6 寸</text>
+  <text x="468" y="296" font-size="12" fill="#0b0b0b" opacity="0.75">← 折痕几乎看不见</text>
+</svg>
