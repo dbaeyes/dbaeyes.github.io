@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" font-family="-apple-system, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', Arial, sans-serif">
+  <rect width="640" height="360" fill="#fcfcfb"/>
+  <text x="32" y="44" font-size="20" font-weight="700" fill="#0b0b0b">iPad mini 起售价（美元，128GB Wi-Fi）</text>
+  <text x="32" y="70" font-size="13" fill="#52514e">两年涨了 200 美元</text>
+  <!-- gridlines -->
+  <g stroke="#e4e3df" stroke-width="1">
+    <line x1="80" y1="300" x2="608" y2="300"/>
+    <line x1="80" y1="240" x2="608" y2="240"/>
+    <line x1="80" y1="180" x2="608" y2="180"/>
+    <line x1="80" y1="120" x2="608" y2="120"/>
+  </g>
+  <g font-size="12" fill="#8a8984" text-anchor="end">
+    <text x="70" y="304">$0</text><text x="70" y="244">$200</text><text x="70" y="184">$400</text><text x="70" y="124">$600</text>
+  </g>
+  <!-- scale: 0.3 px per dollar; baseline y=300 -->
+  <path d="M120,300 V154.3 a4,4 0 0 1 4,-4 H244 a4,4 0 0 1 4,4 V300 Z" fill="#9ec1ec"/>
+  <path d="M290,300 V124.3 a4,4 0 0 1 4,-4 H414 a4,4 0 0 1 4,4 V300 Z" fill="#9ec1ec"/>
+  <path d="M460,300 V94.3 a4,4 0 0 1 4,-4 H584 a4,4 0 0 1 4,4 V300 Z" fill="#2a78d6"/>
+  <g font-size="16" font-weight="700" fill="#0b0b0b" text-anchor="middle">
+    <text x="184" y="142">$499</text><text x="354" y="112">$599</text><text x="524" y="82">$699</text>
+  </g>
+  <g font-size="13" fill="#52514e" text-anchor="middle">
+    <text x="184" y="322">2024 年发布</text><text x="354" y="322">2026 年 6 月调价</text><text x="524" y="322">2026 年 10 月新款</text>
+  </g>
+</svg>

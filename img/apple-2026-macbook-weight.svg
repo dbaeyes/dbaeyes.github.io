@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 260" width="640" height="260" font-family="-apple-system, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', Arial, sans-serif">
+  <rect width="640" height="260" fill="#fcfcfb"/>
+  <text x="32" y="44" font-size="20" font-weight="700" fill="#0b0b0b">14 寸 MacBook Pro 重量（M5 Pro）</text>
+  <text x="32" y="70" font-size="13" fill="#52514e">新款轻了 220 克</text>
+  <!-- scale: 260 px per kg from x=200 -->
+  <text x="188" y="126" font-size="14" fill="#0b0b0b" text-anchor="end">mini-LED 旧款</text>
+  <path d="M200,108 H612 a4,4 0 0 1 4,4 V132 a4,4 0 0 1 -4,4 H200 Z" fill="#9ec1ec"/>
+  <text x="604" y="127" font-size="14" font-weight="700" fill="#0b0b0b" text-anchor="end">1.60 kg</text>
+  <text x="188" y="186" font-size="14" fill="#0b0b0b" text-anchor="end">PROLED 新款</text>
+  <path d="M200,168 H555 a4,4 0 0 1 4,4 V192 a4,4 0 0 1 -4,4 H200 Z" fill="#2a78d6"/>
+  <text x="547" y="187" font-size="14" font-weight="700" fill="#fcfcfb" text-anchor="end">1.38 kg</text>
+  <line x1="200" y1="96" x2="200" y2="208" stroke="#8a8984" stroke-width="1"/>
+  <text x="200" y="228" font-size="12" fill="#8a8984" text-anchor="middle">0</text>
+</svg>

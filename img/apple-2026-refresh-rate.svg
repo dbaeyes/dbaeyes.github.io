@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" width="640" height="300" font-family="-apple-system, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', Arial, sans-serif">
+  <rect width="640" height="300" fill="#fcfcfb"/>
+  <text x="32" y="44" font-size="20" font-weight="700" fill="#0b0b0b">同样 1/10 秒，屏幕刷新几次？</text>
+  <text x="32" y="70" font-size="13" fill="#52514e">每一条竖线代表一帧画面，帧越密，滑动越顺</text>
+  <text x="32" y="132" font-size="15" font-weight="700" fill="#0b0b0b">60Hz</text>
+  <text x="32" y="152" font-size="12" fill="#52514e">新 iPad mini</text>
+  <line x1="196" y1="140" x2="608" y2="140" stroke="#e4e3df" stroke-width="2"/>
+  <g id="f60" stroke="#eb6834" stroke-width="4" stroke-linecap="round"><line x1="200.0" y1="116" x2="200.0" y2="164"/><line x1="280.0" y1="116" x2="280.0" y2="164"/><line x1="360.0" y1="116" x2="360.0" y2="164"/><line x1="440.0" y1="116" x2="440.0" y2="164"/><line x1="520.0" y1="116" x2="520.0" y2="164"/><line x1="600.0" y1="116" x2="600.0" y2="164"/></g>
+  <text x="608" y="186" font-size="12" fill="#52514e" text-anchor="end">6 帧</text>
+  <text x="32" y="232" font-size="15" font-weight="700" fill="#0b0b0b">120Hz</text>
+  <text x="32" y="252" font-size="12" fill="#52514e">iPhone 18 Pro / iPad Pro</text>
+  <line x1="196" y1="240" x2="608" y2="240" stroke="#e4e3df" stroke-width="2"/>
+  <g stroke="#2a78d6" stroke-width="4" stroke-linecap="round"><line x1="200.0" y1="216" x2="200.0" y2="264"/><line x1="236.4" y1="216" x2="236.4" y2="264"/><line x1="272.7" y1="216" x2="272.7" y2="264"/><line x1="309.1" y1="216" x2="309.1" y2="264"/><line x1="345.5" y1="216" x2="345.5" y2="264"/><line x1="381.8" y1="216" x2="381.8" y2="264"/><line x1="418.2" y1="216" x2="418.2" y2="264"/><line x1="454.5" y1="216" x2="454.5" y2="264"/><line x1="490.9" y1="216" x2="490.9" y2="264"/><line x1="527.3" y1="216" x2="527.3" y2="264"/><line x1="563.6" y1="216" x2="563.6" y2="264"/><line x1="600.0" y1="216" x2="600.0" y2="264"/></g>
+  <text x="608" y="286" font-size="12" fill="#52514e" text-anchor="end">12 帧</text>
+</svg>
